@@ -1,0 +1,812 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 50;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		0203C523217A48100054FA10 /* FIOSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0203C519217A48100054FA10 /* FIOSDK.framework */; };
+		0203C528217A48100054FA10 /* FIOSDKTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0203C527217A48100054FA10 /* FIOSDKTests.swift */; };
+		0203C56F217A487A0054FA10 /* LICENSE in Resources */ = {isa = PBXBuildFile; fileRef = 0203C534217A487A0054FA10 /* LICENSE */; };
+		0203C570217A487A0054FA10 /* AnyDecodable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0203C539217A487A0054FA10 /* AnyDecodable.swift */; };
+		0203C571217A487A0054FA10 /* AnyCodable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0203C53A217A487A0054FA10 /* AnyCodable.swift */; };
+		0203C572217A487A0054FA10 /* AnyEncodable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0203C53B217A487A0054FA10 /* AnyEncodable.swift */; };
+		0203C573217A487A0054FA10 /* uECC.h in Headers */ = {isa = PBXBuildFile; fileRef = 0203C53E217A487A0054FA10 /* uECC.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		0203C574217A487A0054FA10 /* ripemd160.h in Headers */ = {isa = PBXBuildFile; fileRef = 0203C53F217A487A0054FA10 /* ripemd160.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		0203C575217A487A0054FA10 /* asm_arm.inc.h in Headers */ = {isa = PBXBuildFile; fileRef = 0203C540217A487A0054FA10 /* asm_arm.inc.h */; };
+		0203C577217A487A0054FA10 /* libbase58.h in Headers */ = {isa = PBXBuildFile; fileRef = 0203C542217A487A0054FA10 /* libbase58.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		0203C578217A487A0054FA10 /* curve-specific.inc in Sources */ = {isa = PBXBuildFile; fileRef = 0203C543217A487A0054FA10 /* curve-specific.inc */; };
+		0203C579217A487A0054FA10 /* types.h in Headers */ = {isa = PBXBuildFile; fileRef = 0203C544217A487A0054FA10 /* types.h */; };
+		0203C57A217A487A0054FA10 /* platform-specific.inc in Sources */ = {isa = PBXBuildFile; fileRef = 0203C545217A487A0054FA10 /* platform-specific.inc */; };
+		0203C57B217A487A0054FA10 /* Bridging-Header.h in Headers */ = {isa = PBXBuildFile; fileRef = 0203C546217A487A0054FA10 /* Bridging-Header.h */; };
+		0203C57C217A487A0054FA10 /* ripemd160.c in Sources */ = {isa = PBXBuildFile; fileRef = 0203C548217A487A0054FA10 /* ripemd160.c */; };
+		0203C57D217A487A0054FA10 /* uECC.c in Sources */ = {isa = PBXBuildFile; fileRef = 0203C549217A487A0054FA10 /* uECC.c */; };
+		0203C57E217A487A0054FA10 /* base58.c in Sources */ = {isa = PBXBuildFile; fileRef = 0203C54A217A487A0054FA10 /* base58.c */; };
+		0203C57F217A487A0054FA10 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 0203C54B217A487A0054FA10 /* README.md */; };
+		0203C580217A487A0054FA10 /* Crypto.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0203C54F217A487A0054FA10 /* Crypto.swift */; };
+		0203C581217A487A0054FA10 /* TransactionUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0203C552217A487A0054FA10 /* TransactionUtil.swift */; };
+		0203C582217A487A0054FA10 /* Transaction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0203C553217A487A0054FA10 /* Transaction.swift */; };
+		0203C583217A487A0054FA10 /* ResourceUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0203C555217A487A0054FA10 /* ResourceUtil.swift */; };
+		0203C584217A487A0054FA10 /* Currency.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0203C557217A487A0054FA10 /* Currency.swift */; };
+		0203C585217A487A0054FA10 /* Signature.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0203C559217A487A0054FA10 /* Signature.swift */; };
+		0203C586217A487A0054FA10 /* ChainRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0203C55C217A487A0054FA10 /* ChainRouter.swift */; };
+		0203C587217A487A0054FA10 /* EOSRPC+Chain.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0203C55D217A487A0054FA10 /* EOSRPC+Chain.swift */; };
+		0203C588217A487A0054FA10 /* EOSRPC+History.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0203C55F217A487A0054FA10 /* EOSRPC+History.swift */; };
+		0203C589217A487A0054FA10 /* HistoryRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0203C560217A487A0054FA10 /* HistoryRouter.swift */; };
+		0203C58A217A487A0054FA10 /* EOSRPC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0203C562217A487A0054FA10 /* EOSRPC.swift */; };
+		0203C58B217A487A0054FA10 /* BaseRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0203C563217A487A0054FA10 /* BaseRouter.swift */; };
+		0203C58C217A487A0054FA10 /* KeyPair.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0203C565217A487A0054FA10 /* KeyPair.swift */; };
+		0203C58D217A487A0054FA10 /* PublicKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0203C566217A487A0054FA10 /* PublicKey.swift */; };
+		0203C58E217A487A0054FA10 /* PrivateKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0203C567217A487A0054FA10 /* PrivateKey.swift */; };
+		0203C58F217A487A0054FA10 /* ChainModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0203C569217A487A0054FA10 /* ChainModels.swift */; };
+		0203C590217A487A0054FA10 /* Error.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0203C56A217A487A0054FA10 /* Error.swift */; };
+		0203C591217A487A0054FA10 /* BigInt.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0203C56B217A487A0054FA10 /* BigInt.swift */; };
+		0203C592217A487A0054FA10 /* SEWallet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0203C56E217A487A0054FA10 /* SEWallet.swift */; };
+		0203C597217A4DD70054FA10 /* FIOSDK.h in Headers */ = {isa = PBXBuildFile; fileRef = 0203C51C217A48100054FA10 /* FIOSDK.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		0203C599217A4EC90054FA10 /* Utilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0203C598217A4EC90054FA10 /* Utilities.swift */; };
+		0203C5CB217A6A6D0054FA10 /* FIOSDK.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0203C5C9217A6A6D0054FA10 /* FIOSDK.swift */; };
+		0203C5CC217A6A6D0054FA10 /* Settings.plist in Resources */ = {isa = PBXBuildFile; fileRef = 0203C5CA217A6A6D0054FA10 /* Settings.plist */; };
+		0203C5D8217A71330054FA10 /* FIOError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0203C5D7217A71330054FA10 /* FIOError.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		0203C524217A48100054FA10 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 0203C510217A48100054FA10 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 0203C518217A48100054FA10;
+			remoteInfo = FIOSDK;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		0203C519217A48100054FA10 /* FIOSDK.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = FIOSDK.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		0203C51C217A48100054FA10 /* FIOSDK.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FIOSDK.h; sourceTree = "<group>"; };
+		0203C51D217A48100054FA10 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		0203C522217A48100054FA10 /* FIOSDKTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FIOSDKTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		0203C527217A48100054FA10 /* FIOSDKTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FIOSDKTests.swift; sourceTree = "<group>"; };
+		0203C529217A48100054FA10 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		0203C534217A487A0054FA10 /* LICENSE */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
+		0203C539217A487A0054FA10 /* AnyDecodable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AnyDecodable.swift; sourceTree = "<group>"; };
+		0203C53A217A487A0054FA10 /* AnyCodable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AnyCodable.swift; sourceTree = "<group>"; };
+		0203C53B217A487A0054FA10 /* AnyEncodable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AnyEncodable.swift; sourceTree = "<group>"; };
+		0203C53E217A487A0054FA10 /* uECC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = uECC.h; sourceTree = "<group>"; };
+		0203C53F217A487A0054FA10 /* ripemd160.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ripemd160.h; sourceTree = "<group>"; };
+		0203C540217A487A0054FA10 /* asm_arm.inc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = asm_arm.inc.h; sourceTree = "<group>"; };
+		0203C541217A487A0054FA10 /* uECC_vli.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = uECC_vli.h; sourceTree = "<group>"; };
+		0203C542217A487A0054FA10 /* libbase58.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = libbase58.h; sourceTree = "<group>"; };
+		0203C543217A487A0054FA10 /* curve-specific.inc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; path = "curve-specific.inc"; sourceTree = "<group>"; };
+		0203C544217A487A0054FA10 /* types.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = types.h; sourceTree = "<group>"; };
+		0203C545217A487A0054FA10 /* platform-specific.inc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; path = "platform-specific.inc"; sourceTree = "<group>"; };
+		0203C546217A487A0054FA10 /* Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Bridging-Header.h"; sourceTree = "<group>"; };
+		0203C548217A487A0054FA10 /* ripemd160.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ripemd160.c; sourceTree = "<group>"; };
+		0203C549217A487A0054FA10 /* uECC.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = uECC.c; sourceTree = "<group>"; };
+		0203C54A217A487A0054FA10 /* base58.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = base58.c; sourceTree = "<group>"; };
+		0203C54B217A487A0054FA10 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		0203C54F217A487A0054FA10 /* Crypto.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Crypto.swift; sourceTree = "<group>"; };
+		0203C552217A487A0054FA10 /* TransactionUtil.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TransactionUtil.swift; sourceTree = "<group>"; };
+		0203C553217A487A0054FA10 /* Transaction.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Transaction.swift; sourceTree = "<group>"; };
+		0203C555217A487A0054FA10 /* ResourceUtil.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ResourceUtil.swift; sourceTree = "<group>"; };
+		0203C557217A487A0054FA10 /* Currency.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Currency.swift; sourceTree = "<group>"; };
+		0203C559217A487A0054FA10 /* Signature.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Signature.swift; sourceTree = "<group>"; };
+		0203C55C217A487A0054FA10 /* ChainRouter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChainRouter.swift; sourceTree = "<group>"; };
+		0203C55D217A487A0054FA10 /* EOSRPC+Chain.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "EOSRPC+Chain.swift"; sourceTree = "<group>"; };
+		0203C55F217A487A0054FA10 /* EOSRPC+History.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "EOSRPC+History.swift"; sourceTree = "<group>"; };
+		0203C560217A487A0054FA10 /* HistoryRouter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HistoryRouter.swift; sourceTree = "<group>"; };
+		0203C562217A487A0054FA10 /* EOSRPC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EOSRPC.swift; sourceTree = "<group>"; };
+		0203C563217A487A0054FA10 /* BaseRouter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BaseRouter.swift; sourceTree = "<group>"; };
+		0203C565217A487A0054FA10 /* KeyPair.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeyPair.swift; sourceTree = "<group>"; };
+		0203C566217A487A0054FA10 /* PublicKey.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PublicKey.swift; sourceTree = "<group>"; };
+		0203C567217A487A0054FA10 /* PrivateKey.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PrivateKey.swift; sourceTree = "<group>"; };
+		0203C569217A487A0054FA10 /* ChainModels.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChainModels.swift; sourceTree = "<group>"; };
+		0203C56A217A487A0054FA10 /* Error.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Error.swift; sourceTree = "<group>"; };
+		0203C56B217A487A0054FA10 /* BigInt.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BigInt.swift; sourceTree = "<group>"; };
+		0203C56E217A487A0054FA10 /* SEWallet.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SEWallet.swift; sourceTree = "<group>"; };
+		0203C598217A4EC90054FA10 /* Utilities.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Utilities.swift; sourceTree = "<group>"; };
+		0203C5C9217A6A6D0054FA10 /* FIOSDK.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FIOSDK.swift; sourceTree = "<group>"; };
+		0203C5CA217A6A6D0054FA10 /* Settings.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Settings.plist; sourceTree = "<group>"; };
+		0203C5D7217A71330054FA10 /* FIOError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FIOError.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		0203C516217A48100054FA10 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		0203C51F217A48100054FA10 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				0203C523217A48100054FA10 /* FIOSDK.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		0203C50F217A48100054FA10 = {
+			isa = PBXGroup;
+			children = (
+				0203C51B217A48100054FA10 /* FIOSDK */,
+				0203C526217A48100054FA10 /* FIOSDKTests */,
+				0203C51A217A48100054FA10 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		0203C51A217A48100054FA10 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				0203C519217A48100054FA10 /* FIOSDK.framework */,
+				0203C522217A48100054FA10 /* FIOSDKTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		0203C51B217A48100054FA10 /* FIOSDK */ = {
+			isa = PBXGroup;
+			children = (
+				0203C51C217A48100054FA10 /* FIOSDK.h */,
+				0203C5C9217A6A6D0054FA10 /* FIOSDK.swift */,
+				0203C5D7217A71330054FA10 /* FIOError.swift */,
+				0203C598217A4EC90054FA10 /* Utilities.swift */,
+				0203C533217A487A0054FA10 /* SwiftyEOS */,
+				0203C51D217A48100054FA10 /* Info.plist */,
+				0203C5CA217A6A6D0054FA10 /* Settings.plist */,
+			);
+			path = FIOSDK;
+			sourceTree = "<group>";
+		};
+		0203C526217A48100054FA10 /* FIOSDKTests */ = {
+			isa = PBXGroup;
+			children = (
+				0203C527217A48100054FA10 /* FIOSDKTests.swift */,
+				0203C529217A48100054FA10 /* Info.plist */,
+			);
+			path = FIOSDKTests;
+			sourceTree = "<group>";
+		};
+		0203C533217A487A0054FA10 /* SwiftyEOS */ = {
+			isa = PBXGroup;
+			children = (
+				0203C534217A487A0054FA10 /* LICENSE */,
+				0203C535217A487A0054FA10 /* Dependencies */,
+				0203C53C217A487A0054FA10 /* Libraries */,
+				0203C54B217A487A0054FA10 /* README.md */,
+				0203C54C217A487A0054FA10 /* Sources */,
+			);
+			path = SwiftyEOS;
+			sourceTree = "<group>";
+		};
+		0203C535217A487A0054FA10 /* Dependencies */ = {
+			isa = PBXGroup;
+			children = (
+				0203C536217A487A0054FA10 /* AnyCodable */,
+			);
+			path = Dependencies;
+			sourceTree = "<group>";
+		};
+		0203C536217A487A0054FA10 /* AnyCodable */ = {
+			isa = PBXGroup;
+			children = (
+				0203C537217A487A0054FA10 /* Sources */,
+			);
+			path = AnyCodable;
+			sourceTree = "<group>";
+		};
+		0203C537217A487A0054FA10 /* Sources */ = {
+			isa = PBXGroup;
+			children = (
+				0203C538217A487A0054FA10 /* AnyCodable */,
+			);
+			path = Sources;
+			sourceTree = "<group>";
+		};
+		0203C538217A487A0054FA10 /* AnyCodable */ = {
+			isa = PBXGroup;
+			children = (
+				0203C539217A487A0054FA10 /* AnyDecodable.swift */,
+				0203C53A217A487A0054FA10 /* AnyCodable.swift */,
+				0203C53B217A487A0054FA10 /* AnyEncodable.swift */,
+			);
+			path = AnyCodable;
+			sourceTree = "<group>";
+		};
+		0203C53C217A487A0054FA10 /* Libraries */ = {
+			isa = PBXGroup;
+			children = (
+				0203C53D217A487A0054FA10 /* include */,
+				0203C547217A487A0054FA10 /* src */,
+			);
+			path = Libraries;
+			sourceTree = "<group>";
+		};
+		0203C53D217A487A0054FA10 /* include */ = {
+			isa = PBXGroup;
+			children = (
+				0203C53E217A487A0054FA10 /* uECC.h */,
+				0203C53F217A487A0054FA10 /* ripemd160.h */,
+				0203C540217A487A0054FA10 /* asm_arm.inc.h */,
+				0203C541217A487A0054FA10 /* uECC_vli.h */,
+				0203C542217A487A0054FA10 /* libbase58.h */,
+				0203C543217A487A0054FA10 /* curve-specific.inc */,
+				0203C544217A487A0054FA10 /* types.h */,
+				0203C545217A487A0054FA10 /* platform-specific.inc */,
+				0203C546217A487A0054FA10 /* Bridging-Header.h */,
+			);
+			path = include;
+			sourceTree = "<group>";
+		};
+		0203C547217A487A0054FA10 /* src */ = {
+			isa = PBXGroup;
+			children = (
+				0203C548217A487A0054FA10 /* ripemd160.c */,
+				0203C549217A487A0054FA10 /* uECC.c */,
+				0203C54A217A487A0054FA10 /* base58.c */,
+			);
+			path = src;
+			sourceTree = "<group>";
+		};
+		0203C54C217A487A0054FA10 /* Sources */ = {
+			isa = PBXGroup;
+			children = (
+				0203C54D217A487A0054FA10 /* SwiftyEOS */,
+				0203C56C217A487A0054FA10 /* Utils */,
+			);
+			path = Sources;
+			sourceTree = "<group>";
+		};
+		0203C54D217A487A0054FA10 /* SwiftyEOS */ = {
+			isa = PBXGroup;
+			children = (
+				0203C54E217A487A0054FA10 /* Crypto */,
+				0203C550217A487A0054FA10 /* Contract */,
+				0203C558217A487A0054FA10 /* Signature */,
+				0203C55A217A487A0054FA10 /* Network */,
+				0203C564217A487A0054FA10 /* Key */,
+				0203C568217A487A0054FA10 /* Models */,
+			);
+			path = SwiftyEOS;
+			sourceTree = "<group>";
+		};
+		0203C54E217A487A0054FA10 /* Crypto */ = {
+			isa = PBXGroup;
+			children = (
+				0203C54F217A487A0054FA10 /* Crypto.swift */,
+			);
+			path = Crypto;
+			sourceTree = "<group>";
+		};
+		0203C550217A487A0054FA10 /* Contract */ = {
+			isa = PBXGroup;
+			children = (
+				0203C551217A487A0054FA10 /* transaction */,
+				0203C554217A487A0054FA10 /* resource */,
+				0203C556217A487A0054FA10 /* currency */,
+			);
+			path = Contract;
+			sourceTree = "<group>";
+		};
+		0203C551217A487A0054FA10 /* transaction */ = {
+			isa = PBXGroup;
+			children = (
+				0203C552217A487A0054FA10 /* TransactionUtil.swift */,
+				0203C553217A487A0054FA10 /* Transaction.swift */,
+			);
+			path = transaction;
+			sourceTree = "<group>";
+		};
+		0203C554217A487A0054FA10 /* resource */ = {
+			isa = PBXGroup;
+			children = (
+				0203C555217A487A0054FA10 /* ResourceUtil.swift */,
+			);
+			path = resource;
+			sourceTree = "<group>";
+		};
+		0203C556217A487A0054FA10 /* currency */ = {
+			isa = PBXGroup;
+			children = (
+				0203C557217A487A0054FA10 /* Currency.swift */,
+			);
+			path = currency;
+			sourceTree = "<group>";
+		};
+		0203C558217A487A0054FA10 /* Signature */ = {
+			isa = PBXGroup;
+			children = (
+				0203C559217A487A0054FA10 /* Signature.swift */,
+			);
+			path = Signature;
+			sourceTree = "<group>";
+		};
+		0203C55A217A487A0054FA10 /* Network */ = {
+			isa = PBXGroup;
+			children = (
+				0203C55B217A487A0054FA10 /* Chain */,
+				0203C55E217A487A0054FA10 /* History */,
+				0203C561217A487A0054FA10 /* Base */,
+			);
+			path = Network;
+			sourceTree = "<group>";
+		};
+		0203C55B217A487A0054FA10 /* Chain */ = {
+			isa = PBXGroup;
+			children = (
+				0203C55C217A487A0054FA10 /* ChainRouter.swift */,
+				0203C55D217A487A0054FA10 /* EOSRPC+Chain.swift */,
+			);
+			path = Chain;
+			sourceTree = "<group>";
+		};
+		0203C55E217A487A0054FA10 /* History */ = {
+			isa = PBXGroup;
+			children = (
+				0203C55F217A487A0054FA10 /* EOSRPC+History.swift */,
+				0203C560217A487A0054FA10 /* HistoryRouter.swift */,
+			);
+			path = History;
+			sourceTree = "<group>";
+		};
+		0203C561217A487A0054FA10 /* Base */ = {
+			isa = PBXGroup;
+			children = (
+				0203C562217A487A0054FA10 /* EOSRPC.swift */,
+				0203C563217A487A0054FA10 /* BaseRouter.swift */,
+			);
+			path = Base;
+			sourceTree = "<group>";
+		};
+		0203C564217A487A0054FA10 /* Key */ = {
+			isa = PBXGroup;
+			children = (
+				0203C565217A487A0054FA10 /* KeyPair.swift */,
+				0203C566217A487A0054FA10 /* PublicKey.swift */,
+				0203C567217A487A0054FA10 /* PrivateKey.swift */,
+			);
+			path = Key;
+			sourceTree = "<group>";
+		};
+		0203C568217A487A0054FA10 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				0203C569217A487A0054FA10 /* ChainModels.swift */,
+				0203C56A217A487A0054FA10 /* Error.swift */,
+				0203C56B217A487A0054FA10 /* BigInt.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		0203C56C217A487A0054FA10 /* Utils */ = {
+			isa = PBXGroup;
+			children = (
+				0203C56D217A487A0054FA10 /* iOS */,
+			);
+			path = Utils;
+			sourceTree = "<group>";
+		};
+		0203C56D217A487A0054FA10 /* iOS */ = {
+			isa = PBXGroup;
+			children = (
+				0203C56E217A487A0054FA10 /* SEWallet.swift */,
+			);
+			path = iOS;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		0203C514217A48100054FA10 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				0203C574217A487A0054FA10 /* ripemd160.h in Headers */,
+				0203C577217A487A0054FA10 /* libbase58.h in Headers */,
+				0203C573217A487A0054FA10 /* uECC.h in Headers */,
+				0203C597217A4DD70054FA10 /* FIOSDK.h in Headers */,
+				0203C579217A487A0054FA10 /* types.h in Headers */,
+				0203C57B217A487A0054FA10 /* Bridging-Header.h in Headers */,
+				0203C575217A487A0054FA10 /* asm_arm.inc.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXNativeTarget section */
+		0203C518217A48100054FA10 /* FIOSDK */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 0203C52D217A48100054FA10 /* Build configuration list for PBXNativeTarget "FIOSDK" */;
+			buildPhases = (
+				0203C514217A48100054FA10 /* Headers */,
+				0203C515217A48100054FA10 /* Sources */,
+				0203C516217A48100054FA10 /* Frameworks */,
+				0203C517217A48100054FA10 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = FIOSDK;
+			productName = FIOSDK;
+			productReference = 0203C519217A48100054FA10 /* FIOSDK.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		0203C521217A48100054FA10 /* FIOSDKTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 0203C530217A48100054FA10 /* Build configuration list for PBXNativeTarget "FIOSDKTests" */;
+			buildPhases = (
+				0203C51E217A48100054FA10 /* Sources */,
+				0203C51F217A48100054FA10 /* Frameworks */,
+				0203C520217A48100054FA10 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				0203C525217A48100054FA10 /* PBXTargetDependency */,
+			);
+			name = FIOSDKTests;
+			productName = FIOSDKTests;
+			productReference = 0203C522217A48100054FA10 /* FIOSDKTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		0203C510217A48100054FA10 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastSwiftUpdateCheck = 1000;
+				LastUpgradeCheck = 1000;
+				ORGANIZATIONNAME = "Dapix, Inc.";
+				TargetAttributes = {
+					0203C518217A48100054FA10 = {
+						CreatedOnToolsVersion = 10.0;
+					};
+					0203C521217A48100054FA10 = {
+						CreatedOnToolsVersion = 10.0;
+					};
+				};
+			};
+			buildConfigurationList = 0203C513217A48100054FA10 /* Build configuration list for PBXProject "FIOSDK" */;
+			compatibilityVersion = "Xcode 9.3";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = 0203C50F217A48100054FA10;
+			productRefGroup = 0203C51A217A48100054FA10 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				0203C518217A48100054FA10 /* FIOSDK */,
+				0203C521217A48100054FA10 /* FIOSDKTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		0203C517217A48100054FA10 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				0203C57F217A487A0054FA10 /* README.md in Resources */,
+				0203C56F217A487A0054FA10 /* LICENSE in Resources */,
+				0203C5CC217A6A6D0054FA10 /* Settings.plist in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		0203C520217A48100054FA10 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		0203C515217A48100054FA10 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				0203C57A217A487A0054FA10 /* platform-specific.inc in Sources */,
+				0203C57C217A487A0054FA10 /* ripemd160.c in Sources */,
+				0203C582217A487A0054FA10 /* Transaction.swift in Sources */,
+				0203C599217A4EC90054FA10 /* Utilities.swift in Sources */,
+				0203C589217A487A0054FA10 /* HistoryRouter.swift in Sources */,
+				0203C592217A487A0054FA10 /* SEWallet.swift in Sources */,
+				0203C57E217A487A0054FA10 /* base58.c in Sources */,
+				0203C585217A487A0054FA10 /* Signature.swift in Sources */,
+				0203C58D217A487A0054FA10 /* PublicKey.swift in Sources */,
+				0203C586217A487A0054FA10 /* ChainRouter.swift in Sources */,
+				0203C581217A487A0054FA10 /* TransactionUtil.swift in Sources */,
+				0203C58B217A487A0054FA10 /* BaseRouter.swift in Sources */,
+				0203C58E217A487A0054FA10 /* PrivateKey.swift in Sources */,
+				0203C58F217A487A0054FA10 /* ChainModels.swift in Sources */,
+				0203C58C217A487A0054FA10 /* KeyPair.swift in Sources */,
+				0203C588217A487A0054FA10 /* EOSRPC+History.swift in Sources */,
+				0203C587217A487A0054FA10 /* EOSRPC+Chain.swift in Sources */,
+				0203C580217A487A0054FA10 /* Crypto.swift in Sources */,
+				0203C570217A487A0054FA10 /* AnyDecodable.swift in Sources */,
+				0203C58A217A487A0054FA10 /* EOSRPC.swift in Sources */,
+				0203C5CB217A6A6D0054FA10 /* FIOSDK.swift in Sources */,
+				0203C5D8217A71330054FA10 /* FIOError.swift in Sources */,
+				0203C583217A487A0054FA10 /* ResourceUtil.swift in Sources */,
+				0203C584217A487A0054FA10 /* Currency.swift in Sources */,
+				0203C572217A487A0054FA10 /* AnyEncodable.swift in Sources */,
+				0203C591217A487A0054FA10 /* BigInt.swift in Sources */,
+				0203C578217A487A0054FA10 /* curve-specific.inc in Sources */,
+				0203C590217A487A0054FA10 /* Error.swift in Sources */,
+				0203C571217A487A0054FA10 /* AnyCodable.swift in Sources */,
+				0203C57D217A487A0054FA10 /* uECC.c in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		0203C51E217A48100054FA10 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				0203C528217A48100054FA10 /* FIOSDKTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		0203C525217A48100054FA10 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 0203C518217A48100054FA10 /* FIOSDK */;
+			targetProxy = 0203C524217A48100054FA10 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		0203C52B217A48100054FA10 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+		0203C52C217A48100054FA10 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				VALIDATE_PRODUCT = YES;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
+		0203C52E217A48100054FA10 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_IDENTITY = "";
+				CODE_SIGN_STYLE = Automatic;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				HEADER_SEARCH_PATHS = "FIOSDK/SwiftyEOS/Libraries/include/**";
+				INFOPLIST_FILE = FIOSDK/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				LIBRARY_SEARCH_PATHS = "";
+				PRODUCT_BUNDLE_IDENTIFIER = com.dapix.FIOSDK;
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 4.2;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		0203C52F217A48100054FA10 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_IDENTITY = "";
+				CODE_SIGN_STYLE = Automatic;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				HEADER_SEARCH_PATHS = "FIOSDK/SwiftyEOS/Libraries/include/**";
+				INFOPLIST_FILE = FIOSDK/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				LIBRARY_SEARCH_PATHS = "";
+				PRODUCT_BUNDLE_IDENTIFIER = com.dapix.FIOSDK;
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 4.2;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		0203C531217A48100054FA10 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				INFOPLIST_FILE = FIOSDKTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.dapix.FIOSDKTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 4.2;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		0203C532217A48100054FA10 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				INFOPLIST_FILE = FIOSDKTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.dapix.FIOSDKTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 4.2;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		0203C513217A48100054FA10 /* Build configuration list for PBXProject "FIOSDK" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				0203C52B217A48100054FA10 /* Debug */,
+				0203C52C217A48100054FA10 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		0203C52D217A48100054FA10 /* Build configuration list for PBXNativeTarget "FIOSDK" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				0203C52E217A48100054FA10 /* Debug */,
+				0203C52F217A48100054FA10 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		0203C530217A48100054FA10 /* Build configuration list for PBXNativeTarget "FIOSDKTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				0203C531217A48100054FA10 /* Debug */,
+				0203C532217A48100054FA10 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 0203C510217A48100054FA10 /* Project object */;
+}
