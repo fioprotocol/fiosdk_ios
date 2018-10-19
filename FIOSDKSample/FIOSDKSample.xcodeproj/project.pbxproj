@@ -1,0 +1,526 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 50;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		0203C5A7217A69980054FA10 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0203C5A6217A69980054FA10 /* AppDelegate.swift */; };
+		0203C5A9217A69980054FA10 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0203C5A8217A69980054FA10 /* ViewController.swift */; };
+		0203C5AC217A69980054FA10 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0203C5AA217A69980054FA10 /* Main.storyboard */; };
+		0203C5AE217A69990054FA10 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0203C5AD217A69990054FA10 /* Assets.xcassets */; };
+		0203C5B1217A69990054FA10 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0203C5AF217A69990054FA10 /* LaunchScreen.storyboard */; };
+		0203C5BC217A699A0054FA10 /* FIOSDKSampleTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0203C5BB217A699A0054FA10 /* FIOSDKSampleTests.swift */; };
+		0203C5CE217A6AC60054FA10 /* FIOSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0203C5CD217A6AC60054FA10 /* FIOSDK.framework */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		0203C5B8217A699A0054FA10 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 0203C59B217A69980054FA10 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 0203C5A2217A69980054FA10;
+			remoteInfo = FIOSDKSample;
+		};
+		0203C5D3217A71040054FA10 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 0203C5C7217A69F50054FA10 /* FIOSDK.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 0203C519217A48100054FA10;
+			remoteInfo = FIOSDK;
+		};
+		0203C5D5217A71040054FA10 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 0203C5C7217A69F50054FA10 /* FIOSDK.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 0203C522217A48100054FA10;
+			remoteInfo = FIOSDKTests;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		0203C5A3217A69980054FA10 /* FIOSDKSample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FIOSDKSample.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		0203C5A6217A69980054FA10 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		0203C5A8217A69980054FA10 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		0203C5AB217A69980054FA10 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		0203C5AD217A69990054FA10 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		0203C5B0217A69990054FA10 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		0203C5B2217A69990054FA10 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		0203C5B7217A699A0054FA10 /* FIOSDKSampleTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FIOSDKSampleTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		0203C5BB217A699A0054FA10 /* FIOSDKSampleTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FIOSDKSampleTests.swift; sourceTree = "<group>"; };
+		0203C5BD217A699A0054FA10 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		0203C5C7217A69F50054FA10 /* FIOSDK.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = FIOSDK.xcodeproj; path = ../FIOSDK/FIOSDK.xcodeproj; sourceTree = "<group>"; };
+		0203C5CD217A6AC60054FA10 /* FIOSDK.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = FIOSDK.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		0203C5A0217A69980054FA10 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				0203C5CE217A6AC60054FA10 /* FIOSDK.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		0203C5B4217A699A0054FA10 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		0203C59A217A69980054FA10 = {
+			isa = PBXGroup;
+			children = (
+				0203C5A5217A69980054FA10 /* FIOSDKSample */,
+				0203C5BA217A699A0054FA10 /* FIOSDKSampleTests */,
+				0203C5A4217A69980054FA10 /* Products */,
+				0203C5C6217A69F50054FA10 /* Frameworks */,
+			);
+			sourceTree = "<group>";
+		};
+		0203C5A4217A69980054FA10 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				0203C5A3217A69980054FA10 /* FIOSDKSample.app */,
+				0203C5B7217A699A0054FA10 /* FIOSDKSampleTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		0203C5A5217A69980054FA10 /* FIOSDKSample */ = {
+			isa = PBXGroup;
+			children = (
+				0203C5A6217A69980054FA10 /* AppDelegate.swift */,
+				0203C5A8217A69980054FA10 /* ViewController.swift */,
+				0203C5AA217A69980054FA10 /* Main.storyboard */,
+				0203C5AD217A69990054FA10 /* Assets.xcassets */,
+				0203C5AF217A69990054FA10 /* LaunchScreen.storyboard */,
+				0203C5B2217A69990054FA10 /* Info.plist */,
+			);
+			path = FIOSDKSample;
+			sourceTree = "<group>";
+		};
+		0203C5BA217A699A0054FA10 /* FIOSDKSampleTests */ = {
+			isa = PBXGroup;
+			children = (
+				0203C5BB217A699A0054FA10 /* FIOSDKSampleTests.swift */,
+				0203C5BD217A699A0054FA10 /* Info.plist */,
+			);
+			path = FIOSDKSampleTests;
+			sourceTree = "<group>";
+		};
+		0203C5C6217A69F50054FA10 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				0203C5CD217A6AC60054FA10 /* FIOSDK.framework */,
+				0203C5C7217A69F50054FA10 /* FIOSDK.xcodeproj */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		0203C5CF217A71040054FA10 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				0203C5D4217A71040054FA10 /* FIOSDK.framework */,
+				0203C5D6217A71040054FA10 /* FIOSDKTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		0203C5A2217A69980054FA10 /* FIOSDKSample */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 0203C5C0217A699A0054FA10 /* Build configuration list for PBXNativeTarget "FIOSDKSample" */;
+			buildPhases = (
+				0203C59F217A69980054FA10 /* Sources */,
+				0203C5A0217A69980054FA10 /* Frameworks */,
+				0203C5A1217A69980054FA10 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = FIOSDKSample;
+			productName = FIOSDKSample;
+			productReference = 0203C5A3217A69980054FA10 /* FIOSDKSample.app */;
+			productType = "com.apple.product-type.application";
+		};
+		0203C5B6217A699A0054FA10 /* FIOSDKSampleTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 0203C5C3217A699A0054FA10 /* Build configuration list for PBXNativeTarget "FIOSDKSampleTests" */;
+			buildPhases = (
+				0203C5B3217A699A0054FA10 /* Sources */,
+				0203C5B4217A699A0054FA10 /* Frameworks */,
+				0203C5B5217A699A0054FA10 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				0203C5B9217A699A0054FA10 /* PBXTargetDependency */,
+			);
+			name = FIOSDKSampleTests;
+			productName = FIOSDKSampleTests;
+			productReference = 0203C5B7217A699A0054FA10 /* FIOSDKSampleTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		0203C59B217A69980054FA10 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastSwiftUpdateCheck = 1000;
+				LastUpgradeCheck = 1000;
+				ORGANIZATIONNAME = "Dapix, Inc.";
+				TargetAttributes = {
+					0203C5A2217A69980054FA10 = {
+						CreatedOnToolsVersion = 10.0;
+					};
+					0203C5B6217A699A0054FA10 = {
+						CreatedOnToolsVersion = 10.0;
+						TestTargetID = 0203C5A2217A69980054FA10;
+					};
+				};
+			};
+			buildConfigurationList = 0203C59E217A69980054FA10 /* Build configuration list for PBXProject "FIOSDKSample" */;
+			compatibilityVersion = "Xcode 9.3";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 0203C59A217A69980054FA10;
+			productRefGroup = 0203C5A4217A69980054FA10 /* Products */;
+			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = 0203C5CF217A71040054FA10 /* Products */;
+					ProjectRef = 0203C5C7217A69F50054FA10 /* FIOSDK.xcodeproj */;
+				},
+			);
+			projectRoot = "";
+			targets = (
+				0203C5A2217A69980054FA10 /* FIOSDKSample */,
+				0203C5B6217A699A0054FA10 /* FIOSDKSampleTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXReferenceProxy section */
+		0203C5D4217A71040054FA10 /* FIOSDK.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = FIOSDK.framework;
+			remoteRef = 0203C5D3217A71040054FA10 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		0203C5D6217A71040054FA10 /* FIOSDKTests.xctest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = FIOSDKTests.xctest;
+			remoteRef = 0203C5D5217A71040054FA10 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
+
+/* Begin PBXResourcesBuildPhase section */
+		0203C5A1217A69980054FA10 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				0203C5B1217A69990054FA10 /* LaunchScreen.storyboard in Resources */,
+				0203C5AE217A69990054FA10 /* Assets.xcassets in Resources */,
+				0203C5AC217A69980054FA10 /* Main.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		0203C5B5217A699A0054FA10 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		0203C59F217A69980054FA10 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				0203C5A9217A69980054FA10 /* ViewController.swift in Sources */,
+				0203C5A7217A69980054FA10 /* AppDelegate.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		0203C5B3217A699A0054FA10 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				0203C5BC217A699A0054FA10 /* FIOSDKSampleTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		0203C5B9217A699A0054FA10 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 0203C5A2217A69980054FA10 /* FIOSDKSample */;
+			targetProxy = 0203C5B8217A699A0054FA10 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		0203C5AA217A69980054FA10 /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				0203C5AB217A69980054FA10 /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		0203C5AF217A69990054FA10 /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				0203C5B0217A69990054FA10 /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		0203C5BE217A699A0054FA10 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		0203C5BF217A699A0054FA10 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		0203C5C1217A699A0054FA10 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_STYLE = Automatic;
+				INFOPLIST_FILE = FIOSDKSample/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.dapix.FIOSDKSample;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 4.2;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		0203C5C2217A699A0054FA10 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_STYLE = Automatic;
+				INFOPLIST_FILE = FIOSDKSample/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.dapix.FIOSDKSample;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 4.2;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		0203C5C4217A699A0054FA10 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				INFOPLIST_FILE = FIOSDKSampleTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.dapix.FIOSDKSampleTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 4.2;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/FIOSDKSample.app/FIOSDKSample";
+			};
+			name = Debug;
+		};
+		0203C5C5217A699A0054FA10 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				INFOPLIST_FILE = FIOSDKSampleTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.dapix.FIOSDKSampleTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 4.2;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/FIOSDKSample.app/FIOSDKSample";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		0203C59E217A69980054FA10 /* Build configuration list for PBXProject "FIOSDKSample" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				0203C5BE217A699A0054FA10 /* Debug */,
+				0203C5BF217A699A0054FA10 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		0203C5C0217A699A0054FA10 /* Build configuration list for PBXNativeTarget "FIOSDKSample" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				0203C5C1217A699A0054FA10 /* Debug */,
+				0203C5C2217A699A0054FA10 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		0203C5C3217A699A0054FA10 /* Build configuration list for PBXNativeTarget "FIOSDKSampleTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				0203C5C4217A699A0054FA10 /* Debug */,
+				0203C5C5217A699A0054FA10 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 0203C59B217A69980054FA10 /* Project object */;
+}
