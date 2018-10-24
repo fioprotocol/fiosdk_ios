@@ -17,9 +17,7 @@
 		0203C574217A487A0054FA10 /* ripemd160.h in Headers */ = {isa = PBXBuildFile; fileRef = 0203C53F217A487A0054FA10 /* ripemd160.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		0203C575217A487A0054FA10 /* asm_arm.inc.h in Headers */ = {isa = PBXBuildFile; fileRef = 0203C540217A487A0054FA10 /* asm_arm.inc.h */; };
 		0203C577217A487A0054FA10 /* libbase58.h in Headers */ = {isa = PBXBuildFile; fileRef = 0203C542217A487A0054FA10 /* libbase58.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		0203C578217A487A0054FA10 /* curve-specific.inc in Sources */ = {isa = PBXBuildFile; fileRef = 0203C543217A487A0054FA10 /* curve-specific.inc */; };
 		0203C579217A487A0054FA10 /* types.h in Headers */ = {isa = PBXBuildFile; fileRef = 0203C544217A487A0054FA10 /* types.h */; };
-		0203C57A217A487A0054FA10 /* platform-specific.inc in Sources */ = {isa = PBXBuildFile; fileRef = 0203C545217A487A0054FA10 /* platform-specific.inc */; };
 		0203C57B217A487A0054FA10 /* Bridging-Header.h in Headers */ = {isa = PBXBuildFile; fileRef = 0203C546217A487A0054FA10 /* Bridging-Header.h */; };
 		0203C57C217A487A0054FA10 /* ripemd160.c in Sources */ = {isa = PBXBuildFile; fileRef = 0203C548217A487A0054FA10 /* ripemd160.c */; };
 		0203C57D217A487A0054FA10 /* uECC.c in Sources */ = {isa = PBXBuildFile; fileRef = 0203C549217A487A0054FA10 /* uECC.c */; };
@@ -49,6 +47,8 @@
 		0203C5CB217A6A6D0054FA10 /* FIOSDK.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0203C5C9217A6A6D0054FA10 /* FIOSDK.swift */; };
 		0203C5CC217A6A6D0054FA10 /* Settings.plist in Resources */ = {isa = PBXBuildFile; fileRef = 0203C5CA217A6A6D0054FA10 /* Settings.plist */; };
 		0203C5D8217A71330054FA10 /* FIOError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0203C5D7217A71330054FA10 /* FIOError.swift */; };
+		0243269D217FD88A00337CF1 /* curve-specific.inc in Resources */ = {isa = PBXBuildFile; fileRef = 0203C543217A487A0054FA10 /* curve-specific.inc */; };
+		0243269E217FD89200337CF1 /* platform-specific.inc in Resources */ = {isa = PBXBuildFile; fileRef = 0203C545217A487A0054FA10 /* platform-specific.inc */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -425,6 +425,7 @@
 				0203C515217A48100054FA10 /* Sources */,
 				0203C516217A48100054FA10 /* Frameworks */,
 				0203C517217A48100054FA10 /* Resources */,
+				024326A3217FDBB700337CF1 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -497,6 +498,8 @@
 				0203C57F217A487A0054FA10 /* README.md in Resources */,
 				0203C56F217A487A0054FA10 /* LICENSE in Resources */,
 				0203C5CC217A6A6D0054FA10 /* Settings.plist in Resources */,
+				0243269D217FD88A00337CF1 /* curve-specific.inc in Resources */,
+				0243269E217FD89200337CF1 /* platform-specific.inc in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -509,12 +512,31 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		024326A3217FDBB700337CF1 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "UNIVERSAL_OUTPUTFOLDER=${BUILD_DIR}/${CONFIGURATION}-universal\n\n# make sure the output directory exists\nmkdir -p \"${UNIVERSAL_OUTPUTFOLDER}\"\n\n# Next, work out if we're in SIM or DEVICE\nif [ \"false\" == ${ALREADYINVOKED:-false} ]\nthen\n\nexport ALREADYINVOKED=\"true\"\n\nif [ ${PLATFORM_NAME} = \"iphonesimulator\" ]\nthen\nxcodebuild -target \"${PROJECT_NAME}\" ONLY_ACTIVE_ARCH=NO -configuration ${CONFIGURATION} -sdk iphoneos  BUILD_DIR=\"${BUILD_DIR}\" BUILD_ROOT=\"${BUILD_ROOT}\" clean build\nelse\nxcodebuild -target \"${PROJECT_NAME}\" -configuration ${CONFIGURATION} -sdk iphonesimulator ONLY_ACTIVE_ARCH=NO BUILD_DIR=\"${BUILD_DIR}\" BUILD_ROOT=\"${BUILD_ROOT}\" clean build\nfi\n\n# Step 2. Copy the framework structure (from iphoneos build) to the universal folder\ncp -R \"${BUILD_DIR}/${CONFIGURATION}-iphoneos/${PROJECT_NAME}.framework\" \"${UNIVERSAL_OUTPUTFOLDER}/\"\n\n# Step 3. Copy Swift modules from iphonesimulator build (if it exists) to the copied framework directory\nSIMULATOR_SWIFT_MODULES_DIR=\"${BUILD_DIR}/${CONFIGURATION}-iphonesimulator/${PROJECT_NAME}.framework/Modules/${PROJECT_NAME}.swiftmodule/.\"\nif [ -d \"${SIMULATOR_SWIFT_MODULES_DIR}\" ]; then\ncp -R \"${SIMULATOR_SWIFT_MODULES_DIR}\" \"${UNIVERSAL_OUTPUTFOLDER}/${PROJECT_NAME}.framework/Modules/${PROJECT_NAME}.swiftmodule\"\nfi\n\n# Step 4. Create universal binary file using lipo and place the combined executable in the copied framework directory\nlipo -create -output \"${UNIVERSAL_OUTPUTFOLDER}/${PROJECT_NAME}.framework/${PROJECT_NAME}\" \"${BUILD_DIR}/${CONFIGURATION}-iphonesimulator/${PROJECT_NAME}.framework/${PROJECT_NAME}\" \"${BUILD_DIR}/${CONFIGURATION}-iphoneos/${PROJECT_NAME}.framework/${PROJECT_NAME}\"\n\n# Step 5. Convenience step to copy the framework to the project's directory\ncp -R \"${UNIVERSAL_OUTPUTFOLDER}/${PROJECT_NAME}.framework\" \"${PROJECT_DIR}\"\n\n# Step 6. Convenience step to open the project's directory in Finder\nopen \"${PROJECT_DIR}\"\n\nfi\n";
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		0203C515217A48100054FA10 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				0203C57A217A487A0054FA10 /* platform-specific.inc in Sources */,
 				0203C57C217A487A0054FA10 /* ripemd160.c in Sources */,
 				0203C582217A487A0054FA10 /* Transaction.swift in Sources */,
 				0203C599217A4EC90054FA10 /* Utilities.swift in Sources */,
@@ -540,7 +562,6 @@
 				0203C584217A487A0054FA10 /* Currency.swift in Sources */,
 				0203C572217A487A0054FA10 /* AnyEncodable.swift in Sources */,
 				0203C591217A487A0054FA10 /* BigInt.swift in Sources */,
-				0203C578217A487A0054FA10 /* curve-specific.inc in Sources */,
 				0203C590217A487A0054FA10 /* Error.swift in Sources */,
 				0203C571217A487A0054FA10 /* AnyCodable.swift in Sources */,
 				0203C57D217A487A0054FA10 /* uECC.c in Sources */,
