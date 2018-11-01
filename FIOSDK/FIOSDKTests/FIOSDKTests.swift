@@ -13,13 +13,14 @@ class FIOSDKTests: XCTestCase {
 
     private let accountName:String = "exchange1111"
     private let privateKey:String = "5KDQzVMaD1iUdYDrA2PNK3qEP7zNbUf8D41ZVKqGzZ117PdM5Ap"
+    private let publicKey:String = "EOS6D6gSipBmP1KW9SMB5r4ELjooaogFt77gEs25V9TU9FrxKVeFb"
     private let url:String = "http://52.14.221.174:8889/v1"
     
     private let TIMEOUT:Double = 10.0
     
     override func setUp() {
         // Put setup code here. This method is called before the invocation of each test method in the class.
-        _ = FIOSDK.sharedInstance(accountName: accountName, privateKey: privateKey, url: url)
+        _ = FIOSDK.sharedInstance(accountName: accountName, privateKey: privateKey, publicKey: publicKey, url: url)
     }
     
     override func tearDown() {
@@ -84,4 +85,31 @@ class FIOSDKTests: XCTestCase {
     }
 
 
+    func testCreateAccount() {
+        
+        let expectation = XCTestExpectation(description: "testNewAccountCreation")
+        
+        FIOSDK.sharedInstance().createNewAccount(newAccountName:"testnew");
+        
+        wait(for: [expectation], timeout: TIMEOUT)
+    }
+    
+    func testGetAccount() {
+        let expectation = XCTestExpectation(description: "testGetAccount")
+        
+        FIOSDK.sharedInstance().getAccount(accountName:"testnew");
+        
+        wait(for: [expectation], timeout: TIMEOUT)
+        
+    }
+
+    func testCreateRandomAccountName() {
+        let accountName = FIOSDK.sharedInstance().createRandomAccountName()
+        
+        print (accountName)
+        print (accountName.count)
+        XCTAssert(accountName.count == 12, "should be 12 characters")
+        
+    }
+    
 }

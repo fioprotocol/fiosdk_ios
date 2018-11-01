@@ -9,46 +9,110 @@
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "FIOSDK/FIOSDK/FIOSDK.swift"
-            timestampString = "561674774.2581871"
+            filePath = "FIOSDK/FIOSDK/SwiftyEOS/Sources/SwiftyEOS/Contract/transaction/TransactionUtil.swift"
+            timestampString = "562712524.516907"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "151"
-            endingLineNumber = "151"
-            landmarkName = "unknown"
-            landmarkType = "0">
+            startingLineNumber = "64"
+            endingLineNumber = "64"
+            landmarkName = "pushTransaction(abis:account:privateKey:completion:)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 (Swift.Optional&lt;FIOSDK.ChainInfo&gt;, Swift.Optional&lt;Swift.Error&gt;) -&gt; () in static FIOSDK.TransactionUtil.pushTransaction(abis: Swift.Array&lt;FIOSDK.AbiJson&gt;, account: Swift.String, privateKey: FIOSDK.PrivateKey, completion: (Swift.Optional&lt;FIOSDK.TransactionResult&gt;, Swift.Optional&lt;Swift.Error&gt;) -&gt; ()) -&gt; ()"
+                  moduleName = "FIOSDK"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/shawnarney/Dropbox/working/dapix/code/fiosdk_ios/FIOSDK/FIOSDK/SwiftyEOS/Sources/SwiftyEOS/Contract/transaction/TransactionUtil.swift"
+                  timestampString = "562712188.566752"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "64"
+                  endingLineNumber = "64"
+                  offsetFromSymbolStart = "393">
+               </Location>
+               <Location
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 (Swift.Optional&lt;FIOSDK.BlockInfo&gt;, Swift.Optional&lt;Swift.Error&gt;) -&gt; () in closure #1 (Swift.Optional&lt;FIOSDK.ChainInfo&gt;, Swift.Optional&lt;Swift.Error&gt;) -&gt; () in static FIOSDK.TransactionUtil.pushTransaction(abis: Swift.Array&lt;FIOSDK.AbiJson&gt;, account: Swift.String, privateKey: FIOSDK.PrivateKey, completion: (Swift.Optional&lt;FIOSDK.TransactionResult&gt;, Swift.Optional&lt;Swift.Error&gt;) -&gt; ()) -&gt; ()"
+                  moduleName = "FIOSDK"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/shawnarney/Dropbox/working/dapix/code/fiosdk_ios/FIOSDK/FIOSDK/SwiftyEOS/Sources/SwiftyEOS/Contract/transaction/TransactionUtil.swift"
+                  timestampString = "562712188.5683399"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "65"
+                  endingLineNumber = "65"
+                  offsetFromSymbolStart = "203">
+               </Location>
+            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            shouldBeEnabled = "No"
+            shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "FIOSDK/FIOSDK/FIOSDK.swift"
-            timestampString = "561674774.258251"
+            filePath = "FIOSDK/FIOSDK/SwiftyEOS/Sources/SwiftyEOS/Contract/transaction/TransactionUtil.swift"
+            timestampString = "562712524.51694"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "154"
-            endingLineNumber = "154"
-            landmarkName = "unknown"
-            landmarkType = "0">
+            startingLineNumber = "73"
+            endingLineNumber = "73"
+            landmarkName = "pushTransaction(abis:account:privateKey:completion:)"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            shouldBeEnabled = "No"
+            shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "FIOSDK/FIOSDK/FIOSDK.swift"
-            timestampString = "561674774.2582999"
+            filePath = "FIOSDK/FIOSDK/SwiftyEOS/Sources/SwiftyEOS/Contract/transaction/TransactionUtil.swift"
+            timestampString = "562712524.5169719"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "150"
-            endingLineNumber = "150"
-            landmarkName = "unknown"
-            landmarkType = "0">
+            startingLineNumber = "108"
+            endingLineNumber = "108"
+            landmarkName = "pushTransaction(abis:account:privateKey:completion:)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #2 () -&gt; () in closure #1 (Swift.Optional&lt;FIOSDK.BlockInfo&gt;, Swift.Optional&lt;Swift.Error&gt;) -&gt; () in closure #1 (Swift.Optional&lt;FIOSDK.ChainInfo&gt;, Swift.Optional&lt;Swift.Error&gt;) -&gt; () in static FIOSDK.TransactionUtil.pushTransaction(abis: Swift.Array&lt;FIOSDK.AbiJson&gt;, account: Swift.String, privateKey: FIOSDK.PrivateKey, completion: (Swift.Optional&lt;FIOSDK.TransactionResult&gt;, Swift.Optional&lt;Swift.Error&gt;) -&gt; ()) -&gt; ()"
+                  moduleName = "FIOSDK"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/shawnarney/Dropbox/working/dapix/code/fiosdk_ios/FIOSDK/FIOSDK/SwiftyEOS/Sources/SwiftyEOS/Contract/transaction/TransactionUtil.swift"
+                  timestampString = "562714133.347453"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "108"
+                  endingLineNumber = "108"
+                  offsetFromSymbolStart = "4246">
+               </Location>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 (Swift.Optional&lt;FIOSDK.TransactionResult&gt;, Swift.Optional&lt;Swift.Error&gt;) -&gt; () in closure #2 () -&gt; () in closure #1 (Swift.Optional&lt;FIOSDK.BlockInfo&gt;, Swift.Optional&lt;Swift.Error&gt;) -&gt; () in closure #1 (Swift.Optional&lt;FIOSDK.ChainInfo&gt;, Swift.Optional&lt;Swift.Error&gt;) -&gt; () in static FIOSDK.TransactionUtil.pushTransaction(abis: Swift.Array&lt;FIOSDK.AbiJson&gt;, account: Swift.String, privateKey: FIOSDK.PrivateKey, completion: (Swift.Optional&lt;FIOSDK.TransactionResult&gt;, Swift.Optional&lt;Swift.Error&gt;) -&gt; ()) -&gt; ()"
+                  moduleName = "FIOSDK"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/shawnarney/Dropbox/working/dapix/code/fiosdk_ios/FIOSDK/FIOSDK/SwiftyEOS/Sources/SwiftyEOS/Contract/transaction/TransactionUtil.swift"
+                  timestampString = "562714133.349595"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "109"
+                  endingLineNumber = "109"
+                  offsetFromSymbolStart = "42">
+               </Location>
+            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

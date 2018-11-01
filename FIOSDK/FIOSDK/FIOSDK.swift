@@ -20,6 +20,7 @@ public class FIOSDK: NSObject {
     private let ERROR_DOMAIN = "FIO Wallet SDK"
     private var accountName:String = ""
     private var privateKey:String = ""
+    private var publicKey:String = ""
     
     struct AddressByNameRequest: Codable {
         let fio_name: String
@@ -55,7 +56,7 @@ public class FIOSDK: NSObject {
         return sharedInstance
     }()
     
-    public class func sharedInstance(accountName: String? = nil, privateKey:String? = nil, url:String? = nil) -> FIOSDK {
+    public class func sharedInstance(accountName: String? = nil, privateKey:String? = nil, publicKey:String? = nil, url:String? = nil) -> FIOSDK {
         
         if (accountName == nil ){
             if (_sharedInstance.accountName.count < 2 ){
@@ -74,6 +75,15 @@ public class FIOSDK: NSObject {
         }
         else {
             _sharedInstance.privateKey = privateKey!
+        }
+        
+        if (publicKey == nil){
+            if (_sharedInstance.publicKey.count < 2){
+                fatalError("Public Key hasn't been set yet, for the FIOWalletSDK Shared Instance, this needs to be passed in with the first usage")
+            }
+        }
+        else {
+            _sharedInstance.publicKey = publicKey!
         }
         
         if (url == nil){
@@ -105,7 +115,6 @@ public class FIOSDK: NSObject {
             return false
         }
         
-        
         return true
     }
     
@@ -119,6 +128,10 @@ public class FIOSDK: NSObject {
     
     private func getURI() -> String {
         return Utilities.sharedInstance().URL
+    }
+    
+    private func getPublicKey() -> String {
+        return self.publicKey
     }
     
     public func getAddressByFioName (fioName:String, currencyCode:String, completion: @escaping (_ fioLookupResults: AddressByNameResponse, _ error:FIOError?) -> ()) {
@@ -220,11 +233,69 @@ public class FIOSDK: NSObject {
                 }
             } else {
                 print("Ok. RegisterName, Txid: \(result!.transactionId)")
-                self.addAllPublicAddresses(fioName: fioName, publicReceiveAddresses: publicReceiveAddresses, completion: { (error) in
+            
+                self.createAccountAddAllPublicAddresses(fioName: fioName, publicReceiveAddresses: publicReceiveAddresses, completion: { (error) in
                     completion(error)
                 })
            }
         })
+    }
+    
+    private func createAccountAddAllPublicAddresses(fioName : String,  publicReceiveAddresses:Dictionary<String,String>, completion: @escaping ( _ error:FIOError?) -> ()) {
+        getValidNewAccountName { (newAccountName, error) in
+            if (newAccountName != nil && newAccountName!.count > 0){
+                self.createAccount(newAccountName: newAccountName!, completion: { (error) in
+                    if (error?.kind == FIOError.ErrorKind.Success){
+                        var addresses:Dictionary<String,String> = publicReceiveAddresses
+                        addresses[newAccountName!] = "BTC"
+                        
+                        self.addAllPublicAddresses(fioName: fioName, publicReceiveAddresses: addresses, completion: { (error) in
+                            completion(error)
+                        })
+                    }
+                    else{
+                        completion(error)
+                    }
+                })
+            }
+            else{
+                completion(error)
+            }
+        }
+    }
+    
+    // try 4 times.
+    private func getValidNewAccountName(completion: @escaping (_ newAccountName: String?, _ error:FIOError?) -> ()) {
+        
+        self.getAccount(accountName: createRandomAccountName()) { (account, error) in
+            if (account != nil){
+                completion(account?.accountName, FIOError.init(kind: FIOError.ErrorKind.Success, localizedDescription: ""))
+            }
+            else {
+                self.getAccount(accountName: self.createRandomAccountName()) { (account, error) in
+                    if (account != nil){
+                        completion(account?.accountName, FIOError.init(kind: FIOError.ErrorKind.Success, localizedDescription: ""))
+                    }
+                    else {
+                        self.getAccount(accountName: self.createRandomAccountName()) { (account, error) in
+                            if (account != nil){
+                                completion(account?.accountName, FIOError.init(kind: FIOError.ErrorKind.Success, localizedDescription: ""))
+                            }
+                            else {
+                                self.getAccount(accountName: self.createRandomAccountName()) { (account, error) in
+                                    if (account != nil){
+                                        completion(account?.accountName, FIOError.init(kind: FIOError.ErrorKind.Success, localizedDescription: ""))
+                                    }
+                                    else {
+                                        completion(nil, FIOError.init(kind: FIOError.ErrorKind.Failure, localizedDescription: "Unable to create new account for register name"))
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
         
     }
     
@@ -256,4 +327,43 @@ public class FIOSDK: NSObject {
             completion(FIOError.init(kind: FIOError.ErrorKind.Success, localizedDescription: ""))
         }
     }
+    
+    private func createAccount(newAccountName:String, completion: @escaping ( _ error:FIOError?) -> ()) {
+        
+        AccountUtil.createAccount(account: newAccountName, ownerKey:getPublicKey() , activeKey: getPublicKey(), creator: getAccountName(), pkString: getPrivateKey()) { (result, error) in
+            if error != nil {
+                if (error! as NSError).code == RPCErrorResponse.ErrorCode {
+                    let errDescription = "error"
+                    print (errDescription)
+                    completion(FIOError.init(kind: FIOError.ErrorKind.Failure, localizedDescription: errDescription))
+                } else {
+                    let errDescription = ("other error: \(String(describing: error?.localizedDescription))")
+                    print (errDescription)
+                    completion(FIOError.init(kind: FIOError.ErrorKind.Failure, localizedDescription: errDescription))
+                }
+            } else {
+                print("Ok. new account, Txid: \(result!.transactionId)")
+                completion(FIOError.init(kind: FIOError.ErrorKind.Success, localizedDescription: "Successfully created the new account"))
+            }
+        }
+        
+    }
+    
+    private func getAccount(accountName:String, completion: @escaping (_ account: Account?, _ error:FIOError?) -> ()) {
+        EOSRPC.sharedInstance.getAccount(account: accountName) { (account, error) in
+            if (account != nil){
+               completion(account, FIOError.init(kind: FIOError.ErrorKind.Success, localizedDescription: "Successfully got the new account"))
+            }
+            else {
+                let errDescription = ("other error: \(String(describing: error?.localizedDescription))")
+                print (errDescription)
+                completion(nil, FIOError.init(kind: FIOError.ErrorKind.Failure, localizedDescription: errDescription))
+            }
+        }
+    }
+    
+    private func createRandomAccountName() -> String{
+        return Utilities.sharedInstance().randomString(length:12)
+    }
+    
 }
