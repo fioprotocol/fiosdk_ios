@@ -9,7 +9,12 @@
 			<key>orderHint</key>
 			<integer>0</integer>
 		</dict>
-		<key>FIOSDK_Release.xcscheme</key>
+		<key>FIOSDK_AppStoreRelease.xcscheme</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>3</integer>
+		</dict>
+		<key>FIOSDK_ExternalSimulator.xcscheme</key>
 		<dict>
 			<key>orderHint</key>
 			<integer>1</integer>
