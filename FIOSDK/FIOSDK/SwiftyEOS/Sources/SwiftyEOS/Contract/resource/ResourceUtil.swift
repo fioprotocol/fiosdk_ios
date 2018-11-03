@@ -44,15 +44,15 @@ import Foundation
         let param = DelegateParam()
         param.from = from
         param.receiver = receiver
-        param.stakeNetQuantity = String(format: "%.4f EOS", net)
-        param.stakeCpuQuantity = String(format: "%.4f EOS", cpu)
+        param.stakeNetQuantity = String(format: "%.4f FIO", net)
+        param.stakeCpuQuantity = String(format: "%.4f FIO", cpu)
         param.transfer = transfer
         
         let encoder = JSONEncoder()
         encoder.keyEncodingStrategy = .convertToSnakeCase
         let jsonData = try! encoder.encode(param)
         let jsonString = String(data: jsonData, encoding: .utf8)
-        
+        print (jsonString!)
         return try! AbiJson(code: "eosio", action: "delegatebw", json: jsonString!)
     }
     
@@ -100,13 +100,13 @@ import Foundation
         let param = BuyRamParam()
         param.payer = payer
         param.receiver = receiver
-        param.quant = String(format: "%.4f EOS", ramEos)
+        param.quant = String(format: "%.4f FIO", ramEos)
         
         let encoder = JSONEncoder()
         encoder.keyEncodingStrategy = .convertToSnakeCase
         let jsonData = try! encoder.encode(param)
         let jsonString = String(data: jsonData, encoding: .utf8)
-        
+        print (jsonString)
         return try! AbiJson(code: "eosio", action: "buyram", json: jsonString!)
     }
     

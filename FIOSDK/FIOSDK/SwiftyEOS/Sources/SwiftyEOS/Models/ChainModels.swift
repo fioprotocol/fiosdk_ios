@@ -71,7 +71,7 @@ struct ChainInfo: Codable {
     var requiredAuth: RequiredAuth?
 }
 
-@objcMembers class Account: NSObject, Codable {
+@objcMembers public class Account: NSObject, Codable {
     var accountName: String = ""
     var permissions: [AccountPermission]?
     var netLimit: ResourceLimit?
@@ -99,7 +99,7 @@ struct ChainInfo: Codable {
         case coreLiquidBalance
     }
     
-    required init(from decoder: Decoder) throws {
+    public required init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         
         self.accountName = try container.decode(String.self, forKey: .accountName)

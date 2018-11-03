@@ -12,21 +12,31 @@ import XCTest
 class FIOSDKTests: XCTestCase {
 
     private let accountName:String = "exchange1111"
+    private let accountNameForRequestFunds:String = "exchange2222"
     private let privateKey:String = "5KDQzVMaD1iUdYDrA2PNK3qEP7zNbUf8D41ZVKqGzZ117PdM5Ap"
     private let publicKey:String = "EOS6D6gSipBmP1KW9SMB5r4ELjooaogFt77gEs25V9TU9FrxKVeFb"
     private let url:String = "http://52.14.221.174:8889/v1"
     
     private let TIMEOUT:Double = 10.0
     
+    private let useStaging = true
+    
     override func setUp() {
         // Put setup code here. This method is called before the invocation of each test method in the class.
-        _ = FIOSDK.sharedInstance(accountName: accountName, privateKey: privateKey, publicKey: publicKey, url: url)
+        
+        if (useStaging){
+            _ = FIOSDK.sharedInstance(accountName: "fioname11111", accountNameForRequestFunds: "fioname11111", privateKey: "5JA5zQkg1S59swPzY6d29gsfNhNPVCb7XhiGJAakGFa7tEKSMjT", publicKey: "EOS8ApHc48DpXehLznVqMJgMGPAaJoyMbFJbfDLyGQ5QjF7nDPuvJ", url: "http://18.223.14.244:8889/v1")
+        }
+
+        else{
+            _ = FIOSDK.sharedInstance(accountName: accountName, accountNameForRequestFunds: accountNameForRequestFunds, privateKey: privateKey, publicKey: publicKey, url: url)
+        }
     }
     
     override func tearDown() {
         // Put teardown code here. This method is called after the invocation of each test method in the class.
     }
-    
+  /*
     func testGetAddressByFioName() {
         let expectation = XCTestExpectation(description: "testGetAddressByFIOName")
         
@@ -53,7 +63,7 @@ class FIOSDKTests: XCTestCase {
         
         wait(for: [expectation], timeout: TIMEOUT)
     }
-    
+
     func testRegisterFioName(){
         let expectation = XCTestExpectation(description: "testRegisterFIOName")
         
@@ -68,9 +78,9 @@ class FIOSDKTests: XCTestCase {
             expectation.fulfill()
         })
         
-        wait(for: [expectation], timeout: TIMEOUT)
+        wait(for: [expectation], timeout: TIMEOUT*3000)
     }
-    
+     */
     func testValidation(){
         
         XCTAssert(FIOSDK.sharedInstance().isFioNameValid(fioName: "test.brd"), "should be valid")
@@ -85,31 +95,36 @@ class FIOSDKTests: XCTestCase {
     }
 
 
-    func testCreateAccount() {
+    //
+    
+    func testGetAccountName(){
+        let expectation = XCTestExpectation(description: "testGetAccountName")
         
-        let expectation = XCTestExpectation(description: "testNewAccountCreation")
+        let receiveAddress:String = "0xc39b2845E3CFAdE5f5b2864fe73f5960B8dB483B"
         
-        FIOSDK.sharedInstance().createNewAccount(newAccountName:"testnew");
+        FIOSDK.sharedInstance().getAccount(accountName: "5jnzm4k4g4vn", completion: { (account, error) in
+            if (account != nil){
+                print ("account name found")
+                print(account?.accountName)
+                XCTAssert((error?.kind == FIOError.ErrorKind.Success), "getAccountName NOT SUCCESSFUL")
+                expectation.fulfill()
+            }
+        })
         
         wait(for: [expectation], timeout: TIMEOUT)
     }
     
-    func testGetAccount() {
-        let expectation = XCTestExpectation(description: "testGetAccount")
+    
+    func testAddAccountPermissions(){
+        let expectation = XCTestExpectation(description: "testAddAccountPermissions")
         
-        FIOSDK.sharedInstance().getAccount(accountName:"testnew");
+        let receiveAddress:String = "0xc39b2845E3CFAdE5f5b2864fe73f5960B8dB483B"
+        
+        FIOSDK.sharedInstance().addAccountPermissions(accountName: "5jnzm4k4g4vn", completion: { (error) in
+            XCTAssert((error?.kind == FIOError.ErrorKind.Success), "testAddAccountPermissions NOT SUCCESSFUL")
+            expectation.fulfill()
+        })
         
         wait(for: [expectation], timeout: TIMEOUT)
-        
     }
-
-    func testCreateRandomAccountName() {
-        let accountName = FIOSDK.sharedInstance().createRandomAccountName()
-        
-        print (accountName)
-        print (accountName.count)
-        XCTAssert(accountName.count == 12, "should be 12 characters")
-        
-    }
-    
 }
