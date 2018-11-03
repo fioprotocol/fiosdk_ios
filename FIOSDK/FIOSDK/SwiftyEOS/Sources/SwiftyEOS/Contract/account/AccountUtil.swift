@@ -44,7 +44,7 @@ import Foundation
         encoder.keyEncodingStrategy = .convertToSnakeCase
         let jsonData = try! encoder.encode(param)
         let jsonString = String(data: jsonData, encoding: .utf8)
-        
+        print(jsonString)
         return try! AbiJson(code: "eosio", action: "newaccount", json: jsonString!)
     }
     
@@ -63,14 +63,16 @@ import Foundation
     ///   - completion: callback
     
     static func createAccount(account: String, ownerKey: String, activeKey: String, creator: String, pkString: String, completion: @escaping (_ result: TransactionResult?, _ error: Error?) -> ()) {
-        let newaccountAbiJson = self.newAccountAbiJson(creator: creator,account: account, ownerKey: ownerKey, activeKey: activeKey)
+        let newaccountAbiJson = newAccountAbiJson(creator: creator, account: account, ownerKey: ownerKey, activeKey: activeKey)
+        let buyRamAbiJson = ResourceUtil.buyRamAbiJson(payer: creator, receiver: account, ramEos: 100.0000)
+        let delegatebwAbiJson = ResourceUtil.stakeResourceAbiJson(from: creator, receiver: account, transfer: 1, net: 100.0000, cpu: 100.0000)
         
         guard let privateKey = try? PrivateKey(keyString: pkString) else {
             completion(nil, NSError(domain: "", code: 0, userInfo: [NSLocalizedDescriptionKey: "invalid private key"]))
             return
         }
         
-        TransactionUtil.pushTransaction(abis: [newaccountAbiJson], account: creator, privateKey: privateKey!, completion: completion)
+        TransactionUtil.pushTransaction(abis: [newaccountAbiJson, buyRamAbiJson, delegatebwAbiJson], account: creator, privateKey: privateKey!, completion: completion)
     }
     
 }
