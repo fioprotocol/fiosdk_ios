@@ -47,6 +47,7 @@ public class FIOSDK: NSObject {
     
     public struct NameByAddressResponse: Codable {
         public let name: String
+        public let expiration: String
     }
     
     private static var _sharedInstance: FIOSDK = {
@@ -161,7 +162,7 @@ public class FIOSDK: NSObject {
  
     public func getFioNameByAddress (publicAddress:String, currencyCode:String, completion: @escaping (_ fioLookupResults: NameByAddressResponse, _ error:FIOError?) -> ()) {
         
-        var fioRsvp : NameByAddressResponse = NameByAddressResponse(name: "")
+        var fioRsvp : NameByAddressResponse = NameByAddressResponse(name: "", expiration: "")
         
         let fioRequest = NameByAddressRequest(key: publicAddress, chain:currencyCode)
         var jsonData: Data
@@ -204,7 +205,7 @@ public class FIOSDK: NSObject {
         let account = getAccountName()
         let importedPk = try! PrivateKey(keyString: getPrivateKey())
         
-        let data = "{\"name\":\"" + fioName + "\"}"
+        let data = "{\"name\":\""+fioName+"\",\"requestor\":\"fioname11111\"}"
         let abi = try! AbiJson(code: account, action: "registername", json: data)
 
         TransactionUtil.pushTransaction(abi: abi, account: account, privateKey: importedPk!, completion: { (result, error) in
