@@ -10,11 +10,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "FIOSDK/FIOSDK/SwiftyEOS/Sources/SwiftyEOS/Contract/transaction/TransactionUtil.swift"
-            timestampString = "562967196.888585"
+            timestampString = "563409854.318861"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "64"
-            endingLineNumber = "64"
+            startingLineNumber = "76"
+            endingLineNumber = "76"
             landmarkName = "pushTransaction(abis:account:privateKey:completion:)"
             landmarkType = "7">
             <Locations>
@@ -58,11 +58,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "FIOSDK/FIOSDK/SwiftyEOS/Sources/SwiftyEOS/Contract/transaction/TransactionUtil.swift"
-            timestampString = "562967196.888639"
+            timestampString = "563409854.318915"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "73"
-            endingLineNumber = "73"
+            startingLineNumber = "85"
+            endingLineNumber = "85"
             landmarkName = "pushTransaction(abis:account:privateKey:completion:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -74,11 +74,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "FIOSDK/FIOSDK/SwiftyEOS/Sources/SwiftyEOS/Contract/transaction/TransactionUtil.swift"
-            timestampString = "562967196.88868"
+            timestampString = "563409854.318954"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "108"
-            endingLineNumber = "108"
+            startingLineNumber = "120"
+            endingLineNumber = "120"
             landmarkName = "pushTransaction(abis:account:privateKey:completion:)"
             landmarkType = "7">
             <Locations>
@@ -122,91 +122,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "FIOSDK/FIOSDK/FIOSDK.swift"
-            timestampString = "562967196.888719"
+            timestampString = "563488807.33882"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "265"
-            endingLineNumber = "265"
-            landmarkName = "requestFunds(fioNameFrom:fioNameTo:amount:memo:completion:)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "FIOSDK/FIOSDK/FIOSDK.swift"
-            timestampString = "562967196.889009"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "301"
-            endingLineNumber = "301"
-            landmarkName = "registerFioName(fioName:publicReceiveAddresses:completion:)"
-            landmarkType = "7">
-            <Locations>
-               <Location
-                  shouldBeEnabled = "No"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #1 (Swift.Optional&lt;Swift.String&gt;, Swift.Optional&lt;FIOSDK.FIOError&gt;) -&gt; () in FIOSDK.FIOSDK.(createAccountAddPermissions in _187D9E53E8D8CCD500AEE83C22CCB6E7)(fioName: Swift.String, completion: (Swift.String, Swift.Optional&lt;FIOSDK.FIOError&gt;) -&gt; ()) -&gt; ()"
-                  moduleName = "FIOSDK"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/shawnarney/Dropbox/working/dapix/code/fiosdk_ios/FIOSDK/FIOSDK/FIOSDK.swift"
-                  timestampString = "562893771.765021"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "301"
-                  endingLineNumber = "301"
-                  offsetFromSymbolStart = "502">
-               </Location>
-               <Location
-                  shouldBeEnabled = "No"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #1 (Swift.Optional&lt;FIOSDK.FIOError&gt;) -&gt; () in closure #1 (Swift.Optional&lt;Swift.String&gt;, Swift.Optional&lt;FIOSDK.FIOError&gt;) -&gt; () in FIOSDK.FIOSDK.(createAccountAddPermissions in _187D9E53E8D8CCD500AEE83C22CCB6E7)(fioName: Swift.String, completion: (Swift.String, Swift.Optional&lt;FIOSDK.FIOError&gt;) -&gt; ()) -&gt; ()"
-                  moduleName = "FIOSDK"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/shawnarney/Dropbox/working/dapix/code/fiosdk_ios/FIOSDK/FIOSDK/FIOSDK.swift"
-                  timestampString = "562893771.770857"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "302"
-                  endingLineNumber = "302"
-                  offsetFromSymbolStart = "61">
-               </Location>
-            </Locations>
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "FIOSDK/FIOSDK/FIOSDK.swift"
-            timestampString = "562967196.8892111"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "300"
-            endingLineNumber = "300"
-            landmarkName = "registerFioName(fioName:publicReceiveAddresses:completion:)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "FIOSDK/FIOSDK/FIOSDK.swift"
-            timestampString = "562967196.8894041"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "437"
-            endingLineNumber = "437"
+            startingLineNumber = "513"
+            endingLineNumber = "513"
             landmarkName = "addAllPublicAddresses(fioName:publicReceiveAddresses:completion:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -218,76 +138,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "FIOSDK/FIOSDK/FIOSDK.swift"
-            timestampString = "562967196.889599"
+            timestampString = "563488807.338868"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "442"
-            endingLineNumber = "442"
+            startingLineNumber = "518"
+            endingLineNumber = "518"
             landmarkName = "addAllPublicAddresses(fioName:publicReceiveAddresses:completion:)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "FIOSDK/FIOSDK/FIOSDK.swift"
-            timestampString = "562967196.889788"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "324"
-            endingLineNumber = "324"
-            landmarkName = "getRequestSentHistory(fioName:currencyCode:completion:)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "FIOSDK/FIOSDK/FIOSDK.swift"
-            timestampString = "562967196.889977"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "302"
-            endingLineNumber = "302"
-            landmarkName = "registerFioName(fioName:publicReceiveAddresses:completion:)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "FIOSDK/FIOSDK/FIOSDK.swift"
-            timestampString = "562967196.890164"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "304"
-            endingLineNumber = "304"
-            landmarkName = "registerFioName(fioName:publicReceiveAddresses:completion:)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "FIOSDK/FIOSDK/FIOSDK.swift"
-            timestampString = "562967196.89035"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "417"
-            endingLineNumber = "417"
-            landmarkName = "addAccountPermissions(accountName:completion:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -298,12 +154,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "FIOSDK/FIOSDK/SwiftyEOS/Sources/SwiftyEOS/Contract/account/AccountUtil.swift"
-            timestampString = "562912228.610119"
+            timestampString = "563488807.338907"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "75"
-            endingLineNumber = "75"
-            landmarkName = "createAccount(account:ownerKey:activeKey:creator:pkString:completion:)"
+            startingLineNumber = "78"
+            endingLineNumber = "78"
+            landmarkName = "createAccount(account:ownerKey1:activeKey1:creator1:pkString1:completion:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -506,11 +362,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "FIOSDK/FIOSDK/SwiftyEOS/Sources/SwiftyEOS/Contract/transaction/TransactionUtil.swift"
-            timestampString = "562967196.890685"
+            timestampString = "563409854.3196059"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "66"
-            endingLineNumber = "66"
+            startingLineNumber = "78"
+            endingLineNumber = "78"
             landmarkName = "pushTransaction(abis:account:privateKey:completion:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -522,11 +378,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "FIOSDK/FIOSDK/SwiftyEOS/Sources/SwiftyEOS/Contract/transaction/TransactionUtil.swift"
-            timestampString = "562967196.890725"
+            timestampString = "563409854.319647"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "70"
-            endingLineNumber = "70"
+            startingLineNumber = "82"
+            endingLineNumber = "82"
             landmarkName = "pushTransaction(abis:account:privateKey:completion:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -538,11 +394,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "FIOSDK/FIOSDK/SwiftyEOS/Sources/SwiftyEOS/Contract/transaction/TransactionUtil.swift"
-            timestampString = "562967196.890761"
+            timestampString = "563409854.319681"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "113"
-            endingLineNumber = "113"
+            startingLineNumber = "125"
+            endingLineNumber = "125"
             landmarkName = "pushTransaction(abis:account:privateKey:completion:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -554,11 +410,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "FIOSDK/FIOSDK/SwiftyEOS/Sources/SwiftyEOS/Contract/transaction/TransactionUtil.swift"
-            timestampString = "562967196.890795"
+            timestampString = "563409854.319714"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "110"
-            endingLineNumber = "110"
+            startingLineNumber = "122"
+            endingLineNumber = "122"
             landmarkName = "pushTransaction(abis:account:privateKey:completion:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -570,11 +426,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "FIOSDK/FIOSDK/SwiftyEOS/Sources/SwiftyEOS/Contract/transaction/TransactionUtil.swift"
-            timestampString = "562967196.890829"
+            timestampString = "563409854.319746"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "45"
-            endingLineNumber = "45"
+            startingLineNumber = "57"
+            endingLineNumber = "57"
             landmarkName = "pushTransaction(abi:account:privateKey:completion:)"
             landmarkType = "7">
             <Locations>
@@ -634,11 +490,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "FIOSDK/FIOSDK/SwiftyEOS/Sources/SwiftyEOS/Contract/transaction/TransactionUtil.swift"
-            timestampString = "562967196.890877"
+            timestampString = "563409854.31979"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "59"
-            endingLineNumber = "59"
+            startingLineNumber = "71"
+            endingLineNumber = "71"
             landmarkName = "pushTransaction(abis:account:privateKey:completion:)"
             landmarkType = "7">
             <Locations>
@@ -682,11 +538,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "FIOSDK/FIOSDK/FIOSDK.swift"
-            timestampString = "562967196.8909121"
+            timestampString = "563488807.339082"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "308"
-            endingLineNumber = "308"
+            startingLineNumber = "333"
+            endingLineNumber = "333"
             landmarkName = "registerFioName(fioName:publicReceiveAddresses:completion:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -698,11 +554,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "FIOSDK/FIOSDK/SwiftyEOS/Sources/SwiftyEOS/Contract/transaction/TransactionUtil.swift"
-            timestampString = "562967196.8911541"
+            timestampString = "563409854.3200181"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "111"
-            endingLineNumber = "111"
+            startingLineNumber = "123"
+            endingLineNumber = "123"
             landmarkName = "pushTransaction(abis:account:privateKey:completion:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -714,11 +570,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "FIOSDK/FIOSDK/SwiftyEOS/Sources/SwiftyEOS/Contract/transaction/TransactionUtil.swift"
-            timestampString = "562967196.891192"
+            timestampString = "563409854.320055"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "114"
-            endingLineNumber = "114"
+            startingLineNumber = "126"
+            endingLineNumber = "126"
             landmarkName = "pushTransaction(abis:account:privateKey:completion:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -730,12 +586,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "FIOSDK/FIOSDK/SwiftyEOS/Sources/SwiftyEOS/Contract/account/AccountUtil.swift"
-            timestampString = "562912228.6115431"
+            timestampString = "563488807.339136"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "66"
-            endingLineNumber = "66"
-            landmarkName = "createAccount(account:ownerKey:activeKey:creator:pkString:completion:)"
+            startingLineNumber = "67"
+            endingLineNumber = "67"
+            landmarkName = "createAccount(account:ownerKey1:activeKey1:creator1:pkString1:completion:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -746,12 +602,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "FIOSDK/FIOSDK/SwiftyEOS/Sources/SwiftyEOS/Contract/account/AccountUtil.swift"
-            timestampString = "562912228.612047"
+            timestampString = "563488807.339166"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "48"
-            endingLineNumber = "48"
-            landmarkName = "newAccountAbiJson(creator:account:ownerKey:activeKey:)"
+            startingLineNumber = "49"
+            endingLineNumber = "49"
+            landmarkName = "newAccountAbiJson(code:creator:account:ownerKey:activeKey:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -762,7 +618,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "FIOSDK/FIOSDK/SwiftyEOS/Sources/SwiftyEOS/Contract/resource/ResourceUtil.swift"
-            timestampString = "562895299.666948"
+            timestampString = "563233099.442536"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "49"
@@ -778,7 +634,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "FIOSDK/FIOSDK/SwiftyEOS/Sources/SwiftyEOS/Contract/resource/ResourceUtil.swift"
-            timestampString = "562895299.667039"
+            timestampString = "563233099.442587"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "56"
@@ -794,11 +650,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "FIOSDK/FIOSDK/FIOSDK.swift"
-            timestampString = "562967196.8912801"
+            timestampString = "563488807.339214"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "367"
-            endingLineNumber = "367"
+            startingLineNumber = "434"
+            endingLineNumber = "434"
             landmarkName = "getValidNewAccountName(completion:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -810,11 +666,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "FIOSDK/FIOSDK/SwiftyEOS/Sources/SwiftyEOS/Contract/transaction/TransactionUtil.swift"
-            timestampString = "562967196.8914731"
+            timestampString = "563409854.320339"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "42"
-            endingLineNumber = "42"
+            startingLineNumber = "49"
+            endingLineNumber = "49"
             landmarkName = "pushTransaction(abi:account:privateKey:completion:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -826,11 +682,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "FIOSDK/FIOSDK/FIOSDK.swift"
-            timestampString = "562967196.89151"
+            timestampString = "563488807.339259"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "366"
-            endingLineNumber = "366"
+            startingLineNumber = "433"
+            endingLineNumber = "433"
             landmarkName = "getValidNewAccountName(completion:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -842,7 +698,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "FIOSDK/FIOSDK/SwiftyEOS/Sources/SwiftyEOS/Contract/transaction/TransactionUtil.swift"
-            timestampString = "562967196.891701"
+            timestampString = "563409854.3205611"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "33"
@@ -858,7 +714,7 @@
                   moduleName = "FIOSDK"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/shawnarney/Dropbox/working/dapix/code/fiosdk_ios/FIOSDK/FIOSDK/SwiftyEOS/Sources/SwiftyEOS/Contract/transaction/TransactionUtil.swift"
-                  timestampString = "562966909.17977"
+                  timestampString = "563242153.954777"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
                   startingLineNumber = "33"
@@ -873,12 +729,12 @@
                   moduleName = "FIOSDK"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/shawnarney/Dropbox/working/dapix/code/fiosdk_ios/FIOSDK/FIOSDK/SwiftyEOS/Sources/SwiftyEOS/Contract/transaction/TransactionUtil.swift"
-                  timestampString = "562966909.181381"
+                  timestampString = "563242153.956373"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
                   startingLineNumber = "34"
                   endingLineNumber = "34"
-                  offsetFromSymbolStart = "298">
+                  offsetFromSymbolStart = "309">
                </Location>
             </Locations>
          </BreakpointContent>
@@ -890,27 +746,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "FIOSDK/FIOSDK/FIOSDK.swift"
-            timestampString = "562967196.891739"
+            timestampString = "563488807.339305"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "256"
-            endingLineNumber = "256"
-            landmarkName = "requestFunds(fioNameFrom:fioNameTo:amount:memo:completion:)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "FIOSDK/FIOSDK/FIOSDK.swift"
-            timestampString = "562967196.891923"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "409"
-            endingLineNumber = "409"
+            startingLineNumber = "480"
+            endingLineNumber = "480"
             landmarkName = "addAccountPermissions(accountName:completion:)"
             landmarkType = "7">
             <Locations>
@@ -953,8 +793,888 @@
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
+            filePath = "FIOSDK/FIOSDK/FIOSDK.swift"
+            timestampString = "563488807.339339"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "482"
+            endingLineNumber = "482"
+            landmarkName = "addAccountPermissions(accountName:completion:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
             filePath = "FIOSDK/FIOSDK/SwiftyEOS/Sources/SwiftyEOS/Contract/transaction/TransactionUtil.swift"
-            timestampString = "562967196.89211"
+            timestampString = "563409854.3209701"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "39"
+            endingLineNumber = "39"
+            landmarkName = "pushTransaction(abi:account:privateKey:completion:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "FIOSDK/FIOSDK/FIOSDK.swift"
+            timestampString = "563488807.3393821"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "324"
+            endingLineNumber = "324"
+            landmarkName = "registerFioName(fioName:publicReceiveAddresses:completion:)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "FIOSDK.FIOSDK.registerFioName(fioName: Swift.String, publicReceiveAddresses: Swift.Dictionary&lt;Swift.String, Swift.String&gt;, completion: (Swift.Optional&lt;FIOSDK.FIOError&gt;) -&gt; ()) -&gt; ()"
+                  moduleName = "FIOSDK"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/shawnarney/Dropbox/working/dapix/code/fiosdk_ios/FIOSDK/FIOSDK/FIOSDK.swift"
+                  timestampString = "563039283.030212"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "310"
+                  endingLineNumber = "310"
+                  offsetFromSymbolStart = "591">
+               </Location>
+               <Location
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 (Swift.String, Swift.Optional&lt;FIOSDK.FIOError&gt;) -&gt; () in FIOSDK.FIOSDK.registerFioName(fioName: Swift.String, publicReceiveAddresses: Swift.Dictionary&lt;Swift.String, Swift.String&gt;, completion: (Swift.Optional&lt;FIOSDK.FIOError&gt;) -&gt; ()) -&gt; ()"
+                  moduleName = "FIOSDK"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/shawnarney/Dropbox/working/dapix/code/fiosdk_ios/FIOSDK/FIOSDK/FIOSDK.swift"
+                  timestampString = "563039283.032977"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "311"
+                  endingLineNumber = "311"
+                  offsetFromSymbolStart = "262">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "FIOSDK/FIOSDK/FIOSDK.swift"
+            timestampString = "563488807.339415"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "294"
+            endingLineNumber = "294"
+            landmarkName = "register(fioName:newAccountName:publicReceiveAddresses:completion:)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "FIOSDK.FIOSDK.(register in _187D9E53E8D8CCD500AEE83C22CCB6E7)(fioName: Swift.String, newAccountName: Swift.String, publicReceiveAddresses: Swift.Dictionary&lt;Swift.String, Swift.String&gt;, completion: (Swift.Optional&lt;FIOSDK.FIOError&gt;) -&gt; ()) -&gt; ()"
+                  moduleName = "FIOSDK"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/shawnarney/Dropbox/working/dapix/code/fiosdk_ios/FIOSDK/FIOSDK/FIOSDK.swift"
+                  timestampString = "563134650.82301"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "282"
+                  endingLineNumber = "282"
+                  offsetFromSymbolStart = "1026">
+               </Location>
+               <Location
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 (Swift.Optional&lt;FIOSDK.TransactionResult&gt;, Swift.Optional&lt;Swift.Error&gt;) -&gt; () in FIOSDK.FIOSDK.(register in _187D9E53E8D8CCD500AEE83C22CCB6E7)(fioName: Swift.String, newAccountName: Swift.String, publicReceiveAddresses: Swift.Dictionary&lt;Swift.String, Swift.String&gt;, completion: (Swift.Optional&lt;FIOSDK.FIOError&gt;) -&gt; ()) -&gt; ()"
+                  moduleName = "FIOSDK"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/shawnarney/Dropbox/working/dapix/code/fiosdk_ios/FIOSDK/FIOSDK/FIOSDK.swift"
+                  timestampString = "563134650.826455"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "283"
+                  endingLineNumber = "283"
+                  offsetFromSymbolStart = "113">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "FIOSDK/FIOSDK/SwiftyEOS/Sources/SwiftyEOS/Contract/transaction/TransactionUtil.swift"
+            timestampString = "563409854.32137"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "43"
+            endingLineNumber = "43"
+            landmarkName = "pushTransaction(abi:account:privateKey:completion:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "FIOSDK/FIOSDK/SwiftyEOS/Sources/SwiftyEOS/Contract/transaction/TransactionUtil.swift"
+            timestampString = "563409854.321407"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "47"
+            endingLineNumber = "47"
+            landmarkName = "pushTransaction(abi:account:privateKey:completion:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "FIOSDK/FIOSDK/FIOSDK.swift"
+            timestampString = "563488807.339467"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "325"
+            endingLineNumber = "325"
+            landmarkName = "registerFioName(fioName:publicReceiveAddresses:completion:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "FIOSDK/FIOSDK/FIOSDK.swift"
+            timestampString = "563488807.3395"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "408"
+            endingLineNumber = "408"
+            landmarkName = "createAccountAddPermissions(completion:)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 (Swift.Optional&lt;Swift.String&gt;, Swift.Optional&lt;FIOSDK.FIOError&gt;) -&gt; () in FIOSDK.FIOSDK.(createAccountAddPermissions in _187D9E53E8D8CCD500AEE83C22CCB6E7)(completion: (Swift.String, Swift.Optional&lt;FIOSDK.FIOError&gt;) -&gt; ()) -&gt; ()"
+                  moduleName = "FIOSDK"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/shawnarney/Dropbox/working/dapix/code/fiosdk_ios/FIOSDK/FIOSDK/FIOSDK.swift"
+                  timestampString = "563394655.897573"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "401"
+                  endingLineNumber = "401"
+                  offsetFromSymbolStart = "502">
+               </Location>
+               <Location
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 (Swift.Optional&lt;FIOSDK.FIOError&gt;) -&gt; () in closure #1 (Swift.Optional&lt;Swift.String&gt;, Swift.Optional&lt;FIOSDK.FIOError&gt;) -&gt; () in FIOSDK.FIOSDK.(createAccountAddPermissions in _187D9E53E8D8CCD500AEE83C22CCB6E7)(completion: (Swift.String, Swift.Optional&lt;FIOSDK.FIOError&gt;) -&gt; ()) -&gt; ()"
+                  moduleName = "FIOSDK"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/shawnarney/Dropbox/working/dapix/code/fiosdk_ios/FIOSDK/FIOSDK/FIOSDK.swift"
+                  timestampString = "563394655.899226"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "402"
+                  endingLineNumber = "402"
+                  offsetFromSymbolStart = "61">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "FIOSDK/FIOSDK/FIOSDK.swift"
+            timestampString = "563488807.3395309"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "534"
+            endingLineNumber = "534"
+            landmarkName = "addAllPublicAddresses(fioName:publicReceiveAddresses:completion:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "FIOSDK/FIOSDK/FIOSDK.swift"
+            timestampString = "563488807.339563"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "409"
+            endingLineNumber = "409"
+            landmarkName = "createAccountAddPermissions(completion:)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 (Swift.Optional&lt;FIOSDK.FIOError&gt;) -&gt; () in closure #1 (Swift.Optional&lt;Swift.String&gt;, Swift.Optional&lt;FIOSDK.FIOError&gt;) -&gt; () in FIOSDK.FIOSDK.(createAccountAddPermissions in _187D9E53E8D8CCD500AEE83C22CCB6E7)(fioName: Swift.String, completion: (Swift.String, Swift.Optional&lt;FIOSDK.FIOError&gt;) -&gt; ()) -&gt; ()"
+                  moduleName = "FIOSDK"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/shawnarney/Dropbox/working/dapix/code/fiosdk_ios/FIOSDK/FIOSDK/FIOSDK.swift"
+                  timestampString = "563146104.5054311"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "409"
+                  endingLineNumber = "409"
+                  offsetFromSymbolStart = "270">
+               </Location>
+               <Location
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 (Swift.Optional&lt;FIOSDK.FIOError&gt;) -&gt; () in closure #1 (Swift.Optional&lt;FIOSDK.FIOError&gt;) -&gt; () in closure #1 (Swift.Optional&lt;Swift.String&gt;, Swift.Optional&lt;FIOSDK.FIOError&gt;) -&gt; () in FIOSDK.FIOSDK.(createAccountAddPermissions in _187D9E53E8D8CCD500AEE83C22CCB6E7)(fioName: Swift.String, completion: (Swift.String, Swift.Optional&lt;FIOSDK.FIOError&gt;) -&gt; ()) -&gt; ()"
+                  moduleName = "FIOSDK"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/shawnarney/Dropbox/working/dapix/code/fiosdk_ios/FIOSDK/FIOSDK/FIOSDK.swift"
+                  timestampString = "563146104.507067"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "410"
+                  endingLineNumber = "410"
+                  offsetFromSymbolStart = "45">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "FIOSDK/FIOSDK/SwiftyEOS/Sources/SwiftyEOS/Contract/transaction/TransactionUtil.swift"
+            timestampString = "563409854.3221821"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "54"
+            endingLineNumber = "54"
+            landmarkName = "pushTransaction(abi:account:privateKey:completion:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "FIOSDK/FIOSDK/SwiftyEOS/Sources/SwiftyEOS/Contract/transaction/Transaction.swift"
+            timestampString = "563150793.091911"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "325"
+            endingLineNumber = "325"
+            landmarkName = "sign(pk:chainId:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "FIOSDK/FIOSDK/SwiftyEOS/Sources/SwiftyEOS/Contract/transaction/Transaction.swift"
+            timestampString = "563150793.091946"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "326"
+            endingLineNumber = "326"
+            landmarkName = "sign(pk:chainId:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "FIOSDK/FIOSDK/SwiftyEOS/Sources/SwiftyEOS/Contract/transaction/Transaction.swift"
+            timestampString = "563150793.091978"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "328"
+            endingLineNumber = "328"
+            landmarkName = "sign(pk:chainId:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "FIOSDK/FIOSDK/SwiftyEOS/Sources/SwiftyEOS/Contract/transaction/Transaction.swift"
+            timestampString = "563150793.09201"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "327"
+            endingLineNumber = "327"
+            landmarkName = "sign(pk:chainId:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "FIOSDK/FIOSDK/RequestFunds.swift"
+            timestampString = "563488807.339641"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "119"
+            endingLineNumber = "119"
+            landmarkName = "getRequestPendingHistory(requesteeAccountName:maxItemsReturned:completion:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "FIOSDK/FIOSDK/RequestFunds.swift"
+            timestampString = "563488807.339685"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "108"
+            endingLineNumber = "108"
+            landmarkName = "getRequestPendingHistory(requesteeAccountName:maxItemsReturned:completion:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "FIOSDK/FIOSDK/RequestFunds.swift"
+            timestampString = "563488807.339722"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "117"
+            endingLineNumber = "117"
+            landmarkName = "getRequestPendingHistory(requesteeAccountName:maxItemsReturned:completion:)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "FIOSDK.RequestFunds.getRequestPendingHistory(requesteeAccountName: Swift.String, maxItemsReturned: Swift.Int, completion: (Swift.Array&lt;FIOSDK.FIOSDK.Request&gt;, Swift.Optional&lt;FIOSDK.FIOError&gt;) -&gt; ()) -&gt; ()"
+                  moduleName = "FIOSDK"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/shawnarney/Dropbox/working/dapix/code/fiosdk_ios/FIOSDK/FIOSDK/RequestFunds.swift"
+                  timestampString = "563235837.712037"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "124"
+                  endingLineNumber = "124"
+                  offsetFromSymbolStart = "2860">
+               </Location>
+               <Location
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 (Swift.Optional&lt;Foundation.Data&gt;, Swift.Optional&lt;__C.NSURLResponse&gt;, Swift.Optional&lt;Swift.Error&gt;) -&gt; () in FIOSDK.RequestFunds.getRequestPendingHistory(requesteeAccountName: Swift.String, maxItemsReturned: Swift.Int, completion: (Swift.Array&lt;FIOSDK.FIOSDK.Request&gt;, Swift.Optional&lt;FIOSDK.FIOError&gt;) -&gt; ()) -&gt; ()"
+                  moduleName = "FIOSDK"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/shawnarney/Dropbox/working/dapix/code/fiosdk_ios/FIOSDK/FIOSDK/RequestFunds.swift"
+                  timestampString = "563235837.713537"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "101"
+                  endingLineNumber = "101"
+                  offsetFromSymbolStart = "81">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "FIOSDK/FIOSDK/RequestFunds.swift"
+            timestampString = "563488807.3397599"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "199"
+            endingLineNumber = "199"
+            landmarkName = "getRequestPendingHistory(requesteeAccountName:maxItemsReturned:completion:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "FIOSDK/FIOSDK/RequestFunds.swift"
+            timestampString = "563488807.3397959"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "118"
+            endingLineNumber = "118"
+            landmarkName = "getRequestPendingHistory(requesteeAccountName:maxItemsReturned:completion:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "FIOSDK/FIOSDK/RequestFunds.swift"
+            timestampString = "563488807.339833"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "198"
+            endingLineNumber = "198"
+            landmarkName = "getRequestPendingHistory(requesteeAccountName:maxItemsReturned:completion:)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 (Swift.Optional&lt;Foundation.Data&gt;, Swift.Optional&lt;__C.NSURLResponse&gt;, Swift.Optional&lt;Swift.Error&gt;) -&gt; () in FIOSDK.RequestFunds.getRequestPendingHistory(requesteeAccountName: Swift.String, maxItemsReturned: Swift.Int, completion: (Swift.Array&lt;FIOSDK.FIOSDK.Request&gt;, Swift.Optional&lt;FIOSDK.FIOError&gt;) -&gt; ()) -&gt; ()"
+                  moduleName = "FIOSDK"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/shawnarney/Dropbox/working/dapix/code/fiosdk_ios/FIOSDK/FIOSDK/RequestFunds.swift"
+                  timestampString = "563230878.310866"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "131"
+                  endingLineNumber = "131"
+                  offsetFromSymbolStart = "2120">
+               </Location>
+               <Location
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 (Swift.Optional&lt;Foundation.Data&gt;, Swift.Optional&lt;__C.NSURLResponse&gt;, Swift.Optional&lt;Swift.Error&gt;) -&gt; () in FIOSDK.RequestFunds.getRequestPendingHistory(requesteeAccountName: Swift.String, maxItemsReturned: Swift.Int, completion: (Swift.Array&lt;FIOSDK.FIOSDK.Request&gt;, Swift.Optional&lt;FIOSDK.FIOError&gt;) -&gt; ()) -&gt; ()"
+                  moduleName = "FIOSDK"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/shawnarney/Dropbox/working/dapix/code/fiosdk_ios/FIOSDK/FIOSDK/RequestFunds.swift"
+                  timestampString = "563230878.312318"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "131"
+                  endingLineNumber = "131"
+                  offsetFromSymbolStart = "3232">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "FIOSDK/FIOSDK/RequestFunds.swift"
+            timestampString = "563488807.339869"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "204"
+            endingLineNumber = "204"
+            landmarkName = "getRequestPendingHistory(requesteeAccountName:maxItemsReturned:completion:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "FIOSDK/FIOSDK/RequestFunds.swift"
+            timestampString = "563488807.339906"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "125"
+            endingLineNumber = "125"
+            landmarkName = "getRequestPendingHistory(requesteeAccountName:maxItemsReturned:completion:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "FIOSDK/FIOSDK/RequestFunds.swift"
+            timestampString = "563488807.339941"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "344"
+            endingLineNumber = "344"
+            landmarkName = "getRequestDetails(appIdStart:appIdEnd:maxItemsReturned:completion:)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "FIOSDK.RequestFunds.requestFunds(requestorAccountName: Swift.String, requesteeAccountName: Swift.String, chain: Swift.String, asset: Swift.String, amount: Swift.Float, memo: Swift.String, completion: (Swift.Optional&lt;FIOSDK.FIOError&gt;) -&gt; ()) -&gt; ()"
+                  moduleName = "FIOSDK"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/shawnarney/Dropbox/working/dapix/code/fiosdk_ios/FIOSDK/FIOSDK/RequestFunds.swift"
+                  timestampString = "563242069.993556"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "182"
+                  endingLineNumber = "182"
+                  offsetFromSymbolStart = "1499">
+               </Location>
+               <Location
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 (Swift.Optional&lt;FIOSDK.TransactionResult&gt;, Swift.Optional&lt;Swift.Error&gt;) -&gt; () in FIOSDK.RequestFunds.requestFunds(requestorAccountName: Swift.String, requesteeAccountName: Swift.String, chain: Swift.String, asset: Swift.String, amount: Swift.Float, memo: Swift.String, completion: (Swift.Optional&lt;FIOSDK.FIOError&gt;) -&gt; ()) -&gt; ()"
+                  moduleName = "FIOSDK"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/shawnarney/Dropbox/working/dapix/code/fiosdk_ios/FIOSDK/FIOSDK/RequestFunds.swift"
+                  timestampString = "563242069.995111"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "183"
+                  endingLineNumber = "183"
+                  offsetFromSymbolStart = "45">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "FIOSDK/FIOSDK/RequestFunds.swift"
+            timestampString = "563488807.339978"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "478"
+            endingLineNumber = "478"
+            landmarkName = "requestFunds(requestorAccountName:requestId:requesteeAccountName:chain:asset:amount:memo:completion:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "FIOSDK/FIOSDK/RequestFunds.swift"
+            timestampString = "563488807.3400151"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "480"
+            endingLineNumber = "480"
+            landmarkName = "requestFunds(requestorAccountName:requestId:requesteeAccountName:chain:asset:amount:memo:completion:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "FIOSDK/FIOSDK/RequestFunds.swift"
+            timestampString = "563488807.3400511"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "490"
+            endingLineNumber = "490"
+            landmarkName = "RejectFundsData"
+            landmarkType = "14">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "FIOSDK/FIOSDK/RequestFunds.swift"
+            timestampString = "563488807.3400871"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "267"
+            endingLineNumber = "267"
+            landmarkName = "getRequestDetails(appIdStart:appIdEnd:maxItemsReturned:completion:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "FIOSDK/FIOSDK/RequestFunds.swift"
+            timestampString = "563488807.340124"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "270"
+            endingLineNumber = "270"
+            landmarkName = "getRequestDetails(appIdStart:appIdEnd:maxItemsReturned:completion:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "FIOSDK/FIOSDK/RequestFunds.swift"
+            timestampString = "563488807.34016"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "169"
+            endingLineNumber = "169"
+            landmarkName = "getRequestPendingHistory(requesteeAccountName:maxItemsReturned:completion:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "FIOSDK/FIOSDK/RequestFunds.swift"
+            timestampString = "563488807.340197"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "339"
+            endingLineNumber = "339"
+            landmarkName = "getRequestDetails(appIdStart:appIdEnd:maxItemsReturned:completion:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "FIOSDK/FIOSDK/RequestFunds.swift"
+            timestampString = "563488807.340233"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "268"
+            endingLineNumber = "268"
+            landmarkName = "getRequestDetails(appIdStart:appIdEnd:maxItemsReturned:completion:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "FIOSDK/FIOSDK/RequestFunds.swift"
+            timestampString = "563488807.34027"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "276"
+            endingLineNumber = "276"
+            landmarkName = "getRequestDetails(appIdStart:appIdEnd:maxItemsReturned:completion:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "FIOSDK/FIOSDK/RequestFunds.swift"
+            timestampString = "563488807.340306"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "273"
+            endingLineNumber = "273"
+            landmarkName = "getRequestDetails(appIdStart:appIdEnd:maxItemsReturned:completion:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "FIOSDK/FIOSDK/RequestFunds.swift"
+            timestampString = "563488807.340341"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "342"
+            endingLineNumber = "342"
+            landmarkName = "getRequestDetails(appIdStart:appIdEnd:maxItemsReturned:completion:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "FIOSDK/FIOSDK/FIOSDK.swift"
+            timestampString = "563488807.340378"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "561"
+            endingLineNumber = "561"
+            landmarkName = "createAccount(newAccountName:completion:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "FIOSDK/FIOSDK/FIOSDK.swift"
+            timestampString = "563488807.34041"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "297"
+            endingLineNumber = "297"
+            landmarkName = "register(fioName:newAccountName:publicReceiveAddresses:completion:)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "FIOSDK.FIOSDK.register(fioName: Swift.String, newAccountName: Swift.String, publicReceiveAddresses: Swift.Dictionary&lt;Swift.String, Swift.String&gt;, completion: (Swift.Optional&lt;FIOSDK.FIOError&gt;) -&gt; ()) -&gt; ()"
+                  moduleName = "FIOSDK"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/shawnarney/Dropbox/working/dapix/code/fiosdk_ios/FIOSDK/FIOSDK/FIOSDK.swift"
+                  timestampString = "563405252.184829"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "296"
+                  endingLineNumber = "296"
+                  offsetFromSymbolStart = "1658">
+               </Location>
+               <Location
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 (Swift.Optional&lt;FIOSDK.TransactionResult&gt;, Swift.Optional&lt;Swift.Error&gt;) -&gt; () in FIOSDK.FIOSDK.register(fioName: Swift.String, newAccountName: Swift.String, publicReceiveAddresses: Swift.Dictionary&lt;Swift.String, Swift.String&gt;, completion: (Swift.Optional&lt;FIOSDK.FIOError&gt;) -&gt; ()) -&gt; ()"
+                  moduleName = "FIOSDK"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/shawnarney/Dropbox/working/dapix/code/fiosdk_ios/FIOSDK/FIOSDK/FIOSDK.swift"
+                  timestampString = "563405252.186355"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "297"
+                  endingLineNumber = "297"
+                  offsetFromSymbolStart = "113">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "FIOSDK/FIOSDK/FIOSDK.swift"
+            timestampString = "563488807.340454"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "299"
+            endingLineNumber = "299"
+            landmarkName = "register(fioName:newAccountName:publicReceiveAddresses:completion:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "FIOSDK/FIOSDK/FIOSDK.swift"
+            timestampString = "563488807.340486"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "309"
+            endingLineNumber = "309"
+            landmarkName = "register(fioName:newAccountName:publicReceiveAddresses:completion:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "FIOSDK/FIOSDK/SwiftyEOS/Sources/SwiftyEOS/Contract/transaction/TransactionUtil.swift"
+            timestampString = "563409854.323209"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "46"
@@ -969,13 +1689,45 @@
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "FIOSDK/FIOSDK/FIOSDK.swift"
-            timestampString = "562967196.8921469"
+            filePath = "FIOSDK/FIOSDKTests/FIOSDKTests.swift"
+            timestampString = "563488807.340533"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "411"
-            endingLineNumber = "411"
-            landmarkName = "addAccountPermissions(accountName:completion:)"
+            startingLineNumber = "163"
+            endingLineNumber = "163"
+            landmarkName = "FIOSDKTests"
+            landmarkType = "3">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "FIOSDK/FIOSDKTests/FIOSDKTests.swift"
+            timestampString = "563488807.3408639"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "136"
+            endingLineNumber = "136"
+            landmarkName = "FIOSDKTests"
+            landmarkType = "3">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "FIOSDK/FIOSDKTests/FIOSDKTests.swift"
+            timestampString = "563488807.341064"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "149"
+            endingLineNumber = "149"
+            landmarkName = "testGetPendingRequestHistory()"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -985,13 +1737,61 @@
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "FIOSDK/FIOSDK/FIOSDK.swift"
-            timestampString = "562967196.892325"
+            filePath = "FIOSDK/FIOSDK/RequestFunds.swift"
+            timestampString = "563488807.341254"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "418"
-            endingLineNumber = "418"
-            landmarkName = "addAccountPermissions(accountName:completion:)"
+            startingLineNumber = "426"
+            endingLineNumber = "426"
+            landmarkName = "getRequestMemoDate(appIdStart:appIdEnd:type:status:maxItemsReturned:completion:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "FIOSDK/FIOSDK/RequestFunds.swift"
+            timestampString = "563488807.341296"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "420"
+            endingLineNumber = "420"
+            landmarkName = "getRequestMemoDate(appIdStart:appIdEnd:type:status:maxItemsReturned:completion:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "FIOSDK/FIOSDK/RequestFunds.swift"
+            timestampString = "563488807.341333"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "415"
+            endingLineNumber = "415"
+            landmarkName = "getRequestMemoDate(appIdStart:appIdEnd:type:status:maxItemsReturned:completion:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "FIOSDK/FIOSDK/RequestFunds.swift"
+            timestampString = "563488807.341368"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "436"
+            endingLineNumber = "436"
+            landmarkName = "getRequestMemoDate(appIdStart:appIdEnd:type:status:maxItemsReturned:completion:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
