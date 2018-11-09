@@ -35,12 +35,24 @@ import Foundation
                         completion(nil, error)
                         return
                     }
+                             
                     let auth = Authorization(actor: account, permission: "active")
-                    let action = Action(account: abi.code, name: abi.action, authorization: [auth], data: bin!.binargs)
+                    var authorization:[Authorization] = [auth]
+                    if (abi.code == "fio.system"){
+                        let authFioSystem = Authorization(actor: "fio.system", permission: "active")
+                      //  authorization = [auth,authFioSystem]
+                    }
+                    
+                    let action = Action(account: abi.code, name: abi.action, authorization:authorization, data: bin!.binargs)
                     let rawTx = Transaction(blockInfo: blockInfo!, actions: [action])
                     
                     var tx = PackedTransaction(transaction: rawTx, compression: "none")
+                    if (abi.code == "fio.system"){
+                     //   tx.signatures = ["5KBX1dwHME4VyuUss2sYM25D5ZTDvyYrbEz37UJqwAVAsR4tGuY","5JA5zQkg1S59swPzY6d29gsfNhNPVCb7XhiGJAakGFa7tEKSMjT"]
+                    }
+                    
                     tx.sign(pk: privateKey, chainId: chainInfo!.chainId!)
+                   
                     let signedTx = SignedTransaction(packedTx: tx)
                     EOSRPC.sharedInstance.pushTransaction(transaction: signedTx, completion: { (txResult, error) in
                         if error != nil {

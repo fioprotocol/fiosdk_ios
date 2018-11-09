@@ -22,6 +22,7 @@ public class FIOSDK: NSObject {
     private var privateKey:String = ""
     private var publicKey:String = ""
     private var accountNameForRequestFunds:String = ""
+    private let requestFunds = RequestFunds()
     
     struct AddressByNameRequest: Codable {
         let fio_name: String
@@ -52,18 +53,24 @@ public class FIOSDK: NSObject {
     }
     
     public struct Request{
-        public let amount:Double
+        public let amount:Float
         public let currencyCode:String
         public let status:RequestStatus
         public let requestDate:String
-        public let from:String
+        public let fromFioName:String
+        public let toFioName:String
+        public let requestorAccountName:String
+        public let requesteeAccountName:String
         public let memo:String
+        public let fioappid:Int
+        public let requestid:Int
+        public let statusDescription:String
     }
     
-    public enum RequestStatus {
-        case Requested
-        case Rejected
-        case Approved
+    public enum RequestStatus:String {
+        case Requested = "Requested"
+        case Rejected = "Rejected"
+        case Approved = "Approved"
     }
     
     private static var _sharedInstance: FIOSDK = {
@@ -156,6 +163,16 @@ public class FIOSDK: NSObject {
         return self.privateKey
     }
     
+    private func getSystemPrivateKey() -> String {
+        return "5KBX1dwHME4VyuUss2sYM25D5ZTDvyYrbEz37UJqwAVAsR4tGuY"
+    }
+    
+    private func getSystemPublicKey() -> String {
+        return "EOS7isxEua78KPVbGzKemH4nj2bWE52gqj8Hkac3tc7jKNvpfWzYS"
+    }
+// so, the public key of fio.system needs to go into permission... permission then register name
+    
+    
     private func getURI() -> String {
         return Utilities.sharedInstance().URL
     }
@@ -243,17 +260,41 @@ public class FIOSDK: NSObject {
         task.resume()
     }
     
-    public func requestFunds (fioNameFrom:String, fioNameTo:String, amount:Double, memo:String, completion: @escaping ( _ error:FIOError?) -> ()) {
-        let account = getAccountNameForRequestFunds()
-        let importedPk = try! PrivateKey(keyString: getPrivateKey())
+    public func requestFunds (requestorAccountName:String, requesteeAccountName:String, chain:String, asset:String, amount:Float, memo:String, completion: @escaping ( _ error:FIOError?) -> ()) {
+        let timestamp = NSDate().timeIntervalSince1970
+        self.requestFunds.requestFunds(requestorAccountName: requestorAccountName, requestId: Int(timestamp.rounded()) ,requesteeAccountName: requesteeAccountName, chain: chain, asset: asset, amount: amount, memo: memo) { (error) in
+            completion(error)
+        }
+    }
+
+    private struct RegisterName: Codable {
+        let name:String
+        let requestor:String
+    }
+    
+    public func register(fioName:String, newAccountName:String, publicReceiveAddresses:Dictionary<String,String>, completion: @escaping ( _ error:FIOError?) -> ()) {
         
-        let data = "{\"name\":\"" + fioNameFrom + "\"}"
-        let abi = try! AbiJson(code: account, action: "requestfunds", json: data)
-  
-        completion(FIOError.init(kind: FIOError.ErrorKind.Success, localizedDescription: ""))
+       // let account = "fio.system"
+        let importedPk = try! PrivateKey(keyString: "5KBX1dwHME4VyuUss2sYM25D5ZTDvyYrbEz37UJqwAVAsR4tGuY")
+
+        //let account = "fioname22222"
+        //let importedPk = try! PrivateKey(keyString: "5KBX1dwHME4VyuUss2sYM25D5ZTDvyYrbEz37UJqwAVAsR4tGuY")
+
+        let data = RegisterName(name: fioName, requestor: "fio.system")
         
-        return;
-        TransactionUtil.pushTransaction(abi: abi, account: account, privateKey: importedPk!, completion: { (result, error) in
+        var jsonString: String
+        do{
+            let jsonData:Data = try JSONEncoder().encode(data)
+            jsonString = String(data: jsonData, encoding: .utf8)!
+            print(jsonString)
+        }catch {
+            //completion (fioResponse, FIOError(kind: .NoDataReturned, localizedDescription: ""))
+            return
+        }
+       
+        let abi = try! AbiJson(code: "fio.system", action: "registername", json: jsonString)
+        
+        TransactionUtil.pushTransaction(abi: abi, account: "fio.system", privateKey: importedPk!, completion: { (result, error) in
             if error != nil {
                 if (error! as NSError).code == RPCErrorResponse.ErrorCode {
                     let errDescription = "error"
@@ -267,73 +308,101 @@ public class FIOSDK: NSObject {
             } else {
                 print("Ok. RegisterName, Txid: \(result!.transactionId)")
                 
+                var addresses:Dictionary<String,String> = publicReceiveAddresses
+                addresses[newAccountName] = "FIO"
+                
+                self.addAllPublicAddresses(fioName: fioName, publicReceiveAddresses: addresses, completion: { (error) in
+                    completion(error)
+                })
             }
         })
     }
     
     public func registerFioName (fioName:String, publicReceiveAddresses:Dictionary<String,String>, completion: @escaping ( _ error:FIOError?) -> ()) {
-        let account = getAccountName()
-        let importedPk = try! PrivateKey(keyString: getPrivateKey())
-        
-        self.createAccountAddPermissions(fioName: fioName) { (newAccountName, error) in
+
+       // let importedPk = try! PrivateKey(keyString: "5JA5zQkg1S59swPzY6d29gsfNhNPVCb7XhiGJAakGFa7tEKSMjT")
+
+        self.createAccountAddPermissions(completion: { (newAccountName, error) in
             if (error?.kind == FIOError.ErrorKind.Success){
-                let data = "{\"name\":\"" + fioName + "\",\"requestor\":\"" + newAccountName +  "\"}"
-                let abi = try! AbiJson(code: account, action: "registername", json: data)
                 
-                TransactionUtil.pushTransaction(abi: abi, account: account, privateKey: importedPk!, completion: { (result, error) in
-                    if error != nil {
-                        if (error! as NSError).code == RPCErrorResponse.ErrorCode {
-                            let errDescription = "error"
-                            print (errDescription)
-                            completion(FIOError.init(kind: FIOError.ErrorKind.Failure, localizedDescription: errDescription))
-                        } else {
-                            let errDescription = ("other error: \(String(describing: error?.localizedDescription))")
-                            print (errDescription)
-                            completion(FIOError.init(kind: FIOError.ErrorKind.Failure, localizedDescription: errDescription))
-                        }
-                    } else {
-                        print("Ok. RegisterName, Txid: \(result!.transactionId)")
-                        
-                        var addresses:Dictionary<String,String> = publicReceiveAddresses
-                        addresses[newAccountName] = "BTC"
-                        
-                        self.addAllPublicAddresses(fioName: fioName, publicReceiveAddresses: addresses, completion: { (error) in
-                            completion(error)
-                        })
-                    }
+                self.register(fioName: fioName,newAccountName: newAccountName, publicReceiveAddresses: publicReceiveAddresses, completion: { (error) in
+                    completion(error)
                 })
+
             }
             else{
                 completion(error)
             }
+        })
+    }
+
+    public func rejectRequestFunds (requesteeAccountName:String, fioAppId:Int, memo:String, completion: @escaping ( _ error:FIOError?) -> ()) {
+        self.requestFunds.rejectFundsRequest(requesteeAccountName: requesteeAccountName, fioAppId: fioAppId, memo: memo) { (err) in
+            completion(err)
         }
+    }
+
+    public func cancelRequestFunds (requestorAccountName:String, requestId:Int, memo:String, completion: @escaping ( _ error:FIOError?) -> ()) {
+       self.requestFunds.cancelFundsRequest(requestorAccountName: requestorAccountName, requestId: requestId, memo: memo) { (error) in
+            completion(error)
+        }
+    }
+    
+    public func approveRequestFunds (requesteeAccountName:String, fioAppId:Int, obtId:String, memo:String, completion: @escaping ( _ error:FIOError?) -> ()) {
+        self.requestFunds.approveFundsRequest(requesteeAccountName: requesteeAccountName, fioAppId: fioAppId, obtid:obtId, memo: memo) { (err) in
+            completion(err)
+        }
+    }
+    
+    private func transfer(newAccountName:String){
+        let account = getAccountName()
+        let importedPk = try! PrivateKey(keyString: getPrivateKey())
+        let transfer = Transfer()
+        transfer.from = account
+        transfer.to = newAccountName
+        transfer.quantity = "200.0000 FIO"
+        transfer.memo = "for register"
+        
+        Currency.transferCurrency(transfer: transfer, code: account, privateKey: importedPk!, completion: { (result, error) in
+            if error != nil {
+                if (error! as NSError).code == RPCErrorResponse.ErrorCode {
+                    print("\(((error! as NSError).userInfo[RPCErrorResponse.ErrorKey] as! RPCErrorResponse).errorDescription())")
+                } else {
+                    print("other error: \(String(describing: error?.localizedDescription))")
+                }
+                
+            } else {
+                print("Ok.  Transfer Currency. Txid: \(result!.transactionId)")
+                
+            }
+        })
     }
     
     public func getRequestSentHistory (fioName:String, currencyCode:String, completion: @escaping ( _ requests:[Request] , _ error:FIOError?) -> ()) {
         
-        if (currencyCode == "BTC")
-        {
-            let v = Request(amount: 1.2, currencyCode: "BTC", status: RequestStatus.Requested, requestDate: "02/14/2012", from: "savings.brd", memo: "test funds")
-            let w = Request(amount: 3.0, currencyCode: "BTC", status: RequestStatus.Requested, requestDate: "03/15/2013", from: "savings.brd", memo: "test funds")
-            completion([v,w],FIOError.init(kind: FIOError.ErrorKind.Success, localizedDescription: ""))
-        }
-        else{
-            let v = Request(amount: 2.0, currencyCode: "ETH", status: RequestStatus.Requested, requestDate: "01/13/2012", from: "savings.brd", memo: "test funds")
-            let w = Request(amount: 1.0, currencyCode: "ETH", status: RequestStatus.Requested, requestDate: "05/13/2013", from: "savings.brd", memo: "test funds")
-            completion([v,w],FIOError.init(kind: FIOError.ErrorKind.Success, localizedDescription: ""))
-        }
         
     }
     
-    public func getRequestPendingHistory (fioName:String, completion: @escaping ( _ requests:[Request] , _ error:FIOError?) -> ()) {
+    public func getRequestPendingHistory (requesteeAccountName:String, maxItemsReturned:Int, completion: @escaping ( _ requests:[Request] , _ error:FIOError?) -> ()) {
         
-        let v = Request(amount: 0.05, currencyCode: "BTC", status: RequestStatus.Requested, requestDate: "01/13/2012", from: "fred.brd", memo: "test funds")
-        let w = Request(amount: 2.0, currencyCode: "ETH", status: RequestStatus.Requested, requestDate: "05/13/2013", from: "bob.brd", memo: "test funds")
-        
-        completion([v,w],FIOError.init(kind: FIOError.ErrorKind.Success, localizedDescription: ""))
+        self.requestFunds.getRequestPendingHistory(requesteeAccountName: requesteeAccountName, maxItemsReturned: maxItemsReturned) { (requests, error) in
+            completion(requests,FIOError.init(kind: FIOError.ErrorKind.Success, localizedDescription: "")
+        )}
     }
     
-    private func createAccountAddPermissions(fioName : String, completion: @escaping ( _ newAccountName:String, _ error:FIOError?) -> ()) {
+    /*
+    public func getRequestDetails (appIdStart: Int, appIdEnd: Int, maxItemsReturned: Int, completion: @escaping ( _ requests:[Request] , _ error:FIOError?) -> ()) {
+        
+        self.requestFunds.getRequestDetails(appIdStart: appIdStart, appIdEnd:appIdEnd , maxItemsReturned: maxItemsReturned) { (requests, error) in
+            let v = Request(amount: 0.05, currencyCode: "BTC", status: RequestStatus.Requested, requestDate: "01/13/2012", from: "fred.brd", memo: "test funds", statusDescription:RequestStatus.Requested.rawValue)
+            let w = Request(amount: 2.0, currencyCode: "ETH", status: RequestStatus.Requested, requestDate: "05/13/2013", from: "bob.brd", memo: "test funds", statusDescription:RequestStatus.Requested.rawValue)
+            
+                completion([v,w],FIOError.init(kind: FIOError.ErrorKind.Success, localizedDescription: "")
+            )}
+    }
+ */
+    
+    private func createAccountAddPermissions(completion: @escaping ( _ newAccountName:String, _ error:FIOError?) -> ()) {
         getValidNewAccountName { (newAccountName, error) in
             if (newAccountName != nil && newAccountName!.count > 0){
                 self.createAccount(newAccountName: newAccountName!, completion: { (error) in
@@ -392,13 +461,18 @@ public class FIOSDK: NSObject {
         
     }
     
+    // pubsyskey=EOS7isxEua78KPVbGzKemH4nj2bWE52gqj8Hkac3tc7jKNvpfWzYS
+    // prisyskey=5KBX1dwHME4VyuUss2sYM25D5ZTDvyYrbEz37UJqwAVAsR4tGuY
+    //
+    
     public func addAccountPermissions(accountName : String, completion: @escaping ( _ error:FIOError?) -> ()) {
         // try fio.system as well
-        let account = getAccountName()
-        let importedPk = try! PrivateKey(keyString: getPrivateKey())
+        let account = "fioname22222"
+        let importedPk = try! PrivateKey(keyString: "5JA5zQkg1S59swPzY6d29gsfNhNPVCb7XhiGJAakGFa7tEKSMjT")
         
-        let auth = "\"auth\": {\"threshold\": 1,\"keys\": [{\"key\": \"" + getPublicKey() + "\",\"weight\": 1}],\"accounts\": [{\"permission\": {\"actor\":\"" + "fio.system" + "\",\"permission\": \"eosio.code\"},\"weight\": 1}],\"waits\": []}"
-        let data = "{\"account\":\"" + account +  "\",\"permission\":\"active\",\"parent\":\"owner\"," + auth + "}"
+        let auth = "\"auth\": {\"threshold\": 1,\"keys\": [{\"key\": \"" + "EOS8ApHc48DpXehLznVqMJgMGPAaJoyMbFJbfDLyGQ5QjF7nDPuvJ" + "\",\"weight\": 1}],\"accounts\": [{\"permission\": {\"actor\":\"" + "fio.system" + "\",\"permission\": \"" + "eosio.code" +  "\"},\"weight\": 1}],\"waits\": []}"
+        
+        let data = "{\"account\":\"" + "fioname22222" +  "\",\"permission\":\"active\",\"parent\":\"owner\"," + auth + "}"
         let abi = try! AbiJson(code: "eosio", action: "updateauth", json: data)
         
         print ("***")
@@ -406,12 +480,16 @@ public class FIOSDK: NSObject {
         print(abi.action)
         print(data)
         print ("***")
-        TransactionUtil.pushTransaction(abi: abi, account: account, privateKey: importedPk!, completion: { (result, error) in
+        TransactionUtil.pushTransaction(abi: abi, account: "fioname22222", privateKey: importedPk!, completion: { (result, error) in
             if error != nil {
                 if (error! as NSError).code == RPCErrorResponse.ErrorCode {
-                    print("\(((error! as NSError).userInfo[RPCErrorResponse.ErrorKey] as! RPCErrorResponse).errorDescription())")
+                    let errDescription = "error"
+                    print (errDescription)
+                    completion(FIOError.init(kind: FIOError.ErrorKind.Failure, localizedDescription: errDescription))
                 } else {
-                    print("other error: \(String(describing: error?.localizedDescription))")
+                    let errDescription = ("other error: \(String(describing: error?.localizedDescription))")
+                    print (errDescription)
+                    completion(FIOError.init(kind: FIOError.ErrorKind.Failure, localizedDescription: errDescription))
                 }
             } else {
                 print("Ok. Add account permissions worked, Txid: \(result!.transactionId)")
@@ -420,16 +498,38 @@ public class FIOSDK: NSObject {
         })
     }
 
+    public struct AddAddress : Codable{
+        let fio_user_name: String
+        let chain: String
+        let address: String
+        let requestor: String
+    }
+    
     private func addAllPublicAddresses(fioName : String,  publicReceiveAddresses:Dictionary<String,String>, completion: @escaping ( _ error:FIOError?) -> ()) {
 
-        let account = getAccountName()
-        let importedPk = try! PrivateKey(keyString: getPrivateKey())
+        //let account = getAccountName()
+        //let importedPk = try! PrivateKey(keyString: getPrivateKey())
+        
+        let account = "fio.system"
+        let importedPk = try! PrivateKey(keyString: "5KBX1dwHME4VyuUss2sYM25D5ZTDvyYrbEz37UJqwAVAsR4tGuY")
         
         let dispatchGroup = DispatchGroup()
         for (receiveAddress, currencyCode) in publicReceiveAddresses{
             dispatchGroup.enter()
-            let data = "{\"fio_user_name\":\"" + fioName +  "\",\"chain\":\"" + currencyCode + "\",\"address\":\"" + receiveAddress + "\"}"
-            let abi = try! AbiJson(code: account, action: "addaddress", json: data)
+            
+            let data = AddAddress(fio_user_name: fioName, chain: currencyCode, address: receiveAddress, requestor:"fioname11111")
+            
+            var jsonString: String
+            do{
+                let jsonData:Data = try JSONEncoder().encode(data)
+                jsonString = String(data: jsonData, encoding: .utf8)!
+                print(jsonString)
+            }catch {
+               // completion (fioResponse, FIOError(kind: .NoDataReturned, localizedDescription: ""))
+                return
+            }
+            
+            let abi = try! AbiJson(code: "fio.system", action: "addaddress", json: jsonString)
             TransactionUtil.pushTransaction(abi: abi, account: account, privateKey: importedPk!, completion: { (result, error) in
                 if error != nil {
                     if (error! as NSError).code == RPCErrorResponse.ErrorCode {
@@ -451,7 +551,12 @@ public class FIOSDK: NSObject {
     
     private func createAccount(newAccountName:String, completion: @escaping ( _ error:FIOError?) -> ()) {
         print(newAccountName)
-        AccountUtil.createAccount(account: newAccountName, ownerKey:getPublicKey() , activeKey: getPublicKey(), creator: getAccountName(), pkString: getPrivateKey()) { (result, error) in
+        
+        // fioname11111
+        // 5K2HBexbraViJLQUJVJqZc42A8dxkouCmzMamdrZsLHhUHv77jF
+        // EOS5GpUwQtFrfvwqxAv24VvMJFeMHutpQJseTz8JYUBfZXP2zR8VY
+        
+        AccountUtil.createAccount(account: newAccountName, ownerKey1:"" , activeKey1: "", creator1: "", pkString1: "") { (result, error) in
             if error != nil {
                 if (error! as NSError).code == RPCErrorResponse.ErrorCode {
                     let errDescription = "error"
