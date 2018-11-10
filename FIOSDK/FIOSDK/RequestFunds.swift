@@ -21,11 +21,11 @@ public class RequestFunds{
     }
     
     private func fioFinanceAccountPrivateKey() -> String {
-        return "5KBX1dwHME4VyuUss2sYM25D5ZTDvyYrbEz37UJqwAVAsR4tGuY"
+        return FIOSDK.sharedInstance().getSystemPrivateKey()
     }
     
     private func privateKey() -> String {
-        return "5K2HBexbraViJLQUJVJqZc42A8dxkouCmzMamdrZsLHhUHv77jF"
+        return FIOSDK.sharedInstance().getPrivateKey()
     }
     
     struct TableRequest: Codable {
@@ -41,7 +41,7 @@ public class RequestFunds{
         let index_position: String
         let encode_type: String
     }
-    
+
     struct PendingHistoryResponse: Codable {
         let json: Bool
         let code: String
@@ -54,9 +54,6 @@ public class RequestFunds{
         let index_position: String
         let encode_type: String
     }
-    
-    // const Data=`{"json": true, "code": "${fiocommon.Config.FioFinanceAccount}", "scope": "${fiocommon.Config.FioFinanceAccount}", "table": "pendrqsts",
-    //    "table_key": "", "lower_bound": "", "upper_bound": "${requestee}", "limit": ${limit}, "key_type": "name", "index_position": "2", "encode_type": "dec"}`;
     
     struct HistoryResponseDetails: Codable {
         let rows:[HistoryResponseDetailsRecord]
@@ -92,7 +89,7 @@ public class RequestFunds{
     
     public func getRequestPendingHistory (requesteeAccountName:String, maxItemsReturned:Int, completion: @escaping ( _ requests:[FIOSDK.Request] , _ error:FIOError?) -> ()) {
         
-        let fioRequest = TableRequest(json: true, code: "fio.finance", scope: "fio.finance", table: "pendrqsts", table_key: "", lower_bound: "", upper_bound: requesteeAccountName, limit: maxItemsReturned, key_type: "name", index_position: "2", encode_type: "dec")
+        let fioRequest = TableRequest(json: true, code: "fio.finance", scope: "fio.finance", table: "pendrqsts", table_key: "", lower_bound: "", upper_bound: requesteeAccountName, limit: maxItemsReturned, key_type: "name", index_position: "3", encode_type: "dec")
         var jsonData: Data
         var jsonString: String
         do{
@@ -100,7 +97,7 @@ public class RequestFunds{
             jsonString = String(data: jsonData, encoding: .utf8)!
             print(jsonString)
         }catch {
-           //completion (fioResponse, FIOError(kind: .NoDataReturned, localizedDescription: ""))
+            completion ([FIOSDK.Request](), FIOError(kind: .NoDataReturned, localizedDescription: "Input Data, unable to JSON encode"))
             return
         }
         
@@ -214,10 +211,6 @@ public class RequestFunds{
         return dateFormatterPrint.string(from: date as Date)
     }
     
-   // responseStruct = try JSONDecoder().decode(AddressByNameResponse.self, from: data)
-    //{"rows":[
-    //{"fioappid":1,"originator":"fioname11111","receiver":"fioname22222","chain":"FIO","asset":"FIO","quantity":"10.1010"},
-    
     struct ResponseDetails: Codable {
         let rows:[ResponseDetailsRecord]
     }
@@ -242,7 +235,7 @@ public class RequestFunds{
             jsonString = String(data: jsonData, encoding: .utf8)!
             print(jsonString)
         }catch {
-            //completion (fioResponse, FIOError(kind: .NoDataReturned, localizedDescription: ""))
+            completion (ResponseDetailsReturned(rows: [RequestFunds.ResponseDetailsRecordReturned]()), FIOError(kind: .Failure, localizedDescription: "Json Encoding of input data failed."))
             return
         }
         
@@ -352,8 +345,6 @@ public class RequestFunds{
         let more:Bool
     }
     
-   // {\"rows\":[{\"key\":1,\"fioappid\":2,\"type\":1,\"status\":1,\"time\":1541716599,\"data\":\"{\\\"reqid\\\":\\\"10000\\\",\\\"memo\\\":\\\"shawn test\\\"}\"}],\"more\":false}"
-    
     struct RequestTrxData: Codable{
         let reqid: String?
         let obtid: String?
@@ -374,11 +365,12 @@ public class RequestFunds{
         let time: Int
         let memo: String
     }
-    
+
+    ///TODO: get the bounds working, to restrict the data
     private func getRequestMemoDate (appIdStart:Int, appIdEnd:Int, type:Int, status:Int, maxItemsReturned:Int, completion: @escaping ( _ requests:[ResponseRequestMemoDate] , _ error:FIOError?) -> ()) {
         
-        let fioRequest = TableRequest(json: true, code: "fio.finance", scope: "fio.finance", table: "trxlogs", table_key: "", lower_bound: String(appIdStart),
-                                      upper_bound: String(appIdEnd+1), limit: maxItemsReturned, key_type: "", index_position: "", encode_type: "dec")
+        let fioRequest = TableRequest(json: true, code: "fio.finance", scope: "fio.finance", table: "trxlogs", table_key: "", lower_bound: "",
+                                      upper_bound: "", limit: maxItemsReturned, key_type: "", index_position: "", encode_type: "dec")
         var jsonData: Data
         var jsonString: String
         do{
@@ -426,7 +418,10 @@ public class RequestFunds{
                     if (row.fioappid == appIdStart && row.type == type){
                         print("MEMO MATCHED")
                         // let memo = try JSONDecoder().decode(RequestTrxLogDetails.self, from: row.data)
-                        completion([ResponseRequestMemoDate(fioappid: row.fioappid, time: row.time, memo: row.data)], FIOError(kind: .Success, localizedDescription: ""))
+                        let jsonDecoder = JSONDecoder()
+                        let datafield = try jsonDecoder.decode(RequestTrxData.self, from: row.data.data(using: .utf8)!)
+                       
+                        completion([ResponseRequestMemoDate(fioappid: row.fioappid, time: row.time, memo: datafield.memo)], FIOError(kind: .Success, localizedDescription: ""))
                         return
                     }
                 }
@@ -453,7 +448,13 @@ public class RequestFunds{
 
     // the private key is associated with the account: name
     public func requestFunds (requestorAccountName:String, requestId: Int, requesteeAccountName:String, chain:String , asset:String, amount:Float, memo:String, completion: @escaping ( _ error:FIOError?) -> ()) {
-        let importedPk = try! PrivateKey(keyString: privateKey())
+        
+        var privateKey = self.fioFinanceAccountPrivateKey()  // So, the accounts are being created with the FIO.system private key... will it work if we USE FIO.system privatekey HERE
+        if (requestorAccountName == "fioname22222"){
+            privateKey = "5JA5zQkg1S59swPzY6d29gsfNhNPVCb7XhiGJAakGFa7tEKSMjT"
+        }
+        
+        let importedPk = try! PrivateKey(keyString: privateKey)
         
         let data = RequestFundsData(requestid: requestId, requestor: requestorAccountName, requestee: requesteeAccountName, chain: chain, asset: asset, quantity: amount, memo: memo)
         
@@ -462,7 +463,7 @@ public class RequestFunds{
             let jsonData:Data = try JSONEncoder().encode(data)
             jsonString = String(data: jsonData, encoding: .utf8)!
         }catch {
-            //completion (fioResponse, FIOError(kind: .NoDataReturned, localizedDescription: ""))
+            completion (FIOError(kind: .Failure, localizedDescription: "Json Encoding of input failed"))
             return
         }
         
@@ -495,7 +496,13 @@ public class RequestFunds{
     //THE PRIVATE KEY is associated with the account: name --> so, need to tie it back into.. the account creation side of things.
     
     public func rejectFundsRequest (requesteeAccountName:String, fioAppId:Int, memo:String, completion: @escaping ( _ error:FIOError?) -> ()) {
-        let importedPk = try! PrivateKey(keyString: "5JA5zQkg1S59swPzY6d29gsfNhNPVCb7XhiGJAakGFa7tEKSMjT")
+        
+        var privateKey = self.privateKey()  // So, the accounts are being created with the FIO.system private key... will it work if we USE FIO.system privatekey HERE
+        if (requesteeAccountName == "fioname22222"){
+            privateKey = "5JA5zQkg1S59swPzY6d29gsfNhNPVCb7XhiGJAakGFa7tEKSMjT"
+        }
+        
+        let importedPk = try! PrivateKey(keyString: privateKey)
         
         let data = RejectFundsData(fioappid: fioAppId, requestee: requesteeAccountName, memo: memo)
         
@@ -504,7 +511,7 @@ public class RequestFunds{
             let jsonData:Data = try JSONEncoder().encode(data)
             jsonString = String(data: jsonData, encoding: .utf8)!
         }catch {
-            //completion (fioResponse, FIOError(kind: .NoDataReturned, localizedDescription: ""))
+            completion (FIOError(kind: .Failure, localizedDescription: "Json Encoding of input data failed."))
             return
         }
         print(jsonString)
@@ -536,7 +543,12 @@ public class RequestFunds{
     }
     
     public func cancelFundsRequest (requestorAccountName:String, requestId:Int, memo:String, completion: @escaping ( _ error:FIOError?) -> ()) {
-        let importedPk = try! PrivateKey(keyString: privateKey())
+        var privateKey = self.privateKey()  // So, the accounts are being created with the FIO.system private key... will it work if we USE FIO.system privatekey HERE
+        if (requestorAccountName == "fioname22222"){
+            privateKey = "5JA5zQkg1S59swPzY6d29gsfNhNPVCb7XhiGJAakGFa7tEKSMjT"
+        }
+        
+        let importedPk = try! PrivateKey(keyString: privateKey)
         
         let data = CancelFundsData(requestid: requestId, requestor: requestorAccountName, memo: memo)
         
@@ -545,7 +557,7 @@ public class RequestFunds{
             let jsonData:Data = try JSONEncoder().encode(data)
             jsonString = String(data: jsonData, encoding: .utf8)!
         }catch {
-            //completion (fioResponse, FIOError(kind: .NoDataReturned, localizedDescription: ""))
+            completion (FIOError(kind: .Failure, localizedDescription: "JSon encoding of input data failed."))
             return
         }
         print(jsonString)
@@ -580,7 +592,12 @@ public class RequestFunds{
     //THE PRIVATE KEY is associated with the account: name --> so, need to tie it back into.. the account creation side of things.
     // reportrqst '{"fioappid": "2","requestee":"fioname22222","obtid":"0x123456789","memo":"approved"}' --permission fioname22222@active
     public func approveFundsRequest (requesteeAccountName:String, fioAppId:Int, obtid:String, memo:String, completion: @escaping ( _ error:FIOError?) -> ()) {
-        let importedPk = try! PrivateKey(keyString: "5JA5zQkg1S59swPzY6d29gsfNhNPVCb7XhiGJAakGFa7tEKSMjT")
+        var privateKey = self.privateKey()  // So, the accounts are being created with the FIO.system private key... will it work if we USE FIO.system privatekey HERE
+        if (requesteeAccountName == "fioname22222"){
+            privateKey = "5JA5zQkg1S59swPzY6d29gsfNhNPVCb7XhiGJAakGFa7tEKSMjT"
+        }
+        
+        let importedPk = try! PrivateKey(keyString: privateKey)
         
         let data = ApproveFundsData(fioappid: fioAppId, requestee: requesteeAccountName, obtid:obtid, memo: memo)
         
@@ -589,7 +606,7 @@ public class RequestFunds{
             let jsonData:Data = try JSONEncoder().encode(data)
             jsonString = String(data: jsonData, encoding: .utf8)!
         }catch {
-            //completion (fioResponse, FIOError(kind: .NoDataReturned, localizedDescription: ""))
+            completion (FIOError(kind: .Failure, localizedDescription: "Json encoding of input data failed."))
             return
         }
         print(jsonString)

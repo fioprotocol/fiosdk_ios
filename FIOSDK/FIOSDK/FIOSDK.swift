@@ -21,12 +21,14 @@ public class FIOSDK: NSObject {
     private var accountName:String = ""
     private var privateKey:String = ""
     private var publicKey:String = ""
-    private var accountNameForRequestFunds:String = ""
+    private var systemPrivateKey:String = ""
+    private var systemPublicKey:String = ""
     private let requestFunds = RequestFunds()
     
     struct AddressByNameRequest: Codable {
         let fio_name: String
         let chain: String
+        let requestor: String
     }
     
     public struct AddressByNameResponse: Codable {
@@ -50,6 +52,7 @@ public class FIOSDK: NSObject {
     
     public struct NameByAddressResponse: Codable {
         public let name: String
+        public let expiration: String
     }
     
     public struct Request{
@@ -79,7 +82,7 @@ public class FIOSDK: NSObject {
         return sharedInstance
     }()
     
-    public class func sharedInstance(accountName: String? = nil, accountNameForRequestFunds: String? = nil, privateKey:String? = nil, publicKey:String? = nil, url:String? = nil) -> FIOSDK {
+    public class func sharedInstance(accountName: String? = nil, privateKey:String? = nil, publicKey:String? = nil, systemPrivateKey:String?=nil, systemPublicKey:String? = nil, url:String? = nil) -> FIOSDK {
         
         if (accountName == nil ){
             if (_sharedInstance.accountName.count < 2 ){
@@ -89,16 +92,6 @@ public class FIOSDK: NSObject {
         }
         else{
             _sharedInstance.accountName = accountName!
-        }
-        
-        if (accountNameForRequestFunds == nil ){
-            if (_sharedInstance.accountNameForRequestFunds.count < 2 ){
-                //throw FIOError(kind:FIOError.ErrorKind.Failure, localizedDescription: "Account name hasn't been set yet, for the SDK Shared Instance, this needs to be passed in with the first usage")
-                fatalError("Account name for request funds, hasn't been set yet, for the FIOWalletSDK Shared Instance, this needs to be passed in with the first usage")
-            }
-        }
-        else{
-            _sharedInstance.accountNameForRequestFunds = accountNameForRequestFunds!
         }
         
         if (privateKey == nil){
@@ -117,6 +110,24 @@ public class FIOSDK: NSObject {
         }
         else {
             _sharedInstance.publicKey = publicKey!
+        }
+        
+        if (systemPrivateKey == nil){
+            if (_sharedInstance.systemPrivateKey.count < 2){
+                fatalError("System Private Key hasn't been set yet, for the FIOWalletSDK Shared Instance, this needs to be passed in with the first usage")
+            }
+        }
+        else {
+            _sharedInstance.systemPrivateKey = systemPrivateKey!
+        }
+        
+        if (systemPublicKey == nil){
+            if (_sharedInstance.systemPublicKey.count < 2){
+                fatalError("System Public Key hasn't been set yet, for the FIOWalletSDK Shared Instance, this needs to be passed in with the first usage")
+            }
+        }
+        else {
+            _sharedInstance.systemPublicKey = systemPublicKey!
         }
         
         if (url == nil){
@@ -155,29 +166,24 @@ public class FIOSDK: NSObject {
         return self.accountName
     }
     
-    private func getAccountNameForRequestFunds() -> String{
-        return self.accountNameForRequestFunds
-    }
-    
-    private func getPrivateKey() -> String {
+
+    internal func getPrivateKey() -> String {
         return self.privateKey
     }
     
-    private func getSystemPrivateKey() -> String {
-        return "5KBX1dwHME4VyuUss2sYM25D5ZTDvyYrbEz37UJqwAVAsR4tGuY"
+    internal func getSystemPrivateKey() -> String {
+        return self.systemPrivateKey
     }
     
-    private func getSystemPublicKey() -> String {
-        return "EOS7isxEua78KPVbGzKemH4nj2bWE52gqj8Hkac3tc7jKNvpfWzYS"
+    internal func getSystemPublicKey() -> String {
+        return self.systemPublicKey
     }
-// so, the public key of fio.system needs to go into permission... permission then register name
     
-    
-    private func getURI() -> String {
+    internal func getURI() -> String {
         return Utilities.sharedInstance().URL
     }
     
-    private func getPublicKey() -> String {
+    internal func getPublicKey() -> String {
         return self.publicKey
     }
     
@@ -185,7 +191,7 @@ public class FIOSDK: NSObject {
     
         var responseStruct : AddressByNameResponse = AddressByNameResponse(is_registered: "", is_domain: "", address: "")
         
-        let fioRequest = AddressByNameRequest(fio_name: fioName, chain:currencyCode)
+        let fioRequest = AddressByNameRequest(fio_name: fioName, chain:currencyCode, requestor:getAccountName())
         var jsonData: Data
         do{
             jsonData = try JSONEncoder().encode(fioRequest)
@@ -221,7 +227,7 @@ public class FIOSDK: NSObject {
  
     public func getFioNameByAddress (publicAddress:String, currencyCode:String, completion: @escaping (_ fioLookupResults: NameByAddressResponse, _ error:FIOError?) -> ()) {
         
-        var fioRsvp : NameByAddressResponse = NameByAddressResponse(name: "")
+        var fioRsvp : NameByAddressResponse = NameByAddressResponse(name: "", expiration: "11111111")
         
         let fioRequest = NameByAddressRequest(key: publicAddress, chain:currencyCode)
         var jsonData: Data
@@ -247,8 +253,13 @@ public class FIOSDK: NSObject {
                 return
             }
             do {
+                let result = String(data: data, encoding: String.Encoding.utf8) as String!
+                print(result)
+                
                 fioRsvp = try JSONDecoder().decode(NameByAddressResponse.self, from: data)
                 print(fioRsvp)
+                
+                
                 completion(fioRsvp, FIOError(kind: .Success, localizedDescription: ""))
                 
             }catch let error{
@@ -272,14 +283,8 @@ public class FIOSDK: NSObject {
         let requestor:String
     }
     
-    public func register(fioName:String, newAccountName:String, publicReceiveAddresses:Dictionary<String,String>, completion: @escaping ( _ error:FIOError?) -> ()) {
-        
-       // let account = "fio.system"
-        let importedPk = try! PrivateKey(keyString: "5KBX1dwHME4VyuUss2sYM25D5ZTDvyYrbEz37UJqwAVAsR4tGuY")
-
-        //let account = "fioname22222"
-        //let importedPk = try! PrivateKey(keyString: "5KBX1dwHME4VyuUss2sYM25D5ZTDvyYrbEz37UJqwAVAsR4tGuY")
-
+    private func register(fioName:String, newAccountName:String, publicReceiveAddresses:Dictionary<String,String>, completion: @escaping ( _ error:FIOError?) -> ()) {
+        let importedPk = try! PrivateKey(keyString: getSystemPrivateKey())
         let data = RegisterName(name: fioName, requestor: "fio.system")
         
         var jsonString: String
@@ -288,7 +293,7 @@ public class FIOSDK: NSObject {
             jsonString = String(data: jsonData, encoding: .utf8)!
             print(jsonString)
         }catch {
-            //completion (fioResponse, FIOError(kind: .NoDataReturned, localizedDescription: ""))
+            completion (FIOError(kind: .Failure, localizedDescription: "Json for input data not wrapping correctly"))
             return
         }
        
@@ -319,9 +324,6 @@ public class FIOSDK: NSObject {
     }
     
     public func registerFioName (fioName:String, publicReceiveAddresses:Dictionary<String,String>, completion: @escaping ( _ error:FIOError?) -> ()) {
-
-       // let importedPk = try! PrivateKey(keyString: "5JA5zQkg1S59swPzY6d29gsfNhNPVCb7XhiGJAakGFa7tEKSMjT")
-
         self.createAccountAddPermissions(completion: { (newAccountName, error) in
             if (error?.kind == FIOError.ErrorKind.Success){
                 
@@ -384,23 +386,10 @@ public class FIOSDK: NSObject {
     }
     
     public func getRequestPendingHistory (requesteeAccountName:String, maxItemsReturned:Int, completion: @escaping ( _ requests:[Request] , _ error:FIOError?) -> ()) {
-        
         self.requestFunds.getRequestPendingHistory(requesteeAccountName: requesteeAccountName, maxItemsReturned: maxItemsReturned) { (requests, error) in
             completion(requests,FIOError.init(kind: FIOError.ErrorKind.Success, localizedDescription: "")
         )}
     }
-    
-    /*
-    public func getRequestDetails (appIdStart: Int, appIdEnd: Int, maxItemsReturned: Int, completion: @escaping ( _ requests:[Request] , _ error:FIOError?) -> ()) {
-        
-        self.requestFunds.getRequestDetails(appIdStart: appIdStart, appIdEnd:appIdEnd , maxItemsReturned: maxItemsReturned) { (requests, error) in
-            let v = Request(amount: 0.05, currencyCode: "BTC", status: RequestStatus.Requested, requestDate: "01/13/2012", from: "fred.brd", memo: "test funds", statusDescription:RequestStatus.Requested.rawValue)
-            let w = Request(amount: 2.0, currencyCode: "ETH", status: RequestStatus.Requested, requestDate: "05/13/2013", from: "bob.brd", memo: "test funds", statusDescription:RequestStatus.Requested.rawValue)
-            
-                completion([v,w],FIOError.init(kind: FIOError.ErrorKind.Success, localizedDescription: "")
-            )}
-    }
- */
     
     private func createAccountAddPermissions(completion: @escaping ( _ newAccountName:String, _ error:FIOError?) -> ()) {
         getValidNewAccountName { (newAccountName, error) in
@@ -461,26 +450,63 @@ public class FIOSDK: NSObject {
         
     }
     
-    // pubsyskey=EOS7isxEua78KPVbGzKemH4nj2bWE52gqj8Hkac3tc7jKNvpfWzYS
-    // prisyskey=5KBX1dwHME4VyuUss2sYM25D5ZTDvyYrbEz37UJqwAVAsR4tGuY
-    //
+    struct KeyValues : Codable {
+        let key:String
+        let weight: Int
+    }
+    
+    struct PermissionValues: Codable {
+        let actor: String
+        let permission: String
+    }
+    
+    struct AccountValues : Codable {
+        let permission:PermissionValues
+        let weight:Int
+    }
+    
+    struct AuthValue : Codable{
+        let threshold:Int
+        let keys:[KeyValues]
+        let accounts:[AccountValues]
+        let waits:[String]
+    }
+    
+    struct PermissionAccount: Codable{
+        let account: String
+        let permission: String
+        let parent: String
+        let auth:AuthValue
+    }
+ 
+    // so, the public key of fio.system needs to go into permission... permission then register name
     
     public func addAccountPermissions(accountName : String, completion: @escaping ( _ error:FIOError?) -> ()) {
         // try fio.system as well
-        let account = "fioname22222"
-        let importedPk = try! PrivateKey(keyString: "5JA5zQkg1S59swPzY6d29gsfNhNPVCb7XhiGJAakGFa7tEKSMjT")
+        let importedPk = try! PrivateKey(keyString: getPrivateKey())
         
-        let auth = "\"auth\": {\"threshold\": 1,\"keys\": [{\"key\": \"" + "EOS8ApHc48DpXehLznVqMJgMGPAaJoyMbFJbfDLyGQ5QjF7nDPuvJ" + "\",\"weight\": 1}],\"accounts\": [{\"permission\": {\"actor\":\"" + "fio.system" + "\",\"permission\": \"" + "eosio.code" +  "\"},\"weight\": 1}],\"waits\": []}"
+        let data = PermissionAccount(account: getAccountName(), permission: "active", parent: "owner"
+                        , auth:AuthValue(threshold: 1, keys: [KeyValues(key: getPublicKey() , weight: 1)]
+                                                    , accounts:[AccountValues(permission: FIOSDK.PermissionValues(actor: "fio.system", permission: "eosio.code"), weight: 1)]
+                                                    , waits:[]))
         
-        let data = "{\"account\":\"" + "fioname22222" +  "\",\"permission\":\"active\",\"parent\":\"owner\"," + auth + "}"
-        let abi = try! AbiJson(code: "eosio", action: "updateauth", json: data)
+        var jsonString: String = ""
+        do{
+            let jsonData:Data = try JSONEncoder().encode(data)
+            jsonString = String(data: jsonData, encoding: .utf8)!
+            print(jsonString)
+        }catch {
+           completion(FIOError.init(kind: FIOError.ErrorKind.Failure, localizedDescription: "Unable to serialize JSON for addaccountpermissions"))
+        }
+        
+        let abi = try! AbiJson(code: "eosio", action: "updateauth", json: jsonString)
         
         print ("***")
         print(abi.code)
         print(abi.action)
         print(data)
         print ("***")
-        TransactionUtil.pushTransaction(abi: abi, account: "fioname22222", privateKey: importedPk!, completion: { (result, error) in
+        TransactionUtil.pushTransaction(abi: abi, account: getAccountName(), privateKey: importedPk!, completion: { (result, error) in
             if error != nil {
                 if (error! as NSError).code == RPCErrorResponse.ErrorCode {
                     let errDescription = "error"
@@ -507,17 +533,14 @@ public class FIOSDK: NSObject {
     
     private func addAllPublicAddresses(fioName : String,  publicReceiveAddresses:Dictionary<String,String>, completion: @escaping ( _ error:FIOError?) -> ()) {
 
-        //let account = getAccountName()
-        //let importedPk = try! PrivateKey(keyString: getPrivateKey())
-        
         let account = "fio.system"
-        let importedPk = try! PrivateKey(keyString: "5KBX1dwHME4VyuUss2sYM25D5ZTDvyYrbEz37UJqwAVAsR4tGuY")
+        let importedPk = try! PrivateKey(keyString: getSystemPrivateKey())
         
         let dispatchGroup = DispatchGroup()
         for (receiveAddress, currencyCode) in publicReceiveAddresses{
             dispatchGroup.enter()
-            
-            let data = AddAddress(fio_user_name: fioName, chain: currencyCode, address: receiveAddress, requestor:"fioname11111")
+            ///TODO: TEST THIS DEAL HERE
+            let data = AddAddress(fio_user_name: fioName, chain: currencyCode, address: receiveAddress, requestor:getAccountName())
             
             var jsonString: String
             do{
@@ -525,7 +548,7 @@ public class FIOSDK: NSObject {
                 jsonString = String(data: jsonData, encoding: .utf8)!
                 print(jsonString)
             }catch {
-               // completion (fioResponse, FIOError(kind: .NoDataReturned, localizedDescription: ""))
+                completion (FIOError(kind: .Failure, localizedDescription: "Input data JSON Encoding Failed"))
                 return
             }
             
@@ -552,11 +575,7 @@ public class FIOSDK: NSObject {
     private func createAccount(newAccountName:String, completion: @escaping ( _ error:FIOError?) -> ()) {
         print(newAccountName)
         
-        // fioname11111
-        // 5K2HBexbraViJLQUJVJqZc42A8dxkouCmzMamdrZsLHhUHv77jF
-        // EOS5GpUwQtFrfvwqxAv24VvMJFeMHutpQJseTz8JYUBfZXP2zR8VY
-        
-        AccountUtil.createAccount(account: newAccountName, ownerKey1:"" , activeKey1: "", creator1: "", pkString1: "") { (result, error) in
+        AccountUtil.createAccount(account: newAccountName, ownerKey:getSystemPublicKey() , activeKey: getSystemPublicKey(), creator: "fio.system", pkString: getSystemPrivateKey()) { (result, error) in
             if error != nil {
                 if (error! as NSError).code == RPCErrorResponse.ErrorCode {
                     let errDescription = "error"

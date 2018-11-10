@@ -17,6 +17,8 @@ class FIOSDKTests: XCTestCase {
     private let publicKey:String = "EOS6D6gSipBmP1KW9SMB5r4ELjooaogFt77gEs25V9TU9FrxKVeFb"
     private let url:String = "http://52.14.221.174:8889/v1"
     
+    
+    // stage 1 server: 18.223.14.244
     private let TIMEOUT:Double = 10.0
     
     private let useStaging = true
@@ -26,18 +28,19 @@ class FIOSDKTests: XCTestCase {
         // Put setup code here. This method is called before the invocation of each test method in the class.
         
         if (useStaging){
-            _ = FIOSDK.sharedInstance(accountName: "fioname11111", accountNameForRequestFunds: "fioname11111", privateKey: "5K2HBexbraViJLQUJVJqZc42A8dxkouCmzMamdrZsLHhUHv77jF", publicKey: "EOS5GpUwQtFrfvwqxAv24VvMJFeMHutpQJseTz8JYUBfZXP2zR8VY", url: "http://18.223.56.185:8889/v1")
+            _ = FIOSDK.sharedInstance(accountName: "fioname11111", privateKey: "5K2HBexbraViJLQUJVJqZc42A8dxkouCmzMamdrZsLHhUHv77jF", publicKey: "EOS5GpUwQtFrfvwqxAv24VvMJFeMHutpQJseTz8JYUBfZXP2zR8VY",systemPrivateKey:"5KBX1dwHME4VyuUss2sYM25D5ZTDvyYrbEz37UJqwAVAsR4tGuY", systemPublicKey:"EOS7isxEua78KPVbGzKemH4nj2bWE52gqj8Hkac3tc7jKNvpfWzYS", url: "http://18.223.56.185:8889/v1")
         }
 
         else{
-            _ = FIOSDK.sharedInstance(accountName: accountName, accountNameForRequestFunds: accountNameForRequestFunds, privateKey: privateKey, publicKey: publicKey, url: url)
+            _ = FIOSDK.sharedInstance(accountName: accountName,  privateKey: privateKey, publicKey: publicKey, systemPrivateKey: "", systemPublicKey: "", url: url)
         }
     }
     
     override func tearDown() {
         // Put teardown code here. This method is called after the invocation of each test method in the class.
     }
-  /*
+
+    /*
     func testGetAddressByFioName() {
         let expectation = XCTestExpectation(description: "testGetAddressByFIOName")
         
@@ -50,7 +53,7 @@ class FIOSDKTests: XCTestCase {
         
         wait(for: [expectation], timeout: TIMEOUT)
     }
-    
+ */
     func testGetFioNameByAddress(){
         let expectation = XCTestExpectation(description: "testGetFIONameByKey")
         
@@ -64,9 +67,7 @@ class FIOSDKTests: XCTestCase {
         
         wait(for: [expectation], timeout: TIMEOUT)
     }
-
-  */
-    /*
+/*
     func testRegisterFioName(){
         let expectation = XCTestExpectation(description: "testRegisterFIOName")
         
@@ -83,8 +84,9 @@ class FIOSDKTests: XCTestCase {
         
         wait(for: [expectation], timeout: TIMEOUT*3000)
     }
+ */
 
-
+/*
     func testRegister(){
         let expectation = XCTestExpectation(description: "testRegisterFIOName")
         
@@ -140,26 +142,29 @@ class FIOSDKTests: XCTestCase {
         wait(for: [expectation], timeout: TIMEOUT*30000)
     }
 
+
   */
+    
+ 
     func testGetPendingRequestHistory(){
         let expectation = XCTestExpectation(description: "testGetPendingRequestHistory")
         
-        FIOSDK.sharedInstance().getRequestPendingHistory(requesteeAccountName: "fioname22222", maxItemsReturned: 10, completion: { (requests, error) in
+        FIOSDK.sharedInstance().getRequestPendingHistory(requesteeAccountName: "dqi12mps5nlu", maxItemsReturned: 10, completion: { (requests, error) in
             
             XCTAssert((error?.kind == FIOError.ErrorKind.Success), "testGetPendingRequestHistory NOT SUCCESSFUL")
             expectation.fulfill()
             
         })
         
-        wait(for: [expectation], timeout: TIMEOUT*3000)
+        wait(for: [expectation], timeout: TIMEOUT*30000)
     }
 
  
-/*
+   /*
     func testRequestFunds(){
         let expectation = XCTestExpectation(description: "testRequestFunds")
         
-        FIOSDK.sharedInstance().requestFunds(requestorAccountName: "fioname11111", requesteeAccountName: "fioname22222", chain: "FIO", asset: "FIO", amount: 10.0000, memo: "shawn test") { (error) in
+        FIOSDK.sharedInstance().requestFunds(requestorAccountName: "2ym4udjxp4gj", requesteeAccountName: "dqi12mps5nlu", chain: "FIO", asset: "FIO", amount: 10.0000, memo: "shawn test") { (error) in
             XCTAssert((error?.kind == FIOError.ErrorKind.Success), "testRequestFunds NOT SUCCESSFUL")
             expectation.fulfill()
         }
