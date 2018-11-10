@@ -63,14 +63,10 @@ import Foundation
     ///   - transfer: Whether to transfer creator's resources(ram,cpu,net) to account
     ///   - completion: callback
     
-    static func createAccount(account: String, ownerKey1: String, activeKey1: String, creator1: String, pkString1: String, completion: @escaping (_ result: TransactionResult?, _ error: Error?) -> ()) {
+    static func createAccount(account: String, ownerKey: String, activeKey: String, creator: String, pkString: String, completion: @escaping (_ result: TransactionResult?, _ error: Error?) -> ()) {
         
         print (account)
-        let creator =   "fio.system"
-        let ownerKey =  "EOS7isxEua78KPVbGzKemH4nj2bWE52gqj8Hkac3tc7jKNvpfWzYS"
-        let activeKey = "EOS7isxEua78KPVbGzKemH4nj2bWE52gqj8Hkac3tc7jKNvpfWzYS"
-        let pkString =  "5KBX1dwHME4VyuUss2sYM25D5ZTDvyYrbEz37UJqwAVAsR4tGuY"
-        
+
         let newaccountAbiJson = newAccountAbiJson(code: "eosio", creator: creator, account: account, ownerKey: ownerKey, activeKey: activeKey)
         let buyRamAbiJson = ResourceUtil.buyRamAbiJson(payer: creator, receiver: account, ramEos: 100.0000)
         let delegatebwAbiJson = ResourceUtil.stakeResourceAbiJson(from: creator, receiver: account, transfer: 1, net: 100.0000, cpu: 100.0000)
