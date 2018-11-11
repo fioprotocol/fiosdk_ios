@@ -87,7 +87,42 @@ public class RequestFunds{
         let receiverFioName: String
     }
     
-    public func getRequestPendingHistory (requesteeAccountName:String, maxItemsReturned:Int, completion: @escaping ( _ requests:[FIOSDK.Request] , _ error:FIOError?) -> ()) {
+    public func getRequesteePendingHistoryByAddress (address:String, currencyCode:String, maxItemsReturned:Int, completion: @escaping ( _ requests:[FIOSDK.Request] , _ error:FIOError?) -> ()) {
+        FIOSDK.sharedInstance().getFioNameByAddress(publicAddress: address, currencyCode: currencyCode) { (response, error) in
+            if (error?.kind == FIOError.ErrorKind.Success){
+                self.getRequesteePendingHistoryByFioName(fioName: response.name
+                    , maxItemsReturned: maxItemsReturned
+                    , completion: { (responses, err) in
+                        completion(responses,err)
+                })
+            }
+            else {
+                completion([FIOSDK.Request](),error)
+            }
+        }
+    }
+    
+    public func getRequesteePendingHistoryByFioName (fioName:String, maxItemsReturned:Int, completion: @escaping ( _ requests:[FIOSDK.Request] , _ error:FIOError?) -> ()) {
+        FIOSDK.sharedInstance().getAddressByFioName(fioName: fioName, currencyCode: "FIO") { (response, error) in
+            if (error?.kind == FIOError.ErrorKind.Success){
+                self.getRequesteePendingHistory(requesteeAccountName: response.address, maxItemsReturned: maxItemsReturned
+                    , completion: { (responses, err) in
+                    
+                        if (err?.kind == FIOError.ErrorKind.Success){
+                            completion(responses, err)
+                        }
+                        else{
+                            completion([FIOSDK.Request](),error)
+                        }
+                })
+            }
+            else {
+                completion([FIOSDK.Request](),error)
+            }
+        }
+    }
+    
+    public func getRequesteePendingHistory (requesteeAccountName:String, maxItemsReturned:Int, completion: @escaping ( _ requests:[FIOSDK.Request] , _ error:FIOError?) -> ()) {
         
         let fioRequest = TableRequest(json: true, code: "fio.finance", scope: "fio.finance", table: "pendrqsts", table_key: "", lower_bound: "", upper_bound: requesteeAccountName, limit: maxItemsReturned, key_type: "name", index_position: "3", encode_type: "dec")
         var jsonData: Data
@@ -127,13 +162,13 @@ public class RequestFunds{
                 print ("***")
                 print (response)
                 print ("****")
-                
+             
                 if (response.rows.count > 0){
-                    
+              
                     let dispatchGroup = DispatchGroup()
                     var detailRecords = SynchronizedArray<ResponseDetailsRecordReturned>()
                     ///TODO: do this with some sort of bounds to minimize calls - no time left to do this right
-                    for item in response.rows{
+                    for item in response.rows.filter({ $0.receiver ==  requesteeAccountName}){
                         dispatchGroup.enter()
                         self.getRequestDetails(appIdStart: item.fioappid, appIdEnd: item.fioappid, maxItemsReturned: 1, completion: { (details, error) in
                             if (error?.kind == FIOError.ErrorKind.Success){
@@ -146,7 +181,7 @@ public class RequestFunds{
                     }
                     
                     var dateMemoRecords = SynchronizedArray<ResponseRequestMemoDate>()
-                    for item in response.rows{
+                    for item in response.rows.filter({ $0.receiver ==  requesteeAccountName}){
                         dispatchGroup.enter()
                         self.getRequestMemoDate(appIdStart: item.fioappid, appIdEnd: item.fioappid, type: 1, status: 1, maxItemsReturned: 100, completion: { (results, error) in
                             if (error?.kind == FIOError.ErrorKind.Success){
@@ -179,9 +214,12 @@ public class RequestFunds{
                                     print("**found memo match")
                                 }
                             }
-                            print ("*adding")
-                            arr.append(FIOSDK.Request(amount: Float(detail.quantity) ?? 0, currencyCode: detail.asset, status: FIOSDK.RequestStatus.Requested, requestDate: self.formattedDate(time: date), fromFioName: detail.originatorFioName, toFioName: detail.receiverFioName, requestorAccountName: detail.originator, requesteeAccountName: detail.receiver, memo: memo, fioappid: detail.fioappid, requestid: responseRow?.requestid ??  0, statusDescription: FIOSDK.RequestStatus.Requested.rawValue))
-                            
+                           
+                           if (detail.asset.lowercased() != "fio"){
+                                print ("*adding")
+                                arr.append(FIOSDK.Request(amount: Float(detail.quantity) ?? 0, currencyCode: detail.asset, status: FIOSDK.RequestStatus.Requested, requestTimeStamp:date, requestDate: self.dateFromTimeStamp(time: date), requestDateFormatted: self.formattedDate(time: date),fromFioName: detail.originatorFioName, toFioName: detail.receiverFioName, requestorAccountName: detail.originator, requesteeAccountName: detail.receiver, memo: memo, fioappid: detail.fioappid, requestid: responseRow?.requestid ??  0, statusDescription: FIOSDK.RequestStatus.Requested.rawValue))
+                           }
+
                         }
 
                         completion(arr, FIOError.init(kind: FIOError.ErrorKind.Success, localizedDescription: ""))
@@ -201,14 +239,17 @@ public class RequestFunds{
         task.resume()
     }
     
-    private func formattedDate(time:Int) -> String {
-    
+    private func dateFromTimeStamp(time:Int) -> Date {
         let index = Double(time)
         let date = NSDate(timeIntervalSince1970: index ?? 11111111)
+        return date as Date
+    }
+    
+    private func formattedDate(time:Int) -> String {
         let dateFormatterPrint = DateFormatter()
         dateFormatterPrint.dateFormat = "MMM dd,yyyy"
     
-        return dateFormatterPrint.string(from: date as Date)
+        return dateFormatterPrint.string(from: dateFromTimeStamp(time:time))
     }
     
     struct ResponseDetails: Codable {
@@ -497,7 +538,7 @@ public class RequestFunds{
     
     public func rejectFundsRequest (requesteeAccountName:String, fioAppId:Int, memo:String, completion: @escaping ( _ error:FIOError?) -> ()) {
         
-        var privateKey = self.privateKey()  // So, the accounts are being created with the FIO.system private key... will it work if we USE FIO.system privatekey HERE
+        var privateKey = self.fioFinanceAccountPrivateKey()  // So, the accounts are being created with the FIO.system private key... will it work if we USE FIO.system privatekey HERE
         if (requesteeAccountName == "fioname22222"){
             privateKey = "5JA5zQkg1S59swPzY6d29gsfNhNPVCb7XhiGJAakGFa7tEKSMjT"
         }
@@ -543,7 +584,7 @@ public class RequestFunds{
     }
     
     public func cancelFundsRequest (requestorAccountName:String, requestId:Int, memo:String, completion: @escaping ( _ error:FIOError?) -> ()) {
-        var privateKey = self.privateKey()  // So, the accounts are being created with the FIO.system private key... will it work if we USE FIO.system privatekey HERE
+        var privateKey = self.fioFinanceAccountPrivateKey()  // So, the accounts are being created with the FIO.system private key... will it work if we USE FIO.system privatekey HERE
         if (requestorAccountName == "fioname22222"){
             privateKey = "5JA5zQkg1S59swPzY6d29gsfNhNPVCb7XhiGJAakGFa7tEKSMjT"
         }

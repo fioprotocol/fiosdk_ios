@@ -54,6 +54,7 @@ class FIOSDKTests: XCTestCase {
         wait(for: [expectation], timeout: TIMEOUT)
     }
  */
+    /*
     func testGetFioNameByAddress(){
         let expectation = XCTestExpectation(description: "testGetFIONameByKey")
         
@@ -67,7 +68,7 @@ class FIOSDKTests: XCTestCase {
         
         wait(for: [expectation], timeout: TIMEOUT)
     }
-/*
+
     func testRegisterFioName(){
         let expectation = XCTestExpectation(description: "testRegisterFIOName")
         
@@ -145,22 +146,46 @@ class FIOSDKTests: XCTestCase {
 
   */
     
- 
+    /*
+    func testRequestFundsByAddress(){
+        let expectation = XCTestExpectation(description: "testRequestFunds")
+        
+        FIOSDK.sharedInstance().requestFundsByAddress(requestorAddress: "0x3A2522321656285661Df2012a3A05bEF84C8B1ed", requestorCurrencyCode: "ETH", requesteeFioName: "shawnrequestee.brd", chain: "FIO", asset: "ETH", amount: 1.0000, memo: "shawn test request by address") { (error) in
+            XCTAssert((error?.kind == FIOError.ErrorKind.Success), "testRequestFunds NOT SUCCESSFUL")
+            expectation.fulfill()
+        }
+        
+        wait(for: [expectation], timeout: TIMEOUT*30000)
+    }
+    
+
+    func testGetPendingRequestHistoryByAddress(){
+        let expectation = XCTestExpectation(description: "testGetPendingRequestHistoryByAddress")
+        
+        FIOSDK.sharedInstance().getRequesteePendingHistoryByAddress(address: "mzpMBooUUSbpptqfGwJ1hbu3WyW2x6SyPv", currencyCode: "BTC", maxItemsReturned: 10, completion: { (response, error) in
+                XCTAssert((error?.kind == FIOError.ErrorKind.Success), "testGetPendingRequestHistoryByAddress NOT SUCCESSFUL")
+                expectation.fulfill()
+        })
+
+        wait(for: [expectation], timeout: TIMEOUT)
+    }
+    
+    
     func testGetPendingRequestHistory(){
         let expectation = XCTestExpectation(description: "testGetPendingRequestHistory")
         
-        FIOSDK.sharedInstance().getRequestPendingHistory(requesteeAccountName: "dqi12mps5nlu", maxItemsReturned: 10, completion: { (requests, error) in
+        FIOSDK.sharedInstance().getRequesteePendingHistory(requesteeAccountName: "dqi12mps5nlu", maxItemsReturned: 10, completion: { (requests, error) in
             
             XCTAssert((error?.kind == FIOError.ErrorKind.Success), "testGetPendingRequestHistory NOT SUCCESSFUL")
             expectation.fulfill()
             
         })
         
-        wait(for: [expectation], timeout: TIMEOUT*30000)
+        wait(for: [expectation], timeout: TIMEOUT)
     }
 
  
-   /*
+
     func testRequestFunds(){
         let expectation = XCTestExpectation(description: "testRequestFunds")
         
