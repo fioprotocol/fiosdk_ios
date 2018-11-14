@@ -58,7 +58,7 @@ public class FIOSDK: NSObject {
     public struct Request{
         public let amount:Float
         public let currencyCode:String
-        public let status:RequestStatus
+        public var status:RequestStatus
         public let requestTimeStamp:Int
         public let requestDate:Date
         public let requestDateFormatted:String
@@ -425,26 +425,73 @@ public class FIOSDK: NSObject {
         })
     }
     
-    public func getRequestSentHistory (fioName:String, currencyCode:String, completion: @escaping ( _ requests:[Request] , _ error:FIOError?) -> ()) {
-        
-        
-    }
-    
     public func getRequesteePendingHistoryByAddress (address:String, currencyCode:String, maxItemsReturned:Int, completion: @escaping ( _ requests:[FIOSDK.Request] , _ error:FIOError?) -> ()) {
-        self.requestFunds.getRequesteePendingHistoryByAddress(address: address, currencyCode: currencyCode, maxItemsReturned: maxItemsReturned) { (requests, error) in
-            completion (requests, error)
+        self.getFioNameByAddress(publicAddress: address, currencyCode: currencyCode) { (response, error) in
+            if (error?.kind == FIOError.ErrorKind.Success){
+                self.getRequesteePendingHistoryByFioName(fioName: response.name
+                    , maxItemsReturned: maxItemsReturned
+                    , completion: { (responses, err) in
+                        completion(responses,err)
+                })
+            }
+            else {
+                completion([FIOSDK.Request](),error)
+            }
         }
     }
     
     public func getRequesteePendingHistoryByFioName (fioName:String, maxItemsReturned:Int, completion: @escaping ( _ requests:[FIOSDK.Request] , _ error:FIOError?) -> ()) {
-        self.requestFunds.getRequesteePendingHistoryByFioName(fioName: fioName, maxItemsReturned: maxItemsReturned) { (requests, error) in
-            completion(requests,error)
+        self.getAddressByFioName(fioName: fioName, currencyCode: "FIO") { (response, error) in
+            if (error?.kind == FIOError.ErrorKind.Success){
+                self.requestFunds.getRequesteePendingHistory(requesteeAccountName: response.address,maxItemsReturned: maxItemsReturned
+                    , completion: { (responses, err) in
+                        
+                        if (err?.kind == FIOError.ErrorKind.Success){
+                            completion(responses, err)
+                        }
+                        else{
+                            completion([FIOSDK.Request](),error)
+                        }
+                })
+            }
+            else {
+                completion([FIOSDK.Request](),error)
+            }
         }
     }
     
-    public func getRequesteePendingHistory (requesteeAccountName:String, maxItemsReturned:Int, completion: @escaping ( _ requests:[Request] , _ error:FIOError?) -> ()) {
-        self.requestFunds.getRequesteePendingHistory(requesteeAccountName: requesteeAccountName, maxItemsReturned: maxItemsReturned) { (requests, error) in
-            completion(requests,error)
+    public func getRequestorHistoryByAddress (address:String, currencyCode:String, maxItemsReturned:Int, completion: @escaping ( _ requests:[FIOSDK.Request] , _ error:FIOError?) -> ()) {
+        self.getFioNameByAddress(publicAddress: address, currencyCode: currencyCode) { (response, error) in
+            if (error?.kind == FIOError.ErrorKind.Success){
+                self.getRequestorHistoryByFioName(fioName: response.name, currencyCode: currencyCode
+                    , maxItemsReturned: maxItemsReturned
+                    , completion: { (responses, err) in
+                        completion(responses,err)
+                })
+            }
+            else {
+                completion([FIOSDK.Request](),error)
+            }
+        }
+    }
+    
+    public func getRequestorHistoryByFioName (fioName:String, currencyCode:String, maxItemsReturned:Int, completion: @escaping ( _ requests:[FIOSDK.Request] , _ error:FIOError?) -> ()) {
+        self.getAddressByFioName(fioName: fioName, currencyCode: "FIO") { (response, error) in
+            if (error?.kind == FIOError.ErrorKind.Success){
+                self.requestFunds.getRequestorHistory(requestorAccountName: response.address, currencyCode: currencyCode, maxItemsReturned: maxItemsReturned
+                    , completion: { (responses, err) in
+                        
+                        if (err?.kind == FIOError.ErrorKind.Success){
+                            completion(responses, err)
+                        }
+                        else{
+                            completion([FIOSDK.Request](),error)
+                        }
+                })
+            }
+            else {
+                completion([FIOSDK.Request](),error)
+            }
         }
     }
     
@@ -664,8 +711,8 @@ public class FIOSDK: NSObject {
         }
     }
     
-    private func createRandomAccountName() -> String{
-        return Utilities.sharedInstance().randomString(length:12)
+    public func createRandomAccountName() -> String{
+        return Utilities.sharedInstance().randomStringCharsOnly(length: 1) +      Utilities.sharedInstance().randomString(length:11)
     }
     
 }

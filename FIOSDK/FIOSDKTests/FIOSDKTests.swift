@@ -40,6 +40,13 @@ class FIOSDKTests: XCTestCase {
         // Put teardown code here. This method is called after the invocation of each test method in the class.
     }
 
+    func testRandomAccountString (){
+        let newAccountName = FIOSDK.sharedInstance().createRandomAccountName()
+        print(newAccountName)
+        XCTAssert(newAccountName.count == 12, "newAccountName should be 12 chars")
+        
+    }
+    
     /*
     func testGetAddressByFioName() {
         let expectation = XCTestExpectation(description: "testGetAddressByFIOName")
@@ -157,7 +164,7 @@ class FIOSDKTests: XCTestCase {
         
         wait(for: [expectation], timeout: TIMEOUT*30000)
     }
-    
+
 
     func testGetPendingRequestHistoryByAddress(){
         let expectation = XCTestExpectation(description: "testGetPendingRequestHistoryByAddress")
@@ -169,22 +176,22 @@ class FIOSDKTests: XCTestCase {
 
         wait(for: [expectation], timeout: TIMEOUT)
     }
-    
-    
+   */
+  
     func testGetPendingRequestHistory(){
         let expectation = XCTestExpectation(description: "testGetPendingRequestHistory")
         
-        FIOSDK.sharedInstance().getRequesteePendingHistory(requesteeAccountName: "dqi12mps5nlu", maxItemsReturned: 10, completion: { (requests, error) in
+        FIOSDK.sharedInstance().getRequestorHistoryByFioName(fioName : "shawnrequestor.brd", currencyCode: "ETH", maxItemsReturned: 100, completion: { (requests, error) in
             
             XCTAssert((error?.kind == FIOError.ErrorKind.Success), "testGetPendingRequestHistory NOT SUCCESSFUL")
             expectation.fulfill()
             
         })
         
-        wait(for: [expectation], timeout: TIMEOUT)
+        wait(for: [expectation], timeout: TIMEOUT*30000)
     }
 
- 
+ /*
 
     func testRequestFunds(){
         let expectation = XCTestExpectation(description: "testRequestFunds")
