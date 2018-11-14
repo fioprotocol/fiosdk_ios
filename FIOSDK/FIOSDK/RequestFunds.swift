@@ -87,44 +87,303 @@ public class RequestFunds{
         let receiverFioName: String
     }
     
-    public func getRequesteePendingHistoryByAddress (address:String, currencyCode:String, maxItemsReturned:Int, completion: @escaping ( _ requests:[FIOSDK.Request] , _ error:FIOError?) -> ()) {
-        FIOSDK.sharedInstance().getFioNameByAddress(publicAddress: address, currencyCode: currencyCode) { (response, error) in
-            if (error?.kind == FIOError.ErrorKind.Success){
-                self.getRequesteePendingHistoryByFioName(fioName: response.name
-                    , maxItemsReturned: maxItemsReturned
-                    , completion: { (responses, err) in
-                        completion(responses,err)
-                })
-            }
-            else {
-                completion([FIOSDK.Request](),error)
-            }
-        }
-    }
-    
-    public func getRequesteePendingHistoryByFioName (fioName:String, maxItemsReturned:Int, completion: @escaping ( _ requests:[FIOSDK.Request] , _ error:FIOError?) -> ()) {
-        FIOSDK.sharedInstance().getAddressByFioName(fioName: fioName, currencyCode: "FIO") { (response, error) in
-            if (error?.kind == FIOError.ErrorKind.Success){
-                self.getRequesteePendingHistory(requesteeAccountName: response.address, maxItemsReturned: maxItemsReturned
-                    , completion: { (responses, err) in
-                    
-                        if (err?.kind == FIOError.ErrorKind.Success){
-                            completion(responses, err)
-                        }
-                        else{
-                            completion([FIOSDK.Request](),error)
-                        }
-                })
-            }
-            else {
-                completion([FIOSDK.Request](),error)
-            }
-        }
-    }
-    
-    public func getRequesteePendingHistory (requesteeAccountName:String, maxItemsReturned:Int, completion: @escaping ( _ requests:[FIOSDK.Request] , _ error:FIOError?) -> ()) {
+    public func getRequestorPendingHistory (requestorAccountName:String, currencyCode:String, maxItemsReturned:Int, completion: @escaping ( _ requests:[FIOSDK.Request] , _ error:FIOError?) -> ()) {
         
-        let fioRequest = TableRequest(json: true, code: "fio.finance", scope: "fio.finance", table: "pendrqsts", table_key: "", lower_bound: "", upper_bound: requesteeAccountName, limit: maxItemsReturned, key_type: "name", index_position: "3", encode_type: "dec")
+        let fioRequest = TableRequest(json: true, code: "fio.finance", scope: "fio.finance", table: "pendrqsts", table_key: "", lower_bound:"" , upper_bound: "", limit: maxItemsReturned, key_type: "name", index_position: "", encode_type: "dec")
+        var jsonData: Data
+        var jsonString: String
+        do{
+            jsonData = try JSONEncoder().encode(fioRequest)
+            jsonString = String(data: jsonData, encoding: .utf8)!
+            print(jsonString)
+        }catch {
+            completion ([FIOSDK.Request](), FIOError(kind: .NoDataReturned, localizedDescription: "Input Data, unable to JSON encode"))
+            return
+        }
+        
+        // create post request
+        let url = URL(string: getURI() + "/chain/get_table_rows")!
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.addValue("application/json", forHTTPHeaderField: "content-type")
+        request.addValue("no-cache", forHTTPHeaderField: "cache-control")
+        
+        // insert json data to the request
+        request.httpBody = jsonString.data(using: .utf8)
+        
+        let task = URLSession.shared.dataTask(with: request) { data, response, error in
+            guard let data = data, error == nil else {
+                print(error?.localizedDescription ?? "No data")
+                
+                completion([], FIOError(kind: .NoDataReturned, localizedDescription: ""))
+                return
+            }
+            do {
+                //fioResponse = try JSONDecoder().decode(PendingHistoryResponse.self, from: data)
+                let result = String(data: data, encoding: String.Encoding.utf8) as String!
+                print(result)
+                print ("data was printed")
+                let response = try JSONDecoder().decode(HistoryResponseDetails.self, from: data)
+                print ("***")
+                print (response)
+                print ("****")
+                
+                if (response.rows.count > 0){
+                    
+                    let dispatchGroup = DispatchGroup()
+                    var detailRecords = SynchronizedArray<ResponseDetailsRecordReturned>()
+                    ///TODO: do this with some sort of bounds to minimize calls - no time left to do this right
+                    for item in response.rows.filter({ $0.originator ==  requestorAccountName}){
+                        dispatchGroup.enter()
+                        self.getRequestDetails(appIdStart: item.fioappid, appIdEnd: item.fioappid, maxItemsReturned: 1, completion: { (details, error) in
+                            if (error?.kind == FIOError.ErrorKind.Success){
+                                for detailItem in details.rows{
+                                    detailRecords.append(newElement: detailItem)
+                                }
+                            }
+                            dispatchGroup.leave()
+                        })
+                    }
+                    
+                    var dateMemoRecords = SynchronizedArray<ResponseRequestMemoDate>()
+                    for item in response.rows.filter({ $0.originator ==  requestorAccountName}){
+                        dispatchGroup.enter()
+                        self.getRequestMemoDate(appIdStart: item.fioappid, appIdEnd: item.fioappid, includeType: 1, removeType: -1, status: 1, maxItemsReturned: 100, completion: { (results, error) in
+                            if (error?.kind == FIOError.ErrorKind.Success){
+                                for memoItem in results{
+                                    dateMemoRecords.append(newElement: memoItem)
+                                    print("found a memo")
+                                }
+                            }
+                            dispatchGroup.leave()
+                        })
+                    }
+                    
+                    dispatchGroup.notify(queue: DispatchQueue.main) {
+                        
+                        print("start maping")
+                        // map the records here.
+                        var arr = [FIOSDK.Request]()
+                        for i in 0 ..< detailRecords.count {
+                            let detail = detailRecords[i]
+                            
+                            let responseRow = response.rows.first(where:{$0.fioappid == detail.fioappid})
+                            
+                            var date:Int = 0
+                            var memo:String = ""
+                            for t in 0 ..< dateMemoRecords.count{
+                                let dateItem = dateMemoRecords[t]
+                                if (dateItem.fioappid == detail.fioappid){
+                                    date = dateItem.time
+                                    memo = dateItem.memo
+                                    print("**found memo match")
+                                }
+                            }
+                            
+                            if (detail.asset.lowercased() == currencyCode.lowercased()){
+                                print ("*adding")
+                                arr.append(FIOSDK.Request(amount: Float(detail.quantity) ?? 0, currencyCode: detail.asset, status: FIOSDK.RequestStatus.Requested, requestTimeStamp:date, requestDate: self.dateFromTimeStamp(time: date), requestDateFormatted: self.formattedDate(time: date),fromFioName: detail.originatorFioName, toFioName: detail.receiverFioName, requestorAccountName: detail.originator, requesteeAccountName: detail.receiver, memo: memo, fioappid: detail.fioappid, requestid: responseRow?.requestid ??  0, statusDescription: FIOSDK.RequestStatus.Requested.rawValue))
+                            }
+                            
+                        }
+                        
+                        completion(arr, FIOError.init(kind: FIOError.ErrorKind.Success, localizedDescription: ""))
+                    }
+                    
+                }
+                else{
+                    completion([], FIOError(kind: .Success, localizedDescription: ""))
+                }
+                
+            }catch let error{
+                let err = FIOError(kind: .Failure, localizedDescription: error.localizedDescription)///TODO:create this correctly with ERROR results
+                completion([], err)
+            }
+        }
+        
+        task.resume()
+    }
+    
+    internal func getRequestorHistory (requestorAccountName:String, currencyCode:String, maxItemsReturned:Int, completion: @escaping ( _ requests:[FIOSDK.Request] , _ error:FIOError?) -> ()) {
+        self.getRequestorPendingHistory(requestorAccountName: requestorAccountName, currencyCode: currencyCode, maxItemsReturned: maxItemsReturned
+            , completion: { (responses, err) in
+                
+                if (err?.kind == FIOError.ErrorKind.Success){
+                    self.getRequestorSentNotPendingHistory(requestorAccountName: requestorAccountName, maxItemsReturned: maxItemsReturned
+                        , completion: { (reqs, er) in
+                            if (er?.kind == FIOError.ErrorKind.Success){
+                                
+                                var arr = [FIOSDK.Request]()
+                                for item in responses{
+                                    let sent = reqs.filter({$0.fioappid == item.fioappid})
+                                    if (sent.count > 0){
+                                       // item.status = sent[0].status
+                                        let newItem = FIOSDK.Request(amount:item.amount, currencyCode: item.currencyCode, status:sent[0].status, requestTimeStamp:item.requestTimeStamp, requestDate: item.requestDate, requestDateFormatted: item.requestDateFormatted,fromFioName: item.fromFioName, toFioName: item.toFioName, requestorAccountName: item.requestorAccountName, requesteeAccountName: item.requesteeAccountName, memo: item.memo, fioappid: item.fioappid, requestid: item.requestid, statusDescription: item.statusDescription)
+                                        arr.append(newItem)
+                                    }
+                                    else{
+                                        arr.append(item)
+                                    }
+                                }
+                                
+                                for item in reqs {
+                                    let found = arr.filter({$0.fioappid == item.fioappid})
+                                    if (found.count <= 0){
+                                        arr.append(item)
+                                    }
+                                }
+                                completion(arr, er)
+                            }
+                    })
+                }
+                else{
+                    completion([FIOSDK.Request](),err)
+                }
+        })
+        
+    }
+    
+    private func getRequestorSentNotPendingHistory (requestorAccountName:String, maxItemsReturned:Int, completion: @escaping ( _ requests:[FIOSDK.Request] , _ error:FIOError?) -> ()) {
+        
+        let fioRequest = TableRequest(json: true, code: "fio.finance", scope: "fio.finance", table: "prsrqsts", table_key: "", lower_bound: "", upper_bound:"", limit: maxItemsReturned, key_type: "name", index_position: "3", encode_type: "dec")
+        var jsonData: Data
+        var jsonString: String
+        do{
+            jsonData = try JSONEncoder().encode(fioRequest)
+            jsonString = String(data: jsonData, encoding: .utf8)!
+            print(jsonString)
+        }catch {
+            completion ([FIOSDK.Request](), FIOError(kind: .NoDataReturned, localizedDescription: "Input Data, unable to JSON encode"))
+            return
+        }
+        
+        // create post request
+        let url = URL(string: getURI() + "/chain/get_table_rows")!
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.addValue("application/json", forHTTPHeaderField: "content-type")
+        request.addValue("no-cache", forHTTPHeaderField: "cache-control")
+        
+        // insert json data to the request
+        request.httpBody = jsonString.data(using: .utf8)
+        
+        let task = URLSession.shared.dataTask(with: request) { data, response, error in
+            guard let data = data, error == nil else {
+                print(error?.localizedDescription ?? "No data")
+                
+                completion([], FIOError(kind: .NoDataReturned, localizedDescription: ""))
+                return
+            }
+            do {
+                //fioResponse = try JSONDecoder().decode(PendingHistoryResponse.self, from: data)
+                let result = String(data: data, encoding: String.Encoding.utf8) as String!
+                print(result)
+                print ("data was printed")
+                let response = try JSONDecoder().decode(HistoryResponseDetails.self, from: data)
+                print ("***")
+                print (response)
+                print ("****")
+                
+                if (response.rows.count > 0){
+                    
+                    let dispatchGroup = DispatchGroup()
+                    var detailRecords = SynchronizedArray<ResponseDetailsRecordReturned>()
+                    ///TODO: do this with some sort of bounds to minimize calls - no time left to do this right
+                    for item in response.rows.filter({ $0.originator ==  requestorAccountName}){
+                        dispatchGroup.enter()
+                        self.getRequestDetails(appIdStart: item.fioappid, appIdEnd: item.fioappid, maxItemsReturned: 1, completion: { (details, error) in
+                            if (error?.kind == FIOError.ErrorKind.Success){
+                                for detailItem in details.rows{
+                                    detailRecords.append(newElement: detailItem)
+                                }
+                            }
+                            dispatchGroup.leave()
+                        })
+                    }
+                    
+                    var dateMemoRecords = SynchronizedArray<ResponseRequestMemoDate>()
+                    for item in response.rows.filter({ $0.originator ==  requestorAccountName}){
+                        dispatchGroup.enter()
+                        self.getRequestMemoDate(appIdStart: item.fioappid, appIdEnd: item.fioappid, includeType: -1, removeType: -1, status: 1, maxItemsReturned: 100, completion: { (results, error) in
+                            if (error?.kind == FIOError.ErrorKind.Success){
+                                for memoItem in results{
+                                    dateMemoRecords.append(newElement: memoItem)
+                                    print("found a memo")
+                                }
+                            }
+                            dispatchGroup.leave()
+                        })
+                    }
+                    
+                    dispatchGroup.notify(queue: DispatchQueue.main) {
+                        
+                        print("start maping")
+                        // map the records here.
+                        var arr = [FIOSDK.Request]()
+                        for i in 0 ..< detailRecords.count {
+                            let detail = detailRecords[i]
+                            
+                            let responseRow = response.rows.first(where:{$0.fioappid == detail.fioappid})
+                            
+                            var date:Int = 0
+                            var memo:String = ""
+                            var status:Int = 0
+                            for t in 0 ..< dateMemoRecords.count{
+                                let dateItem = dateMemoRecords[t]
+                                if (dateItem.fioappid == detail.fioappid){
+                                    date = dateItem.time
+                                    if (dateItem.status == 1){
+                                        memo = dateItem.memo
+                                    }
+                                    else{
+                                        status = dateItem.status
+                                    }
+                                    
+                                    
+                                    print("**found memo match")
+                                }
+                            }
+                            
+                            if (detail.asset.lowercased() != "fio"){
+                                print ("*adding")
+                                print(memo)
+                                print(status)
+                                arr.append(FIOSDK.Request(amount: Float(detail.quantity) ?? 0, currencyCode: detail.asset, status: self.getRequestStatus(status: status), requestTimeStamp:date, requestDate: self.dateFromTimeStamp(time: date), requestDateFormatted: self.formattedDate(time: date),fromFioName: detail.originatorFioName, toFioName: detail.receiverFioName, requestorAccountName: detail.originator, requesteeAccountName: detail.receiver, memo: memo, fioappid: detail.fioappid, requestid: responseRow?.requestid ??  0, statusDescription: self.getRequestStatus(status: status).rawValue))
+                            }
+                            
+                        }
+                        
+                        completion(arr, FIOError.init(kind: FIOError.ErrorKind.Success, localizedDescription: ""))
+                    }
+                    
+                }
+                else{
+                    completion([], FIOError(kind: .Success, localizedDescription: ""))
+                }
+                
+            }catch let error{
+                let err = FIOError(kind: .Failure, localizedDescription: error.localizedDescription)///TODO:create this correctly with ERROR results
+                completion([], err)
+            }
+        }
+        
+        task.resume()
+    }
+    
+    private func getRequestStatus(status:Int) -> FIOSDK.RequestStatus {
+        switch status {
+        case 0:
+            return FIOSDK.RequestStatus.Approved
+        case 4:
+            return FIOSDK.RequestStatus.Rejected
+        default:
+            return FIOSDK.RequestStatus.Requested
+        }
+    }
+    
+    internal func getRequesteePendingHistory (requesteeAccountName:String, maxItemsReturned:Int, completion: @escaping ( _ requests:[FIOSDK.Request] , _ error:FIOError?) -> ()) {
+        
+        let fioRequest = TableRequest(json: true, code: "fio.finance", scope: "fio.finance", table: "pendrqsts", table_key: "", lower_bound: "", upper_bound:"", limit: maxItemsReturned, key_type: "name", index_position: "3", encode_type: "dec")
         var jsonData: Data
         var jsonString: String
         do{
@@ -183,7 +442,7 @@ public class RequestFunds{
                     var dateMemoRecords = SynchronizedArray<ResponseRequestMemoDate>()
                     for item in response.rows.filter({ $0.receiver ==  requesteeAccountName}){
                         dispatchGroup.enter()
-                        self.getRequestMemoDate(appIdStart: item.fioappid, appIdEnd: item.fioappid, type: 1, status: 1, maxItemsReturned: 100, completion: { (results, error) in
+                        self.getRequestMemoDate(appIdStart: item.fioappid, appIdEnd: item.fioappid, includeType: 1, removeType: -1, status: 1, maxItemsReturned: 100, completion: { (results, error) in
                             if (error?.kind == FIOError.ErrorKind.Success){
                                 for memoItem in results{
                                     dateMemoRecords.append(newElement: memoItem)
@@ -405,10 +664,11 @@ public class RequestFunds{
         let fioappid: Int
         let time: Int
         let memo: String
+        let status: Int
     }
 
     ///TODO: get the bounds working, to restrict the data
-    private func getRequestMemoDate (appIdStart:Int, appIdEnd:Int, type:Int, status:Int, maxItemsReturned:Int, completion: @escaping ( _ requests:[ResponseRequestMemoDate] , _ error:FIOError?) -> ()) {
+    private func getRequestMemoDate (appIdStart:Int, appIdEnd:Int, includeType:Int, removeType:Int, status:Int, maxItemsReturned:Int, completion: @escaping ( _ requests:[ResponseRequestMemoDate] , _ error:FIOError?) -> ()) {
         
         let fioRequest = TableRequest(json: true, code: "fio.finance", scope: "fio.finance", table: "trxlogs", table_key: "", lower_bound: "",
                                       upper_bound: "", limit: maxItemsReturned, key_type: "", index_position: "", encode_type: "dec")
@@ -455,18 +715,33 @@ public class RequestFunds{
                     return
                 }
 
+                var arr = [ResponseRequestMemoDate]()
                 for row in response.rows {
-                    if (row.fioappid == appIdStart && row.type == type){
-                        print("MEMO MATCHED")
-                        // let memo = try JSONDecoder().decode(RequestTrxLogDetails.self, from: row.data)
-                        let jsonDecoder = JSONDecoder()
-                        let datafield = try jsonDecoder.decode(RequestTrxData.self, from: row.data.data(using: .utf8)!)
-                       
-                        completion([ResponseRequestMemoDate(fioappid: row.fioappid, time: row.time, memo: datafield.memo)], FIOError(kind: .Success, localizedDescription: ""))
-                        return
+                    if (row.fioappid == appIdStart){
+                        var include = true
+                        if (includeType > 0){
+                            if (row.type != includeType){
+                                include = false
+                            }
+                        }
+                        if (removeType > 0){
+                            if (row.type == removeType){
+                                include = false
+                            }
+                        }
+                        
+                        if (include){
+                            print("MEMO MATCHED")
+                            // let memo = try JSONDecoder().decode(RequestTrxLogDetails.self, from: row.data)
+                            let jsonDecoder = JSONDecoder()
+                            let datafield = try jsonDecoder.decode(RequestTrxData.self, from: row.data.data(using: .utf8)!)
+                            
+                            arr.append(ResponseRequestMemoDate(fioappid: row.fioappid, time: row.time, memo: datafield.memo, status:row.status))
+                            
+                        }
                     }
                 }
-                completion([ResponseRequestMemoDate](), FIOError(kind: .NoDataReturned, localizedDescription: ""))
+                completion(arr, FIOError(kind: .Success, localizedDescription: ""))
                 
             }catch let error{
                 let err = FIOError(kind: .Failure, localizedDescription: error.localizedDescription)///TODO:create this correctly with ERROR results
@@ -633,7 +908,7 @@ public class RequestFunds{
     //THE PRIVATE KEY is associated with the account: name --> so, need to tie it back into.. the account creation side of things.
     // reportrqst '{"fioappid": "2","requestee":"fioname22222","obtid":"0x123456789","memo":"approved"}' --permission fioname22222@active
     public func approveFundsRequest (requesteeAccountName:String, fioAppId:Int, obtid:String, memo:String, completion: @escaping ( _ error:FIOError?) -> ()) {
-        var privateKey = self.privateKey()  // So, the accounts are being created with the FIO.system private key... will it work if we USE FIO.system privatekey HERE
+        var privateKey = self.fioFinanceAccountPrivateKey()  // So, the accounts are being created with the FIO.system private key... will it work if we USE FIO.system privatekey HERE
         if (requesteeAccountName == "fioname22222"){
             privateKey = "5JA5zQkg1S59swPzY6d29gsfNhNPVCb7XhiGJAakGFa7tEKSMjT"
         }

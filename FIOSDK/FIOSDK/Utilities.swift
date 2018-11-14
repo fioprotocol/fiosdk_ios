@@ -36,6 +36,11 @@ public class Utilities:NSObject{
         return ""
     }
 
+    public func randomStringCharsOnly(length: Int) -> String {
+        let letters = "abcdefghijklmnopqrstuvwxyz"
+        return String((0...length-1).map{ _ in letters.randomElement()! })
+    }
+    
     public func randomString(length: Int) -> String {
         let letters = "abcdefghijklmnopqrstuvwxyz12345"
         return String((0...length-1).map{ _ in letters.randomElement()! })
