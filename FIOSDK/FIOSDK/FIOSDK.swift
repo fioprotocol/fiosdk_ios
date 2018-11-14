@@ -359,7 +359,7 @@ public class FIOSDK: NSObject {
                 print("Ok. RegisterName, Txid: \(result!.transactionId)")
                 
                 var addresses:Dictionary<String,String> = publicReceiveAddresses
-                addresses[newAccountName] = "FIO"
+                addresses["FIO"] = newAccountName
                 
                 self.addAllPublicAddresses(fioName: fioName, publicReceiveAddresses: addresses, completion: { (error) in
                     completion(error)
@@ -641,7 +641,7 @@ public class FIOSDK: NSObject {
         let importedPk = try! PrivateKey(keyString: getSystemPrivateKey())
         
         let dispatchGroup = DispatchGroup()
-        for (receiveAddress, currencyCode) in publicReceiveAddresses{
+        for (currencyCode, receiveAddress) in publicReceiveAddresses{
             dispatchGroup.enter()
             ///TODO: TEST THIS DEAL HERE
             let data = AddAddress(fio_user_name: fioName, chain: currencyCode, address: receiveAddress, requestor:getAccountName())

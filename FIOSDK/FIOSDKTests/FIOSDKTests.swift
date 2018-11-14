@@ -28,7 +28,7 @@ class FIOSDKTests: XCTestCase {
         // Put setup code here. This method is called before the invocation of each test method in the class.
         
         if (useStaging){
-            _ = FIOSDK.sharedInstance(accountName: "fioname11111", privateKey: "5K2HBexbraViJLQUJVJqZc42A8dxkouCmzMamdrZsLHhUHv77jF", publicKey: "EOS5GpUwQtFrfvwqxAv24VvMJFeMHutpQJseTz8JYUBfZXP2zR8VY",systemPrivateKey:"5KBX1dwHME4VyuUss2sYM25D5ZTDvyYrbEz37UJqwAVAsR4tGuY", systemPublicKey:"EOS7isxEua78KPVbGzKemH4nj2bWE52gqj8Hkac3tc7jKNvpfWzYS", url: "http://18.223.56.185:8889/v1")
+            _ = FIOSDK.sharedInstance(accountName: "fioname11111", privateKey: "5K2HBexbraViJLQUJVJqZc42A8dxkouCmzMamdrZsLHhUHv77jF", publicKey: "EOS5GpUwQtFrfvwqxAv24VvMJFeMHutpQJseTz8JYUBfZXP2zR8VY",systemPrivateKey:"5KBX1dwHME4VyuUss2sYM25D5ZTDvyYrbEz37UJqwAVAsR4tGuY", systemPublicKey:"EOS7isxEua78KPVbGzKemH4nj2bWE52gqj8Hkac3tc7jKNvpfWzYS", url: "http://18.223.14.244:8889/v1")
         }
 
         else{
@@ -61,7 +61,7 @@ class FIOSDKTests: XCTestCase {
         wait(for: [expectation], timeout: TIMEOUT)
     }
  */
-    /*
+
     func testGetFioNameByAddress(){
         let expectation = XCTestExpectation(description: "testGetFIONameByKey")
         
@@ -75,7 +75,7 @@ class FIOSDKTests: XCTestCase {
         
         wait(for: [expectation], timeout: TIMEOUT)
     }
-
+/*
     func testRegisterFioName(){
         let expectation = XCTestExpectation(description: "testRegisterFIOName")
         
@@ -84,7 +84,7 @@ class FIOSDKTests: XCTestCase {
         let timestamp = NSDate().timeIntervalSince1970
         print(Int(timestamp.rounded()))
         
-        let publicReceiveAddresses:Dictionary<String,String> = [receiveAddress:"ETH"]
+        let publicReceiveAddresses:Dictionary<String,String> = ["ETH":receiveAddress]
         FIOSDK.sharedInstance().registerFioName(fioName: ("sha\(Int(timestamp.rounded())).brd"), publicReceiveAddresses: publicReceiveAddresses, completion: {error in ()
             XCTAssert((error?.kind == FIOError.ErrorKind.Success), "registerFIOName NOT SUCCESSFUL")
             expectation.fulfill()
@@ -92,9 +92,9 @@ class FIOSDKTests: XCTestCase {
         
         wait(for: [expectation], timeout: TIMEOUT*3000)
     }
- */
 
-/*
+
+
     func testRegister(){
         let expectation = XCTestExpectation(description: "testRegisterFIOName")
         
@@ -165,7 +165,7 @@ class FIOSDKTests: XCTestCase {
         wait(for: [expectation], timeout: TIMEOUT*30000)
     }
 
-
+*/
     func testGetPendingRequestHistoryByAddress(){
         let expectation = XCTestExpectation(description: "testGetPendingRequestHistoryByAddress")
         
@@ -176,8 +176,8 @@ class FIOSDKTests: XCTestCase {
 
         wait(for: [expectation], timeout: TIMEOUT)
     }
-   */
-  
+
+  /*
     func testGetPendingRequestHistory(){
         let expectation = XCTestExpectation(description: "testGetPendingRequestHistory")
         
@@ -190,8 +190,6 @@ class FIOSDKTests: XCTestCase {
         
         wait(for: [expectation], timeout: TIMEOUT*30000)
     }
-
- /*
 
     func testRequestFunds(){
         let expectation = XCTestExpectation(description: "testRequestFunds")
