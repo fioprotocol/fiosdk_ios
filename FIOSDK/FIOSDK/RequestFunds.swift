@@ -328,14 +328,15 @@ public class RequestFunds{
                             var date:Int = 0
                             var memo:String = ""
                             var status:Int = 0
+                            
                             for t in 0 ..< dateMemoRecords.count{
                                 let dateItem = dateMemoRecords[t]
                                 if (dateItem.fioappid == detail.fioappid){
                                     date = dateItem.time
                                     if (dateItem.status == 1){
-                                        memo = dateItem.memo
                                     }
                                     else{
+                                        memo = dateItem.memo
                                         status = dateItem.status
                                     }
                                     
