@@ -31,7 +31,27 @@ public class Utilities:NSObject{
                 return myDict[keyName] as! String
             }
         }
+        
+       // AccountUtil
         return ""
     }
 
+    public func randomStringCharsOnly(length: Int) -> String {
+        let letters = "abcdefghijklmnopqrstuvwxyz"
+        return String((0...length-1).map{ _ in letters.randomElement()! })
+    }
+    
+    public func randomString(length: Int) -> String {
+        let letters = "abcdefghijklmnopqrstuvwxyz12345"
+        return String((0...length-1).map{ _ in letters.randomElement()! })
+    }
+}
+
+extension Float {
+    func string(fractionDigits:Int) -> String {
+        let formatter = NumberFormatter()
+        formatter.minimumFractionDigits = fractionDigits
+        formatter.maximumFractionDigits = fractionDigits
+        return formatter.string(from: NSNumber(value: self)) ?? "\(self)"
+    }
 }
