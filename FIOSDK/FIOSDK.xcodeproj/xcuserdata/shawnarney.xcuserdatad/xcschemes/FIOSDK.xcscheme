@@ -37,6 +37,14 @@
                BlueprintName = "FIOSDKTests"
                ReferencedContainer = "container:FIOSDK.xcodeproj">
             </BuildableReference>
+            <SkippedTests>
+               <Test
+                  Identifier = "FIOSDKTests/testCreateAccount()">
+               </Test>
+               <Test
+                  Identifier = "FIOSDKTests/testGetAccount()">
+               </Test>
+            </SkippedTests>
          </TestableReference>
       </Testables>
       <MacroExpansion>

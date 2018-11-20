@@ -67,6 +67,7 @@ func customDateFormatter(_ decoder: Decoder) throws -> Date {
             return
         }
         
+        print(request.description)
         let dataTask = URLSession.shared.dataTask(with: request) {
             (data, response, error) in
             
@@ -78,7 +79,7 @@ func customDateFormatter(_ decoder: Decoder) throws -> Date {
                 }
                 
                 let jsonString = String(data:data, encoding: .utf8)
-                
+                print(jsonString!)
                 let decoder = self.decoder
                 guard let responseObject = try? decoder.decode(T.self, from: data) else {
                     guard let errorResponse = try? decoder.decode(RPCErrorResponse.self, from: data) else {
