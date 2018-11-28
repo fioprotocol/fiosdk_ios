@@ -635,7 +635,7 @@ public class FIOSDK: NSObject {
         let requestor: String
     }
     
-    private func addAllPublicAddresses(fioName : String,  publicReceiveAddresses:Dictionary<String,String>, completion: @escaping ( _ error:FIOError?) -> ()) {
+    public func addAllPublicAddresses(fioName : String,  publicReceiveAddresses:Dictionary<String,String>, completion: @escaping ( _ error:FIOError?) -> ()) {
 
         let account = "fio.system"
         let importedPk = try! PrivateKey(keyString: getSystemPrivateKey())
