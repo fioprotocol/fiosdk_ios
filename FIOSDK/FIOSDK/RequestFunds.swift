@@ -89,13 +89,13 @@ public class RequestFunds{
     
     public func getRequestorPendingHistory (requestorAccountName:String, currencyCode:String, maxItemsReturned:Int, completion: @escaping ( _ requests:[FIOSDK.Request] , _ error:FIOError?) -> ()) {
         
-        let fioRequest = TableRequest(json: true, code: "fio.finance", scope: "fio.finance", table: "pendrqsts", table_key: "", lower_bound:"" , upper_bound: "", limit: maxItemsReturned, key_type: "name", index_position: "", encode_type: "dec")
+        let fioRequest = TableRequest(json: true, code: "fio.finance", scope: "fio.finance", table: "pendrqsts", table_key: "", lower_bound:"" , upper_bound: "", limit: 0, key_type: "name", index_position: "", encode_type: "dec")
         var jsonData: Data
         var jsonString: String
         do{
             jsonData = try JSONEncoder().encode(fioRequest)
             jsonString = String(data: jsonData, encoding: .utf8)!
-            print(jsonString)
+            //print(jsonString)
         }catch {
             completion ([FIOSDK.Request](), FIOError(kind: .NoDataReturned, localizedDescription: "Input Data, unable to JSON encode"))
             return
@@ -121,12 +121,12 @@ public class RequestFunds{
             do {
                 //fioResponse = try JSONDecoder().decode(PendingHistoryResponse.self, from: data)
                 let result = String(data: data, encoding: String.Encoding.utf8) as String!
-                print(result)
-                print ("data was printed")
+                //print(result)
+                //print ("data was printed")
                 let response = try JSONDecoder().decode(HistoryResponseDetails.self, from: data)
-                print ("***")
-                print (response)
-                print ("****")
+                //print ("***")
+                //print (response)
+                //print ("****")
                 
                 if (response.rows.count > 0){
                     
@@ -152,7 +152,7 @@ public class RequestFunds{
                             if (error?.kind == FIOError.ErrorKind.Success){
                                 for memoItem in results{
                                     dateMemoRecords.append(newElement: memoItem)
-                                    print("found a memo")
+                                    //print("found a memo")
                                 }
                             }
                             dispatchGroup.leave()
@@ -161,7 +161,7 @@ public class RequestFunds{
                     
                     dispatchGroup.notify(queue: DispatchQueue.main) {
                         
-                        print("start maping")
+                        //print("start maping")
                         // map the records here.
                         var arr = [FIOSDK.Request]()
                         for i in 0 ..< detailRecords.count {
@@ -176,14 +176,15 @@ public class RequestFunds{
                                 if (dateItem.fioappid == detail.fioappid){
                                     date = dateItem.time
                                     memo = dateItem.memo
-                                    print("**found memo match")
+                                    //print("**found memo match")
                                 }
                             }
                             
-                            if (detail.asset.lowercased() == currencyCode.lowercased()){
-                                print ("*adding")
+                            
+                            //SARNEY TEMP if (detail.asset.lowercased() == currencyCode.lowercased()){
+                                //print ("*adding")
                                 arr.append(FIOSDK.Request(amount: Float(detail.quantity) ?? 0, currencyCode: detail.asset, status: FIOSDK.RequestStatus.Requested, requestTimeStamp:date, requestDate: self.dateFromTimeStamp(time: date), requestDateFormatted: self.formattedDate(time: date),fromFioName: detail.originatorFioName, toFioName: detail.receiverFioName, requestorAccountName: detail.originator, requesteeAccountName: detail.receiver, memo: memo, fioappid: detail.fioappid, requestid: responseRow?.requestid ??  0, statusDescription: FIOSDK.RequestStatus.Requested.rawValue))
-                            }
+                            //}
                             
                         }
                         
@@ -245,13 +246,13 @@ public class RequestFunds{
     
     private func getRequestorSentNotPendingHistory (requestorAccountName:String, maxItemsReturned:Int, completion: @escaping ( _ requests:[FIOSDK.Request] , _ error:FIOError?) -> ()) {
         
-        let fioRequest = TableRequest(json: true, code: "fio.finance", scope: "fio.finance", table: "prsrqsts", table_key: "", lower_bound: "", upper_bound:"", limit: maxItemsReturned, key_type: "name", index_position: "3", encode_type: "dec")
+        let fioRequest = TableRequest(json: true, code: "fio.finance", scope: "fio.finance", table: "prsrqsts", table_key: "", lower_bound: requestorAccountName, upper_bound:"", limit: 0, key_type: "name", index_position: "3", encode_type: "dec")
         var jsonData: Data
         var jsonString: String
         do{
             jsonData = try JSONEncoder().encode(fioRequest)
             jsonString = String(data: jsonData, encoding: .utf8)!
-            print(jsonString)
+            //print(jsonString)
         }catch {
             completion ([FIOSDK.Request](), FIOError(kind: .NoDataReturned, localizedDescription: "Input Data, unable to JSON encode"))
             return
@@ -277,12 +278,12 @@ public class RequestFunds{
             do {
                 //fioResponse = try JSONDecoder().decode(PendingHistoryResponse.self, from: data)
                 let result = String(data: data, encoding: String.Encoding.utf8) as String!
-                print(result)
-                print ("data was printed")
+                //print(result)
+                //print ("data was printed")
                 let response = try JSONDecoder().decode(HistoryResponseDetails.self, from: data)
-                print ("***")
-                print (response)
-                print ("****")
+                //print ("***")
+                //print (response)
+                //print ("****")
                 
                 if (response.rows.count > 0){
                     
@@ -308,7 +309,7 @@ public class RequestFunds{
                             if (error?.kind == FIOError.ErrorKind.Success){
                                 for memoItem in results{
                                     dateMemoRecords.append(newElement: memoItem)
-                                    print("found a memo")
+                                    //print("found a memo")
                                 }
                             }
                             dispatchGroup.leave()
@@ -317,7 +318,7 @@ public class RequestFunds{
                     
                     dispatchGroup.notify(queue: DispatchQueue.main) {
                         
-                        print("start maping")
+                        //print("start maping")
                         // map the records here.
                         var arr = [FIOSDK.Request]()
                         for i in 0 ..< detailRecords.count {
@@ -332,23 +333,23 @@ public class RequestFunds{
                             for t in 0 ..< dateMemoRecords.count{
                                 let dateItem = dateMemoRecords[t]
                                 if (dateItem.fioappid == detail.fioappid){
-                                    date = dateItem.time
+                                    
                                     if (dateItem.status == 1){
+                                        date = dateItem.time
                                     }
                                     else{
                                         memo = dateItem.memo
                                         status = dateItem.status
                                     }
-                                    
-                                    
-                                    print("**found memo match")
+ 
+                                    //print("**found memo match")
                                 }
                             }
                             
                             if (detail.asset.lowercased() != "fio"){
-                                print ("*adding")
-                                print(memo)
-                                print(status)
+                                //print ("*adding")
+                                //print(memo)
+                                //print(status)
                                 arr.append(FIOSDK.Request(amount: Float(detail.quantity) ?? 0, currencyCode: detail.asset, status: self.getRequestStatus(status: status), requestTimeStamp:date, requestDate: self.dateFromTimeStamp(time: date), requestDateFormatted: self.formattedDate(time: date),fromFioName: detail.originatorFioName, toFioName: detail.receiverFioName, requestorAccountName: detail.originator, requesteeAccountName: detail.receiver, memo: memo, fioappid: detail.fioappid, requestid: responseRow?.requestid ??  0, statusDescription: self.getRequestStatus(status: status).rawValue))
                             }
                             
@@ -384,13 +385,13 @@ public class RequestFunds{
     
     internal func getRequesteePendingHistory (requesteeAccountName:String, maxItemsReturned:Int, completion: @escaping ( _ requests:[FIOSDK.Request] , _ error:FIOError?) -> ()) {
         
-        let fioRequest = TableRequest(json: true, code: "fio.finance", scope: "fio.finance", table: "pendrqsts", table_key: "", lower_bound: "", upper_bound:"", limit: maxItemsReturned, key_type: "name", index_position: "3", encode_type: "dec")
+        let fioRequest = TableRequest(json: true, code: "fio.finance", scope: "fio.finance", table: "pendrqsts", table_key: "", lower_bound: "", upper_bound:"", limit: 0, key_type: "name", index_position: "3", encode_type: "dec")
         var jsonData: Data
         var jsonString: String
         do{
             jsonData = try JSONEncoder().encode(fioRequest)
             jsonString = String(data: jsonData, encoding: .utf8)!
-            print(jsonString)
+            //print(jsonString)
         }catch {
             completion ([FIOSDK.Request](), FIOError(kind: .NoDataReturned, localizedDescription: "Input Data, unable to JSON encode"))
             return
@@ -416,12 +417,12 @@ public class RequestFunds{
             do {
                 //fioResponse = try JSONDecoder().decode(PendingHistoryResponse.self, from: data)
                 let result = String(data: data, encoding: String.Encoding.utf8) as String!
-                print(result)
-                print ("data was printed")
+                //print(result)
+                //print ("data was printed")
                 let response = try JSONDecoder().decode(HistoryResponseDetails.self, from: data)
-                print ("***")
-                print (response)
-                print ("****")
+                //print ("***")
+               // print (response)
+               // print ("****")
              
                 if (response.rows.count > 0){
               
@@ -447,7 +448,7 @@ public class RequestFunds{
                             if (error?.kind == FIOError.ErrorKind.Success){
                                 for memoItem in results{
                                     dateMemoRecords.append(newElement: memoItem)
-                                    print("found a memo")
+                                    //print("found a memo")
                                 }
                             }
                             dispatchGroup.leave()
@@ -456,7 +457,7 @@ public class RequestFunds{
                     
                     dispatchGroup.notify(queue: DispatchQueue.main) {
                         
-                        print("start maping")
+                        //print("start maping")
                         // map the records here.
                         var arr = [FIOSDK.Request]()
                         for i in 0 ..< detailRecords.count {
@@ -471,12 +472,12 @@ public class RequestFunds{
                                 if (dateItem.fioappid == detail.fioappid){
                                     date = dateItem.time
                                     memo = dateItem.memo
-                                    print("**found memo match")
+                                    //print("**found memo match")
                                 }
                             }
                            
                            if (detail.asset.lowercased() != "fio"){
-                                print ("*adding")
+                                //print ("*adding")
                                 arr.append(FIOSDK.Request(amount: Float(detail.quantity) ?? 0, currencyCode: detail.asset, status: FIOSDK.RequestStatus.Requested, requestTimeStamp:date, requestDate: self.dateFromTimeStamp(time: date), requestDateFormatted: self.formattedDate(time: date),fromFioName: detail.originatorFioName, toFioName: detail.receiverFioName, requestorAccountName: detail.originator, requesteeAccountName: detail.receiver, memo: memo, fioappid: detail.fioappid, requestid: responseRow?.requestid ??  0, statusDescription: FIOSDK.RequestStatus.Requested.rawValue))
                            }
 
@@ -507,7 +508,7 @@ public class RequestFunds{
     
     private func formattedDate(time:Int) -> String {
         let dateFormatterPrint = DateFormatter()
-        dateFormatterPrint.dateFormat = "MMM dd,yyyy"
+        dateFormatterPrint.dateFormat = "MMMM dd, yyyy, hh:mm a"
     
         return dateFormatterPrint.string(from: dateFromTimeStamp(time:time))
     }
@@ -528,13 +529,13 @@ public class RequestFunds{
     private func getRequestDetails (appIdStart:Int, appIdEnd:Int, maxItemsReturned:Int, completion: @escaping ( _ requests:ResponseDetailsReturned , _ error:FIOError?) -> ()) {
         
         let fioRequest = TableRequest(json: true, code: "fio.finance", scope: "fio.finance", table: "trxcontexts", table_key: "", lower_bound: String(appIdStart),
-                                      upper_bound: String(appIdEnd+1), limit: maxItemsReturned, key_type: "", index_position: "", encode_type: "dec")
+                                      upper_bound: String(appIdEnd+1), limit: 0, key_type: "", index_position: "", encode_type: "dec")
         var jsonData: Data
         var jsonString: String
         do{
             jsonData = try JSONEncoder().encode(fioRequest)
             jsonString = String(data: jsonData, encoding: .utf8)!
-            print(jsonString)
+            //print(jsonString)
         }catch {
             completion (ResponseDetailsReturned(rows: [RequestFunds.ResponseDetailsRecordReturned]()), FIOError(kind: .Failure, localizedDescription: "Json Encoding of input data failed."))
             return
@@ -560,23 +561,23 @@ public class RequestFunds{
             do {
                
                 let result = String(data: data, encoding: String.Encoding.utf8) as String!
-                print(result)
-                print ("getRequestDetails() data was printed")
+                //print(result)
+                //print ("getRequestDetails() data was printed")
                 let response = try JSONDecoder().decode(ResponseDetails.self, from: data)
-                print ("*****")
-                print (response)
-                print ("***")
+                //print ("*****")
+                //print (response)
+                //print ("***")
   
                 if (response.rows.count < 1){
                     completion(ResponseDetailsReturned(rows: []), FIOError(kind: .NoDataReturned, localizedDescription: ""))
                     return
                 }
-                print(response.rows.count)
+                //print(response.rows.count)
                 let dispatchGroup = DispatchGroup()
                 var fioNameRecords = SynchronizedArray<FioName>()
                 ///TODO: do this with some sort of bounds to minimize calls - no time left to do this right
                 for item in response.rows{
-                    print("dispatch")
+                    //print("dispatch")
                     dispatchGroup.enter()
                     FIOSDK.sharedInstance().getFioNameByAddress(publicAddress: item.receiver, currencyCode: item.chain, completion: { (res, err) in
                         if (err?.kind == FIOError.ErrorKind.Success){
@@ -590,7 +591,7 @@ public class RequestFunds{
                 }
                 
                 for item in response.rows{
-                    print("dispatch2")
+                    //print("dispatch2")
                     dispatchGroup.enter()
                     FIOSDK.sharedInstance().getFioNameByAddress(publicAddress: item.originator, currencyCode: item.chain, completion: { (res, err) in
                         if (err?.kind == FIOError.ErrorKind.Success){
@@ -605,7 +606,7 @@ public class RequestFunds{
                 
                 ///TODO: do this the right way -- right now, we know there is only one record.
                 dispatchGroup.notify(queue: DispatchQueue.main) {
-                    print("dispatch group main")
+                    //print("dispatch group main")
                     var arr = [ResponseDetailsRecordReturned]()
                     for item in response.rows{
                         // let responseRow = response.rows.first(where:{$0.fioappid == detail.fioappid})
@@ -671,14 +672,14 @@ public class RequestFunds{
     ///TODO: get the bounds working, to restrict the data
     private func getRequestMemoDate (appIdStart:Int, appIdEnd:Int, includeType:Int, removeType:Int, status:Int, maxItemsReturned:Int, completion: @escaping ( _ requests:[ResponseRequestMemoDate] , _ error:FIOError?) -> ()) {
         
-        let fioRequest = TableRequest(json: true, code: "fio.finance", scope: "fio.finance", table: "trxlogs", table_key: "", lower_bound: "",
-                                      upper_bound: "", limit: maxItemsReturned, key_type: "", index_position: "", encode_type: "dec")
+        let fioRequest = TableRequest(json: true, code: "fio.finance", scope: "fio.finance", table: "trxlogs", table_key: "", lower_bound: String(appIdStart),
+                                      upper_bound: String(appIdEnd+1), limit: 0, key_type: "i64", index_position: "2", encode_type: "dec")
         var jsonData: Data
         var jsonString: String
         do{
             jsonData = try JSONEncoder().encode(fioRequest)
             jsonString = String(data: jsonData, encoding: .utf8)!
-            print(jsonString)
+            //print(jsonString)
         }catch {
             completion ([ResponseRequestMemoDate](), FIOError(kind: .NoDataReturned, localizedDescription: ""))
             return
@@ -704,12 +705,12 @@ public class RequestFunds{
             do {
                 
                 let result = String(data: data, encoding: String.Encoding.utf8) as String!
-                print(result)
-                print ("getRequestMemoDate() data was printed")
+               // print(result)
+             //   print ("getRequestMemoDate() data was printed")
                 let response = try JSONDecoder().decode(RequestTrxLogDetails.self, from: data)
-                print ("*****")
-                print (response)
-                print ("***")
+               // print ("*****")
+                //print (response)
+               // print ("***")
                 
                 if (response.rows.count < 1){
                     completion([ResponseRequestMemoDate](), FIOError(kind: .NoDataReturned, localizedDescription: ""))
@@ -717,6 +718,7 @@ public class RequestFunds{
                 }
 
                 var arr = [ResponseRequestMemoDate]()
+                //var filteredRows = response.rows.filter({$0.fioappid == appIdStart})
                 for row in response.rows {
                     if (row.fioappid == appIdStart){
                         var include = true
@@ -732,7 +734,7 @@ public class RequestFunds{
                         }
                         
                         if (include){
-                            print("MEMO MATCHED")
+                            //print("MEMO MATCHED")
                             // let memo = try JSONDecoder().decode(RequestTrxLogDetails.self, from: row.data)
                             let jsonDecoder = JSONDecoder()
                             let datafield = try jsonDecoder.decode(RequestTrxData.self, from: row.data.data(using: .utf8)!)
@@ -831,7 +833,7 @@ public class RequestFunds{
             completion (FIOError(kind: .Failure, localizedDescription: "Json Encoding of input data failed."))
             return
         }
-        print(jsonString)
+        //print(jsonString)
         
         let abi = try! AbiJson(code: fioFinanceAccount(), action: "rejectrqst", json:jsonString)
         
@@ -877,7 +879,7 @@ public class RequestFunds{
             completion (FIOError(kind: .Failure, localizedDescription: "JSon encoding of input data failed."))
             return
         }
-        print(jsonString)
+        //print(jsonString)
         
         let abi = try! AbiJson(code: fioFinanceAccount(), action: "cancelrqst", json:jsonString)
         
@@ -926,7 +928,7 @@ public class RequestFunds{
             completion (FIOError(kind: .Failure, localizedDescription: "Json encoding of input data failed."))
             return
         }
-        print(jsonString)
+        //print(jsonString)
         
         let abi = try! AbiJson(code: fioFinanceAccount(), action: "reportrqst", json:jsonString)
         
