@@ -246,7 +246,7 @@ public class RequestFunds{
     
     private func getRequestorSentNotPendingHistory (requestorAccountName:String, maxItemsReturned:Int, completion: @escaping ( _ requests:[FIOSDK.Request] , _ error:FIOError?) -> ()) {
         
-        let fioRequest = TableRequest(json: true, code: "fio.finance", scope: "fio.finance", table: "prsrqsts", table_key: "", lower_bound: "", upper_bound:"", limit: 0, key_type: "name", index_position: "3", encode_type: "dec")
+        let fioRequest = TableRequest(json: true, code: "fio.finance", scope: "fio.finance", table: "prsrqsts", table_key: "", lower_bound: requestorAccountName, upper_bound:"", limit: 0, key_type: "name", index_position: "3", encode_type: "dec")
         var jsonData: Data
         var jsonString: String
         do{
@@ -333,8 +333,9 @@ public class RequestFunds{
                             for t in 0 ..< dateMemoRecords.count{
                                 let dateItem = dateMemoRecords[t]
                                 if (dateItem.fioappid == detail.fioappid){
-                                    date = dateItem.time
+                                    
                                     if (dateItem.status == 1){
+                                        date = dateItem.time
                                     }
                                     else{
                                         memo = dateItem.memo
