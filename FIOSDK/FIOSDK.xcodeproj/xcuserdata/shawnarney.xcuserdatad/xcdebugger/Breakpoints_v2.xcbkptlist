@@ -6,16 +6,16 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "FIOSDKTests/FIOSDKTests.swift"
-            timestampString = "564434378.06477"
+            timestampString = "566178878.07698"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "186"
             endingLineNumber = "186"
-            landmarkName = "testGetPendingRequestHistory()"
+            landmarkName = "testGetRequestorHistoryAndCancel()"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
