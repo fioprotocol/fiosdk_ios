@@ -18,7 +18,7 @@ class FIOSDKTests: XCTestCase {
     private let url:String = "http://52.14.221.174:8889/v1"
     
     // stage 1 server: 18.223.14.244
-    private let TIMEOUT:Double = 60.0
+    private let TIMEOUT:Double = 120.0
     
     private let useStaging = true
     
@@ -34,7 +34,7 @@ class FIOSDKTests: XCTestCase {
         
         let timestamp = NSDate().timeIntervalSince1970
         requesteeFioName = "sha\(Int(timestamp.rounded())).brd"
-        requestorFioName = "shar\(Int(timestamp.rounded())).brd"
+        requestorFioName = "bar\(Int(timestamp.rounded())).brd"
         
         if (useStaging){
             //
@@ -51,10 +51,13 @@ class FIOSDKTests: XCTestCase {
         let publicReceiveAddresses:Dictionary<String,String> = ["ETH":requesteeAddress]
         FIOSDK.sharedInstance().registerFioName(fioName: requesteeFioName, publicReceiveAddresses: publicReceiveAddresses, completion: {error in ()
             XCTAssert((error?.kind == FIOError.ErrorKind.Success), "registerFIOName NOT SUCCESSFUL")
+            print (self.requesteeFioName)
             
             let receiveAddresses:Dictionary<String,String> = ["ETH":self.requestorAddress]
             FIOSDK.sharedInstance().registerFioName(fioName: self.requestorFioName, publicReceiveAddresses: receiveAddresses, completion: {error in ()
-                XCTAssert((error?.kind == FIOError.ErrorKind.Success), "registerFIOName NOT SUCCESSFUL")
+                XCTAssert((error?.kind == FIOError.ErrorKind.Success), "registerFIOName NOT SUCCESSFUL" + (error?.localizedDescription ?? "") )
+                print(error)
+                print(self.requestorFioName)
                 expectation.fulfill()
             })
             
@@ -157,6 +160,8 @@ class FIOSDKTests: XCTestCase {
         wait(for: [expectation], timeout: TIMEOUT)
     }
 
+    //getRequestorHistoryByAddress
+    
     func testGetRequestorHistoryAndCancel(){
         let expectation = XCTestExpectation(description: "testGetRequestorHistory")
         
@@ -183,4 +188,23 @@ class FIOSDKTests: XCTestCase {
         wait(for: [expectation], timeout: TIMEOUT)
     }
 
+    func testGetRequestorHistoryByAddress(){
+        let expectation = XCTestExpectation(description: "testGetRequestorHistoryByAddress")
+        
+        FIOSDK.sharedInstance().requestFundsByAddress(requestorAddress: self.requestorAddress, requestorCurrencyCode: "ETH", requesteeFioName: self.requesteeFioName, chain: "FIO", asset: "ETH", amount: 1.0000, memo: "shawn test request by address") { (error) in
+            XCTAssert((error?.kind == FIOError.ErrorKind.Success), "requestFundsByAddress NOT SUCCESSFUL")
+            
+            FIOSDK.sharedInstance().getRequestorHistoryByAddress(address: self.requestorAddress, currencyCode: "ETH", maxItemsReturned: 10, completion: { (response, error) in
+                XCTAssert((error?.kind == FIOError.ErrorKind.Success), "getRequestorHistoryByFioName NOT SUCCESSFUL")
+                XCTAssert(response.count > 0 , "getRequestorHistoryByFioName NOT SUCCESSFUL")
+                
+                expectation.fulfill()
+            })
+        }
+        
+        wait(for: [expectation], timeout: TIMEOUT)
+    }
+    
+
+    
 }
