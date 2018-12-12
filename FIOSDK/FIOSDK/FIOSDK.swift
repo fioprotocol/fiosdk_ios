@@ -715,4 +715,62 @@ public class FIOSDK: NSObject {
         return Utilities.sharedInstance().randomStringCharsOnly(length: 1) +      Utilities.sharedInstance().randomString(length:11)
     }
     
+    struct AvailCheckRequest: Codable {
+        let fio_name: String
+    }
+    
+    struct AvailCheckResponse: Codable {
+        let fio_name: String
+        let is_registered: Bool
+    }
+    
+    public func isFioAddressOrDomainRegistered(fioAddress:String, completion: @escaping (_ isRegistered: Bool, _ error:FIOError?) -> ()) {
+        var fioRsvp : AvailCheckResponse = AvailCheckResponse(fio_name: "", is_registered: false)
+        
+        let fioRequest = AvailCheckRequest(fio_name: fioAddress)
+        var jsonData: Data
+        do{
+            jsonData = try JSONEncoder().encode(fioRequest)
+        }catch {
+            completion (false, FIOError(kind: .NoDataReturned, localizedDescription: ""))
+            return
+        }
+        
+        // create post request
+        let url = URL(string: getURI() + "/chain/avail_check")!
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        
+        // insert json data to the request
+        request.httpBody = jsonData
+        
+        let task = URLSession.shared.dataTask(with: request) { data, response, error in
+            guard let data = data, error == nil else {
+                print(error?.localizedDescription ?? "No data")
+                completion(false, FIOError(kind: .NoDataReturned, localizedDescription: ""))
+                return
+            }
+            do {
+                var result = String(data: data, encoding: String.Encoding.utf8) as String!
+                print(result)
+                
+               // result = result?.replacingOccurrences(of: "\"true\"", with: "true")
+               // result = result?.replacingOccurrences(of: "\"false\"", with: "false")
+                // print (result)
+                
+                
+                
+                fioRsvp = try JSONDecoder().decode(AvailCheckResponse.self, from: result!.data(using: String.Encoding.utf8)!)
+                print(fioRsvp)
+
+                completion(fioRsvp.is_registered, FIOError(kind: .Success, localizedDescription: ""))
+                
+            }catch let error{
+                let err = FIOError(kind: .Failure, localizedDescription: error.localizedDescription)///TODO:create this correctly with ERROR results
+                completion(false, err)
+            }
+        }
+        
+        task.resume()
+    }
 }
