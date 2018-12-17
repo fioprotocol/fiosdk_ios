@@ -208,13 +208,13 @@ class FIOSDKTests: XCTestCase {
         wait(for: [expectation], timeout: TIMEOUT)
     }
     
-    func testIsFioAddressRegistered(){
+    func testIsAvailable(){
         let expectation = XCTestExpectation(description: "testGetRequestorHistoryByAddress")
         
-        FIOSDK.sharedInstance().isFioAddressOrDomainRegistered(fioAddress:self.requestorFioName) { (isRegistered, error) in
+        FIOSDK.sharedInstance().isAvailable(fioAddress:self.requestorFioName) { (isAvailable, error) in
             XCTAssert((error?.kind == FIOError.ErrorKind.Success), "isFioAddressOrDomainRegistered NOT SUCCESSFUL")
             
-            XCTAssert((isRegistered == true), "isFioAddressOrDomainRegistered NOT SUCCESSFUL")
+            XCTAssert((isAvailable == false), "isFioAddressOrDomainRegistered NOT SUCCESSFUL")
                 
             expectation.fulfill()
         }

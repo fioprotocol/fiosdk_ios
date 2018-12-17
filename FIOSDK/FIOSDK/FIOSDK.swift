@@ -724,7 +724,7 @@ public class FIOSDK: NSObject {
         let is_registered: Bool
     }
     
-    public func isFioAddressOrDomainRegistered(fioAddress:String, completion: @escaping (_ isRegistered: Bool, _ error:FIOError?) -> ()) {
+    public func isAvailable(fioAddress:String, completion: @escaping (_ isAvailable: Bool, _ error:FIOError?) -> ()) {
         var fioRsvp : AvailCheckResponse = AvailCheckResponse(fio_name: "", is_registered: false)
         
         let fioRequest = AvailCheckRequest(fio_name: fioAddress)
@@ -757,13 +757,11 @@ public class FIOSDK: NSObject {
                // result = result?.replacingOccurrences(of: "\"true\"", with: "true")
                // result = result?.replacingOccurrences(of: "\"false\"", with: "false")
                 // print (result)
-                
-                
-                
+
                 fioRsvp = try JSONDecoder().decode(AvailCheckResponse.self, from: result!.data(using: String.Encoding.utf8)!)
                 print(fioRsvp)
 
-                completion(fioRsvp.is_registered, FIOError(kind: .Success, localizedDescription: ""))
+                completion(!fioRsvp.is_registered, FIOError(kind: .Success, localizedDescription: ""))
                 
             }catch let error{
                 let err = FIOError(kind: .Failure, localizedDescription: error.localizedDescription)///TODO:create this correctly with ERROR results
