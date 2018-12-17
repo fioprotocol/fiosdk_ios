@@ -205,6 +205,16 @@ class FIOSDKTests: XCTestCase {
         wait(for: [expectation], timeout: TIMEOUT)
     }
     
-
+    func testAddAddress(){
+        let expectation = XCTestExpectation(description: "testaddaddress")
+        let publicReceiveAddresses:Dictionary<String,String> = ["ETH":requestorAddress]
+        FIOSDK.sharedInstance().addAllPublicAddresses(fioName: self.requestorFioName, publicReceiveAddresses:publicReceiveAddresses, completion:{ (error) in
+            XCTAssert((error?.kind == FIOError.ErrorKind.Success), "testaddaddress NOT SUCCESSFUL")
+       
+            expectation.fulfill()
+        })
+        
+        wait(for: [expectation], timeout: TIMEOUT)
+    }
     
 }
