@@ -52,6 +52,31 @@ extension String {
         }
         return value
     }
+    
+    
+    func pubaddress_to_index() -> CLong {
+        return string_to_long()
+    }
+    
+    func string_to_long() -> CLong {
+        let max_index = 12
+        
+        var c = 0
+        var value = 0
+        for i in 0...max_index + 1 {
+            if i < count && i <= max_index {
+                c = i
+            }
+            if i < max_index {
+                c &= 0x1f
+                c <<= 64-5*(i+1)
+            } else {
+                c &= 0x0f
+            }
+            value |= c
+        }
+        return value
+    }
 }
 
 extension String {
@@ -104,7 +129,7 @@ struct Authorization: Codable {
 }
 
 struct Action: Codable {
-    var account: String
+    var public_address: String
     var name: String
     var authorization: [Authorization]
     var data: String?
@@ -216,7 +241,7 @@ struct DataWriter {
     mutating func pushActions(actions: [Action]) {
         pushVariableUInt(value: CUnsignedInt(actions.count))
         for action in actions {
-            pushLong(value: action.account.eosTypeNameToLong())
+            pushLong(value: action.public_address.eosTypeNameToLong())
             pushLong(value: action.name.eosTypeNameToLong())
             pushPermission(permissions: action.authorization)
             if action.data != nil {

@@ -156,8 +156,8 @@
 		0203C51B217A48100054FA10 /* FIOSDK */ = {
 			isa = PBXGroup;
 			children = (
-				0245A5B02193BF6900C5A870 /* Extensions.swift */,
 				0203C51C217A48100054FA10 /* FIOSDK.h */,
+				0245A5B02193BF6900C5A870 /* Extensions.swift */,
 				0203C5C9217A6A6D0054FA10 /* FIOSDK.swift */,
 				02BAEC512191F53700B251B4 /* RequestFunds.swift */,
 				0203C5D7217A71330054FA10 /* FIOError.swift */,
@@ -766,6 +766,7 @@
 				HEADER_SEARCH_PATHS = "FIOSDK/SwiftyEOS/Libraries/include/**";
 				INFOPLIST_FILE = FIOSDK/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -796,6 +797,7 @@
 				HEADER_SEARCH_PATHS = "FIOSDK/SwiftyEOS/Libraries/include/**";
 				INFOPLIST_FILE = FIOSDK/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

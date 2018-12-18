@@ -45,8 +45,10 @@ class FIOSDKTests: XCTestCase {
             _ = FIOSDK.sharedInstance(accountName: accountName,  privateKey: privateKey, publicKey: publicKey, systemPrivateKey: "", systemPublicKey: "", url: url)
         }
         
-     
-        let expectation = XCTestExpectation(description: "testRegisterFIOName")
+        let s = FIOSDK.sharedInstance().getPublicAddress()
+        print(s)
+
+        let expectation = XCTestExpectation(description: "testRegisterFIOAddress")
         
         let publicReceiveAddresses:Dictionary<String,String> = ["ETH":requesteeAddress]
         FIOSDK.sharedInstance().registerFioName(fioName: requesteeFioName, publicReceiveAddresses: publicReceiveAddresses, completion: {error in ()
@@ -55,8 +57,8 @@ class FIOSDKTests: XCTestCase {
             
             let receiveAddresses:Dictionary<String,String> = ["ETH":self.requestorAddress]
             FIOSDK.sharedInstance().registerFioName(fioName: self.requestorFioName, publicReceiveAddresses: receiveAddresses, completion: {error in ()
-                XCTAssert((error?.kind == FIOError.ErrorKind.Success), "registerFIOName NOT SUCCESSFUL" + (error?.localizedDescription ?? "") )
-                print(error)
+                XCTAssert((error?.kind == FIOError.ErrorKind.Success), "registerFIOAddress NOT SUCCESSFUL" + (error?.localizedDescription ?? "") )
+                print(error ?? "Register FIO Address Fail")
                 print(self.requestorFioName)
                 expectation.fulfill()
             })
@@ -64,6 +66,7 @@ class FIOSDKTests: XCTestCase {
         })
         
         wait(for: [expectation], timeout: TIMEOUT)
+
 
     }
     
@@ -204,7 +207,12 @@ class FIOSDKTests: XCTestCase {
         
         wait(for: [expectation], timeout: TIMEOUT)
     }
-    
-
-    
+/*
+    func testRandomMethods(){
+        print(FIOSDK.sharedInstance().getPublicKey())
+        let s = FIOSDK.sharedInstance().getPublicAddress()
+        print (s)
+        XCTAssert(false, "yes, this was called")
+    }
+  */
 }

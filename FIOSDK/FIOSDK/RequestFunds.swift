@@ -17,7 +17,7 @@ public class RequestFunds{
     }
     
     private func fioFinanceAccount() -> String {
-        return "fio.finance"
+        return FIOSDK.FIOFINANCECODE
     }
     
     private func fioFinanceAccountPrivateKey() -> String {

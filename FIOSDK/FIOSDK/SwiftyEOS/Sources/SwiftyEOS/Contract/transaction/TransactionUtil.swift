@@ -38,16 +38,15 @@ import Foundation
                              
                     let auth = Authorization(actor: account, permission: "active")
                     var authorization:[Authorization] = [auth]
-                    if (abi.code == "fio.system"){
-                        let authFioSystem = Authorization(actor: "fio.system", permission: "active")
-                      //  authorization = [auth,authFioSystem]
+                    if (abi.code == FIOSDK.FIOSYSTEMCODE){
+                    let authFioSystem = Authorization(actor: FIOSDK.FIOSYSTEMPRINCIPAL, permission: "active") //  authorization = [auth,authFioSystem]
                     }
                     
-                    let action = Action(account: abi.code, name: abi.action, authorization:authorization, data: bin!.binargs)
+                    let action = Action(public_address: abi.code, name: abi.action, authorization:authorization, data: bin!.binargs)
                     let rawTx = Transaction(blockInfo: blockInfo!, actions: [action])
                     
                     var tx = PackedTransaction(transaction: rawTx, compression: "none")
-                    if (abi.code == "fio.system"){
+                    if (abi.code == FIOSDK.FIOSYSTEMCODE){
                      //   tx.signatures = ["5KBX1dwHME4VyuUss2sYM25D5ZTDvyYrbEz37UJqwAVAsR4tGuY","5JA5zQkg1S59swPzY6d29gsfNhNPVCb7XhiGJAakGFa7tEKSMjT"]
                     }
                     
@@ -90,7 +89,7 @@ import Foundation
                         // action
                         EOSRPC.sharedInstance.abiJsonToBin(abi: abi, completion: { (bin, error) in
                             if error == nil && bin != nil {
-                                let action = Action(account: abi.code,
+                                let action = Action(public_address: abi.code,
                                                     name: abi.action, authorization: [auth], data: bin!.binargs)
                                 actions.append(action)
                             }

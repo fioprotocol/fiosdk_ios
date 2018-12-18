@@ -25,6 +25,13 @@ public class FIOSDK: NSObject {
     private var systemPublicKey:String = ""
     private let requestFunds = RequestFunds()
     
+    
+    /**** FIOSDK.FIOSYSTEMCODE, FIOSDK.FIOFINANCECODE *****/
+    public static let FIOSYSTEMCODE:String = "fio.system"
+    public static let BIOSCODE:String = "eosio.code"
+    public static let FIOFINANCECODE:String = "fio.finance"
+    public static let FIOSYSTEMPRINCIPAL:String = "fio.system"
+    
     struct AddressByNameRequest: Codable {
         let fio_name: String
         let chain: String
@@ -78,6 +85,18 @@ public class FIOSDK: NSObject {
         case Approved = "Approved"
     }
     
+    public struct CommonActions {
+    
+        public static let RejectRequest:String = "rejectrqst"
+        public static let RequestFundsAction:String = "requestfunds"
+        public static let CancelRequestAction:String = "cancelrqst"
+        public static let ReportRequestAction:String = "reportrqst"
+        public static let RegisterPubAddressAction:String = "RegisterPubAddress"
+        public static let RegisterFIOAddressAction:String = "registername"
+        public static let AddAddressAction:String = "addaddress"
+        public static let UpdateAuth:String = "updateauth"
+        
+    }
     private static var _sharedInstance: FIOSDK = {
         let sharedInstance = FIOSDK()
         
@@ -187,6 +206,19 @@ public class FIOSDK: NSObject {
     
     internal func getPublicKey() -> String {
         return self.publicKey
+    }
+    
+   public func getEncodedPublicKey() -> String {
+        let secureEnclave:SecureEnclave = SecureEnclave.Secp256k1
+        let str = self.publicKey.data(using: String.Encoding.utf8)?.publicKeyEncodeString(enclave: secureEnclave)
+        
+        return str ?? ""
+    }
+ 
+    public func getPublicAddress() -> String {
+        let str = String(data:(self.publicKey.data(using: String.Encoding.utf8)?.base58EncodedData())! ,encoding: String.Encoding.utf8)
+        
+        return str ?? ""
     }
     
     public func getAddressByFioName (fioName:String, currencyCode:String, completion: @escaping (_ fioLookupResults: AddressByNameResponse, _ error:FIOError?) -> ()) {
@@ -330,7 +362,7 @@ public class FIOSDK: NSObject {
     
     private func register(fioName:String, newAccountName:String, publicReceiveAddresses:Dictionary<String,String>, completion: @escaping ( _ error:FIOError?) -> ()) {
         let importedPk = try! PrivateKey(keyString: getSystemPrivateKey())
-        let data = RegisterName(name: fioName, requestor: "fio.system")
+        let data = RegisterName(name: fioName, requestor: CommonActions.RegisterFIOAddressAction)
         
         var jsonString: String
         do{
@@ -342,7 +374,7 @@ public class FIOSDK: NSObject {
             return
         }
        
-        let abi = try! AbiJson(code: "fio.system", action: "registername", json: jsonString)
+        let abi = try! AbiJson(code: FIOSDK.FIOSYSTEMCODE, action: CommonActions.RegisterFIOAddressAction, json: jsonString)
         
         TransactionUtil.pushTransaction(abi: abi, account: "fio.system", privateKey: importedPk!, completion: { (result, error) in
             if error != nil {
@@ -564,7 +596,7 @@ public class FIOSDK: NSObject {
         let permission: String
     }
     
-    struct AccountValues : Codable {
+    struct PrincipalValues : Codable {
         let permission:PermissionValues
         let weight:Int
     }
@@ -572,12 +604,12 @@ public class FIOSDK: NSObject {
     struct AuthValue : Codable{
         let threshold:Int
         let keys:[KeyValues]
-        let accounts:[AccountValues]
+        let principals:[PrincipalValues]
         let waits:[String]
     }
     
     struct PermissionAccount: Codable{
-        let account: String
+        let public_address: String
         let permission: String
         let parent: String
         let auth:AuthValue
@@ -589,9 +621,9 @@ public class FIOSDK: NSObject {
         // try fio.system as well
         let importedPk = try! PrivateKey(keyString: getPrivateKey())
         
-        let data = PermissionAccount(account: getAccountName(), permission: "active", parent: "owner"
+        let data = PermissionAccount(public_address: getAccountName(), permission: "active", parent: "owner"
                         , auth:AuthValue(threshold: 1, keys: [KeyValues(key: getPublicKey() , weight: 1)]
-                                                    , accounts:[AccountValues(permission: FIOSDK.PermissionValues(actor: "fio.system", permission: "eosio.code"), weight: 1)]
+                                                    , principals:[PrincipalValues(permission: FIOSDK.PermissionValues(actor: FIOSDK.FIOSYSTEMCODE, permission: FIOSDK.BIOSCODE), weight: 1)]
                                                     , waits:[]))
         
         var jsonString: String = ""
@@ -603,7 +635,7 @@ public class FIOSDK: NSObject {
            completion(FIOError.init(kind: FIOError.ErrorKind.Failure, localizedDescription: "Unable to serialize JSON for addaccountpermissions"))
         }
         
-        let abi = try! AbiJson(code: "eosio", action: "updateauth", json: jsonString)
+        let abi = try! AbiJson(code: FIOSDK.BIOSCODE, action: "updateauth", json: jsonString)
         
         print ("***")
         print(abi.code)
@@ -637,7 +669,7 @@ public class FIOSDK: NSObject {
     
     public func addAllPublicAddresses(fioName : String,  publicReceiveAddresses:Dictionary<String,String>, completion: @escaping ( _ error:FIOError?) -> ()) {
 
-        let account = "fio.system"
+        let account = FIOSDK.FIOSYSTEMPRINCIPAL
         let importedPk = try! PrivateKey(keyString: getSystemPrivateKey())
         
         let dispatchGroup = DispatchGroup()
@@ -656,7 +688,7 @@ public class FIOSDK: NSObject {
                 return
             }
             
-            let abi = try! AbiJson(code: "fio.system", action: "addaddress", json: jsonString)
+            let abi = try! AbiJson(code: FIOSDK.FIOSYSTEMCODE, action: CommonActions.AddAddressAction, json: jsonString)
             TransactionUtil.pushTransaction(abi: abi, account: account, privateKey: importedPk!, completion: { (result, error) in
                 if error != nil {
                     if (error! as NSError).code == RPCErrorResponse.ErrorCode {
@@ -679,7 +711,7 @@ public class FIOSDK: NSObject {
     private func createAccount(newAccountName:String, completion: @escaping ( _ error:FIOError?) -> ()) {
         print(newAccountName)
         
-        AccountUtil.createAccount(account: newAccountName, ownerKey:getSystemPublicKey() , activeKey: getSystemPublicKey(), creator: "fio.system", pkString: getSystemPrivateKey()) { (result, error) in
+        AccountUtil.createAccount(account: newAccountName, ownerKey:getSystemPublicKey() , activeKey: getSystemPublicKey(), creator: FIOSDK.FIOSYSTEMPRINCIPAL, pkString: getSystemPrivateKey()) { (result, error) in
             if error != nil {
                 if (error! as NSError).code == RPCErrorResponse.ErrorCode {
                     let errDescription = "error"
