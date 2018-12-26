@@ -324,13 +324,16 @@ public class FIOSDK: NSObject {
     }
 
     private struct RegisterName: Codable {
-        let name:String
-        let requestor:String
+        let fioName:String
+        
+        enum CodingKeys: String, CodingKey {
+            case fioName = "fio_name"
+        }
     }
     
     private func register(fioName:String, newAccountName:String, publicReceiveAddresses:Dictionary<String,String>, completion: @escaping ( _ error:FIOError?) -> ()) {
         let importedPk = try! PrivateKey(keyString: getSystemPrivateKey())
-        let data = RegisterName(name: fioName, requestor: "fio.system")
+        let data = RegisterName(fioName: fioName)
         
         var jsonString: String
         do{
@@ -341,8 +344,8 @@ public class FIOSDK: NSObject {
             completion (FIOError(kind: .Failure, localizedDescription: "Json for input data not wrapping correctly"))
             return
         }
-       
-        let abi = try! AbiJson(code: "fio.system", action: "registername", json: jsonString)
+        
+        let abi = try! AbiJson(code: "fio.system", action: "rgstrfioname", json: jsonString)
         
         TransactionUtil.pushTransaction(abi: abi, account: "fio.system", privateKey: importedPk!, completion: { (result, error) in
             if error != nil {
