@@ -679,6 +679,65 @@ public class FIOSDK: NSObject {
         }
     }
     
+    
+    /// Struct to use as DTO for the addpublic address method
+    public struct AddPublicAddress: Codable{
+        let fioAddress: String
+        let chain: String
+        let publicAddress: String
+        
+        enum CodingKeys: String, CodingKey {
+            case fioAddress =  "fio_address"
+            case chain
+            case publicAddress = "pub_address"
+        }
+    }
+    
+    
+    /// SDK method that calls the addpubaddrs from the fio
+    /// to read further information about the API visit https://stealth.atlassian.net/wiki/spaces/DEV/pages/53280776/API#API-/add_pub_address-Addaddress
+    ///
+    /// - Parameters:
+    ///   - fioAddress:
+    ///   - chain:
+    ///   - publicAddress:
+    ///   - completion: The completion handler, providing an optional error in case something goes wrong
+    public func addPublic(address fioAddress:String, chain:String, publicAddress: String, completion: @escaping ( _ error:FIOError? ) -> ()) {
+        let importedPk = try! PrivateKey(keyString: getSystemPrivateKey())
+        let data = AddPublicAddress(fioAddress: fioAddress, chain: chain, publicAddress: publicAddress)
+        
+        var jsonString: String
+        do{
+            let jsonData:Data = try JSONEncoder().encode(data)
+            jsonString = String(data: jsonData, encoding: .utf8)!
+            print(jsonString)
+        }catch {
+            completion (FIOError(kind: .Failure, localizedDescription: "Json for input data not wrapping correctly"))
+            return
+        }
+        
+        let abi = try! AbiJson(code: "fio.system", action: "addpubaddrs", json: jsonString)
+        
+        TransactionUtil.pushTransaction(abi: abi, account: "fio.system", privateKey: importedPk!, completion: { (result, error) in
+            
+            guard let result = result, error == nil else {
+                if (error! as NSError).code == RPCErrorResponse.ErrorCode {
+                    let errDescription = "error"
+                    print (errDescription)
+                    completion(FIOError.init(kind: FIOError.ErrorKind.Failure, localizedDescription: errDescription))
+                } else {
+                    let errDescription = ("other error: \(String(describing: error?.localizedDescription))")
+                    print (errDescription)
+                    completion(FIOError.init(kind: FIOError.ErrorKind.Failure, localizedDescription: errDescription))
+                }
+                return
+            }
+            
+            print("Ok. add public address, Txid: \(result.transactionId)")
+            completion(FIOError.init(kind: FIOError.ErrorKind.Success, localizedDescription: ""))
+        })
+    }
+    
     private func createAccount(newAccountName:String, completion: @escaping ( _ error:FIOError?) -> ()) {
         print(newAccountName)
         
