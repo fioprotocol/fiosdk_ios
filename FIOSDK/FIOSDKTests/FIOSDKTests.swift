@@ -235,4 +235,16 @@ class FIOSDKTests: XCTestCase {
         wait(for: [expectation], timeout: TIMEOUT)
     }
     
+    
+    /// Tests the addPublic address method on FIOSDK using constant values ->
+    /// address: self.requestorAddress, chain: "FIO", publicAddress: self.requesteeAddress
+    func testAddPublicAddress(){
+        let expectation = XCTestExpectation(description: "testaddpublicaddress")
+        FIOSDK.sharedInstance().addPublic(address: self.requestorAddress, chain: "FIO", publicAddress: self.requesteeAddress) { (error) in
+            XCTAssert((error?.kind == FIOError.ErrorKind.Success), "testAddPublicAddress NOT SUCCESSFUL: \(error?.localizedDescription ?? "")")
+            expectation.fulfill()
+        }
+        wait(for: [expectation], timeout: TIMEOUT)
+    }
+    
 }
