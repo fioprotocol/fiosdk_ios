@@ -702,7 +702,7 @@ public class FIOSDK: NSObject {
     ///   - chain:
     ///   - publicAddress:
     ///   - completion: The completion handler, providing an optional error in case something goes wrong
-    public func addPublic(address fioAddress:String, chain:String, publicAddress: String, completion: @escaping ( _ error:FIOError? ) -> ()) {
+    public func addPublicAddress(fioAddress:String, chain:String, publicAddress: String, completion: @escaping ( _ error:FIOError? ) -> ()) {
         let importedPk = try! PrivateKey(keyString: getSystemPrivateKey())
         let data = AddPublicAddress(fioAddress: fioAddress, chain: chain, publicAddress: publicAddress)
         
