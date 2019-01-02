@@ -240,7 +240,7 @@ class FIOSDKTests: XCTestCase {
     /// address: self.requestorAddress, chain: "FIO", publicAddress: self.requesteeAddress
     func testAddPublicAddress(){
         let expectation = XCTestExpectation(description: "testaddpublicaddress")
-        FIOSDK.sharedInstance().addPublicAddress(fioAddress: self.requestorAddress, chain: "FIO", publicAddress: self.requesteeAddress) { (error) in
+        FIOSDK.sharedInstance().addPublicAddress(fioAddress: self.requestorFioName, chain: "ETH", publicAddress: self.requesteeAddress) { (error) in
             XCTAssert((error?.kind == FIOError.ErrorKind.Success), "testAddPublicAddress NOT SUCCESSFUL: \(error?.localizedDescription ?? "")")
             expectation.fulfill()
         }
