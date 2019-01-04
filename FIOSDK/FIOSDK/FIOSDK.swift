@@ -833,4 +833,88 @@ public class FIOSDK: NSObject {
         
         task.resume()
     }
+    
+    
+    
+    /// getPendingFioRequest DTO response
+    public struct PendingFioRequestsResponse: Codable {
+        let address: String
+        let requests: [PendingFioRequest]
+        
+        enum CodingKeys: String, CodingKey{
+            case address = "fio_pub_address"
+            case requests
+        }
+        
+        /// PendingFioRequestsResponse.request DTO
+        public struct PendingFioRequest: Codable{
+            let fioObtId: String
+            let fromFioAddress: String
+            let toFioAddress: String
+            let toPublicAddress: String
+            private let _amount: String //TODO: try changing to double
+            let chain: String
+            let metadata: String
+            let status: String
+            let timeStamp: Date
+            
+            var amount: Double{
+                return Double(_amount) ?? 0
+            }
+            
+            enum CodingKeys: String, CodingKey{
+                case fioObtId = "fio_obt_id"
+                case fromFioAddress = "from_fio_address"
+                case toFioAddress = "to_fio_address"
+                case toPublicAddress = "to_pub_address"
+                case _amount = "amount"
+                case chain
+                case metadata
+                case status
+                case timeStamp = "time_stamp"
+            }
+        }
+    }
+    
+    /// Pending requests call polls for any pending requests sent to a receiver.
+    ///
+    /// - Parameters:
+    ///   - fioPublicAddress: FIO public address of new owner. Has to match signature
+    ///   - completion: Completion hanlder
+    public func getPendingFioRequests(fioPublicAddress: String, completion: @escaping (_ pendingRequests: PendingFioRequestsResponse?, _ error:FIOError?) -> ()) {
+        
+
+        var jsonData: Data
+        do{
+            jsonData = try JSONEncoder().encode(["fio_pub_address": fioPublicAddress])
+        }catch {
+            completion (nil, FIOError(kind: .Failure, localizedDescription: ""))
+            return
+        }
+        
+        let url = URL(string: getURI() + "/chain/get_pending_fio_requests")!
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.httpBody = jsonData
+        
+        let task = URLSession.shared.dataTask(with: request) { data, response, error in
+            guard let data = data, error == nil else {
+                print(error?.localizedDescription ?? "No data")
+                completion(nil, FIOError(kind: .NoDataReturned, localizedDescription: ""))
+                return
+            }
+            do {
+                let decoder = JSONDecoder()
+                decoder.dateDecodingStrategy = .iso8601
+                let result = try decoder.decode(PendingFioRequestsResponse.self, from: data)
+                completion(result, FIOError(kind: .Success, localizedDescription: ""))
+                
+            }catch let error{
+                let err = FIOError(kind: .Failure, localizedDescription: error.localizedDescription)
+                completion(nil, err)
+            }
+        }
+        
+        task.resume()
+    }
 }

@@ -237,7 +237,7 @@ class FIOSDKTests: XCTestCase {
     
     
     /// Tests the addPublic address method on FIOSDK using constant values ->
-    /// address: self.requestorAddress, chain: "FIO", publicAddress: self.requesteeAddress
+    /// address: self.requestorFioName, chain: "FIO", publicAddress: self.requesteeAddress
     func testAddPublicAddress(){
         let expectation = XCTestExpectation(description: "testaddpublicaddress")
         FIOSDK.sharedInstance().addPublicAddress(fioAddress: self.requestorFioName, chain: "ETH", publicAddress: self.requesteeAddress) { (error) in
@@ -247,4 +247,17 @@ class FIOSDKTests: XCTestCase {
         wait(for: [expectation], timeout: TIMEOUT)
     }
     
+    
+    
+    /// Tests the getPendingFioRequests method on FIOSDK using constant values ->
+    /// fioPublicAddress = self.requesteeAddress
+    func testGetPendingFioRequests(){
+        let expectation = XCTestExpectation(description: "testgetpendingfiorequest")
+        FIOSDK.sharedInstance().getPendingFioRequests(fioPublicAddress: self.requesteeAddress) { (data, error) in
+            XCTAssert(error?.kind == FIOError.ErrorKind.Success, "testgetpendingfiorequest not successful: \(error?.localizedDescription ?? "unknown")")
+            expectation.fulfill()
+            XCTAssertNotNil(data, "testgetpendingfiorequest result came out nil")
+        }
+        wait(for: [expectation], timeout: TIMEOUT)
+    }
 }
