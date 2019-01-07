@@ -917,4 +917,84 @@ public class FIOSDK: NSObject {
         
         task.resume()
     }
+    
+    
+    /// DTO to represent the response of /get_fio_names
+    public struct FioNamesResponse: Codable{
+        let address: String
+        let domains: [FioDomainResponse]
+        let addresses: [FioAddressResponse]
+        
+        enum CodingKeys: String, CodingKey {
+            case address = "fio_pub_address"
+            case domains = "fio_domains"
+            case addresses = "fio_addresses"
+        }
+        
+        public struct FioDomainResponse: Codable{
+            let domain: String
+            let expiration: Date
+            
+            enum CodingKeys: String, CodingKey{
+                case domain = "fio_domain"
+                case expiration
+            }
+        }
+        
+        public struct FioAddressResponse: Codable{
+            let address: String
+            let expiration: Date
+            
+            enum CodingKeys: String, CodingKey{
+                case address = "fio_address"
+                case expiration
+            }
+        }
+    }
+    
+    /// Returns FIO Addresses and FIO Domains owned by this public address.
+    ///
+    /// - Parameters:
+    ///   - fioPublicAddress: FIO public address of new owner. Has to match signature
+    ///   - completion: Completion handler
+    public func getFioNames(fioPublicAddress: String, completion: @escaping (_ names: FioNamesResponse?, _ error: FIOError?) -> ()){
+        
+        var jsonData: Data
+        do{
+            jsonData = try JSONEncoder().encode(["fio_pub_address": fioPublicAddress])
+        }catch {
+            completion (nil, FIOError(kind: .Failure, localizedDescription: ""))
+            return
+        }
+        
+        //TODO: uncommented this
+//        let url = URL(string: getURI() + "/chain/get_fio_names")!
+        
+        //TODO: remove this line
+        let url = URL(string: "localhost:8080/chain/get_fio_names")!
+
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.httpBody = jsonData
+        
+        let task = URLSession.shared.dataTask(with: request) { data, response, error in
+            guard let data = data, error == nil else {
+                print(error?.localizedDescription ?? "No data")
+                completion(nil, FIOError(kind: .NoDataReturned, localizedDescription: ""))
+                return
+            }
+            do {
+                let decoder = JSONDecoder()
+                decoder.dateDecodingStrategy = .secondsSince1970
+                let result = try decoder.decode(FioNamesResponse.self, from: data)
+                completion(result, FIOError(kind: .Success, localizedDescription: ""))
+                
+            }catch let error{
+                let err = FIOError(kind: .Failure, localizedDescription: error.localizedDescription)
+                completion(nil, err)
+            }
+        }
+        
+        task.resume()
+    }
 }
