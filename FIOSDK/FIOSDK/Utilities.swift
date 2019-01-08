@@ -22,6 +22,10 @@ public class Utilities:NSObject{
     
     public var URL:String = ""
     
+    
+    /// The mock URL of the mock http server
+    public var mockURL: String? = nil
+    
     public func getSettingForBundle (keyName:String) -> String{
         let bundle = Bundle(for: type(of: self))
         
