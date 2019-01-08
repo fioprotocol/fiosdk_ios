@@ -852,7 +852,7 @@ public class FIOSDK: NSObject {
             let fromFioAddress: String
             let toFioAddress: String
             let toPublicAddress: String
-            private let _amount: String //TODO: try changing to double
+            private let _amount: String
             let chain: String
             let metadata: String
             let status: String
@@ -933,21 +933,29 @@ public class FIOSDK: NSObject {
         
         public struct FioDomainResponse: Codable{
             let domain: String
-            let expiration: Date
+            private let _expiration: String
+            
+            var expiration: Date{
+                return Date(timeIntervalSince1970: (Double(_expiration) ?? 0))
+            }
             
             enum CodingKeys: String, CodingKey{
                 case domain = "fio_domain"
-                case expiration
+                case _expiration = "expiration"
             }
         }
         
         public struct FioAddressResponse: Codable{
             let address: String
-            let expiration: Date
+            private let _expiration: String
+            
+            var expiration: Date{
+                return Date(timeIntervalSince1970: (Double(_expiration) ?? 0))
+            }
             
             enum CodingKeys: String, CodingKey{
                 case address = "fio_address"
-                case expiration
+                case _expiration = "expiration"
             }
         }
     }
@@ -971,11 +979,12 @@ public class FIOSDK: NSObject {
 //        let url = URL(string: getURI() + "/chain/get_fio_names")!
         
         //TODO: remove this line
-        let url = URL(string: "localhost:8080/chain/get_fio_names")!
+        let url = URL(string: "http://localhost:8080/chain/get_fio_names")!
 
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
         request.httpBody = jsonData
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         
         let task = URLSession.shared.dataTask(with: request) { data, response, error in
             guard let data = data, error == nil else {
