@@ -255,8 +255,22 @@ class FIOSDKTests: XCTestCase {
         let expectation = XCTestExpectation(description: "testgetpendingfiorequest")
         FIOSDK.sharedInstance().getPendingFioRequests(fioPublicAddress: self.requesteeAddress) { (data, error) in
             XCTAssert(error?.kind == FIOError.ErrorKind.Success, "testgetpendingfiorequest not successful: \(error?.localizedDescription ?? "unknown")")
-            expectation.fulfill()
             XCTAssertNotNil(data, "testgetpendingfiorequest result came out nil")
+            expectation.fulfill()
+        }
+        wait(for: [expectation], timeout: TIMEOUT)
+    }
+    
+    
+    
+    /// Tests the getFioNames method on FIOSDK using constant values ->
+    /// fioPublicAddress = sself.requesteeAddress
+    func testGetFioNames(){
+        let expectation = XCTestExpectation(description: "testgetfionames")
+        FIOSDK.sharedInstance().getFioNames(fioPublicAddress: self.requesteeAddress) { (data, error) in
+            XCTAssert(error?.kind == FIOError.ErrorKind.Success, "testgetfionames not successful: \(error?.localizedDescription ?? "unknown")")
+            XCTAssertNotNil(data, "testgetfionames result came out nil")
+            expectation.fulfill()
         }
         wait(for: [expectation], timeout: TIMEOUT)
     }
