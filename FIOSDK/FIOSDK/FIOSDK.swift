@@ -84,7 +84,7 @@ public class FIOSDK: NSObject {
         return sharedInstance
     }()
     
-    public class func sharedInstance(accountName: String? = nil, privateKey:String? = nil, publicKey:String? = nil, systemPrivateKey:String?=nil, systemPublicKey:String? = nil, url:String? = nil) -> FIOSDK {
+    public class func sharedInstance(accountName: String? = nil, privateKey:String? = nil, publicKey:String? = nil, systemPrivateKey:String?=nil, systemPublicKey:String? = nil, url:String? = nil, mockUrl: String? = nil) -> FIOSDK {
         
         if (accountName == nil ){
             if (_sharedInstance.accountName.count < 2 ){
@@ -141,6 +141,11 @@ public class FIOSDK: NSObject {
             Utilities.sharedInstance().URL = url!
         }
         
+        if let mockUrl = mockUrl{
+            Utilities.sharedInstance().mockURL = mockUrl
+        }
+        
+        
         return _sharedInstance
     }
     
@@ -183,6 +188,11 @@ public class FIOSDK: NSObject {
     
     internal func getURI() -> String {
         return Utilities.sharedInstance().URL
+    }
+    
+    /// The mock URL of the mock http server
+    internal func getMockURI() -> String?{
+        return Utilities.sharedInstance().mockURL
     }
     
     internal func getPublicKey() -> String {
@@ -921,12 +931,12 @@ public class FIOSDK: NSObject {
     
     /// DTO to represent the response of /get_fio_names
     public struct FioNamesResponse: Codable{
-        let address: String
+        let publicAddress: String
         let domains: [FioDomainResponse]
         let addresses: [FioAddressResponse]
         
         enum CodingKeys: String, CodingKey {
-            case address = "fio_pub_address"
+            case publicAddress = "fio_pub_address"
             case domains = "fio_domains"
             case addresses = "fio_addresses"
         }
@@ -963,23 +973,19 @@ public class FIOSDK: NSObject {
     /// Returns FIO Addresses and FIO Domains owned by this public address.
     ///
     /// - Parameters:
-    ///   - fioPublicAddress: FIO public address of new owner. Has to match signature
+    ///   - publicAddress: FIO public address of new owner. Has to match signature
     ///   - completion: Completion handler
-    public func getFioNames(fioPublicAddress: String, completion: @escaping (_ names: FioNamesResponse?, _ error: FIOError?) -> ()){
+    public func getFioNames(publicAddress: String, completion: @escaping (_ names: FioNamesResponse?, _ error: FIOError?) -> ()){
         
         var jsonData: Data
         do{
-            jsonData = try JSONEncoder().encode(["fio_pub_address": fioPublicAddress])
+            jsonData = try JSONEncoder().encode(["fio_pub_address": publicAddress])
         }catch {
             completion (nil, FIOError(kind: .Failure, localizedDescription: ""))
             return
         }
         
-        //TODO: uncommented this
-//        let url = URL(string: getURI() + "/chain/get_fio_names")!
-        
-        //TODO: remove this line
-        let url = URL(string: "http://localhost:8080/chain/get_fio_names")!
+        let url = URL(string: "\(getMockURI() != nil ? getMockURI()! : getURI())/chain/get_fio_names")!
 
         var request = URLRequest(url: url)
         request.httpMethod = "POST"

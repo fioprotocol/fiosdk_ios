@@ -41,7 +41,7 @@ class FIOSDKTests: XCTestCase {
            // _ = FIOSDK.sharedInstance(accountName: "fioname11111", privateKey: "5K2HBexbraViJLQUJVJqZc42A8dxkouCmzMamdrZsLHhUHv77jF", publicKey: "EOS5GpUwQtFrfvwqxAv24VvMJFeMHutpQJseTz8JYUBfZXP2zR8VY",systemPrivateKey:"5KBX1dwHME4VyuUss2sYM25D5ZTDvyYrbEz37UJqwAVAsR4tGuY", systemPublicKey:"EOS7isxEua78KPVbGzKemH4nj2bWE52gqj8Hkac3tc7jKNvpfWzYS", url: "http://18.223.14.244:8889/v1")
             
            // _ = FIOSDK.sharedInstance(accountName: "fio.system", privateKey: "5KBX1dwHME4VyuUss2sYM25D5ZTDvyYrbEz37UJqwAVAsR4tGuY", publicKey: "EOS7isxEua78KPVbGzKemH4nj2bWE52gqj8Hkac3tc7jKNvpfWzYS",systemPrivateKey:"5KBX1dwHME4VyuUss2sYM25D5ZTDvyYrbEz37UJqwAVAsR4tGuY", systemPublicKey:"EOS7isxEua78KPVbGzKemH4nj2bWE52gqj8Hkac3tc7jKNvpfWzYS", url: "http://34.220.213.187:8889/v1")
-             _ = FIOSDK.sharedInstance(accountName: "fioname11111", privateKey: "5K2HBexbraViJLQUJVJqZc42A8dxkouCmzMamdrZsLHhUHv77jF", publicKey: "EOS5GpUwQtFrfvwqxAv24VvMJFeMHutpQJseTz8JYUBfZXP2zR8VY",systemPrivateKey:"5KBX1dwHME4VyuUss2sYM25D5ZTDvyYrbEz37UJqwAVAsR4tGuY", systemPublicKey:"EOS7isxEua78KPVbGzKemH4nj2bWE52gqj8Hkac3tc7jKNvpfWzYS", url: "http://18.210.240.10:8889/v1")
+            _ = FIOSDK.sharedInstance(accountName: "fioname11111", privateKey: "5K2HBexbraViJLQUJVJqZc42A8dxkouCmzMamdrZsLHhUHv77jF", publicKey: "EOS5GpUwQtFrfvwqxAv24VvMJFeMHutpQJseTz8JYUBfZXP2zR8VY",systemPrivateKey:"5KBX1dwHME4VyuUss2sYM25D5ZTDvyYrbEz37UJqwAVAsR4tGuY", systemPublicKey:"EOS7isxEua78KPVbGzKemH4nj2bWE52gqj8Hkac3tc7jKNvpfWzYS", url: "http://18.210.240.10:8889/v1", mockUrl: "http://localhost:8080")
         }
 
         else{
@@ -250,7 +250,7 @@ class FIOSDKTests: XCTestCase {
     
     
     /// Tests the getPendingFioRequests method on FIOSDK using constant values ->
-    /// fioPublicAddress = self.requesteeAddress
+    /// publicAddress = self.requesteeAddress
     func testGetPendingFioRequests(){
         let expectation = XCTestExpectation(description: "testgetpendingfiorequest")
         FIOSDK.sharedInstance().getPendingFioRequests(fioPublicAddress: self.requesteeAddress) { (data, error) in
@@ -267,7 +267,7 @@ class FIOSDKTests: XCTestCase {
     /// fioPublicAddress = sself.requesteeAddress
     func testGetFioNames(){
         let expectation = XCTestExpectation(description: "testgetfionames")
-        FIOSDK.sharedInstance().getFioNames(fioPublicAddress: self.requesteeAddress) { (data, error) in
+        FIOSDK.sharedInstance().getFioNames(publicAddress: self.requesteeAddress) { (data, error) in
             XCTAssert(error?.kind == FIOError.ErrorKind.Success, "testgetfionames not successful: \(error?.localizedDescription ?? "unknown")")
             XCTAssertNotNil(data, "testgetfionames result came out nil")
             expectation.fulfill()
