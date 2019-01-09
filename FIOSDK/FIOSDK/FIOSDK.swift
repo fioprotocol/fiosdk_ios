@@ -642,9 +642,9 @@ public class FIOSDK: NSObject {
     }
 
     public struct AddAddress : Codable{
-        let fio_user_name: String
+        let fio_address: String
         let chain: String
-        let address: String
+        let pub_address: String
         let requestor: String
     }
     
@@ -657,7 +657,7 @@ public class FIOSDK: NSObject {
         for (currencyCode, receiveAddress) in publicReceiveAddresses{
             dispatchGroup.enter()
             ///TODO: TEST THIS DEAL HERE
-            let data = AddAddress(fio_user_name: fioName, chain: currencyCode, address: receiveAddress, requestor:getAccountName())
+            let data = AddAddress(fio_address: fioName, chain: currencyCode, pub_address: receiveAddress, requestor:getAccountName())
             
             var jsonString: String
             do{
@@ -726,7 +726,7 @@ public class FIOSDK: NSObject {
             return
         }
         
-        let abi = try! AbiJson(code: "fio.system", action: "addpubaddrs", json: jsonString)
+        let abi = try! AbiJson(code: "fio.system", action: "addfiopubadd", json: jsonString)
         
         TransactionUtil.pushTransaction(abi: abi, account: "fio.system", privateKey: importedPk!, completion: { (result, error) in
             
