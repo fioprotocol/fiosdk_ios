@@ -72,7 +72,7 @@ public class FIOSDK: NSObject {
         public let statusDescription:String
     }
     
-    public enum RequestStatus:String {
+    public enum RequestStatus:String, Codable {
         case Requested = "Requested"
         case Rejected = "Rejected"
         case Approved = "Approved"
@@ -774,8 +774,8 @@ public class FIOSDK: NSObject {
     
     /// getPendingFioRequest DTO response
     public struct PendingFioRequestsResponse: Codable {
-        let address: String
-        let requests: [PendingFioRequest]
+       public let address: String
+       public let requests: [PendingFioRequest]
         
         enum CodingKeys: String, CodingKey{
             case address = "fio_pub_address"
@@ -784,26 +784,22 @@ public class FIOSDK: NSObject {
         
         /// PendingFioRequestsResponse.request DTO
         public struct PendingFioRequest: Codable{
-            let fioObtId: String
-            let fromFioAddress: String
-            let toFioAddress: String
-            let toPublicAddress: String
-            private let _amount: String
-            let chain: String
-            let metadata: String
-            let status: String
-            let timeStamp: Date
-            
-            var amount: Double{
-                return Double(_amount) ?? 0
-            }
+            public let fioObtId: String
+            public let fromFioAddress: String
+            public let toFioAddress: String
+            public let toPublicAddress: String
+            public let amount: String
+            public let chain: String
+            public let metadata: String
+            public let status: RequestStatus
+            public let timeStamp: Date
             
             enum CodingKeys: String, CodingKey{
                 case fioObtId = "fio_obt_id"
                 case fromFioAddress = "from_fio_address"
                 case toFioAddress = "to_fio_address"
                 case toPublicAddress = "to_pub_address"
-                case _amount = "amount"
+                case amount
                 case chain
                 case metadata
                 case status
@@ -828,10 +824,11 @@ public class FIOSDK: NSObject {
             return
         }
         
-        let url = URL(string: getURI() + "/chain/get_pending_fio_requests")!
+        let url = URL(string: "\(getMockURI() != nil ? getMockURI()! : getURI())/chain/get_pending_fio_requests")!
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
         request.httpBody = jsonData
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         
         let task = URLSession.shared.dataTask(with: request) { data, response, error in
             guard let data = data, error == nil else {
