@@ -356,7 +356,7 @@ public class FIOSDK: NSObject {
         }
         
         let abi = try! AbiJson(code: "fio.system", action: "rgstrfioname", json: jsonString)
-        
+        print("Called FIOSDK action rgstrfioname")
         TransactionUtil.pushTransaction(abi: abi, account: "fio.system", privateKey: importedPk!, completion: { (result, error) in
             if error != nil {
                 if (error! as NSError).code == RPCErrorResponse.ErrorCode {
@@ -374,9 +374,19 @@ public class FIOSDK: NSObject {
                 var addresses:Dictionary<String,String> = publicReceiveAddresses
                 addresses["FIO"] = newAccountName
                 
-                self.addAllPublicAddresses(fioName: fioName, publicReceiveAddresses: addresses, completion: { (error) in
-                    completion(error)
-                })
+                let dispatchGroup = DispatchGroup()
+                var anyFail = false
+                for (chain, receiveAddress) in addresses{
+                    dispatchGroup.enter()
+                    self.addPublicAddress(fioAddress: fioName, chain: chain, publicAddress: receiveAddress, completion: { (error) in
+                        anyFail = error?.kind == .Failure
+                        dispatchGroup.leave()
+                    })
+                }
+                
+                dispatchGroup.notify(queue: .main){
+                    completion(FIOError.init(kind: anyFail ? .Failure : .Success, localizedDescription: ""))
+                }
             }
         })
     }
@@ -436,41 +446,6 @@ public class FIOSDK: NSObject {
                 
             }
         })
-    }
-    
-    public func getRequesteePendingHistoryByAddress (address:String, currencyCode:String, maxItemsReturned:Int, completion: @escaping ( _ requests:[FIOSDK.Request] , _ error:FIOError?) -> ()) {
-        self.getFioNameByAddress(publicAddress: address, currencyCode: currencyCode) { (response, error) in
-            if (error?.kind == FIOError.ErrorKind.Success){
-                self.getRequesteePendingHistoryByFioName(fioName: response.name
-                    , maxItemsReturned: maxItemsReturned
-                    , completion: { (responses, err) in
-                        completion(responses,err)
-                })
-            }
-            else {
-                completion([FIOSDK.Request](),error)
-            }
-        }
-    }
-    
-    public func getRequesteePendingHistoryByFioName (fioName:String, maxItemsReturned:Int, completion: @escaping ( _ requests:[FIOSDK.Request] , _ error:FIOError?) -> ()) {
-        self.getAddressByFioName(fioName: fioName, currencyCode: "FIO") { (response, error) in
-            if (error?.kind == FIOError.ErrorKind.Success){
-                self.requestFunds.getRequesteePendingHistory(requesteeAccountName: response.address,maxItemsReturned: maxItemsReturned
-                    , completion: { (responses, err) in
-                        
-                        if (err?.kind == FIOError.ErrorKind.Success){
-                            completion(responses, err)
-                        }
-                        else{
-                            completion([FIOSDK.Request](),error)
-                        }
-                })
-            }
-            else {
-                completion([FIOSDK.Request](),error)
-            }
-        }
     }
     
     public func getRequestorHistoryByAddress (address:String, currencyCode:String, maxItemsReturned:Int, completion: @escaping ( _ requests:[FIOSDK.Request] , _ error:FIOError?) -> ()) {
@@ -641,55 +616,6 @@ public class FIOSDK: NSObject {
         })
     }
 
-    public struct AddAddress : Codable{
-        let fio_address: String
-        let chain: String
-        let pub_address: String
-        let requestor: String
-    }
-    
-    public func addAllPublicAddresses(fioName : String,  publicReceiveAddresses:Dictionary<String,String>, completion: @escaping ( _ error:FIOError?) -> ()) {
-
-        let account = "fio.system"
-        let importedPk = try! PrivateKey(keyString: getSystemPrivateKey())
-        
-        let dispatchGroup = DispatchGroup()
-        for (currencyCode, receiveAddress) in publicReceiveAddresses{
-            dispatchGroup.enter()
-            ///TODO: TEST THIS DEAL HERE
-            let data = AddAddress(fio_address: fioName, chain: currencyCode, pub_address: receiveAddress, requestor:getAccountName())
-            
-            var jsonString: String
-            do{
-                let jsonData:Data = try JSONEncoder().encode(data)
-                jsonString = String(data: jsonData, encoding: .utf8)!
-                print(jsonString)
-            }catch {
-                completion (FIOError(kind: .Failure, localizedDescription: "Input data JSON Encoding Failed"))
-                return
-            }
-            
-            let abi = try! AbiJson(code: "fio.system", action: "addaddress", json: jsonString)
-            TransactionUtil.pushTransaction(abi: abi, account: account, privateKey: importedPk!, completion: { (result, error) in
-                if error != nil {
-                    if (error! as NSError).code == RPCErrorResponse.ErrorCode {
-                        print("\(((error! as NSError).userInfo[RPCErrorResponse.ErrorKey] as! RPCErrorResponse).errorDescription())")
-                    } else {
-                        print("other error: \(String(describing: error?.localizedDescription))")
-                    }
-                } else {
-                    print("Ok. Add Address, Txid: \(result!.transactionId)")
-                }
-                dispatchGroup.leave()
-            })
-        }
-        
-        dispatchGroup.notify(queue: DispatchQueue.main) {
-            completion(FIOError.init(kind: FIOError.ErrorKind.Success, localizedDescription: ""))
-        }
-    }
-    
-    
     /// Struct to use as DTO for the addpublic address method
     public struct AddPublicAddress: Codable{
         let fioAddress: String
@@ -726,7 +652,7 @@ public class FIOSDK: NSObject {
             return
         }
         
-        let abi = try! AbiJson(code: "fio.system", action: "addfiopubadd", json: jsonString)
+        let abi = try! AbiJson(code: "fio.system", action: "addpubaddrs", json: jsonString)
         
         TransactionUtil.pushTransaction(abi: abi, account: "fio.system", privateKey: importedPk!, completion: { (result, error) in
             
