@@ -579,9 +579,9 @@ public class RequestFunds{
                 for item in response.rows{
                     //print("dispatch")
                     dispatchGroup.enter()
-                    FIOSDK.sharedInstance().getFioNameByAddress(publicAddress: item.receiver, currencyCode: item.chain, completion: { (res, err) in
-                        if (err?.kind == FIOError.ErrorKind.Success){
-                            fioNameRecords.append(newElement: FioName(fioName: res.name, address: item.receiver) )
+                    FIOSDK.sharedInstance().getFioNames(publicAddress: item.receiver, completion: { (response, error) in
+                        if error?.kind == FIOError.ErrorKind.Success, let responseAddress = response?.addresses.first?.address{
+                            fioNameRecords.append(newElement: FioName(fioName: responseAddress, address: item.receiver) )
                         }
                         else {
                             fioNameRecords.append(newElement: FioName(fioName: "not found", address: item.receiver) )
@@ -593,9 +593,9 @@ public class RequestFunds{
                 for item in response.rows{
                     //print("dispatch2")
                     dispatchGroup.enter()
-                    FIOSDK.sharedInstance().getFioNameByAddress(publicAddress: item.originator, currencyCode: item.chain, completion: { (res, err) in
-                        if (err?.kind == FIOError.ErrorKind.Success){
-                            fioNameRecords.append(newElement: FioName(fioName: res.name, address: item.originator) )
+                    FIOSDK.sharedInstance().getFioNames(publicAddress: item.originator, completion: { (response, error) in
+                        if error?.kind == FIOError.ErrorKind.Success, let responseAddress = response?.addresses.first?.address{
+                            fioNameRecords.append(newElement: FioName(fioName: responseAddress, address: item.originator) )
                         }
                         else {
                             fioNameRecords.append(newElement: FioName(fioName: "not found", address: item.originator) )

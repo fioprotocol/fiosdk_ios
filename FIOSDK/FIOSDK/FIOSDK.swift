@@ -45,16 +45,6 @@ public class FIOSDK: NSObject {
         }
     }
     
-    struct NameByAddressRequest: Codable {
-        let key: String
-        let chain: String
-    }
-    
-    public struct NameByAddressResponse: Codable {
-        public let name: String
-        public let expiration: String
-    }
-    
     public struct Request{
         public let amount:Float
         public let currencyCode:String
@@ -236,70 +226,24 @@ public class FIOSDK: NSObject {
    
         task.resume()
     }
- 
-    public func getFioNameByAddress (publicAddress:String, currencyCode:String, completion: @escaping (_ fioLookupResults: NameByAddressResponse, _ error:FIOError?) -> ()) {
-        
-        var fioRsvp : NameByAddressResponse = NameByAddressResponse(name: "", expiration: "11111111")
-        
-        let fioRequest = NameByAddressRequest(key: publicAddress, chain:currencyCode)
-        var jsonData: Data
-        do{
-            jsonData = try JSONEncoder().encode(fioRequest)
-        }catch {
-            completion (fioRsvp, FIOError(kind: .NoDataReturned, localizedDescription: ""))
-            return
-        }
-        
-        // create post request
-        let url = URL(string: getURI() + "/chain/fio_key_lookup")!
-        var request = URLRequest(url: url)
-        request.httpMethod = "POST"
-        
-        // insert json data to the request
-        request.httpBody = jsonData
-   
-        let task = URLSession.shared.dataTask(with: request) { data, response, error in
-            guard let data = data, error == nil else {
-                print(error?.localizedDescription ?? "No data")
-                completion(fioRsvp, FIOError(kind: .NoDataReturned, localizedDescription: ""))
-                return
-            }
-            do {
-                let result = String(data: data, encoding: String.Encoding.utf8) as String!
-                print(result)
-                
-                fioRsvp = try JSONDecoder().decode(NameByAddressResponse.self, from: data)
-                print(fioRsvp)
-                
-                
-                completion(fioRsvp, FIOError(kind: .Success, localizedDescription: ""))
-                
-            }catch let error{
-                let err = FIOError(kind: .Failure, localizedDescription: error.localizedDescription)///TODO:create this correctly with ERROR results
-                completion(fioRsvp, err)
-            }
-        }
-        
-        task.resume()
-    }
     
     public func requestFundsByAddress (requestorAddress:String, requestorCurrencyCode:String, requesteeFioName:String, chain:String, asset:String, amount:Float, memo:String, completion: @escaping (_ error:FIOError?) -> ()) {
 
-        self.getFioNameByAddress(publicAddress: requestorAddress, currencyCode:requestorCurrencyCode) { (response, error) in
-            if (error?.kind == FIOError.ErrorKind.Success){
-               self.requestFundsByFioName(requestorFioName: response.name
-                    , requesteeFioName: requesteeFioName
-                    , chain: chain
-                    , asset: asset
-                    , amount: amount
-                    , memo: memo
-                    , completion: { (err) in
-                        completion(err)
-                   })
-            }
-            else {
+        self.getFioNames(publicAddress: requestorAddress) { (response, error) in
+            guard error?.kind == .Success, let responseAddress = response?.addresses.first?.address else{
                 completion(error)
+                return
             }
+            
+            self.requestFundsByFioName(requestorFioName: responseAddress
+                , requesteeFioName: requesteeFioName
+                , chain: chain
+                , asset: asset
+                , amount: amount
+                , memo: memo
+                , completion: { (err) in
+                    completion(err)
+            })
         }
     }
     
@@ -449,17 +393,16 @@ public class FIOSDK: NSObject {
     }
     
     public func getRequestorHistoryByAddress (address:String, currencyCode:String, maxItemsReturned:Int, completion: @escaping ( _ requests:[FIOSDK.Request] , _ error:FIOError?) -> ()) {
-        self.getFioNameByAddress(publicAddress: address, currencyCode: currencyCode) { (response, error) in
-            if (error?.kind == FIOError.ErrorKind.Success){
-                self.getRequestorHistoryByFioName(fioName: response.name, currencyCode: currencyCode
-                    , maxItemsReturned: maxItemsReturned
-                    , completion: { (responses, err) in
-                        completion(responses,err)
-                })
+        self.getFioNames(publicAddress: address) { (response, error) in
+            guard error?.kind == .Success, let responseAddress = response?.addresses.first?.address else{
+                completion([FIOSDK.Request](), error)
+                return
             }
-            else {
-                completion([FIOSDK.Request](),error)
-            }
+            self.getRequestorHistoryByFioName(fioName: responseAddress, currencyCode: currencyCode
+                , maxItemsReturned: maxItemsReturned
+                , completion: { (responses, err) in
+                    completion(responses,err)
+            })
         }
     }
     
@@ -854,9 +797,9 @@ public class FIOSDK: NSObject {
     
     /// DTO to represent the response of /get_fio_names
     public struct FioNamesResponse: Codable{
-        let publicAddress: String
-        let domains: [FioDomainResponse]
-        let addresses: [FioAddressResponse]
+        public let publicAddress: String
+        public let domains: [FioDomainResponse]
+        public let addresses: [FioAddressResponse]
         
         enum CodingKeys: String, CodingKey {
             case publicAddress = "fio_pub_address"
@@ -865,10 +808,10 @@ public class FIOSDK: NSObject {
         }
         
         public struct FioDomainResponse: Codable{
-            let domain: String
+            public let domain: String
             private let _expiration: String
             
-            var expiration: Date{
+            public var expiration: Date{
                 return Date(timeIntervalSince1970: (Double(_expiration) ?? 0))
             }
             
@@ -879,10 +822,10 @@ public class FIOSDK: NSObject {
         }
         
         public struct FioAddressResponse: Codable{
-            let address: String
+            public let address: String
             private let _expiration: String
             
-            var expiration: Date{
+            public var expiration: Date{
                 return Date(timeIntervalSince1970: (Double(_expiration) ?? 0))
             }
             
