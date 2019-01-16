@@ -210,12 +210,12 @@ class FIOSDKTests: XCTestCase {
     }
     
     func testIsAvailable(){
-        let expectation = XCTestExpectation(description: "testGetRequestorHistoryByAddress")
+        let expectation = XCTestExpectation(description: "testIsAvailable")
         
         FIOSDK.sharedInstance().isAvailable(fioAddress:self.requestorFioName) { (isAvailable, error) in
-            XCTAssert((error?.kind == FIOError.ErrorKind.Success), "isFioAddressOrDomainRegistered NOT SUCCESSFUL")
+            XCTAssert((error?.kind == FIOError.ErrorKind.Success), "testIsAvailable NOT SUCCESSFUL")
             
-            XCTAssert((isAvailable == false), "isFioAddressOrDomainRegistered NOT SUCCESSFUL")
+            XCTAssert((isAvailable == false), "testIsAvailable NOT SUCCESSFUL")
                 
             expectation.fulfill()
         }
