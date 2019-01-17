@@ -103,9 +103,8 @@ class FIOSDKTests: XCTestCase {
             print(result.isRegistered)
             XCTAssert((error?.kind == FIOError.ErrorKind.Success), "getAddressByFIOName NOT FOUND")
             
-            FIOSDK.sharedInstance().getFioNameByAddress(publicAddress: self.requesteeAddress, currencyCode: "ETH", completion:  {result, error in ()
-                print(result.name)
-                XCTAssert((result.name.count > 3), "getFioNameByAddress NOT FOUND")
+            FIOSDK.sharedInstance().getFioNames(publicAddress: self.requesteeAddress, completion: { (response, error) in
+                XCTAssertNotNil(response?.addresses.first?.address, "getFioNames NOT FOUND")
                 expectation.fulfill()
             })
             
