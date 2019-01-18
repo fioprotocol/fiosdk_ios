@@ -261,4 +261,18 @@ class FIOSDKTests: XCTestCase {
         }
         wait(for: [expectation], timeout: TIMEOUT)
     }
+    
+    
+    /// Tests the getPublicAddress method on FIOSDK using constant values ->
+    /// fioAddress: self.requesteeFioName, tokenCode: "BTC"
+    func testGetPublicAddress(){
+        let expectation = XCTestExpectation(description: "testgetpublicaddress")
+        FIOSDK.sharedInstance().getPublicAddress(fioAddress: requesteeFioName, tokenCode: "BTC") { (response, error) in
+            XCTAssert(error.kind == .Success, "testgetpublicaddress not succesful")
+            XCTAssertNotNil(response, "testgetpublicaddress not successful: \(error.localizedDescription)")
+            XCTAssertFalse(response!.publicAddress.isEmpty, "testgetpublicadddress not succesful no public address was found")
+            expectation.fulfill()
+        }
+        wait(for: [expectation], timeout: TIMEOUT)
+    }
 }

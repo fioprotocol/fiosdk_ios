@@ -878,4 +878,70 @@ public class FIOSDK: NSObject {
         
         task.resume()
     }
+    
+    
+    /// Structure used as response body for getPublicAddress
+    public struct PublicAddressResponse: Codable {
+        
+        /// FIO Address for which public address is returned.
+        public let fioAddress: String
+        
+        /// Token code for which public address is returned.
+        public let tokenCode: String
+        
+        /// public address for the specified FIO Address.
+        public let publicAddress: String
+        
+        enum CodingKeys: String, CodingKey{
+            case fioAddress = "fio_address"
+            case tokenCode = "token_code"
+            case publicAddress = "fio_pub_address"
+        }
+        
+    }
+    
+    
+    /// Returns a public address for a specified FIO Address.
+    ///
+    /// - Parameters:
+    ///   - fioAddress: FIO Address for which public address is to be returned.
+    ///   - tokenCode: Token code for which public address is to be returned.
+    ///   - completion: result based on DTO PublicAddressResponse
+    public func getPublicAddress(fioAddress: String, tokenCode: String, completion: @escaping (_ publicAddress: PublicAddressResponse?, _ error: FIOError) -> ()){
+       
+        var jsonData: Data
+        
+        do{
+            jsonData = try JSONEncoder().encode(["fio_address": fioAddress, "token_code": tokenCode])
+        }catch {
+            completion (nil, FIOError(kind: .Failure, localizedDescription: ""))
+            return
+        }
+        
+        let url = URL(string: "\(getMockURI() != nil ? getMockURI()! : getURI())/chain/pub_address_lookup")!
+        
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.httpBody = jsonData
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        
+        let task = URLSession.shared.dataTask(with: request) { data, response, error in
+            guard let data = data, error == nil else {
+                print(error?.localizedDescription ?? "No data")
+                completion(nil, FIOError(kind: .NoDataReturned, localizedDescription: ""))
+                return
+            }
+            do {
+                let decoder = JSONDecoder()
+                let result = try decoder.decode(PublicAddressResponse.self, from: data)
+                completion(result, FIOError(kind: .Success, localizedDescription: ""))
+                
+            }catch let error{
+                let err = FIOError(kind: .Failure, localizedDescription: error.localizedDescription)
+                completion(nil, err)
+            }
+        }
+        
+        task.resume()
+    }
 }
