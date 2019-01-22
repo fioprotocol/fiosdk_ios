@@ -901,7 +901,12 @@ public class FIOSDK: NSObject {
     }
     
     
-    /// Returns a public address for a specified FIO Address.
+    /// Returns a public address for a specified FIO Address, based on a given token for example BTC.
+    /// example response:
+    /// ```
+    /// // example response
+    /// let result: [String: String] =  ["fio_pub_address": "0xab5801a7d398351b8be11c439e05c5b3259aec9b", "token_code": "FIO", "fio_address": "purse.alice"]
+    /// ```
     ///
     /// - Parameters:
     ///   - fioAddress: FIO Address for which public address is to be returned.
