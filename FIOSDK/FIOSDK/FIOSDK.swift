@@ -189,6 +189,9 @@ public class FIOSDK: NSObject {
         return self.publicKey
     }
     
+    
+    
+    /// TODO: is this an old call, new call?  Add an example of data in, data out.
     public func getAddressByFioName (fioName:String, currencyCode:String, completion: @escaping (_ fioLookupResults: AddressByNameResponse, _ error:FIOError?) -> ()) {
     
         var responseStruct : AddressByNameResponse = AddressByNameResponse(is_registered: "", is_domain: "", address: "")
@@ -905,7 +908,7 @@ public class FIOSDK: NSObject {
     /// example response:
     /// ```
     /// // example response
-    /// let result: [String: String] =  ["fio_pub_address": "0xab5801a7d398351b8be11c439e05c5b3259aec9b", "token_code": "FIO", "fio_address": "purse.alice"]
+    /// let result: [String: String] =  ["fio_pub_address": "0xab5801a7d398351b8be11c439e05c5b3259aec9b", "token_code": "ETH", "fio_address": "purse.alice"]
     /// ```
     ///
     /// - Parameters:
