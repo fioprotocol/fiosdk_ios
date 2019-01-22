@@ -901,7 +901,7 @@ public class FIOSDK: NSObject {
     }
     
     
-    /// Returns a public address for a specified FIO Address, based on a given token for example BTC.
+    /// Returns a public address for a specified FIO Address, based on a given token for example ETH.
     /// example response:
     /// ```
     /// // example response
@@ -909,8 +909,8 @@ public class FIOSDK: NSObject {
     /// ```
     ///
     /// - Parameters:
-    ///   - fioAddress: FIO Address for which public address is to be returned.
-    ///   - tokenCode: Token code for which public address is to be returned.
+    ///   - fioAddress: FIO Address for which public address is to be returned, e.g. "alice.brd"
+    ///   - tokenCode: Token code for which public address is to be returned, e.g. "ETH".
     ///   - completion: result based on DTO PublicAddressResponse
     public func getPublicAddress(fioAddress: String, tokenCode: String, completion: @escaping (_ publicAddress: PublicAddressResponse?, _ error: FIOError) -> ()){
        
