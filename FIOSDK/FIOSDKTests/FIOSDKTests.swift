@@ -97,18 +97,16 @@ class FIOSDKTests: XCTestCase {
 
     func testGetRegisteredFioName(){
         let expectation = XCTestExpectation(description: "testGetRegisteredFioName")
-   
-        FIOSDK.sharedInstance().getAddressByFioName(fioName: self.requesteeFioName, currencyCode: "ETH", completion: { result, error in ()
-            print(result.address)
-            print(result.isRegistered)
-            XCTAssert((error?.kind == FIOError.ErrorKind.Success), "getAddressByFIOName NOT FOUND")
+        
+        FIOSDK.sharedInstance().getPublicAddress(fioAddress: self.requesteeFioName, tokenCode: "ETH") { (response, error) in
+            XCTAssert(error.kind == .Success, "getPublicAddress error")
+            XCTAssertNotNil(response, "getPublicAddress error")
             
             FIOSDK.sharedInstance().getFioNames(publicAddress: self.requesteeAddress, completion: { (response, error) in
                 XCTAssertNotNil(response?.addresses.first?.address, "getFioNames NOT FOUND")
                 expectation.fulfill()
             })
-            
-        })
+        }
         
         wait(for: [expectation], timeout: TIMEOUT)
     }
