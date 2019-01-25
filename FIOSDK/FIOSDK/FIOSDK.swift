@@ -887,4 +887,83 @@ public class FIOSDK: NSObject {
         
         task.resume()
     }
+    
+    
+    public struct RequestFundsRequest: Codable{
+        public let from: String
+        public let to: String
+        public let toPublicAddress: String
+        public let amount: String
+        public let tokenCode: String
+        public let metadata: String //TODO: changes this type to -> MetaData
+        
+        enum CodingKeys: String, CodingKey{
+            case from = "from_fio_address"
+            case to = "to_fio_address"
+            case toPublicAddress = "to_pub_address"
+            case amount
+            case tokenCode = "token_code"
+            case metadata
+        }
+        
+        public struct MetaData: Codable{
+            public var memo: String?
+            public var hash: String?
+            public var offlineUrl: String?
+            
+            enum CodingKeys: String, CodingKey {
+                case memo
+                case hash
+                case offlineUrl = "offline_url"
+            }
+        }
+    }
+    
+    
+    /// Creates a new funds request.
+    /// to read further information about the API visit https://stealth.atlassian.net/wiki/spaces/DEV/pages/53280776/API#API-/new_funds_request-Createnewfundsrequest
+    ///
+    /// - Parameters:
+    ///   - fromFioAddress: FIO Address of user sending funds, i.e. requestee
+    ///   - toFioAddress: FIO Address of user receiving funds, i.e. requestor
+    ///   - publicAddress: Public address on other blockchain of user receiving funds.
+    ///   - amount: Amount requested.
+    ///   - tokenCode: Code of the token represented in Amount requested, i.e. DAI
+    ///   - metadata: Contains the: memo, hash, offlineUrl
+    ///   - completion: The completion handler containing the result
+    public func requestFunds(from fromFioAddress:String, to toFioAddress: String, toPublicAddress publicAddress: String, amount: String, tokenCode: String, metadata: RequestFundsRequest.MetaData, completion: @escaping ( _ error:FIOError? ) -> ()) {
+        let importedPk = try! PrivateKey(keyString: getSystemPrivateKey())
+        let data = RequestFundsRequest(from: fromFioAddress, to: toFioAddress, toPublicAddress: publicAddress, amount: amount, tokenCode: tokenCode, metadata: "")
+        
+        
+        var jsonString: String
+        do{
+            let jsonData:Data = try JSONEncoder().encode(data)
+            jsonString = String(data: jsonData, encoding: .utf8)!
+            print(jsonString)
+        }catch {
+            completion (FIOError(kind: .Failure, localizedDescription: "Json for input data not wrapping correctly"))
+            return
+        }
+        
+        let abi = try! AbiJson(code: "fio.system", action: "newfndsreq", json: jsonString)
+        
+        TransactionUtil.pushTransaction(abi: abi, account: "fio.system", privateKey: importedPk!, completion: { (result, error) in
+            
+            guard let result = result, error == nil else {
+                if (error! as NSError).code == RPCErrorResponse.ErrorCode {
+                    let errDescription = "error"
+                    print (errDescription)
+                    completion(FIOError.init(kind: FIOError.ErrorKind.Failure, localizedDescription: errDescription))
+                } else {
+                    let errDescription = ("other error: \(String(describing: error?.localizedDescription))")
+                    print (errDescription)
+                    completion(FIOError.init(kind: FIOError.ErrorKind.Failure, localizedDescription: errDescription))
+                }
+                return
+            }
+            print("Ok. newfndsreq, Txid: \(result.transactionId)")
+            completion(FIOError.init(kind: FIOError.ErrorKind.Success, localizedDescription: ""))
+        })
+    }
 }

@@ -273,4 +273,15 @@ class FIOSDKTests: XCTestCase {
         }
         wait(for: [expectation], timeout: TIMEOUT)
     }
+    
+    func testRequestFunds(){
+        let expectation = XCTestExpectation(description: "testRequestFunds")
+        let metadata = FIOSDK.RequestFundsRequest.MetaData(memo: "this is the memo", hash: nil, offlineUrl: nil)
+        FIOSDK.sharedInstance().requestFunds(from: requestorFioName, to: requesteeFioName, toPublicAddress: requesteeAddress, amount: "100", tokenCode: "BTC", metadata: metadata) { (error) in
+            XCTAssert(error?.kind == .Success, "requestFunds failed")
+            expectation.fulfill()
+        }
+        
+        wait(for: [expectation], timeout: TIMEOUT)
+    }
 }
