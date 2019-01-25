@@ -25,25 +25,6 @@ public class FIOSDK: NSObject {
     private var systemPublicKey:String = ""
     private let requestFunds = RequestFunds()
     
-    struct AddressByNameRequest: Codable {
-        let fio_name: String
-        let chain: String
-        let requestor: String
-    }
-    
-    public struct AddressByNameResponse: Codable {
-        let is_registered: String
-        let is_domain: String
-        public let address: String
-        
-        var isRegistered:Bool{
-            get { return (is_registered == "true" ? true : false) }
-        }
-        
-        var isDomain:Bool{
-            get { return (is_domain == "true" ? true : false) }
-        }
-    }
     
     public struct Request{
         public let amount:Float
@@ -189,47 +170,6 @@ public class FIOSDK: NSObject {
         return self.publicKey
     }
     
-    
-    
-    /// TODO: is this an old call, new call?  Add an example of data in, data out.
-    public func getAddressByFioName (fioName:String, currencyCode:String, completion: @escaping (_ fioLookupResults: AddressByNameResponse, _ error:FIOError?) -> ()) {
-    
-        var responseStruct : AddressByNameResponse = AddressByNameResponse(is_registered: "", is_domain: "", address: "")
-        
-        let fioRequest = AddressByNameRequest(fio_name: fioName, chain:currencyCode, requestor:getAccountName())
-        var jsonData: Data
-        do{
-            jsonData = try JSONEncoder().encode(fioRequest)
-        }catch {
-            completion (responseStruct, FIOError(kind: .NoDataReturned, localizedDescription: ""))
-            return
-        }
-        
-        // create post request
-        let url = URL(string: getURI() + "/chain/fio_name_lookup")!
-        var request = URLRequest(url: url)
-        request.httpMethod = "POST"
-        request.httpBody = jsonData
-
-        let task = URLSession.shared.dataTask(with: request) { data, response, error in
-            guard let data = data, error == nil else {
-                print(error?.localizedDescription ?? "No data")
-                completion(responseStruct, FIOError(kind: .NoDataReturned, localizedDescription: ""))
-                return
-            }
-            do {
-                responseStruct = try JSONDecoder().decode(AddressByNameResponse.self, from: data)
-                completion(responseStruct, FIOError(kind: .Success, localizedDescription: ""))
-                
-            }catch let error{
-                let err = FIOError(kind: .Failure, localizedDescription: error.localizedDescription)///TODO:create this correctly with ERROR results
-                completion(responseStruct, err)
-            }
-        }
-   
-        task.resume()
-    }
-    
     public func requestFundsByAddress (requestorAddress:String, requestorCurrencyCode:String, requesteeFioName:String, chain:String, asset:String, amount:Float, memo:String, completion: @escaping (_ error:FIOError?) -> ()) {
 
         self.getFioNames(publicAddress: requestorAddress) { (response, error) in
@@ -251,25 +191,21 @@ public class FIOSDK: NSObject {
     }
     
     public func requestFundsByFioName (requestorFioName:String, requesteeFioName:String, chain:String, asset:String, amount:Float, memo:String, completion: @escaping ( _ error:FIOError?) -> ()) {
-        self.getAddressByFioName(fioName: requestorFioName, currencyCode: "FIO") { (response, error) in
-            if (error?.kind == FIOError.ErrorKind.Success){
-                let requestorAccountName = response.address
-                
-                self.getAddressByFioName(fioName: requesteeFioName, currencyCode: "FIO", completion: { (res, er) in
-                    if (er?.kind == FIOError.ErrorKind.Success){
-                        self.requestFunds(requestorAccountName: requestorAccountName, requesteeAccountName: res.address, chain: "FIO", asset: asset, amount: amount, memo: memo
-                            , completion: { (errRequestFunds) in
-                                completion(errRequestFunds)
-                        })
-                    }
-                    else {
-                        completion(er)
-                    }
-                })
-            }
-            else{
+        self.getPublicAddress(fioAddress: requestorFioName, tokenCode: "FIO") { (response, error) in
+            guard error.kind == .Success, let requestorPublicAddress = response?.publicAddress else{
                 completion(error)
+                return
             }
+            self.getPublicAddress(fioAddress: requesteeFioName, tokenCode: "FIO", completion: { (response, error) in
+                guard error.kind == .Success, let requesteePublicAddress = response?.publicAddress else{
+                    completion(error)
+                    return
+                }
+                self.requestFunds(requestorAccountName: requestorPublicAddress, requesteeAccountName: requesteePublicAddress, chain: "FIO", asset: asset, amount: amount, memo: memo
+                    , completion: { (errRequestFunds) in
+                        completion(errRequestFunds)
+                })
+            })
         }
     }
     
@@ -410,22 +346,21 @@ public class FIOSDK: NSObject {
     }
     
     public func getRequestorHistoryByFioName (fioName:String, currencyCode:String, maxItemsReturned:Int, completion: @escaping ( _ requests:[FIOSDK.Request] , _ error:FIOError?) -> ()) {
-        self.getAddressByFioName(fioName: fioName, currencyCode: "FIO") { (response, error) in
-            if (error?.kind == FIOError.ErrorKind.Success){
-                self.requestFunds.getRequestorHistory(requestorAccountName: response.address, currencyCode: currencyCode, maxItemsReturned: maxItemsReturned
-                    , completion: { (responses, err) in
-                        
-                        if (err?.kind == FIOError.ErrorKind.Success){
-                            completion(responses, err)
-                        }
-                        else{
-                            completion([FIOSDK.Request](),error)
-                        }
-                })
+        self.getPublicAddress(fioAddress: fioName, tokenCode: "FIO") { (response, error) in
+            guard error.kind == .Success, let publicAddress = response?.publicAddress else{
+                completion([FIOSDK.Request](), error)
+                return
             }
-            else {
-                completion([FIOSDK.Request](),error)
-            }
+            self.requestFunds.getRequestorHistory(requestorAccountName: publicAddress, currencyCode: currencyCode, maxItemsReturned: maxItemsReturned
+                , completion: { (response, error) in
+                    
+                    guard error?.kind == .Success else{
+                        completion([FIOSDK.Request](),error)
+                        return
+                    }
+                    
+                    completion(response, error)
+            })
         }
     }
     
