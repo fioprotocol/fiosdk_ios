@@ -81,6 +81,12 @@ func customDateFormatter(_ decoder: Decoder) throws -> Date {
                 let jsonString = String(data:data, encoding: .utf8)
                 print(jsonString!)
                 let decoder = self.decoder
+                do{
+                    let testResponse = try decoder.decode(T.self, from: data)
+                    print(testResponse)
+                }catch let error{
+                    print(error)
+                }
                 guard let responseObject = try? decoder.decode(T.self, from: data) else {
                     guard let errorResponse = try? decoder.decode(RPCErrorResponse.self, from: data) else {
                         completion(nil, NSError(domain: errorDomain, code: 1, userInfo: [NSLocalizedDescriptionKey: "Decoding error \(String(describing: error))"]))

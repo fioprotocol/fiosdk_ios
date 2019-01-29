@@ -48,26 +48,26 @@ class FIOSDKTests: XCTestCase {
             _ = FIOSDK.sharedInstance(accountName: accountName,  privateKey: privateKey, publicKey: publicKey, systemPrivateKey: "", systemPublicKey: "", url: url)
         }
         
-
-        let expectation = XCTestExpectation(description: "testRegisterFIOName")
-        
-        let publicReceiveAddresses:Dictionary<String,String> = ["ETH":requesteeAddress]
-        FIOSDK.sharedInstance().registerFioName(fioName: requesteeFioName, publicReceiveAddresses: publicReceiveAddresses, completion: {error in ()
-            XCTAssert((error?.kind == FIOError.ErrorKind.Success), "registerFIOName NOT SUCCESSFUL")
-            print (self.requesteeFioName)
-            
-            let receiveAddresses:Dictionary<String,String> = ["ETH":self.requestorAddress]
-            FIOSDK.sharedInstance().registerFioName(fioName: self.requestorFioName, publicReceiveAddresses: receiveAddresses, completion: {error in ()
-                XCTAssert((error?.kind == FIOError.ErrorKind.Success), "registerFIOName NOT SUCCESSFUL" + (error?.localizedDescription ?? "") )
-                print(error)
-                print(self.requestorFioName)
-                expectation.fulfill()
-            })
-            
-        })
-        
-        wait(for: [expectation], timeout: TIMEOUT)
-
+//
+//        let expectation = XCTestExpectation(description: "testRegisterFIOName")
+//
+//        let publicReceiveAddresses:Dictionary<String,String> = ["ETH":requesteeAddress]
+//        FIOSDK.sharedInstance().registerFioName(fioName: requesteeFioName, publicReceiveAddresses: publicReceiveAddresses, completion: {error in ()
+//            XCTAssert((error?.kind == FIOError.ErrorKind.Success), "registerFIOName NOT SUCCESSFUL")
+//            print (self.requesteeFioName)
+//
+//            let receiveAddresses:Dictionary<String,String> = ["ETH":self.requestorAddress]
+//            FIOSDK.sharedInstance().registerFioName(fioName: self.requestorFioName, publicReceiveAddresses: receiveAddresses, completion: {error in ()
+//                XCTAssert((error?.kind == FIOError.ErrorKind.Success), "registerFIOName NOT SUCCESSFUL" + (error?.localizedDescription ?? "") )
+//                print(error)
+//                print(self.requestorFioName)
+//                expectation.fulfill()
+//            })
+//
+//        })
+//
+//        wait(for: [expectation], timeout: TIMEOUT)
+//
 
     }
     
@@ -274,14 +274,39 @@ class FIOSDKTests: XCTestCase {
         wait(for: [expectation], timeout: TIMEOUT)
     }
     
+    
+    /// Tests the requestFUnds method on FIOSDK
+    /// ```
+    /// //using the following constant values:
+    /// from: self.requesteeFioName
+    /// to: self.requestorFioName
+    /// toPublicAddress: self.requestorAddress
+    /// ```
     func testRequestFunds(){
         let expectation = XCTestExpectation(description: "testRequestFunds")
         let metadata = FIOSDK.RequestFundsRequest.MetaData(memo: "this is the memo", hash: nil, offlineUrl: nil)
-        FIOSDK.sharedInstance().requestFunds(from: requestorFioName, to: requesteeFioName, toPublicAddress: requesteeAddress, amount: "100", tokenCode: "BTC", metadata: metadata) { (error) in
+        FIOSDK.sharedInstance().requestFunds(from: requesteeFioName, to: requestorFioName, toPublicAddress: requestorAddress, amount: "100", tokenCode: "BTC", metadata: metadata) { (_, error) in
             XCTAssert(error?.kind == .Success, "requestFunds failed")
             expectation.fulfill()
         }
         
         wait(for: [expectation], timeout: TIMEOUT)
     }
+    
+    func testRejectFundsRequest(){
+        let expectation = XCTestExpectation(description: "testRejectFundsRequest")
+        let amount = Double.random(in: 1111.0...4444)
+        FIOSDK.sharedInstance().requestFunds(from: self.requesteeFioName, to: requestorFioName, toPublicAddress: requestorAddress, amount: String(amount), tokenCode: "BTC", metadata: FIOSDK.RequestFundsRequest.MetaData(memo: "", hash: nil, offlineUrl: nil)) { (response, error) in
+            XCTAssert(error?.kind == .Success && response != nil, "testRejectFundsRequest Couldn't create mock request")
+            
+            FIOSDK.sharedInstance().rejectFundsRequest(fundsRequestId: response!.fundsRequestId, completion: { (response, error) in
+                XCTAssert(error.kind == .Success, "testRejectFundsRequest couldn't reject request")
+                expectation.fulfill()
+            })
+            
+        }
+        
+        wait(for: [expectation], timeout: TIMEOUT)
+    }
+    
 }

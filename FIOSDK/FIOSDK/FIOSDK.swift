@@ -919,6 +919,14 @@ public class FIOSDK: NSObject {
         }
     }
     
+    public struct RequestFundsResponse: Codable{
+        public var fundsRequestId: String
+        
+        enum CodingKeys: String, CodingKey {
+            case fundsRequestId = "fio_funds_request_id"
+        }
+    }
+    
     
     /// Creates a new funds request.
     /// to read further information about the API visit https://stealth.atlassian.net/wiki/spaces/DEV/pages/53280776/API#API-/new_funds_request-Createnewfundsrequest
@@ -931,7 +939,7 @@ public class FIOSDK: NSObject {
     ///   - tokenCode: Code of the token represented in Amount requested, i.e. DAI
     ///   - metadata: Contains the: memo, hash, offlineUrl
     ///   - completion: The completion handler containing the result
-    public func requestFunds(from fromFioAddress:String, to toFioAddress: String, toPublicAddress publicAddress: String, amount: String, tokenCode: String, metadata: RequestFundsRequest.MetaData, completion: @escaping ( _ error:FIOError? ) -> ()) {
+    public func requestFunds(from fromFioAddress:String, to toFioAddress: String, toPublicAddress publicAddress: String, amount: String, tokenCode: String, metadata: RequestFundsRequest.MetaData, completion: @escaping ( _ response: RequestFundsResponse?, _ error:FIOError? ) -> ()) {
         let importedPk = try! PrivateKey(keyString: getSystemPrivateKey())
         let data = RequestFundsRequest(from: fromFioAddress, to: toFioAddress, toPublicAddress: publicAddress, amount: amount, tokenCode: tokenCode, metadata: "")
         
@@ -942,7 +950,7 @@ public class FIOSDK: NSObject {
             jsonString = String(data: jsonData, encoding: .utf8)!
             print(jsonString)
         }catch {
-            completion (FIOError(kind: .Failure, localizedDescription: "Json for input data not wrapping correctly"))
+            completion (nil, FIOError(kind: .Failure, localizedDescription: "Json for input data not wrapping correctly"))
             return
         }
         
@@ -954,16 +962,86 @@ public class FIOSDK: NSObject {
                 if (error! as NSError).code == RPCErrorResponse.ErrorCode {
                     let errDescription = "error"
                     print (errDescription)
-                    completion(FIOError.init(kind: FIOError.ErrorKind.Failure, localizedDescription: errDescription))
+                    completion(nil, FIOError.init(kind: FIOError.ErrorKind.Failure, localizedDescription: errDescription))
                 } else {
                     let errDescription = ("other error: \(String(describing: error?.localizedDescription))")
                     print (errDescription)
-                    completion(FIOError.init(kind: FIOError.ErrorKind.Failure, localizedDescription: errDescription))
+                    completion(nil, FIOError.init(kind: FIOError.ErrorKind.Failure, localizedDescription: errDescription))
                 }
                 return
             }
             print("Ok. newfndsreq, Txid: \(result.transactionId)")
-            completion(FIOError.init(kind: FIOError.ErrorKind.Success, localizedDescription: ""))
+            guard let responseString = result.processed?.actionTraces.first?.receipt.response.value as? String, let responseData = responseString.data(using: .utf8), let response = try? JSONDecoder().decode(RequestFundsResponse.self, from: responseData) else{
+                completion(nil, FIOError.init(kind: .Failure, localizedDescription: "Error parsing the response"))
+                return
+            }
+            completion(response, FIOError.init(kind: FIOError.ErrorKind.Success, localizedDescription: ""))
         })
+    }
+    
+    public struct RejectFundsRequestResponse: Codable{
+        
+        public var status: Status
+        
+        public enum Status: String, Codable{
+            case rejected = "request_rejected", unknown
+        }
+        
+        
+    }
+    
+    /// Reject funds request.
+    /// To read further infomation about this API visit https://stealth.atlassian.net/wiki/spaces/DEV/pages/53280776/API#API-/reject_funds_request-Rejectfundsrequest
+    ///
+    /// - Parameters:
+    ///   - fundsRequestId: ID of that fund request.
+    ///   - completion: The completion handler containing the result
+    func rejectFundsRequest(fundsRequestId: String, completion: @escaping(_ response: RejectFundsRequestResponse?,_ :FIOError) -> ()){
+        let importedPk = try! PrivateKey(keyString: getSystemPrivateKey())
+        
+        var jsonString: String
+        do{
+            let jsonData:Data = try JSONEncoder().encode(["fio_funds_request_id": fundsRequestId])
+            jsonString = String(data: jsonData, encoding: .utf8)!
+        }catch {
+            completion (nil, FIOError(kind: .Failure, localizedDescription: "Json for input data not wrapping correctly"))
+            return
+        }
+        
+        let abi = try! AbiJson(code: "fio.system", action: "rejctfndsreq", json: jsonString)
+        
+        TransactionUtil.pushTransaction(abi: abi, account: "fio.system", privateKey: importedPk!, completion: { (result, error) in
+            
+            guard let result = result, error == nil else {
+                if (error! as NSError).code == RPCErrorResponse.ErrorCode {
+                    let errDescription = "error"
+                    print (errDescription)
+                    completion(nil, FIOError.init(kind: FIOError.ErrorKind.Failure, localizedDescription: errDescription))
+                } else {
+                    let errDescription = ("other error: \(String(describing: error?.localizedDescription))")
+                    print (errDescription)
+                    completion(nil, FIOError.init(kind: FIOError.ErrorKind.Failure, localizedDescription: errDescription))
+                }
+                return
+            }
+            print("Ok. newfndsreq, Txid: \(result.transactionId)")
+            guard let responseString = result.processed?.actionTraces.first?.receipt.response.value as? String, let responseData = responseString.data(using: .utf8), let response = try? JSONDecoder().decode(RejectFundsRequestResponse.self, from: responseData) else{
+                completion(nil, FIOError.init(kind: .Failure, localizedDescription: "Error parsing the response"))
+                return
+            }
+            
+            guard response.status == .rejected else {
+                completion(nil, FIOError.init(kind: .Failure, localizedDescription: "The request couldn't rejected"))
+                return
+            }
+            
+            completion(response, FIOError.init(kind: FIOError.ErrorKind.Success, localizedDescription: ""))
+        })
+    }
+}
+
+extension FIOSDK.RejectFundsRequestResponse.Status{
+    public init(from decoder: Decoder) throws {
+        self = try FIOSDK.RejectFundsRequestResponse.Status(rawValue: decoder.singleValueContainer().decode(RawValue.self)) ?? .unknown
     }
 }
