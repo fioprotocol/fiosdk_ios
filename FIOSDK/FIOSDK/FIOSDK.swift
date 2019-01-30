@@ -170,52 +170,6 @@ public class FIOSDK: NSObject {
         return self.publicKey
     }
     
-    public func requestFundsByAddress (requestorAddress:String, requestorCurrencyCode:String, requesteeFioName:String, chain:String, asset:String, amount:Float, memo:String, completion: @escaping (_ error:FIOError?) -> ()) {
-
-        self.getFioNames(publicAddress: requestorAddress) { (response, error) in
-            guard error?.kind == .Success, let responseAddress = response?.addresses.first?.address else{
-                completion(error)
-                return
-            }
-            
-            self.requestFundsByFioName(requestorFioName: responseAddress
-                , requesteeFioName: requesteeFioName
-                , chain: chain
-                , asset: asset
-                , amount: amount
-                , memo: memo
-                , completion: { (err) in
-                    completion(err)
-            })
-        }
-    }
-    
-    public func requestFundsByFioName (requestorFioName:String, requesteeFioName:String, chain:String, asset:String, amount:Float, memo:String, completion: @escaping ( _ error:FIOError?) -> ()) {
-        self.getPublicAddress(fioAddress: requestorFioName, tokenCode: "FIO") { (response, error) in
-            guard error.kind == .Success, let requestorPublicAddress = response?.publicAddress else{
-                completion(error)
-                return
-            }
-            self.getPublicAddress(fioAddress: requesteeFioName, tokenCode: "FIO", completion: { (response, error) in
-                guard error.kind == .Success, let requesteePublicAddress = response?.publicAddress else{
-                    completion(error)
-                    return
-                }
-                self.requestFunds(requestorAccountName: requestorPublicAddress, requesteeAccountName: requesteePublicAddress, chain: "FIO", asset: asset, amount: amount, memo: memo
-                    , completion: { (errRequestFunds) in
-                        completion(errRequestFunds)
-                })
-            })
-        }
-    }
-    
-    private func requestFunds (requestorAccountName:String, requesteeAccountName:String, chain:String, asset:String, amount:Float, memo:String, completion: @escaping ( _ error:FIOError?) -> ()) {
-        let timestamp = NSDate().timeIntervalSince1970
-        self.requestFunds.requestFunds(requestorAccountName: requestorAccountName, requestId: Int(timestamp.rounded()) ,requesteeAccountName: requesteeAccountName, chain: chain, asset: asset, amount: amount, memo: memo) { (error) in
-            completion(error)
-        }
-    }
-
     private struct RegisterName: Codable {
         let fioName:String
         
@@ -287,12 +241,6 @@ public class FIOSDK: NSObject {
                 completion(error)
             }
         })
-    }
-
-    public func rejectRequestFunds (requesteeAccountName:String, fioAppId:Int, memo:String, completion: @escaping ( _ error:FIOError?) -> ()) {
-        self.requestFunds.rejectFundsRequest(requesteeAccountName: requesteeAccountName, fioAppId: fioAppId, memo: memo) { (err) in
-            completion(err)
-        }
     }
 
     public func cancelRequestFunds (requestorAccountName:String, requestId:Int, memo:String, completion: @escaping ( _ error:FIOError?) -> ()) {
@@ -936,7 +884,7 @@ public class FIOSDK: NSObject {
     ///   - toFioAddress: FIO Address of user receiving funds, i.e. requestor
     ///   - publicAddress: Public address on other blockchain of user receiving funds.
     ///   - amount: Amount requested.
-    ///   - tokenCode: Code of the token represented in Amount requested, i.e. DAI
+    ///   - tokenCode: Code of the token represented in Amount requested, i.e. ETH
     ///   - metadata: Contains the: memo, hash, offlineUrl
     ///   - completion: The completion handler containing the result
     public func requestFunds(from fromFioAddress:String, to toFioAddress: String, toPublicAddress publicAddress: String, amount: String, tokenCode: String, metadata: RequestFundsRequest.MetaData, completion: @escaping ( _ response: RequestFundsResponse?, _ error:FIOError? ) -> ()) {

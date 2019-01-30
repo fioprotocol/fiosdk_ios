@@ -136,37 +136,11 @@ class FIOSDKTests: XCTestCase {
 //        wait(for: [expectation], timeout: TIMEOUT)
     }
 
-    func testRequestFundsByAddressAndRejectFunds(){
-//        let expectation = XCTestExpectation(description: "testRequestFundsByAddress")
-//
-//        FIOSDK.sharedInstance().requestFundsByAddress(requestorAddress: self.requestorAddress, requestorCurrencyCode: "ETH", requesteeFioName: self.requesteeFioName, chain: "FIO", asset: "ETH", amount: 1.0000, memo: "shawn test request by address") { (error) in
-//            XCTAssert((error?.kind == FIOError.ErrorKind.Success), "requestFundsByAddress NOT SUCCESSFUL")
-//
-//            FIOSDK.sharedInstance().getRequesteePendingHistoryByAddress(address: self.requesteeAddress, currencyCode: "ETH", maxItemsReturned: 10, completion: { (response, error) in
-//                XCTAssert((error?.kind == FIOError.ErrorKind.Success), "testGetPendingRequestHistoryByAddress NOT SUCCESSFUL")
-//                XCTAssert(response.count > 0 , "testGetPendingRequestHistoryByAddress NOT SUCCESSFUL")
-//
-//                if (response.count > 0 ){
-//                    FIOSDK.sharedInstance().rejectRequestFunds(requesteeAccountName: response[0].requesteeAccountName, fioAppId: response[0].fioappid, memo: "")  { (error) in
-//                        XCTAssert((error?.kind == FIOError.ErrorKind.Success), "testApproveFunds NOT SUCCESSFUL")
-//                        expectation.fulfill()
-//                    }
-//                }
-//                else {
-//                    expectation.fulfill()
-//                }
-//            })
-//        }
-//
-//        wait(for: [expectation], timeout: TIMEOUT)
-    }
-
     //getRequestorHistoryByAddress
     
     func testGetRequestorHistoryAndCancel(){
         let expectation = XCTestExpectation(description: "testGetRequestorHistory")
-        
-        FIOSDK.sharedInstance().requestFundsByAddress(requestorAddress: self.requestorAddress, requestorCurrencyCode: "ETH", requesteeFioName: self.requesteeFioName, chain: "FIO", asset: "ETH", amount: 1.0000, memo: "shawn test request by address") { (error) in
+        FIOSDK.sharedInstance().requestFunds(from: self.requesteeFioName, to: self.requestorFioName, toPublicAddress: self.requestorAddress, amount: "1.000", tokenCode: "ETH", metadata: FIOSDK.RequestFundsRequest.MetaData(memo: "memo", hash: nil, offlineUrl: nil)) { (requestFundsResponse, error) in
             XCTAssert((error?.kind == FIOError.ErrorKind.Success), "requestFundsByAddress NOT SUCCESSFUL")
             
             FIOSDK.sharedInstance().getRequestorHistoryByFioName(fioName : self.requestorFioName, currencyCode: "ETH", maxItemsReturned: 100, completion: { (response, error) in
@@ -182,7 +156,7 @@ class FIOSDKTests: XCTestCase {
                 else {
                     expectation.fulfill()
                 }
-
+                
             })
         }
         
@@ -192,7 +166,7 @@ class FIOSDKTests: XCTestCase {
     func testGetRequestorHistoryByAddress(){
         let expectation = XCTestExpectation(description: "testGetRequestorHistoryByAddress")
         
-        FIOSDK.sharedInstance().requestFundsByAddress(requestorAddress: self.requestorAddress, requestorCurrencyCode: "ETH", requesteeFioName: self.requesteeFioName, chain: "FIO", asset: "ETH", amount: 1.0000, memo: "shawn test request by address") { (error) in
+        FIOSDK.sharedInstance().requestFunds(from: self.requesteeFioName, to: self.requestorFioName, toPublicAddress: self.requestorAddress, amount: "1.0000", tokenCode: "ETH", metadata: FIOSDK.RequestFundsRequest.MetaData(memo: "MEMO", hash: nil, offlineUrl: nil)) { (response, error) in
             XCTAssert((error?.kind == FIOError.ErrorKind.Success), "requestFundsByAddress NOT SUCCESSFUL")
             
             FIOSDK.sharedInstance().getRequestorHistoryByAddress(address: self.requestorAddress, currencyCode: "ETH", maxItemsReturned: 10, completion: { (response, error) in
