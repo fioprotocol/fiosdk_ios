@@ -859,6 +859,12 @@ public class FIOSDK: NSObject {
             public var hash: String?
             public var offlineUrl: String?
             
+            public init(memo: String?, hash: String?, offlineUrl: String?){
+                self.memo = memo
+                self.hash = hash
+                self.offlineUrl = offlineUrl
+            }
+            
             enum CodingKeys: String, CodingKey {
                 case memo
                 case hash
