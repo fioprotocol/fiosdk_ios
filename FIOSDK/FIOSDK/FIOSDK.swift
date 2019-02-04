@@ -613,26 +613,30 @@ public class FIOSDK: NSObject {
         
         /// PendingFioRequestsResponse.request DTO
         public struct PendingFioRequest: Codable{
-            public let fioObtId: String
+            public let fundsRequestId: String
             public let fromFioAddress: String
             public let toFioAddress: String
             public let toPublicAddress: String
             public let amount: String
-            public let chain: String
-            public let metadata: String
-            public let status: RequestStatus
+            public let tokenCode: String
+            public let chainCode: String
+            public let metadata: MetaData
             public let timeStamp: Date
             
             enum CodingKeys: String, CodingKey{
-                case fioObtId = "fio_obt_id"
+                case fundsRequestId = "fio_funds_request_id"
                 case fromFioAddress = "from_fio_address"
                 case toFioAddress = "to_fio_address"
                 case toPublicAddress = "to_pub_address"
                 case amount
-                case chain
+                case tokenCode = "token_code"
+                case chainCode = "chain_code"
                 case metadata
-                case status
                 case timeStamp = "time_stamp"
+            }
+            
+            public struct MetaData: Codable{
+                public let memo: String
             }
         }
     }
