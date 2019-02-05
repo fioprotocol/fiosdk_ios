@@ -954,7 +954,7 @@ public class FIOSDK: NSObject {
     /// - Parameters:
     ///   - fundsRequestId: ID of that fund request.
     ///   - completion: The completion handler containing the result
-    func rejectFundsRequest(fundsRequestId: String, completion: @escaping(_ response: RejectFundsRequestResponse?,_ :FIOError) -> ()){
+    public func rejectFundsRequest(fundsRequestId: String, completion: @escaping(_ response: RejectFundsRequestResponse?,_ :FIOError) -> ()){
         let importedPk = try! PrivateKey(keyString: getSystemPrivateKey())
         
         var jsonString: String
