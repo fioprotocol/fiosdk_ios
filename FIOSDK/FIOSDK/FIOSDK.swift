@@ -170,52 +170,6 @@ public class FIOSDK: NSObject {
         return self.publicKey
     }
     
-    public func requestFundsByAddress (requestorAddress:String, requestorCurrencyCode:String, requesteeFioName:String, chain:String, asset:String, amount:Float, memo:String, completion: @escaping (_ error:FIOError?) -> ()) {
-
-        self.getFioNames(publicAddress: requestorAddress) { (response, error) in
-            guard error?.kind == .Success, let responseAddress = response?.addresses.first?.address else{
-                completion(error)
-                return
-            }
-            
-            self.requestFundsByFioName(requestorFioName: responseAddress
-                , requesteeFioName: requesteeFioName
-                , chain: chain
-                , asset: asset
-                , amount: amount
-                , memo: memo
-                , completion: { (err) in
-                    completion(err)
-            })
-        }
-    }
-    
-    public func requestFundsByFioName (requestorFioName:String, requesteeFioName:String, chain:String, asset:String, amount:Float, memo:String, completion: @escaping ( _ error:FIOError?) -> ()) {
-        self.getPublicAddress(fioAddress: requestorFioName, tokenCode: "FIO") { (response, error) in
-            guard error.kind == .Success, let requestorPublicAddress = response?.publicAddress else{
-                completion(error)
-                return
-            }
-            self.getPublicAddress(fioAddress: requesteeFioName, tokenCode: "FIO", completion: { (response, error) in
-                guard error.kind == .Success, let requesteePublicAddress = response?.publicAddress else{
-                    completion(error)
-                    return
-                }
-                self.requestFunds(requestorAccountName: requestorPublicAddress, requesteeAccountName: requesteePublicAddress, chain: "FIO", asset: asset, amount: amount, memo: memo
-                    , completion: { (errRequestFunds) in
-                        completion(errRequestFunds)
-                })
-            })
-        }
-    }
-    
-    private func requestFunds (requestorAccountName:String, requesteeAccountName:String, chain:String, asset:String, amount:Float, memo:String, completion: @escaping ( _ error:FIOError?) -> ()) {
-        let timestamp = NSDate().timeIntervalSince1970
-        self.requestFunds.requestFunds(requestorAccountName: requestorAccountName, requestId: Int(timestamp.rounded()) ,requesteeAccountName: requesteeAccountName, chain: chain, asset: asset, amount: amount, memo: memo) { (error) in
-            completion(error)
-        }
-    }
-
     private struct RegisterName: Codable {
         let fioName:String
         
@@ -287,12 +241,6 @@ public class FIOSDK: NSObject {
                 completion(error)
             }
         })
-    }
-
-    public func rejectRequestFunds (requesteeAccountName:String, fioAppId:Int, memo:String, completion: @escaping ( _ error:FIOError?) -> ()) {
-        self.requestFunds.rejectFundsRequest(requesteeAccountName: requesteeAccountName, fioAppId: fioAppId, memo: memo) { (err) in
-            completion(err)
-        }
     }
 
     public func cancelRequestFunds (requestorAccountName:String, requestId:Int, memo:String, completion: @escaping ( _ error:FIOError?) -> ()) {
@@ -665,26 +613,30 @@ public class FIOSDK: NSObject {
         
         /// PendingFioRequestsResponse.request DTO
         public struct PendingFioRequest: Codable{
-            public let fioObtId: String
+            public let fundsRequestId: String
             public let fromFioAddress: String
             public let toFioAddress: String
             public let toPublicAddress: String
             public let amount: String
-            public let chain: String
-            public let metadata: String
-            public let status: RequestStatus
+            public let tokenCode: String
+            public let chainCode: String
+            public let metadata: MetaData
             public let timeStamp: Date
             
             enum CodingKeys: String, CodingKey{
-                case fioObtId = "fio_obt_id"
+                case fundsRequestId = "fio_funds_request_id"
                 case fromFioAddress = "from_fio_address"
                 case toFioAddress = "to_fio_address"
                 case toPublicAddress = "to_pub_address"
                 case amount
-                case chain
+                case tokenCode = "token_code"
+                case chainCode = "chain_code"
                 case metadata
-                case status
                 case timeStamp = "time_stamp"
+            }
+            
+            public struct MetaData: Codable{
+                public let memo: String
             }
         }
     }
@@ -886,5 +838,168 @@ public class FIOSDK: NSObject {
         }
         
         task.resume()
+    }
+    
+    
+    public struct RequestFundsRequest: Codable{
+        public let from: String
+        public let to: String
+        public let toPublicAddress: String
+        public let amount: String
+        public let tokenCode: String
+        public let metadata: String //TODO: changes this type to -> MetaData
+        
+        enum CodingKeys: String, CodingKey{
+            case from = "from_fio_address"
+            case to = "to_fio_address"
+            case toPublicAddress = "to_pub_address"
+            case amount
+            case tokenCode = "token_code"
+            case metadata
+        }
+        
+        public struct MetaData: Codable{
+            public var memo: String?
+            public var hash: String?
+            public var offlineUrl: String?
+            
+            public init(memo: String?, hash: String?, offlineUrl: String?){
+                self.memo = memo
+                self.hash = hash
+                self.offlineUrl = offlineUrl
+            }
+            
+            enum CodingKeys: String, CodingKey {
+                case memo
+                case hash
+                case offlineUrl = "offline_url"
+            }
+        }
+    }
+    
+    public struct RequestFundsResponse: Codable{
+        public var fundsRequestId: String
+        
+        enum CodingKeys: String, CodingKey {
+            case fundsRequestId = "fio_funds_request_id"
+        }
+    }
+    
+    
+    /// Creates a new funds request.
+    /// to read further information about the API visit https://stealth.atlassian.net/wiki/spaces/DEV/pages/53280776/API#API-/new_funds_request-Createnewfundsrequest
+    ///
+    /// - Parameters:
+    ///   - fromFioAddress: FIO Address of user sending funds, i.e. requestee
+    ///   - toFioAddress: FIO Address of user receiving funds, i.e. requestor
+    ///   - publicAddress: Public address on other blockchain of user receiving funds.
+    ///   - amount: Amount requested.
+    ///   - tokenCode: Code of the token represented in Amount requested, i.e. ETH
+    ///   - metadata: Contains the: memo, hash, offlineUrl
+    ///   - completion: The completion handler containing the result
+    public func requestFunds(from fromFioAddress:String, to toFioAddress: String, toPublicAddress publicAddress: String, amount: String, tokenCode: String, metadata: RequestFundsRequest.MetaData, completion: @escaping ( _ response: RequestFundsResponse?, _ error:FIOError? ) -> ()) {
+        let importedPk = try! PrivateKey(keyString: getSystemPrivateKey())
+        let data = RequestFundsRequest(from: fromFioAddress, to: toFioAddress, toPublicAddress: publicAddress, amount: amount, tokenCode: tokenCode, metadata: "")
+        
+        
+        var jsonString: String
+        do{
+            let jsonData:Data = try JSONEncoder().encode(data)
+            jsonString = String(data: jsonData, encoding: .utf8)!
+            print(jsonString)
+        }catch {
+            completion (nil, FIOError(kind: .Failure, localizedDescription: "Json for input data not wrapping correctly"))
+            return
+        }
+        
+        let abi = try! AbiJson(code: "fio.system", action: "newfndsreq", json: jsonString)
+        
+        TransactionUtil.pushTransaction(abi: abi, account: "fio.system", privateKey: importedPk!, completion: { (result, error) in
+            
+            guard let result = result, error == nil else {
+                if (error! as NSError).code == RPCErrorResponse.ErrorCode {
+                    let errDescription = "error"
+                    print (errDescription)
+                    completion(nil, FIOError.init(kind: FIOError.ErrorKind.Failure, localizedDescription: errDescription))
+                } else {
+                    let errDescription = ("other error: \(String(describing: error?.localizedDescription))")
+                    print (errDescription)
+                    completion(nil, FIOError.init(kind: FIOError.ErrorKind.Failure, localizedDescription: errDescription))
+                }
+                return
+            }
+            print("Ok. newfndsreq, Txid: \(result.transactionId)")
+            guard let responseString = result.processed?.actionTraces.first?.receipt.response.value as? String, let responseData = responseString.data(using: .utf8), let response = try? JSONDecoder().decode(RequestFundsResponse.self, from: responseData) else{
+                completion(nil, FIOError.init(kind: .Failure, localizedDescription: "Error parsing the response"))
+                return
+            }
+            completion(response, FIOError.init(kind: FIOError.ErrorKind.Success, localizedDescription: ""))
+        })
+    }
+    
+    public struct RejectFundsRequestResponse: Codable{
+        
+        public var status: Status
+        
+        public enum Status: String, Codable{
+            case rejected = "request_rejected", unknown
+        }
+        
+        
+    }
+    
+    /// Reject funds request.
+    /// To read further infomation about this API visit https://stealth.atlassian.net/wiki/spaces/DEV/pages/53280776/API#API-/reject_funds_request-Rejectfundsrequest
+    ///
+    /// - Parameters:
+    ///   - fundsRequestId: ID of that fund request.
+    ///   - completion: The completion handler containing the result
+    public func rejectFundsRequest(fundsRequestId: String, completion: @escaping(_ response: RejectFundsRequestResponse?,_ :FIOError) -> ()){
+        let importedPk = try! PrivateKey(keyString: getSystemPrivateKey())
+        
+        var jsonString: String
+        do{
+            let jsonData:Data = try JSONEncoder().encode(["fio_funds_request_id": fundsRequestId])
+            jsonString = String(data: jsonData, encoding: .utf8)!
+        }catch {
+            completion (nil, FIOError(kind: .Failure, localizedDescription: "Json for input data not wrapping correctly"))
+            return
+        }
+        
+        let abi = try! AbiJson(code: "fio.system", action: "rejctfndsreq", json: jsonString)
+        
+        TransactionUtil.pushTransaction(abi: abi, account: "fio.system", privateKey: importedPk!, completion: { (result, error) in
+            
+            guard let result = result, error == nil else {
+                if (error! as NSError).code == RPCErrorResponse.ErrorCode {
+                    let errDescription = "error"
+                    print (errDescription)
+                    completion(nil, FIOError.init(kind: FIOError.ErrorKind.Failure, localizedDescription: errDescription))
+                } else {
+                    let errDescription = ("other error: \(String(describing: error?.localizedDescription))")
+                    print (errDescription)
+                    completion(nil, FIOError.init(kind: FIOError.ErrorKind.Failure, localizedDescription: errDescription))
+                }
+                return
+            }
+            print("Ok. newfndsreq, Txid: \(result.transactionId)")
+            guard let responseString = result.processed?.actionTraces.first?.receipt.response.value as? String, let responseData = responseString.data(using: .utf8), let response = try? JSONDecoder().decode(RejectFundsRequestResponse.self, from: responseData) else{
+                completion(nil, FIOError.init(kind: .Failure, localizedDescription: "Error parsing the response"))
+                return
+            }
+            
+            guard response.status == .rejected else {
+                completion(nil, FIOError.init(kind: .Failure, localizedDescription: "The request couldn't rejected"))
+                return
+            }
+            
+            completion(response, FIOError.init(kind: FIOError.ErrorKind.Success, localizedDescription: ""))
+        })
+    }
+}
+
+extension FIOSDK.RejectFundsRequestResponse.Status{
+    public init(from decoder: Decoder) throws {
+        self = try FIOSDK.RejectFundsRequestResponse.Status(rawValue: decoder.singleValueContainer().decode(RawValue.self)) ?? .unknown
     }
 }

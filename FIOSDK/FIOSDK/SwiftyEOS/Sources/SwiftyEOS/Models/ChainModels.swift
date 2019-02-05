@@ -208,9 +208,20 @@ struct TableRowRequestParam: Codable {
     var netUsageWords: UInt64 = 0
 }
 
+@objcMembers class TransactionResultProcessedTrace: NSObject, Codable{
+    var receipt: TransactionResultProcessedTraceReceipt
+}
+
+class TransactionResultProcessedTraceReceipt: NSObject, Codable{
+    var receiver: String = ""
+    var response: AnyCodable
+}
+
 @objcMembers class TransactionResultProcessed: NSObject, Codable {
     var id: String = ""
     var receipt: TransactionResultProcessedReceipt?
+    var actionTraces: [TransactionResultProcessedTrace]
+    var netUsage: UInt64 = 0
 }
 
 @objcMembers class TransactionResult: NSObject, Codable {
