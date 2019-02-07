@@ -279,38 +279,6 @@ public class FIOSDK: NSObject {
         })
     }
     
-    public func getRequestorHistoryByAddress (address:String, currencyCode:String, maxItemsReturned:Int, completion: @escaping ( _ requests:[FIOSDK.Request] , _ error:FIOError?) -> ()) {
-        self.getFioNames(publicAddress: address) { (response, error) in
-            guard error?.kind == .Success, let responseAddress = response?.addresses.first?.address else{
-                completion([FIOSDK.Request](), error)
-                return
-            }
-            self.getRequestorHistoryByFioName(fioName: responseAddress, currencyCode: currencyCode
-                , maxItemsReturned: maxItemsReturned
-                , completion: { (responses, err) in
-                    completion(responses,err)
-            })
-        }
-    }
-    
-    public func getRequestorHistoryByFioName (fioName:String, currencyCode:String, maxItemsReturned:Int, completion: @escaping ( _ requests:[FIOSDK.Request] , _ error:FIOError?) -> ()) {
-        self.getPublicAddress(fioAddress: fioName, tokenCode: "FIO") { (response, error) in
-            guard error.kind == .Success, let publicAddress = response?.publicAddress else{
-                completion([FIOSDK.Request](), error)
-                return
-            }
-            self.requestFunds.getRequestorHistory(requestorAccountName: publicAddress, currencyCode: currencyCode, maxItemsReturned: maxItemsReturned
-                , completion: { (response, error) in
-                    
-                    guard error?.kind == .Success else{
-                        completion([FIOSDK.Request](),error)
-                        return
-                    }
-                    
-                    completion(response, error)
-            })
-        }
-    }
     
     private func createAccountAddPermissions(completion: @escaping ( _ newAccountName:String, _ error:FIOError?) -> ()) {
         getValidNewAccountName { (newAccountName, error) in
@@ -887,7 +855,9 @@ public class FIOSDK: NSObject {
     
     
     /// Creates a new funds request.
-    /// to read further information about the API visit https://stealth.atlassian.net/wiki/spaces/DEV/pages/53280776/API#API-/new_funds_request-Createnewfundsrequest
+    /// To read further infomation about this [visit the API specs] [1]
+    ///
+    ///    [1]: https://stealth.atlassian.net/wiki/spaces/DEV/pages/53280776/API#API-/new_funds_request-Createnewfundsrequest        "api specs"
     ///
     /// - Parameters:
     ///   - fromFioAddress: FIO Address of user sending funds, i.e. requestee
@@ -949,7 +919,9 @@ public class FIOSDK: NSObject {
     }
     
     /// Reject funds request.
-    /// To read further infomation about this API visit https://stealth.atlassian.net/wiki/spaces/DEV/pages/53280776/API#API-/reject_funds_request-Rejectfundsrequest
+    /// To read further infomation about this [visit the API specs] [1]
+    ///
+    ///    [1]: https://stealth.atlassian.net/wiki/spaces/DEV/pages/53280776/API#API-/reject_funds_request-Rejectfundsrequest        "api specs"
     ///
     /// - Parameters:
     ///   - fundsRequestId: ID of that fund request.
@@ -995,6 +967,95 @@ public class FIOSDK: NSObject {
             
             completion(response, FIOError.init(kind: FIOError.ErrorKind.Success, localizedDescription: ""))
         })
+    }
+    
+    
+    public struct SentFioRequestResponse: Codable{
+        public let publicAddress: String
+        public let requests: [SentFioRequest]
+        
+        enum CodingKeys: String, CodingKey{
+            case publicAddress = "fio_pub_address"
+            case requests
+        }
+        
+        /// PendingFioRequestsResponse.request DTO
+        public struct SentFioRequest: Codable{
+            public let fundsRequestId: String
+            public let fromFioAddress: String
+            public let toFioAddress: String
+            public let toPublicAddress: String
+            public let amount: String
+            public let tokenCode: String
+            public let chainCode: String
+            public let metadata: MetaData
+            public let timeStamp: Date
+            public let status: String
+            
+            enum CodingKeys: String, CodingKey{
+                case fundsRequestId = "fio_funds_request_id"
+                case fromFioAddress = "from_fio_address"
+                case toFioAddress = "to_fio_address"
+                case toPublicAddress = "to_pub_address"
+                case amount
+                case tokenCode = "token_code"
+                case chainCode = "chain_code"
+                case metadata
+                case timeStamp = "time_stamp"
+                case status
+            }
+            
+            public struct MetaData: Codable{
+                public let memo: String
+            }
+        }
+    }
+    
+    
+    /// Sent requests call polls for any requests sent be sender.
+    /// To read further infomation about this [visit the API specs] [1]
+    ///
+    ///    [1]: https://stealth.atlassian.net/wiki/spaces/DEV/pages/53280776/API#API-/get_sent_fio_requests-GetFIORequestssentout        "api specs"
+    /// - Parameters:
+    ///   - publicAddress: FIO public address of owner.
+    ///   - completion: The completion result
+    public func getSentFioRequest(publicAddress: String, completion: @escaping (_ response: SentFioRequestResponse?, _ error: FIOError) -> ()){
+        
+        var jsonData: Data
+        
+        do{
+            jsonData = try JSONEncoder().encode(["fio_pub_address": publicAddress])
+        }catch {
+            completion (nil, FIOError(kind: .Failure, localizedDescription: ""))
+            return
+        }
+        
+        let url = URL(string: "\(getMockURI() != nil ? getMockURI()! : getURI())/chain/get_sent_fio_requests")!
+        
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.httpBody = jsonData
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        
+        let task = URLSession.shared.dataTask(with: request) { data, response, error in
+            guard let data = data, error == nil else {
+                print(error?.localizedDescription ?? "No data")
+                completion(nil, FIOError(kind: .NoDataReturned, localizedDescription: ""))
+                return
+            }
+            do {
+                let decoder = JSONDecoder()
+                decoder.dateDecodingStrategy = .iso8601
+                let result = try decoder.decode(SentFioRequestResponse.self, from: data)
+                completion(result, FIOError(kind: .Success, localizedDescription: ""))
+                
+            }catch let error{
+                let err = FIOError(kind: .Failure, localizedDescription: error.localizedDescription)
+                completion(nil, err)
+            }
+        }
+        
+        task.resume()
     }
 }
 
