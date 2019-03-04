@@ -53,11 +53,11 @@ class FIOSDKTests: XCTestCase {
 
         let expectation = XCTestExpectation(description: "testRegisterFIOName")
 
-        FIOSDK.sharedInstance().register(fioName: requesteeFioName, completion: {error in ()
+        FIOSDK.sharedInstance().registerFioName(fioName: requesteeFioName, publicReceiveAddresses: [:] , completion: {error in ()
             XCTAssert((error?.kind == FIOError.ErrorKind.Success), "registerFIOName NOT SUCCESSFUL")
             print (self.requesteeFioName)
 
-            FIOSDK.sharedInstance().register(fioName: self.requestorFioName, completion: {error in ()
+            FIOSDK.sharedInstance().registerFioName(fioName: self.requestorFioName,publicReceiveAddresses: [:], completion: {error in ()
                 XCTAssert((error?.kind == FIOError.ErrorKind.Success), "registerFIOName NOT SUCCESSFUL" + (error?.localizedDescription ?? "") )
                 print(error)
                 print(self.requestorFioName)
@@ -258,7 +258,7 @@ class FIOSDKTests: XCTestCase {
         let fioName = "sha\(Int(timestamp.rounded())).brd"
         let expectation = XCTestExpectation(description: "testRegisterFIONameWithNewValueShouldRegister")
         
-        FIOSDK.sharedInstance().register(fioName: fioName, completion: {error in ()
+        FIOSDK.sharedInstance().registerFioName(fioName: fioName, publicReceiveAddresses: [:], completion: {error in ()
             XCTAssert((error?.kind == FIOError.ErrorKind.Success), "registerFIOName NOT SUCCESSFUL")
             expectation.fulfill()
         })
@@ -270,15 +270,15 @@ class FIOSDKTests: XCTestCase {
         let timestamp = NSDate().timeIntervalSince1970
         let fioName = "sha\(Int(timestamp.rounded())).brd"
         let expectation = XCTestExpectation(description: "testRegisterFIONameWithAlreadyRegisteredValueShouldFail")
-        
-        FIOSDK.sharedInstance().register(fioName: fioName, completion: {error in ()
+
+        FIOSDK.sharedInstance().registerFioName(fioName: fioName, publicReceiveAddresses: [:], completion: {error in ()
             XCTAssert((error?.kind == FIOError.ErrorKind.Success), "registerFIOName NOT SUCCESSFUL")
-            FIOSDK.sharedInstance().register(fioName: fioName, completion: {error in ()
+            FIOSDK.sharedInstance().registerFioName(fioName: fioName, publicReceiveAddresses: [:], completion: {error in ()
                 XCTAssert((error?.kind == FIOError.ErrorKind.Failure), "registerFIOName NOT SUCCESSFUL")
                 expectation.fulfill()
             })
         })
-        
+
         wait(for: [expectation], timeout: TIMEOUT)
     }
     
