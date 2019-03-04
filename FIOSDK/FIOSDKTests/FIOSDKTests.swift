@@ -41,7 +41,9 @@ class FIOSDKTests: XCTestCase {
            // _ = FIOSDK.sharedInstance(accountName: "fioname11111", privateKey: "5K2HBexbraViJLQUJVJqZc42A8dxkouCmzMamdrZsLHhUHv77jF", publicKey: "EOS5GpUwQtFrfvwqxAv24VvMJFeMHutpQJseTz8JYUBfZXP2zR8VY",systemPrivateKey:"5KBX1dwHME4VyuUss2sYM25D5ZTDvyYrbEz37UJqwAVAsR4tGuY", systemPublicKey:"EOS7isxEua78KPVbGzKemH4nj2bWE52gqj8Hkac3tc7jKNvpfWzYS", url: "http://18.223.14.244:8889/v1")
             
            // _ = FIOSDK.sharedInstance(accountName: "fio.system", privateKey: "5KBX1dwHME4VyuUss2sYM25D5ZTDvyYrbEz37UJqwAVAsR4tGuY", publicKey: "EOS7isxEua78KPVbGzKemH4nj2bWE52gqj8Hkac3tc7jKNvpfWzYS",systemPrivateKey:"5KBX1dwHME4VyuUss2sYM25D5ZTDvyYrbEz37UJqwAVAsR4tGuY", systemPublicKey:"EOS7isxEua78KPVbGzKemH4nj2bWE52gqj8Hkac3tc7jKNvpfWzYS", url: "http://34.220.213.187:8889/v1")
-            _ = FIOSDK.sharedInstance(accountName: "fioname11111", privateKey: "5K2HBexbraViJLQUJVJqZc42A8dxkouCmzMamdrZsLHhUHv77jF", publicKey: "EOS5GpUwQtFrfvwqxAv24VvMJFeMHutpQJseTz8JYUBfZXP2zR8VY",systemPrivateKey:"5KBX1dwHME4VyuUss2sYM25D5ZTDvyYrbEz37UJqwAVAsR4tGuY", systemPublicKey:"EOS7isxEua78KPVbGzKemH4nj2bWE52gqj8Hkac3tc7jKNvpfWzYS", url: "http://18.210.240.10:8889/v1", mockUrl: "http://localhost:8080")
+//            _ = FIOSDK.sharedInstance(accountName: "fioname11111", privateKey: "5K2HBexbraViJLQUJVJqZc42A8dxkouCmzMamdrZsLHhUHv77jF", publicKey: "EOS5GpUwQtFrfvwqxAv24VvMJFeMHutpQJseTz8JYUBfZXP2zR8VY",systemPrivateKey:"5KBX1dwHME4VyuUss2sYM25D5ZTDvyYrbEz37UJqwAVAsR4tGuY", systemPublicKey:"EOS7isxEua78KPVbGzKemH4nj2bWE52gqj8Hkac3tc7jKNvpfWzYS", url: "http://18.210.240.10:8889/v1", mockUrl: "http://localhost:8080")
+            _ = FIOSDK.sharedInstance(accountName: "fioname11111", privateKey: "5K2HBexbraViJLQUJVJqZc42A8dxkouCmzMamdrZsLHhUHv77jF", publicKey: "EOS5GpUwQtFrfvwqxAv24VvMJFeMHutpQJseTz8JYUBfZXP2zR8VY",systemPrivateKey:"5KBX1dwHME4VyuUss2sYM25D5ZTDvyYrbEz37UJqwAVAsR4tGuY", systemPublicKey:"EOS7isxEua78KPVbGzKemH4nj2bWE52gqj8Hkac3tc7jKNvpfWzYS", url: "http://34.213.160.31:8889/v1", mockUrl: "http://localhost:8080")
+            
         }
 
         else{
@@ -51,13 +53,11 @@ class FIOSDKTests: XCTestCase {
 
         let expectation = XCTestExpectation(description: "testRegisterFIOName")
 
-        let publicReceiveAddresses:Dictionary<String,String> = ["ETH":requesteeAddress]
-        FIOSDK.sharedInstance().registerFioName(fioName: requesteeFioName, publicReceiveAddresses: publicReceiveAddresses, completion: {error in ()
+        FIOSDK.sharedInstance().register(fioName: requesteeFioName, completion: {error in ()
             XCTAssert((error?.kind == FIOError.ErrorKind.Success), "registerFIOName NOT SUCCESSFUL")
             print (self.requesteeFioName)
 
-            let receiveAddresses:Dictionary<String,String> = ["ETH":self.requestorAddress]
-            FIOSDK.sharedInstance().registerFioName(fioName: self.requestorFioName, publicReceiveAddresses: receiveAddresses, completion: {error in ()
+            FIOSDK.sharedInstance().register(fioName: self.requestorFioName, completion: {error in ()
                 XCTAssert((error?.kind == FIOError.ErrorKind.Success), "registerFIOName NOT SUCCESSFUL" + (error?.localizedDescription ?? "") )
                 print(error)
                 print(self.requestorFioName)
@@ -239,6 +239,47 @@ class FIOSDKTests: XCTestCase {
         }
         
         wait(for: [expRequestFunds, expGetSentRequest, expRejectRequest], timeout: TIMEOUT)
+    }
+    
+    func testGenerateFIOPublicAddressWithProperValuesOutputCorrectResult() {
+        let publicKey = "EOS6cDpi7vPnvRwMEdXtLnAmFwygaQ8CzD7vqKLBJ2GfgtHBQ4PPy"
+        let expectedOutput = "cp3r4smnrq4l"
+        XCTAssertEqual(FIOPublicAddress.generate(withPublicKey: publicKey), expectedOutput)
+    }
+    
+    func testGenerateFIOPublicAddressWithEmptyPubKeyOutputEmptyResult() {
+        let publicKey = ""
+        let expectedOutput = ""
+        XCTAssertEqual(FIOPublicAddress.generate(withPublicKey: publicKey), expectedOutput)
+    }
+    
+    func testRegisterFIONameWithNewValueShouldRegister() {
+        let timestamp = NSDate().timeIntervalSince1970
+        let fioName = "sha\(Int(timestamp.rounded())).brd"
+        let expectation = XCTestExpectation(description: "testRegisterFIONameWithNewValueShouldRegister")
+        
+        FIOSDK.sharedInstance().register(fioName: fioName, completion: {error in ()
+            XCTAssert((error?.kind == FIOError.ErrorKind.Success), "registerFIOName NOT SUCCESSFUL")
+            expectation.fulfill()
+        })
+        
+        wait(for: [expectation], timeout: TIMEOUT)
+    }
+    
+    func testRegisterFIONameWithAlreadyRegisteredValueShouldFail() {
+        let timestamp = NSDate().timeIntervalSince1970
+        let fioName = "sha\(Int(timestamp.rounded())).brd"
+        let expectation = XCTestExpectation(description: "testRegisterFIONameWithAlreadyRegisteredValueShouldFail")
+        
+        FIOSDK.sharedInstance().register(fioName: fioName, completion: {error in ()
+            XCTAssert((error?.kind == FIOError.ErrorKind.Success), "registerFIOName NOT SUCCESSFUL")
+            FIOSDK.sharedInstance().register(fioName: fioName, completion: {error in ()
+                XCTAssert((error?.kind == FIOError.ErrorKind.Failure), "registerFIOName NOT SUCCESSFUL")
+                expectation.fulfill()
+            })
+        })
+        
+        wait(for: [expectation], timeout: TIMEOUT)
     }
     
 }
