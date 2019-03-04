@@ -212,7 +212,7 @@ public class FIOSDK: NSObject {
             return
         }
         
-        let actor = FIOPublicAddress.generate(withPublicKey: getSystemPublicKey())
+        let actor = AccountNameGenerator.run(withPublicKey: getSystemPublicKey())
         let toSerialize = SerializeJsonRequest(action: "registername", register: RegisterName(fioName: fioName, actor: actor))
         
         let url = getURI() + "/chain/serialize_json"
@@ -221,7 +221,7 @@ public class FIOSDK: NSObject {
                 do {
                     let result = try JSONDecoder().decode(SerializeJsonResponse.self, from: data)
                     print(result)
-                    TransactionUtil.signedTransaction(code: "fio.system", action: "registername", data: result.json, account: actor, privateKey: importedPk, completion: { (signedTx, error) in
+                    TransactionUtil.packAndSignTransaction(code: "fio.system", action: "registername", data: result.json, account: actor, privateKey: importedPk, completion: { (signedTx, error) in
                         if error != nil {
                             if (error! as NSError).code == RPCErrorResponse.ErrorCode {
                                 let errDescription = "error"
@@ -1112,45 +1112,4 @@ extension FIOSDK.RejectFundsRequestResponse.Status{
     public init(from decoder: Decoder) throws {
         self = try FIOSDK.RejectFundsRequestResponse.Status(rawValue: decoder.singleValueContainer().decode(RawValue.self)) ?? .unknown
     }
-}
-
-
-extension TransactionUtil {
-    
-    static func signedTransaction(code: String, action: String, data: String, account: String, privateKey: PrivateKey, completion: @escaping (_ signedTransaction: SignedTransaction?, _ error: Error?) -> ()) {
-        print("Signing transaction")
-        EOSRPC.sharedInstance.chainInfo { (chainInfo, error) in
-            if error != nil {
-                completion(nil, error)
-                return
-            }
-            EOSRPC.sharedInstance.getBlock(blockNumOrId: "\(chainInfo!.lastIrreversibleBlockNum)" as AnyObject, completion: { (blockInfo, error) in
-                if error != nil {
-                    completion(nil, error)
-                    return
-                }
-                var actions: [Action] = []
-                let auth = Authorization(actor: account, permission: "active")
-                
-                let action = Action(account: code, name: action, authorization: [auth], data: data)
-                actions.append(action)
-                print("Action")
-                print(action)
-                let rawTx = Transaction(blockInfo: blockInfo!, actions: actions)
-                print("Transaction")
-                print(rawTx)
-                var tx = PackedTransaction(transaction: rawTx, compression: "none")
-                print("PackedTransaction before sign")
-                print(tx)
-                tx.sign(pk: privateKey, chainId: chainInfo!.chainId!)
-                print("PackedTransaction after sign")
-                print(tx)
-                let signedTx = SignedTransaction(packedTx: tx)
-                print("Result")
-                print(signedTx)
-                completion(signedTx, nil)
-            })
-        }
-    }
-    
 }

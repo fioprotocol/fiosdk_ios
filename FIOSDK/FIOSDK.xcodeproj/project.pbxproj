@@ -52,8 +52,9 @@
 		0245A5B12193BF6900C5A870 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0245A5B02193BF6900C5A870 /* Extensions.swift */; };
 		02B93140218A280300877149 /* AccountUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02B9313F218A280200877149 /* AccountUtil.swift */; };
 		02BAEC522191F53700B251B4 /* RequestFunds.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02BAEC512191F53700B251B4 /* RequestFunds.swift */; };
-		285649522229C031006E2533 /* FIOPublicAddress.swift in Sources */ = {isa = PBXBuildFile; fileRef = 285649512229C031006E2533 /* FIOPublicAddress.swift */; };
+		285649522229C031006E2533 /* AccountNameGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 285649512229C031006E2533 /* AccountNameGenerator.swift */; };
 		285649542229C3AE006E2533 /* HTTPHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 285649532229C3AE006E2533 /* HTTPHelper.swift */; };
+		28564957222DBBF2006E2533 /* TransactionUtil+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28564956222DBBF2006E2533 /* TransactionUtil+Extensions.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -116,8 +117,9 @@
 		0245A5B02193BF6900C5A870 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		02B9313F218A280200877149 /* AccountUtil.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AccountUtil.swift; sourceTree = "<group>"; };
 		02BAEC512191F53700B251B4 /* RequestFunds.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestFunds.swift; sourceTree = "<group>"; };
-		285649512229C031006E2533 /* FIOPublicAddress.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FIOPublicAddress.swift; sourceTree = "<group>"; };
+		285649512229C031006E2533 /* AccountNameGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountNameGenerator.swift; sourceTree = "<group>"; };
 		285649532229C3AE006E2533 /* HTTPHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HTTPHelper.swift; sourceTree = "<group>"; };
+		28564956222DBBF2006E2533 /* TransactionUtil+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TransactionUtil+Extensions.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -423,8 +425,9 @@
 			children = (
 				0203C598217A4EC90054FA10 /* Utilities.swift */,
 				0245A5B02193BF6900C5A870 /* Extensions.swift */,
-				285649512229C031006E2533 /* FIOPublicAddress.swift */,
+				285649512229C031006E2533 /* AccountNameGenerator.swift */,
 				285649532229C3AE006E2533 /* HTTPHelper.swift */,
+				28564956222DBBF2006E2533 /* TransactionUtil+Extensions.swift */,
 			);
 			path = Core;
 			sourceTree = "<group>";
@@ -598,8 +601,9 @@
 				0203C582217A487A0054FA10 /* Transaction.swift in Sources */,
 				0203C599217A4EC90054FA10 /* Utilities.swift in Sources */,
 				02BAEC522191F53700B251B4 /* RequestFunds.swift in Sources */,
-				285649522229C031006E2533 /* FIOPublicAddress.swift in Sources */,
+				285649522229C031006E2533 /* AccountNameGenerator.swift in Sources */,
 				0203C589217A487A0054FA10 /* HistoryRouter.swift in Sources */,
+				28564957222DBBF2006E2533 /* TransactionUtil+Extensions.swift in Sources */,
 				02B93140218A280300877149 /* AccountUtil.swift in Sources */,
 				0203C592217A487A0054FA10 /* SEWallet.swift in Sources */,
 				0203C57E217A487A0054FA10 /* base58.c in Sources */,

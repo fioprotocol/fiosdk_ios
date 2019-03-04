@@ -241,16 +241,18 @@ class FIOSDKTests: XCTestCase {
         wait(for: [expRequestFunds, expGetSentRequest, expRejectRequest], timeout: TIMEOUT)
     }
     
-    func testGenerateFIOPublicAddressWithProperValuesOutputCorrectResult() {
+    func testGenerateAccountNameGeneratorWithProperValuesOutputCorrectResult() {
         let publicKey = "EOS6cDpi7vPnvRwMEdXtLnAmFwygaQ8CzD7vqKLBJ2GfgtHBQ4PPy"
         let expectedOutput = "cp3r4smnrq4l"
-        XCTAssertEqual(FIOPublicAddress.generate(withPublicKey: publicKey), expectedOutput)
+        let accountName = AccountNameGenerator.run(withPublicKey: publicKey)
+        XCTAssertEqual(accountName, expectedOutput)
     }
     
-    func testGenerateFIOPublicAddressWithEmptyPubKeyOutputEmptyResult() {
+    func testGenerateAccountNameGeneratorWithEmptyPubKeyOutputEmptyResult() {
         let publicKey = ""
         let expectedOutput = ""
-        XCTAssertEqual(FIOPublicAddress.generate(withPublicKey: publicKey), expectedOutput)
+        let accountName = AccountNameGenerator.run(withPublicKey: publicKey)
+        XCTAssertEqual(accountName, expectedOutput)
     }
     
     func testRegisterFIONameWithNewValueShouldRegister() {

@@ -9,16 +9,19 @@
 import Foundation
 
 /**
- This class is responsible for the hash function. https://stealth.atlassian.net/wiki/spaces/DEV/pages/130482236/Hash+function+definition
+ * This class is responsible for account name API parameter https://stealth.atlassian.net/wiki/spaces/DEV/pages/53280776/API#API-Generatingactor, which is a generated hash following this https://stealth.atlassian.net/wiki/spaces/DEV/pages/130482236/Hash+function+definition specs
+ * Account name is also called actor or FIO public address
  */
-struct FIOPublicAddress {
+struct AccountNameGenerator {
     
     /**
-     * Generate FIO Public Address with given public key.
-     * - Parameter withPublicKey: A valid public key to derive the FIO Public Address from.
-     * - Return: FIO Public Address string value.
+     * Generate account name with given public key based on a hash function.
+     * If the public key has less than 4 chars its considered invalid and an empty value will be returned.
+     * This function will also return an empty string in the case of an invalid base58 generation from the public key.
+     * - Parameter withPublicKey: A valid public key to derive the account name from.
+     * - Return: account name value.
      */
-    public static func generate(withPublicKey publicKey: String) -> String {
+    public static func run(withPublicKey publicKey: String) -> String {
         guard publicKey.count > 4 else { return "" }
         //STEP 1 AND STEP 2 are not needed we receive the public key
         var pubKey = publicKey
