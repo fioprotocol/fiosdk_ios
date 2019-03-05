@@ -12,6 +12,8 @@ public struct FIOError: Error {
     public enum ErrorKind {
         case Success
         case NoDataReturned
+        case FailedToUsePrivKey
+        case MalformedRequest
         case Failure
     }
     public let kind: ErrorKind

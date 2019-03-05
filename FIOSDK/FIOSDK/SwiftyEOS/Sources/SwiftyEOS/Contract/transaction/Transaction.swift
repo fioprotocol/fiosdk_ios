@@ -138,6 +138,13 @@ struct SignedTransaction: Codable {
         packedContextFreeData = ""
         packedTrx = packedTx.packedTrx
     }
+    
+    enum CodingKeys: String, CodingKey {
+        case compression
+        case signatures
+        case packedContextFreeData = "packed_context_free_data"
+        case packedTrx = "packed_trx"
+    }
 }
 
 struct DataWriter {
@@ -217,6 +224,7 @@ struct DataWriter {
         pushVariableUInt(value: CUnsignedInt(actions.count))
         for action in actions {
             pushLong(value: action.account.eosTypeNameToLong())
+            pushChar(value: 0x00) // MAGIC ZERO HACK
             pushLong(value: action.name.eosTypeNameToLong())
             pushPermission(permissions: action.authorization)
             if action.data != nil {

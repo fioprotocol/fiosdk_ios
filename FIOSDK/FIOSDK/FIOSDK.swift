@@ -170,76 +170,126 @@ public class FIOSDK: NSObject {
         return self.publicKey
     }
     
+    //MARK: - Register FIO Name Models
     private struct RegisterName: Codable {
         let fioName:String
+        let actor:String
         
         enum CodingKeys: String, CodingKey {
-            case fioName = "fio_name"
+            case fioName = "fioname"
+            case actor = "actor"
         }
     }
     
-    private func register(fioName:String, newAccountName:String, publicReceiveAddresses:Dictionary<String,String>, completion: @escaping ( _ error:FIOError?) -> ()) {
-        let importedPk = try! PrivateKey(keyString: getSystemPrivateKey())
-        let data = RegisterName(fioName: fioName)
+    private struct SerializeJsonRequest: Codable {
+        let action: String
+        let register: RegisterName
         
-        var jsonString: String
-        do{
-            let jsonData:Data = try JSONEncoder().encode(data)
-            jsonString = String(data: jsonData, encoding: .utf8)!
-            print(jsonString)
-        }catch {
-            completion (FIOError(kind: .Failure, localizedDescription: "Json for input data not wrapping correctly"))
+        enum CodingKeys: String, CodingKey {
+            case action
+            case register = "json"
+        }
+    }
+    
+    private struct SerializeJsonResponse: Codable {
+        let json: String
+        
+        enum CodingKeys: String, CodingKey {
+            case json = "serialized_json"
+        }
+    }
+
+    //MARK: -
+    
+    /**
+     * This function should be called to register a new FIO Address (name)
+     * - Parameter fioName: A string to register as FIO Address
+     * - Parameter completion: A callback function that is called when request is finished either with success or failure. Check FIOError.kind to determine if is a success or a failure.
+     */
+    private func register(fioName:String, completion: @escaping ( _ error:FIOError?) -> ()) {
+        guard let importedPk = try! PrivateKey(keyString: getSystemPrivateKey()) else {
+            completion(FIOError(kind: .FailedToUsePrivKey, localizedDescription: "Failed to retrieve private key."))
             return
         }
         
-        let abi = try! AbiJson(code: "fio.system", action: "rgstrfioname", json: jsonString)
-        print("Called FIOSDK action rgstrfioname")
-        TransactionUtil.pushTransaction(abi: abi, account: "fio.system", privateKey: importedPk!, completion: { (result, error) in
-            if error != nil {
-                if (error! as NSError).code == RPCErrorResponse.ErrorCode {
-                    let errDescription = "error"
-                    print (errDescription)
-                    completion(FIOError.init(kind: FIOError.ErrorKind.Failure, localizedDescription: errDescription))
-                } else {
-                    let errDescription = ("other error: \(String(describing: error?.localizedDescription))")
-                    print (errDescription)
-                    completion(FIOError.init(kind: FIOError.ErrorKind.Failure, localizedDescription: errDescription))
-                }
-            } else {
-                print("Ok. RegisterName, Txid: \(result!.transactionId)")
-                
-                var addresses:Dictionary<String,String> = publicReceiveAddresses
-                addresses["FIO"] = newAccountName
-                
-                let dispatchGroup = DispatchGroup()
-                var anyFail = false
-                for (chain, receiveAddress) in addresses{
-                    dispatchGroup.enter()
-                    self.addPublicAddress(fioAddress: fioName, chain: chain, publicAddress: receiveAddress, completion: { (error) in
-                        anyFail = error?.kind == .Failure
-                        dispatchGroup.leave()
+        let actor = AccountNameGenerator.run(withPublicKey: getSystemPublicKey())
+        let toSerialize = SerializeJsonRequest(action: "registername", register: RegisterName(fioName: fioName, actor: actor))
+        
+        let url = getURI() + "/chain/serialize_json"
+        FIOHTTPHelper.postRequestTo(url, withBody: toSerialize) { (data, error) in
+            if let data = data {
+                do {
+                    let result = try JSONDecoder().decode(SerializeJsonResponse.self, from: data)
+                    print(result)
+                    TransactionUtil.packAndSignTransaction(code: "fio.system", action: "registername", data: result.json, account: actor, privateKey: importedPk, completion: { (signedTx, error) in
+                        if error != nil {
+                            if (error! as NSError).code == RPCErrorResponse.ErrorCode {
+                                let errDescription = "error"
+                                print (errDescription)
+                                completion(FIOError.init(kind: .Failure, localizedDescription: errDescription))
+                            } else {
+                                let errDescription = ("other error: \(String(describing: error?.localizedDescription))")
+                                print (errDescription)
+                                completion(FIOError.init(kind: .Failure, localizedDescription: errDescription))
+                            }
+                        }
+                        else {
+                            print("Called FIOSDK action registername")
+                            let url = self.getURI() + "/chain/register_fio_name"
+                            FIOHTTPHelper.postRequestTo(url, withBody: signedTx, onCompletion: { (data, error) in
+                                if data != nil {
+                                    completion(FIOError(kind: .Success, localizedDescription: ""))
+                                } else {
+                                    if let error = error {
+                                        completion(error)
+                                    }
+                                    else {
+                                        completion(FIOError(kind:.Failure, localizedDescription: "register_fio_name request failed."))
+                                    }
+                                }
+                            })
+                        }
                     })
                 }
-                
-                dispatchGroup.notify(queue: .main){
-                    completion(FIOError.init(kind: anyFail ? .Failure : .Success, localizedDescription: ""))
+                catch {
+                    completion(FIOError(kind:.Failure, localizedDescription: "Parsing json serialize_json failed."))
+                }
+            } else {
+                if let error = error {
+                    completion(error)
+                }
+                else {
+                    completion(FIOError(kind:.Failure, localizedDescription: "serialize_json request failed."))
                 }
             }
-        })
+        }
     }
     
-    public func registerFioName (fioName:String, publicReceiveAddresses:Dictionary<String,String>, completion: @escaping ( _ error:FIOError?) -> ()) {
-        self.createAccountAddPermissions(completion: { (newAccountName, error) in
-            if (error?.kind == FIOError.ErrorKind.Success){
-                
-                self.register(fioName: fioName,newAccountName: newAccountName, publicReceiveAddresses: publicReceiveAddresses, completion: { (error) in
-                    completion(error)
-                })
-
-            }
-            else{
+    public func registerFioName(fioName:String, publicReceiveAddresses:Dictionary<String,String>, completion: @escaping ( _ error:FIOError?) -> ()) {
+        self.register(fioName: fioName, completion: { (error) in
+            guard error == nil || error?.kind == .Success else {
                 completion(error)
+                return
             }
+            
+            //TODO: This must be reviwed by task MAS-137 when its unblocked
+            var addresses:Dictionary<String,String> = publicReceiveAddresses
+            addresses["FIO"] = ""//newAccountName was generated by createAccountAddPermissions
+            
+            let dispatchGroup = DispatchGroup()
+            var anyFail = false
+            for (chain, receiveAddress) in addresses{
+                dispatchGroup.enter()
+                self.addPublicAddress(fioAddress: fioName, chain: chain, publicAddress: receiveAddress, completion: { (error) in
+                    anyFail = error?.kind == .Failure
+                    dispatchGroup.leave()
+                })
+            }
+            
+            dispatchGroup.notify(queue: .main){
+                completion(FIOError.init(kind: anyFail ? .Failure : .Success, localizedDescription: ""))
+            }
+            //
         })
     }
 
@@ -275,140 +325,6 @@ public class FIOSDK: NSObject {
             } else {
                 print("Ok.  Transfer Currency. Txid: \(result!.transactionId)")
                 
-            }
-        })
-    }
-    
-    
-    private func createAccountAddPermissions(completion: @escaping ( _ newAccountName:String, _ error:FIOError?) -> ()) {
-        getValidNewAccountName { (newAccountName, error) in
-            if (newAccountName != nil && newAccountName!.count > 0){
-                self.createAccount(newAccountName: newAccountName!, completion: { (error) in
-                    if (error?.kind == FIOError.ErrorKind.Success){
-                        self.addAccountPermissions(accountName: newAccountName!, completion: { (error) in
-                            completion(newAccountName!, error)
-                        })
-                    }
-                    else{
-                        completion("", error)
-                    }
-                })
-            }
-            else{
-                completion("", error)
-            }
-        }
-    }
-    
-    // try 4 times.
-    private func getValidNewAccountName(completion: @escaping (_ newAccountName: String?, _ error:FIOError?) -> ()) {
-        
-        var accountName = createRandomAccountName()
-        self.getAccount(accountName: accountName ) { (account, error) in
-            if (account == nil){
-                completion(accountName, FIOError.init(kind: FIOError.ErrorKind.Success, localizedDescription: ""))
-            }
-            else {
-                accountName = self.createRandomAccountName()
-                self.getAccount(accountName: accountName) { (account, error) in
-                    if (account == nil){
-                        completion(accountName, FIOError.init(kind: FIOError.ErrorKind.Success, localizedDescription: ""))
-                    }
-                    else {
-                        accountName = self.createRandomAccountName()
-                        self.getAccount(accountName: accountName) { (account, error) in
-                            if (account == nil){
-                                completion(account?.accountName, FIOError.init(kind: FIOError.ErrorKind.Success, localizedDescription: ""))
-                            }
-                            else {
-                                accountName = self.createRandomAccountName()
-                                self.getAccount(accountName: accountName) { (account, error) in
-                                    if (account == nil){
-                                        completion(account?.accountName, FIOError.init(kind: FIOError.ErrorKind.Success, localizedDescription: ""))
-                                    }
-                                    else {
-                                        completion(nil, FIOError.init(kind: FIOError.ErrorKind.Failure, localizedDescription: "Unable to find a new random account for register name"))
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        
-    }
-    
-    struct KeyValues : Codable {
-        let key:String
-        let weight: Int
-    }
-    
-    struct PermissionValues: Codable {
-        let actor: String
-        let permission: String
-    }
-    
-    struct AccountValues : Codable {
-        let permission:PermissionValues
-        let weight:Int
-    }
-    
-    struct AuthValue : Codable{
-        let threshold:Int
-        let keys:[KeyValues]
-        let accounts:[AccountValues]
-        let waits:[String]
-    }
-    
-    struct PermissionAccount: Codable{
-        let account: String
-        let permission: String
-        let parent: String
-        let auth:AuthValue
-    }
- 
-    // so, the public key of fio.system needs to go into permission... permission then register name
-    
-    public func addAccountPermissions(accountName : String, completion: @escaping ( _ error:FIOError?) -> ()) {
-        // try fio.system as well
-        let importedPk = try! PrivateKey(keyString: getPrivateKey())
-        
-        let data = PermissionAccount(account: getAccountName(), permission: "active", parent: "owner"
-                        , auth:AuthValue(threshold: 1, keys: [KeyValues(key: getPublicKey() , weight: 1)]
-                                                    , accounts:[AccountValues(permission: FIOSDK.PermissionValues(actor: "fio.system", permission: "eosio.code"), weight: 1)]
-                                                    , waits:[]))
-        
-        var jsonString: String = ""
-        do{
-            let jsonData:Data = try JSONEncoder().encode(data)
-            jsonString = String(data: jsonData, encoding: .utf8)!
-            print(jsonString)
-        }catch {
-           completion(FIOError.init(kind: FIOError.ErrorKind.Failure, localizedDescription: "Unable to serialize JSON for addaccountpermissions"))
-        }
-        
-        let abi = try! AbiJson(code: "eosio", action: "updateauth", json: jsonString)
-        
-        print ("***")
-        print(abi.code)
-        print(abi.action)
-        print(data)
-        print ("***")
-        TransactionUtil.pushTransaction(abi: abi, account: getAccountName(), privateKey: importedPk!, completion: { (result, error) in
-            if error != nil {
-                if (error! as NSError).code == RPCErrorResponse.ErrorCode {
-                    let errDescription = "error"
-                    print (errDescription)
-                    completion(FIOError.init(kind: FIOError.ErrorKind.Failure, localizedDescription: errDescription))
-                } else {
-                    let errDescription = ("other error: \(String(describing: error?.localizedDescription))")
-                    print (errDescription)
-                    completion(FIOError.init(kind: FIOError.ErrorKind.Failure, localizedDescription: errDescription))
-                }
-            } else {
-                print("Ok. Add account permissions worked, Txid: \(result!.transactionId)")
-                completion(FIOError.init(kind: FIOError.ErrorKind.Success, localizedDescription: ""))
             }
         })
     }
@@ -469,45 +385,6 @@ public class FIOSDK: NSObject {
             print("Ok. add public address, Txid: \(result.transactionId)")
             completion(FIOError.init(kind: FIOError.ErrorKind.Success, localizedDescription: ""))
         })
-    }
-    
-    private func createAccount(newAccountName:String, completion: @escaping ( _ error:FIOError?) -> ()) {
-        print(newAccountName)
-        
-        AccountUtil.createAccount(account: newAccountName, ownerKey:getSystemPublicKey() , activeKey: getSystemPublicKey(), creator: "fio.system", pkString: getSystemPrivateKey()) { (result, error) in
-            if error != nil {
-                if (error! as NSError).code == RPCErrorResponse.ErrorCode {
-                    let errDescription = "error"
-                    print (errDescription)
-                    completion(FIOError.init(kind: FIOError.ErrorKind.Failure, localizedDescription: errDescription))
-                } else {
-                    let errDescription = ("other error: \(String(describing: error?.localizedDescription))")
-                    print (errDescription)
-                    completion(FIOError.init(kind: FIOError.ErrorKind.Failure, localizedDescription: errDescription))
-                }
-            } else {
-                print("Ok. new account, Txid: \(result!.transactionId)")
-                completion(FIOError.init(kind: FIOError.ErrorKind.Success, localizedDescription: "Successfully created the new account"))
-            }
-        }
-        
-    }
-    
-    public func getAccount(accountName:String, completion: @escaping (_ account: Account?, _ error:FIOError?) -> ()) {
-        EOSRPC.sharedInstance.getAccount(account: accountName) { (account, error) in
-            if (account != nil){
-               completion(account, FIOError.init(kind: FIOError.ErrorKind.Success, localizedDescription: "Successfully got the new account"))
-            }
-            else {
-                let errDescription = ("other error: \(String(describing: error?.localizedDescription))")
-                print (errDescription)
-                completion(nil, FIOError.init(kind: FIOError.ErrorKind.Failure, localizedDescription: errDescription))
-            }
-        }
-    }
-    
-    public func createRandomAccountName() -> String{
-        return Utilities.sharedInstance().randomStringCharsOnly(length: 1) +      Utilities.sharedInstance().randomString(length:11)
     }
     
     struct AvailCheckRequest: Codable {
