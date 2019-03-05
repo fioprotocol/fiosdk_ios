@@ -14,6 +14,7 @@ public struct FIOError: Error {
         case NoDataReturned
         case FailedToUsePrivKey
         case MalformedRequest
+        case MalformedURL
         case Failure
     }
     public let kind: ErrorKind
