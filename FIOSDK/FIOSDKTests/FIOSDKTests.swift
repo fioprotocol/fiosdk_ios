@@ -74,12 +74,6 @@ class FIOSDKTests: XCTestCase {
     override func tearDown() {
         // Put teardown code here. This method is called after the invocation of each test method in the class.
     }
-
-    func testRandomAccountString (){
-        let newAccountName = FIOSDK.sharedInstance().createRandomAccountName()
-        print(newAccountName)
-        XCTAssert(newAccountName.count == 12, "newAccountName should be 12 chars")
-    }
     
 
     func testValidation(){

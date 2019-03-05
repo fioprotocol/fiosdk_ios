@@ -26,7 +26,10 @@ struct FIOHTTPHelper {
         }
         
         // create post request
-        let url = URL(string: fullUrl)!
+        guard let url = URL(string: fullUrl) else {
+            onCompletion(nil, FIOError(kind: .MalformedURL, localizedDescription: ""))
+            return
+        }
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
         
