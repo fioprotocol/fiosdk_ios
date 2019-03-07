@@ -28,9 +28,10 @@ public class FIOSDK: NSObject {
     
     //MARK: - Chain routes
     enum ChainRoutes: String {
-        case serializeJSON   = "/chain/serialize_json"
-        case registerFIOName = "/chain/register_fio_name"
-        case newFundsRequest = "/chain/new_funds_request"
+        case serializeJSON      = "/chain/serialize_json"
+        case registerFIOName    = "/chain/register_fio_name"
+        case newFundsRequest    = "/chain/new_funds_request"
+        case rejectFundsRequest = "/chain/reject_funds_request"
     }
     
     struct ChainRouteBuilder {
@@ -48,8 +49,9 @@ public class FIOSDK: NSObject {
     //MARK: - Chain Actions
     
     enum ChainActions: String {
-        case registerFIOName = "registername"
-        case newFundsRequest = "newfundsreq"
+        case registerFIOName    = "registername"
+        case newFundsRequest    = "newfundsreq"
+        case rejectFundsRequest = "rejectfndreq"
     }
     
     //MARK: -
@@ -250,11 +252,11 @@ public class FIOSDK: NSObject {
 
     //MARK: - Signed Post Request
     
-    struct TxResult: Codable {
+    private struct TxResult: Codable {
         var processed: TxResultProcessed?
     }
     
-    struct TxResultProcessed: Codable {
+    private struct TxResultProcessed: Codable {
         var actionTraces: [TxResultActionTrace]
         
         enum CodingKeys: String, CodingKey {
@@ -262,11 +264,11 @@ public class FIOSDK: NSObject {
         }
     }
     
-    struct TxResultActionTrace: Codable{
+    private struct TxResultActionTrace: Codable{
         var receipt: TxResultReceipt
     }
     
-    struct TxResultReceipt: Codable{
+    private struct TxResultReceipt: Codable{
         var response: AnyCodable
     }
     
@@ -276,12 +278,15 @@ public class FIOSDK: NSObject {
      *      - route: The route to be requested. Look at ChainRoutes for possible values
      *      - action: The API action for the given request. Look at ChainActions for possible values
      *      - body: The request body parameters to be serialized and sent as a data string
-     *      - privateKey: A PrivateKey to sign the post request
      *      - code: The code required for packing and signing a transaction, for more info look at TransactionUtil.packAndSignTransaction
      *      - account: The account required for packing and signing a transaction, for more info look at TransactionUtil.packAndSignTransaction
      *      - onCompletion: A callback function that is called when request is finished with is Data value and either with success or failure, both values are optional. Check FIOError.kind to determine if is a success or a failure.
      */
-    private func signedPostRequestTo<T: Codable>(route: ChainRoutes, forAction action: ChainActions, withBody body: T, privateKey: PrivateKey, code: String, account: String, onCompletion: @escaping (_ result: TxResult?, FIOError?) -> Void) {
+    private func signedPostRequestTo<T: Codable>(route: ChainRoutes, forAction action: ChainActions, withBody body: T, code: String, account: String, onCompletion: @escaping (_ result: TxResult?, FIOError?) -> Void) {
+        guard let privateKey = try! PrivateKey(keyString: getSystemPrivateKey()) else {
+            onCompletion(nil, FIOError(kind: .FailedToUsePrivKey, localizedDescription: "Failed to retrieve private key."))
+            return
+        }
         serializeJsonToData(body, forAction: action) { (result, error) in
             if let result = result {
                 TransactionUtil.packAndSignTransaction(code: code, action: action.rawValue, data: result.json, account: account, privateKey: privateKey, completion: { (signedTx, error) in
@@ -323,10 +328,7 @@ public class FIOSDK: NSObject {
         do {
             responseObject = try decoder.decode(TxResult.self, from: data)
         } catch let error {
-            guard let errorResponse = try? decoder.decode(RPCErrorResponse.self, from: data) else {
-                return (nil, FIOError(kind: .Failure, localizedDescription: error.localizedDescription))
-            }
-            return (nil, FIOError(kind: .Failure, localizedDescription: errorResponse.errorDescription()))
+            return (nil, FIOError(kind: .Failure, localizedDescription: error.localizedDescription))
         }
         return (responseObject, nil)
     }
@@ -377,18 +379,12 @@ public class FIOSDK: NSObject {
      * - Parameter fioName: A string to register as FIO Address
      * - Parameter completion: A callback function that is called when request is finished either with success or failure. Check FIOError.kind to determine if is a success or a failure.
      */
-    public func register(fioName:String, completion: @escaping ( _ error:FIOError?) -> ()) {
-        guard let importedPk = try! PrivateKey(keyString: getPrivateKey()) else {
-            completion(FIOError(kind: .FailedToUsePrivKey, localizedDescription: "Failed to retrieve private key."))
-            return
-        }
-        
-        let actor = AccountNameGenerator.run(withPublicKey: getPublicKey())
+    private func register(fioName:String, completion: @escaping ( _ error:FIOError?) -> ()) {
+        let actor = AccountNameGenerator.run(withPublicKey: getSystemPublicKey())
         let registerName = RegisterName(fioName: fioName, actor: actor)
         signedPostRequestTo(route: ChainRoutes.registerFIOName,
                             forAction: ChainActions.registerFIOName,
                             withBody: registerName,
-                            privateKey: importedPk,
                             code: "fio.system",
                             account: actor) { (data, error) in
             if data != nil {
@@ -826,6 +822,8 @@ public class FIOSDK: NSObject {
         task.resume()
     }
     
+    //MARK: - Request Funds
+    
     public struct RequestFundsRequest: Codable {
         
         public let from: String
@@ -897,17 +895,12 @@ public class FIOSDK: NSObject {
     ///   - metadata: Contains the: memo or hash or offlineUrl (they are mutually excludent, fill only one)
     ///   - completion: The completion handler containing the result
     public func requestFunds(from fromFioAddress:String, to toFioAddress: String, toPublicAddress publicAddress: String, amount: String, tokenCode: String, metadata: RequestFundsRequest.MetaData, completion: @escaping ( _ response: RequestFundsResponse?, _ error:FIOError? ) -> ()) {
-        guard let importedPk = try! PrivateKey(keyString: getSystemPrivateKey()) else {
-            completion(nil, FIOError(kind: .FailedToUsePrivKey, localizedDescription: "Failed to retrieve private key."))
-            return
-        }
         let actor = AccountNameGenerator.run(withPublicKey: getSystemPublicKey())
         let data = RequestFundsRequest(from: fromFioAddress, to: toFioAddress, toPublicAddress: publicAddress, amount: amount, tokenCode: tokenCode, metadata: metadata.toJSONString(), actor: actor)
         
         signedPostRequestTo(route: ChainRoutes.newFundsRequest,
                             forAction: ChainActions.newFundsRequest,
                             withBody: data,
-                            privateKey: importedPk,
                             code: "fio.reqobt",
                             account: actor) { (result, error) in
                                 guard let result = result else {
@@ -918,12 +911,26 @@ public class FIOSDK: NSObject {
                                 completion(handledData.response, handledData.error)
         }
     }
+    
+    //MARK: - Reject Funds
+    
+    private struct RejectFundsRequest: Codable {
+        var fioReqID: String
+        var actor: String
+            
+        enum CodingKeys: String, CodingKey {
+            case fioReqID = "fioreqid"
+            case actor
+        }
+    }
 
     public struct RejectFundsRequestResponse: Codable{
         
-        public var status: Status
+        var fioReqID: String
+        var status: Status
         
-        public enum Status: String, Codable{
+        enum Status: String, Codable{
+            case fioReqID = "fioreqid"
             case rejected = "request_rejected", unknown
         }
         
@@ -937,50 +944,30 @@ public class FIOSDK: NSObject {
     ///
     /// - Parameters:
     ///   - fundsRequestId: ID of that fund request.
-    ///   - completion: The completion handler containing the result
-    public func rejectFundsRequest(fundsRequestId: String, completion: @escaping(_ response: RejectFundsRequestResponse?,_ :FIOError) -> ()){
-        let importedPk = try! PrivateKey(keyString: getSystemPrivateKey())
-
-        var jsonString: String
-        do{
-            let jsonData:Data = try JSONEncoder().encode(["fio_funds_request_id": fundsRequestId])
-            jsonString = String(data: jsonData, encoding: .utf8)!
-        }catch {
-            completion (nil, FIOError(kind: .Failure, localizedDescription: "Json for input data not wrapping correctly"))
-            return
+    ///   - completion: The completion handler containing the result or error.
+    public func rejectFundsRequest(fundsRequestId: String, completion: @escaping(_ response: RejectFundsRequestResponse?,_ :FIOError?) -> ()){
+        let actor = AccountNameGenerator.run(withPublicKey: getSystemPublicKey())
+        let data = RejectFundsRequest(fioReqID: fundsRequestId, actor: actor)
+        
+        signedPostRequestTo(route: ChainRoutes.rejectFundsRequest,
+                            forAction: ChainActions.rejectFundsRequest,
+                            withBody: data,
+                            code: "fio.reqobt",
+                            account: actor) { (result, error) in
+                                guard let result = result else {
+                                    completion(nil, error)
+                                    return
+                                }
+                                let handledData: (response: RejectFundsRequestResponse?, error: FIOError) = self.parseResponseFromTransactionResult(txResult: result)
+                                guard handledData.response?.status == .rejected else {
+                                    completion(nil, FIOError.init(kind: .Failure, localizedDescription: "The request couldn't rejected"))
+                                    return
+                                }
+                                completion(handledData.response, FIOError.init(kind: FIOError.ErrorKind.Success, localizedDescription: ""))
         }
-
-        let abi = try! AbiJson(code: "fio.system", action: "rejctfndsreq", json: jsonString)
-
-        TransactionUtil.pushTransaction(abi: abi, account: "fio.system", privateKey: importedPk!, completion: { (result, error) in
-
-            guard let result = result, error == nil else {
-                if (error! as NSError).code == RPCErrorResponse.ErrorCode {
-                    let errDescription = "error"
-                    print (errDescription)
-                    completion(nil, FIOError.init(kind: FIOError.ErrorKind.Failure, localizedDescription: errDescription))
-                } else {
-                    let errDescription = ("other error: \(String(describing: error?.localizedDescription))")
-                    print (errDescription)
-                    completion(nil, FIOError.init(kind: FIOError.ErrorKind.Failure, localizedDescription: errDescription))
-                }
-                return
-            }
-            print("Ok. newfndsreq, Txid: \(result.transactionId)")
-            guard let responseString = result.processed?.actionTraces.first?.receipt.response.value as? String, let responseData = responseString.data(using: .utf8), let response = try? JSONDecoder().decode(RejectFundsRequestResponse.self, from: responseData) else{
-                completion(nil, FIOError.init(kind: .Failure, localizedDescription: "Error parsing the response"))
-                return
-            }
-
-            guard response.status == .rejected else {
-                completion(nil, FIOError.init(kind: .Failure, localizedDescription: "The request couldn't rejected"))
-                return
-            }
-
-            completion(response, FIOError.init(kind: FIOError.ErrorKind.Success, localizedDescription: ""))
-        })
     }
     
+    //MARK: -
     
     public struct SentFioRequestResponse: Codable{
         public let publicAddress: String

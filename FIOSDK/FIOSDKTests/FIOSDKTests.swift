@@ -204,10 +204,15 @@ class FIOSDKTests: XCTestCase {
         FIOSDK.sharedInstance().requestFunds(from: self.requesteeFioName, to: requestorFioName, toPublicAddress: requestorAddress, amount: String(amount), tokenCode: "BTC", metadata: FIOSDK.RequestFundsRequest.MetaData(memo: "", hash: nil, offlineUrl: nil)) { (response, error) in
             XCTAssert(error?.kind == .Success && response != nil, "testRejectFundsRequest Couldn't create mock request")
             
-            FIOSDK.sharedInstance().rejectFundsRequest(fundsRequestId: String(response!.fundsRequestId), completion: { (response, error) in
-                XCTAssert(error.kind == .Success, "testRejectFundsRequest couldn't reject request")
+            if let response = response {
+                FIOSDK.sharedInstance().rejectFundsRequest(fundsRequestId: String(response.fundsRequestId), completion: { (response, error) in
+                    XCTAssert(error?.kind == .Success, "testRejectFundsRequest couldn't reject request")
+                    expectation.fulfill()
+                })
+            }
+            else {
                 expectation.fulfill()
-            })
+            }
         }
         
         wait(for: [expectation], timeout: TIMEOUT)
@@ -232,7 +237,7 @@ class FIOSDKTests: XCTestCase {
                 }).isEmpty,  "testGetsentRequest couldn't found the request")
                 expGetSentRequest.fulfill()
                 FIOSDK.sharedInstance().rejectFundsRequest(fundsRequestId: fundsRequestId, completion: { (response, error) in
-                    XCTAssert(error.kind == .Success, "testGetSentRequests couldn't reject test request")
+                    XCTAssert(error?.kind == .Success, "testGetSentRequests couldn't reject test request")
                     expRejectRequest.fulfill()
                 })
             })
@@ -259,7 +264,7 @@ class FIOSDKTests: XCTestCase {
         let timestamp = NSDate().timeIntervalSince1970
         let fioName = "sha\(Int(timestamp.rounded())).brd"
         let expectation = XCTestExpectation(description: "testRegisterFIONameWithNewValueShouldRegister")
-        
+
         FIOSDK.sharedInstance().registerFioName(fioName: fioName, publicReceiveAddresses: [:], completion: {error in ()
             XCTAssert((error?.kind == FIOError.ErrorKind.Success), "registerFIOName NOT SUCCESSFUL")
             expectation.fulfill()
