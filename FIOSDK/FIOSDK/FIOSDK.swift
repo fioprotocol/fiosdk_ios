@@ -873,10 +873,25 @@ public class FIOSDK: NSObject {
     
     public struct RequestFundsResponse: Codable {
         
-        public var fundsRequestId: Int//TODO: Change it back to String if Ed confirm it should be String
+        public var fundsRequestId: String {
+            return String(fioreqid)
+        }
+        var fioreqid: Int //TODO: Change it back to String if Ed confirm it should be String
         
         enum CodingKeys: String, CodingKey {
-            case fundsRequestId = "fioreqid"
+            case fioreqid
+        }
+        
+        init(fioreqid: Int) {
+            self.fioreqid = fioreqid
+        }
+        
+        public init(from decoder: Decoder) throws {
+            let container = try decoder.container(keyedBy: CodingKeys.self)
+            
+            let fioreqid: Int = try container.decodeIfPresent(Int.self, forKey: .fioreqid) ?? 0
+            
+            self.init(fioreqid: fioreqid)
         }
         
     }
@@ -945,7 +960,7 @@ public class FIOSDK: NSObject {
     /// - Parameters:
     ///   - fundsRequestId: ID of that fund request.
     ///   - completion: The completion handler containing the result or error.
-    public func rejectFundsRequest(fundsRequestId: String, completion: @escaping(_ response: RejectFundsRequestResponse?,_ :FIOError?) -> ()){
+    public func rejectFundsRequest(fundsRequestId: String, completion: @escaping(_ response: RejectFundsRequestResponse?,_ :FIOError) -> ()){
         let actor = AccountNameGenerator.run(withPublicKey: getSystemPublicKey())
         let data = RejectFundsRequest(fioReqID: fundsRequestId, actor: actor)
         
@@ -955,7 +970,7 @@ public class FIOSDK: NSObject {
                             code: "fio.reqobt",
                             account: actor) { (result, error) in
                                 guard let result = result else {
-                                    completion(nil, error)
+                                    completion(nil, error ?? FIOError.init(kind: .Failure, localizedDescription: "The request couldn't rejected"))
                                     return
                                 }
                                 let handledData: (response: RejectFundsRequestResponse?, error: FIOError) = self.parseResponseFromTransactionResult(txResult: result)
