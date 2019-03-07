@@ -37,21 +37,23 @@ struct FIOHTTPHelper {
         request.httpBody = jsonData
         
         let task = URLSession.shared.dataTask(with: request) { data, response, error in
-            guard let data = data, error == nil else {
-                if let message = error?.localizedDescription {
-                    onCompletion(nil, FIOError(kind: .Failure, localizedDescription: message))
+            DispatchQueue.main.async {
+                guard let data = data, error == nil else {
+                    if let message = error?.localizedDescription {
+                        onCompletion(nil, FIOError(kind: .Failure, localizedDescription: message))
+                    }
+                    else {
+                        onCompletion(nil, FIOError(kind: .NoDataReturned, localizedDescription: "No data"))
+                    }
+                    return
                 }
-                else {
-                    onCompletion(nil, FIOError(kind: .NoDataReturned, localizedDescription: "No data"))
+                let httpResponse = response as? HTTPURLResponse
+                guard let statusCode = httpResponse?.statusCode, statusCode >= 200, statusCode < 400 else {
+                    onCompletion(nil, FIOError(kind: .Failure, localizedDescription: String(format: "Failed with code: %d", httpResponse?.statusCode ?? -1)))
+                    return
                 }
-                return
+                onCompletion(data, FIOError(kind: .Success, localizedDescription: ""))
             }
-            let httpResponse = response as? HTTPURLResponse
-            guard let statusCode = httpResponse?.statusCode, statusCode >= 200, statusCode < 400 else {
-                onCompletion(nil, FIOError(kind: .Failure, localizedDescription: String(format: "Failed with code: %d", httpResponse?.statusCode ?? -1)))
-                return
-            }
-            onCompletion(data, FIOError(kind: .Success, localizedDescription: ""))
         }
         
         task.resume()

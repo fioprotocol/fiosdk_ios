@@ -30,6 +30,7 @@ public class FIOSDK: NSObject {
     enum ChainRoutes: String {
         case serializeJSON   = "/chain/serialize_json"
         case registerFIOName = "/chain/register_fio_name"
+        case newFundsRequest = "/chain/new_funds_request"
     }
     
     struct ChainRouteBuilder {
@@ -48,6 +49,7 @@ public class FIOSDK: NSObject {
     
     enum ChainActions: String {
         case registerFIOName = "registername"
+        case newFundsRequest = "newfundsreq"
     }
     
     //MARK: -
@@ -196,9 +198,9 @@ public class FIOSDK: NSObject {
         return self.publicKey
     }
     
-    private struct SerializeJsonRequest: Codable {
+    private struct SerializeJsonRequest<T: Codable>: Codable {
         let action: String
-        let json: [String:String]
+        let json: T
         
         enum CodingKeys: String, CodingKey {
             case action
@@ -213,40 +215,24 @@ public class FIOSDK: NSObject {
             case json = "serialized_json"
         }
     }
-
-    //MARK: - Signed Post Request
+    
+    //MARK: - Serialize JSON
     
     /**
-     * This function does a signed post request to our API. It uses TransactionUtil.packAndSignTransaction to pack and sign body before doing the POST request to the required route.
+     * Call serialize_json (POST) in order to serialize the given json object for an API action (ChainAction).
      * - Parameters:
-     *      - route: The route to be requested. Look at ChainRoutes for possible values
-     *      - action: The API action for the given request. Look at ChainActions for possible values
-     *      - body: The request body parameters to be serialized and sent as a data string
-     *      - privateKey: A PrivateKey to sign the post request
-     *      - code: The code required for packing and signing a transaction, for more info look at TransactionUtil.packAndSignTransaction
-     *      - account: The account required for packing and signing a transaction, for more info look at TransactionUtil.packAndSignTransaction
-     *      - onCompletion: A callback function that is called when request is finished with is Data value and either with success or failure, both values are optional. Check FIOError.kind to determine if is a success or a failure.
+     *      - json: A json object to serialize. Must implement Codable.
+     *      - forAction: The API action (ChainActions) that will use the serialized json
+     *      - onCompletion: A callback with either SerializeJsonResponse or FIOError as serialization result.
      */
-    private func signedPostRequestTo(route: ChainRoutes, forAction action: ChainActions, withBody body: [String:String], privateKey: PrivateKey, code: String, account: String, onCompletion: @escaping (_ result: Data?, FIOError?) -> Void) {
-        let toSerialize = SerializeJsonRequest(action: action.rawValue, json: body)
+    private func serializeJsonToData<T: Codable>(_ json: T, forAction action: ChainActions, onCompletion: @escaping (SerializeJsonResponse?, FIOError?) -> Void) {
+        let toSerialize = SerializeJsonRequest(action: action.rawValue, json: json)
         let url = ChainRouteBuilder.build(route: ChainRoutes.serializeJSON)
         FIOHTTPHelper.postRequestTo(url, withBody: toSerialize) { (data, error) in
             if let data = data {
                 do {
                     let result = try JSONDecoder().decode(SerializeJsonResponse.self, from: data)
-                    print(result)
-                    TransactionUtil.packAndSignTransaction(code: code, action: action.rawValue, data: result.json, account: account, privateKey: privateKey, completion: { (signedTx, error) in
-                        if let error = self.translateErrorToFIOError(error: error) {
-                            onCompletion(nil, error)
-                        }
-                        else {
-                            print("Called FIOSDK action: " + action.rawValue)
-                            let url = ChainRouteBuilder.build(route: route)
-                            FIOHTTPHelper.postRequestTo(url, withBody: signedTx, onCompletion: { (data, error) in
-                                onCompletion(data, error)
-                            })
-                        }
-                    })
+                    onCompletion(result, nil)
                 }
                 catch {
                     onCompletion(nil, FIOError(kind:.Failure, localizedDescription: "Parsing json serialize_json failed."))
@@ -260,6 +246,102 @@ public class FIOSDK: NSObject {
                 }
             }
         }
+    }
+
+    //MARK: - Signed Post Request
+    
+    struct TxResult: Codable {
+        var processed: TxResultProcessed?
+    }
+    
+    struct TxResultProcessed: Codable {
+        var actionTraces: [TxResultActionTrace]
+        
+        enum CodingKeys: String, CodingKey {
+            case actionTraces = "action_traces"
+        }
+    }
+    
+    struct TxResultActionTrace: Codable{
+        var receipt: TxResultReceipt
+    }
+    
+    struct TxResultReceipt: Codable{
+        var response: AnyCodable
+    }
+    
+    /**
+     * This function does a signed post request to our API. It uses TransactionUtil.packAndSignTransaction to pack and sign body before doing the POST request to the required route.
+     * - Parameters:
+     *      - route: The route to be requested. Look at ChainRoutes for possible values
+     *      - action: The API action for the given request. Look at ChainActions for possible values
+     *      - body: The request body parameters to be serialized and sent as a data string
+     *      - privateKey: A PrivateKey to sign the post request
+     *      - code: The code required for packing and signing a transaction, for more info look at TransactionUtil.packAndSignTransaction
+     *      - account: The account required for packing and signing a transaction, for more info look at TransactionUtil.packAndSignTransaction
+     *      - onCompletion: A callback function that is called when request is finished with is Data value and either with success or failure, both values are optional. Check FIOError.kind to determine if is a success or a failure.
+     */
+    private func signedPostRequestTo<T: Codable>(route: ChainRoutes, forAction action: ChainActions, withBody body: T, privateKey: PrivateKey, code: String, account: String, onCompletion: @escaping (_ result: TxResult?, FIOError?) -> Void) {
+        serializeJsonToData(body, forAction: action) { (result, error) in
+            if let result = result {
+                TransactionUtil.packAndSignTransaction(code: code, action: action.rawValue, data: result.json, account: account, privateKey: privateKey, completion: { (signedTx, error) in
+                    if let error = self.translateErrorToFIOError(error: error) {
+                        onCompletion(nil, error)
+                    }
+                    else {
+                        print("Called FIOSDK action: " + action.rawValue)
+                        let url = ChainRouteBuilder.build(route: route)
+                        FIOHTTPHelper.postRequestTo(url, withBody: signedTx, onCompletion: { (data, error) in
+                            if data == nil, let error = error {
+                                onCompletion(nil, error)
+                                return
+                            }
+                            let handledResults = self.parseResponseDataToTransactionResult(data: data)
+                            onCompletion(handledResults.response, handledResults.error)
+                        })
+                    }
+                })
+            }
+            else {
+                onCompletion(nil, error)
+            }
+        }
+    }
+    
+    /**
+     * Try transforming data into a TxResult object. Data is expected to be a json object.
+     * - Parameters:
+     *      - data: The Data object containing a json or nil.
+     * - Return: A tuple containing the parsed response object or error.
+     */
+    private func parseResponseDataToTransactionResult(data: Data?) -> (response: TxResult?, error: FIOError?) {
+        guard let data = data else {
+            return (nil, FIOError(kind: .NoDataReturned, localizedDescription: "Server response was empty"))
+        }
+        let decoder = JSONDecoder()
+        var responseObject: TxResult? = nil
+        do {
+            responseObject = try decoder.decode(TxResult.self, from: data)
+        } catch let error {
+            guard let errorResponse = try? decoder.decode(RPCErrorResponse.self, from: data) else {
+                return (nil, FIOError(kind: .Failure, localizedDescription: error.localizedDescription))
+            }
+            return (nil, FIOError(kind: .Failure, localizedDescription: errorResponse.errorDescription()))
+        }
+        return (responseObject, nil)
+    }
+    
+    /**
+     * Decode whichever JSON object that is inside transaction result (TxResult) to expected response. That response must implement Codable.
+     * - Parameters:
+     *      - txResult: The transaction result to parse response from.
+     * - Return: A tuple containing the parsed response object and error. The error is either a FIOError.ErrorKind.Failure or a FIOError.ErrorKind.Success.
+     */
+    private func parseResponseFromTransactionResult<T: Codable>(txResult: TxResult) -> (response: T?, error: FIOError) {
+        guard let responseString = txResult.processed?.actionTraces.first?.receipt.response.value as? String, let responseData = responseString.data(using: .utf8), let response = try? JSONDecoder().decode(T.self, from: responseData) else {
+            return (nil, FIOError.init(kind: .Failure, localizedDescription: "Error parsing the response"))
+        }
+        return (response, FIOError(kind: .Success, localizedDescription: ""))
     }
     
     private func translateErrorToFIOError(error: Error?) -> FIOError? {
@@ -286,10 +368,6 @@ public class FIOSDK: NSObject {
             case actor = "actor"
         }
         
-        func toDictionary() -> [String: String] {
-            return [CodingKeys.fioName.rawValue:fioName, CodingKeys.actor.rawValue:actor]
-        }
-        
     }
     
     //MARK: - Register FIO Name request
@@ -299,14 +377,14 @@ public class FIOSDK: NSObject {
      * - Parameter fioName: A string to register as FIO Address
      * - Parameter completion: A callback function that is called when request is finished either with success or failure. Check FIOError.kind to determine if is a success or a failure.
      */
-    private func register(fioName:String, completion: @escaping ( _ error:FIOError?) -> ()) {
-        guard let importedPk = try! PrivateKey(keyString: getSystemPrivateKey()) else {
+    public func register(fioName:String, completion: @escaping ( _ error:FIOError?) -> ()) {
+        guard let importedPk = try! PrivateKey(keyString: getPrivateKey()) else {
             completion(FIOError(kind: .FailedToUsePrivKey, localizedDescription: "Failed to retrieve private key."))
             return
         }
         
-        let actor = AccountNameGenerator.run(withPublicKey: getSystemPublicKey())
-        let registerName = RegisterName(fioName: fioName, actor: actor).toDictionary()
+        let actor = AccountNameGenerator.run(withPublicKey: getPublicKey())
+        let registerName = RegisterName(fioName: fioName, actor: actor)
         signedPostRequestTo(route: ChainRoutes.registerFIOName,
                             forAction: ChainActions.registerFIOName,
                             withBody: registerName,
@@ -748,22 +826,24 @@ public class FIOSDK: NSObject {
         task.resume()
     }
     
-    
-    public struct RequestFundsRequest: Codable{
+    public struct RequestFundsRequest: Codable {
+        
         public let from: String
         public let to: String
         public let toPublicAddress: String
         public let amount: String
         public let tokenCode: String
-        public let metadata: String //TODO: changes this type to -> MetaData
-        
+        public let metadata: String
+        public let actor: String
+
         enum CodingKeys: String, CodingKey{
-            case from = "from_fio_address"
-            case to = "to_fio_address"
-            case toPublicAddress = "to_pub_address"
+            case from = "fromfioadd"
+            case to = "tofioadd"
+            case toPublicAddress = "topubadd"
             case amount
-            case tokenCode = "token_code"
+            case tokenCode = "tokencode"
             case metadata
+            case actor
         }
         
         public struct MetaData: Codable{
@@ -782,17 +862,26 @@ public class FIOSDK: NSObject {
                 case hash
                 case offlineUrl = "offline_url"
             }
+            
+            func toJSONString() -> String {
+                guard let json = try? JSONEncoder().encode(self) else {
+                    return ""
+                }
+                return String(data: json, encoding: .utf8) ?? ""
+            }
         }
+        
     }
     
-    public struct RequestFundsResponse: Codable{
-        public var fundsRequestId: String
+    public struct RequestFundsResponse: Codable {
+        
+        public var fundsRequestId: Int//TODO: Change it back to String if Ed confirm it should be String
         
         enum CodingKeys: String, CodingKey {
-            case fundsRequestId = "fio_funds_request_id"
+            case fundsRequestId = "fioreqid"
         }
+        
     }
-    
     
     /// Creates a new funds request.
     /// To read further infomation about this [visit the API specs] [1]
@@ -800,53 +889,36 @@ public class FIOSDK: NSObject {
     ///    [1]: https://stealth.atlassian.net/wiki/spaces/DEV/pages/53280776/API#API-/new_funds_request-Createnewfundsrequest        "api specs"
     ///
     /// - Parameters:
-    ///   - fromFioAddress: FIO Address of user sending funds, i.e. requestee
-    ///   - toFioAddress: FIO Address of user receiving funds, i.e. requestor
+    ///   - fromFioAddress: FIO Address of user sending funds, i.e. requestee.brd
+    ///   - toFioAddress: FIO Address of user receiving funds, i.e. requestor.brd
     ///   - publicAddress: Public address on other blockchain of user receiving funds.
     ///   - amount: Amount requested.
     ///   - tokenCode: Code of the token represented in Amount requested, i.e. ETH
-    ///   - metadata: Contains the: memo, hash, offlineUrl
+    ///   - metadata: Contains the: memo or hash or offlineUrl (they are mutually excludent, fill only one)
     ///   - completion: The completion handler containing the result
     public func requestFunds(from fromFioAddress:String, to toFioAddress: String, toPublicAddress publicAddress: String, amount: String, tokenCode: String, metadata: RequestFundsRequest.MetaData, completion: @escaping ( _ response: RequestFundsResponse?, _ error:FIOError? ) -> ()) {
-        let importedPk = try! PrivateKey(keyString: getSystemPrivateKey())
-        let data = RequestFundsRequest(from: fromFioAddress, to: toFioAddress, toPublicAddress: publicAddress, amount: amount, tokenCode: tokenCode, metadata: "")
-        
-        
-        var jsonString: String
-        do{
-            let jsonData:Data = try JSONEncoder().encode(data)
-            jsonString = String(data: jsonData, encoding: .utf8)!
-            print(jsonString)
-        }catch {
-            completion (nil, FIOError(kind: .Failure, localizedDescription: "Json for input data not wrapping correctly"))
+        guard let importedPk = try! PrivateKey(keyString: getSystemPrivateKey()) else {
+            completion(nil, FIOError(kind: .FailedToUsePrivKey, localizedDescription: "Failed to retrieve private key."))
             return
         }
+        let actor = AccountNameGenerator.run(withPublicKey: getSystemPublicKey())
+        let data = RequestFundsRequest(from: fromFioAddress, to: toFioAddress, toPublicAddress: publicAddress, amount: amount, tokenCode: tokenCode, metadata: metadata.toJSONString(), actor: actor)
         
-        let abi = try! AbiJson(code: "fio.system", action: "newfndsreq", json: jsonString)
-        
-        TransactionUtil.pushTransaction(abi: abi, account: "fio.system", privateKey: importedPk!, completion: { (result, error) in
-            
-            guard let result = result, error == nil else {
-                if (error! as NSError).code == RPCErrorResponse.ErrorCode {
-                    let errDescription = "error"
-                    print (errDescription)
-                    completion(nil, FIOError.init(kind: FIOError.ErrorKind.Failure, localizedDescription: errDescription))
-                } else {
-                    let errDescription = ("other error: \(String(describing: error?.localizedDescription))")
-                    print (errDescription)
-                    completion(nil, FIOError.init(kind: FIOError.ErrorKind.Failure, localizedDescription: errDescription))
-                }
-                return
-            }
-            print("Ok. newfndsreq, Txid: \(result.transactionId)")
-            guard let responseString = result.processed?.actionTraces.first?.receipt.response.value as? String, let responseData = responseString.data(using: .utf8), let response = try? JSONDecoder().decode(RequestFundsResponse.self, from: responseData) else{
-                completion(nil, FIOError.init(kind: .Failure, localizedDescription: "Error parsing the response"))
-                return
-            }
-            completion(response, FIOError.init(kind: FIOError.ErrorKind.Success, localizedDescription: ""))
-        })
+        signedPostRequestTo(route: ChainRoutes.newFundsRequest,
+                            forAction: ChainActions.newFundsRequest,
+                            withBody: data,
+                            privateKey: importedPk,
+                            code: "fio.reqobt",
+                            account: actor) { (result, error) in
+                                guard let result = result else {
+                                    completion(nil, error)
+                                    return
+                                }
+                                let handledData: (response: RequestFundsResponse?, error: FIOError) = self.parseResponseFromTransactionResult(txResult: result)
+                                completion(handledData.response, handledData.error)
+        }
     }
-    
+
     public struct RejectFundsRequestResponse: Codable{
         
         public var status: Status
@@ -868,7 +940,7 @@ public class FIOSDK: NSObject {
     ///   - completion: The completion handler containing the result
     public func rejectFundsRequest(fundsRequestId: String, completion: @escaping(_ response: RejectFundsRequestResponse?,_ :FIOError) -> ()){
         let importedPk = try! PrivateKey(keyString: getSystemPrivateKey())
-        
+
         var jsonString: String
         do{
             let jsonData:Data = try JSONEncoder().encode(["fio_funds_request_id": fundsRequestId])
@@ -877,11 +949,11 @@ public class FIOSDK: NSObject {
             completion (nil, FIOError(kind: .Failure, localizedDescription: "Json for input data not wrapping correctly"))
             return
         }
-        
+
         let abi = try! AbiJson(code: "fio.system", action: "rejctfndsreq", json: jsonString)
-        
+
         TransactionUtil.pushTransaction(abi: abi, account: "fio.system", privateKey: importedPk!, completion: { (result, error) in
-            
+
             guard let result = result, error == nil else {
                 if (error! as NSError).code == RPCErrorResponse.ErrorCode {
                     let errDescription = "error"
@@ -899,12 +971,12 @@ public class FIOSDK: NSObject {
                 completion(nil, FIOError.init(kind: .Failure, localizedDescription: "Error parsing the response"))
                 return
             }
-            
+
             guard response.status == .rejected else {
                 completion(nil, FIOError.init(kind: .Failure, localizedDescription: "The request couldn't rejected"))
                 return
             }
-            
+
             completion(response, FIOError.init(kind: FIOError.ErrorKind.Success, localizedDescription: ""))
         })
     }
