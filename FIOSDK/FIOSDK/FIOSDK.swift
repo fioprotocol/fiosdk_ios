@@ -944,11 +944,14 @@ public class FIOSDK: NSObject {
         var fioReqID: String
         var status: Status
         
-        enum Status: String, Codable{
+        enum CodingKeys: String, CodingKey {
             case fioReqID = "fioreqid"
-            case rejected = "request_rejected", unknown
+            case status
         }
         
+        enum Status: String, Codable{
+            case rejected = "request_rejected", unknown
+        }        
         
     }
     
