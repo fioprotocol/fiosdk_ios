@@ -198,6 +198,26 @@ class FIOSDKTests: XCTestCase {
         wait(for: [expectation], timeout: TIMEOUT)
     }
     
+    func testRejectFundsRequestWithDefaultAccountsShouldSucceed(){
+        let expectation = XCTestExpectation(description: "testRejectFundsRequest")
+        let amount = Double.random(in: 1111.0...4444)
+        FIOSDK.sharedInstance().requestFunds(from: "adam.brd ", to: "casey.brd", toPublicAddress: "0xab5801a7d398351b8be11c439e05c5b3259aec9b", amount: String(amount), tokenCode: "BTC", metadata: FIOSDK.RequestFundsRequest.MetaData(memo: "", hash: nil, offlineUrl: nil)) { (response, error) in
+            XCTAssert(error?.kind == .Success && response != nil, "testRejectFundsRequest Couldn't create mock request")
+            
+            if let response = response {
+                FIOSDK.sharedInstance().rejectFundsRequest(fundsRequestId: String(response.fundsRequestId), completion: { (response, error) in
+                    XCTAssert(error.kind == .Success, "testRejectFundsRequest couldn't reject request")
+                    expectation.fulfill()
+                })
+            }
+            else {
+                expectation.fulfill()
+            }
+        }
+        
+        wait(for: [expectation], timeout: TIMEOUT)
+    }
+    
     func testRejectFundsRequest(){
         let expectation = XCTestExpectation(description: "testRejectFundsRequest")
         let amount = Double.random(in: 1111.0...4444)
