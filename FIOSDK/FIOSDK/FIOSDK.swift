@@ -898,20 +898,20 @@ public class FIOSDK: NSObject {
     
     /// Creates a new funds request.
     /// To read further infomation about this [visit the API specs] [1]
-    ///
+    /// Note: requestor is sender, requestee is receiver
     ///    [1]: https://stealth.atlassian.net/wiki/spaces/DEV/pages/53280776/API#API-/new_funds_request-Createnewfundsrequest        "api specs"
     ///
     /// - Parameters:
-    ///   - fromFioAddress: FIO Address of user sending funds, i.e. requestee.brd
-    ///   - toFioAddress: FIO Address of user receiving funds, i.e. requestor.brd
+    ///   - fromFioAddress: FIO Address of user sending funds, i.e. requestor.brd
+    ///   - toFioAddress: FIO Address of user receiving funds, i.e. requestee.brd
     ///   - publicAddress: Public address on other blockchain of user receiving funds.
     ///   - amount: Amount requested.
     ///   - tokenCode: Code of the token represented in Amount requested, i.e. ETH
     ///   - metadata: Contains the: memo or hash or offlineUrl (they are mutually excludent, fill only one)
     ///   - completion: The completion handler containing the result
-    public func requestFunds(from fromFioAddress:String, to toFioAddress: String, toPublicAddress publicAddress: String, amount: String, tokenCode: String, metadata: RequestFundsRequest.MetaData, completion: @escaping ( _ response: RequestFundsResponse?, _ error:FIOError? ) -> ()) {
+    public func requestFunds(from fromFioAddress:String, to toFioAddress: String, toPublicAddress publicAddress: String, amount: Float, tokenCode: String, metadata: RequestFundsRequest.MetaData, completion: @escaping ( _ response: RequestFundsResponse?, _ error:FIOError? ) -> ()) {
         let actor = AccountNameGenerator.run(withPublicKey: getSystemPublicKey())
-        let data = RequestFundsRequest(from: fromFioAddress, to: toFioAddress, toPublicAddress: publicAddress, amount: amount, tokenCode: tokenCode, metadata: metadata.toJSONString(), actor: actor)
+        let data = RequestFundsRequest(from: fromFioAddress, to: toFioAddress, toPublicAddress: publicAddress, amount: String(amount), tokenCode: tokenCode, metadata: metadata.toJSONString(), actor: actor)
         
         signedPostRequestTo(route: ChainRoutes.newFundsRequest,
                             forAction: ChainActions.newFundsRequest,
