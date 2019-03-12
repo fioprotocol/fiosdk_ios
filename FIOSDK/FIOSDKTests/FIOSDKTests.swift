@@ -123,7 +123,7 @@ class FIOSDKTests: XCTestCase {
     /// address: self.requestorFioName, chain: "FIO", publicAddress: self.requesteeAddress
     func testAddPublicAddress(){
         let expectation = XCTestExpectation(description: "testaddpublicaddress")
-        FIOSDK.sharedInstance().addPublicAddress(fioAddress: self.requestorFioName, chain: "ETH", publicAddress: self.requesteeAddress) { (error) in
+        FIOSDK.sharedInstance().addPublicAddress(fioAddress: self.requestorFioName, chain: "ETH", publicAddress: self.requestorAddress) { (error) in
             XCTAssert((error?.kind == FIOError.ErrorKind.Success), "testAddPublicAddress NOT SUCCESSFUL: \(error?.localizedDescription ?? "")")
             expectation.fulfill()
         }
@@ -286,7 +286,7 @@ class FIOSDKTests: XCTestCase {
         let fioName = "sha\(Int(timestamp.rounded())).brd"
         let expectation = XCTestExpectation(description: "testRegisterFIONameWithNewValueShouldRegister")
 
-        FIOSDK.sharedInstance().registerFioName(fioName: fioName, publicReceiveAddresses: [:], completion: {error in ()
+        FIOSDK.sharedInstance().registerFioName(fioName: fioName, publicReceiveAddresses: ["BTC":"1PMycacnJaSqwwJqjawXBErnLsZ7RkXUAs", "ETH":requestorAddress], completion: {error in ()
             XCTAssert((error?.kind == FIOError.ErrorKind.Success), "registerFIOName NOT SUCCESSFUL")
             expectation.fulfill()
         })
