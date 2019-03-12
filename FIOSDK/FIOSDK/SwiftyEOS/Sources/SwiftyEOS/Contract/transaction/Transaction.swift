@@ -224,7 +224,6 @@ struct DataWriter {
         pushVariableUInt(value: CUnsignedInt(actions.count))
         for action in actions {
             pushLong(value: action.account.eosTypeNameToLong())
-            pushChar(value: 0x00) // MAGIC ZERO HACK
             pushLong(value: action.name.eosTypeNameToLong())
             pushPermission(permissions: action.authorization)
             if action.data != nil {
