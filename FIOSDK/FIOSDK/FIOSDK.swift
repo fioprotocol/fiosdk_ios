@@ -33,6 +33,7 @@ public class FIOSDK: NSObject {
         case newFundsRequest    = "/chain/new_funds_request"
         case rejectFundsRequest = "/chain/reject_funds_request"
         case addPublicAddress   = "/chain/add_pub_address"
+        case pubAddressLookup   = "/chain/pub_address_lookup"
     }
     
     struct ChainRouteBuilder {
@@ -434,7 +435,6 @@ public class FIOSDK: NSObject {
                 return
             }
             var addresses:Dictionary<String,String> = publicReceiveAddresses
-            addresses["FIO"] = actor
         
             var anyFail = false
         
@@ -783,6 +783,20 @@ public class FIOSDK: NSObject {
     }
     
     
+    //MARK: Public Address Lookup
+    
+    private struct PublicAddressLookupRequest: Codable {
+        
+        public let fioAddress: String
+        public let tokenCode: String
+        
+        enum CodingKeys: String, CodingKey{
+            case fioAddress = "fio_address"
+            case tokenCode = "token_code"
+        }
+        
+    }
+    
     /// Structure used as response body for getPublicAddress
     public struct PublicAddressResponse: Codable {
         
@@ -804,11 +818,11 @@ public class FIOSDK: NSObject {
     }
     
     
-    /// Returns a public address for a specified FIO Address, based on a given token for example ETH.
+    /// Returns a public address for a specified FIO Address, based on a given token for example ETH. [visit the API specs](https://stealth.atlassian.net/wiki/spaces/DEV/pages/53280776/API#API-/pub_address_lookup-FIOAddresslookup)
     /// example response:
     /// ```
     /// // example response
-    /// let result: [String: String] =  ["fio_pub_address": "0xab5801a7d398351b8be11c439e05c5b3259aec9b", "token_code": "ETH", "fio_address": "purse.alice"]
+    /// let result: [String: String] =  ["pub_address": "0xab5801a7d398351b8be11c439e05c5b3259aec9b", "token_code": "ETH", "fio_address": "purse.alice"]
     /// ```
     ///
     /// - Parameters:
@@ -816,41 +830,26 @@ public class FIOSDK: NSObject {
     ///   - tokenCode: Token code for which public address is to be returned, e.g. "ETH".
     ///   - completion: result based on DTO PublicAddressResponse
     public func getPublicAddress(fioAddress: String, tokenCode: String, completion: @escaping (_ publicAddress: PublicAddressResponse?, _ error: FIOError) -> ()){
-       
-        var jsonData: Data
-        
-        do{
-            jsonData = try JSONEncoder().encode(["fio_address": fioAddress, "token_code": tokenCode])
-        }catch {
-            completion (nil, FIOError(kind: .Failure, localizedDescription: ""))
-            return
-        }
-        
-        let url = URL(string: "\(getMockURI() != nil ? getMockURI()! : getURI())/chain/pub_address_lookup")!
-        
-        var request = URLRequest(url: url)
-        request.httpMethod = "POST"
-        request.httpBody = jsonData
-        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-        
-        let task = URLSession.shared.dataTask(with: request) { data, response, error in
-            guard let data = data, error == nil else {
-                print(error?.localizedDescription ?? "No data")
-                completion(nil, FIOError(kind: .NoDataReturned, localizedDescription: ""))
-                return
-            }
-            do {
-                let decoder = JSONDecoder()
-                let result = try decoder.decode(PublicAddressResponse.self, from: data)
-                completion(result, FIOError(kind: .Success, localizedDescription: ""))
-                
-            }catch let error{
-                let err = FIOError(kind: .Failure, localizedDescription: error.localizedDescription)
-                completion(nil, err)
+        let body = PublicAddressLookupRequest(fioAddress: fioAddress, tokenCode: tokenCode)
+        let url = ChainRouteBuilder.build(route: ChainRoutes.pubAddressLookup)
+        FIOHTTPHelper.postRequestTo(url, withBody: body) { (data, error) in
+            if let data = data {
+                do {
+                    let result = try JSONDecoder().decode(PublicAddressResponse.self, from: data)
+                    completion(result, FIOError(kind: .Success, localizedDescription: ""))
+                }
+                catch {
+                    completion(nil, FIOError(kind:.Failure, localizedDescription: "Parsing json failed."))
+                }
+            } else {
+                if let error = error {
+                    completion(nil, error)
+                }
+                else {
+                    completion(nil, FIOError(kind:.Failure, localizedDescription: ChainRoutes.pubAddressLookup.rawValue + " request failed."))
+                }
             }
         }
-        
-        task.resume()
     }
     
     //MARK: - Request Funds
@@ -928,9 +927,8 @@ public class FIOSDK: NSObject {
     }
     
     /// Creates a new funds request.
-    /// To read further infomation about this [visit the API specs] [1]
+    /// To read further infomation about this [visit the API specs](https://stealth.atlassian.net/wiki/spaces/DEV/pages/53280776/API#API-/new_funds_request-Createnewfundsrequest)
     /// Note: requestor is sender, requestee is receiver
-    ///    [1]: https://stealth.atlassian.net/wiki/spaces/DEV/pages/53280776/API#API-/new_funds_request-Createnewfundsrequest        "api specs"
     ///
     /// - Parameters:
     ///   - fromFioAddress: FIO Address of user sending funds, i.e. requestor.brd

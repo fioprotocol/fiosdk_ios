@@ -91,7 +91,7 @@ class FIOSDKTests: XCTestCase {
     func testGetRegisteredFioName(){
         let expectation = XCTestExpectation(description: "testGetRegisteredFioName")
         
-        FIOSDK.sharedInstance().getPublicAddress(fioAddress: self.requesteeFioName, tokenCode: "ETH") { (response, error) in
+        FIOSDK.sharedInstance().getPublicAddress(fioAddress: self.requesteeFioName, tokenCode: "FIO") { (response, error) in
             XCTAssert(error.kind == .Success, "getPublicAddress error")
             XCTAssertNotNil(response, "getPublicAddress error")
             
@@ -163,10 +163,19 @@ class FIOSDKTests: XCTestCase {
     /// fioAddress: self.requesteeFioName, tokenCode: "BTC"
     func testGetPublicAddress(){
         let expectation = XCTestExpectation(description: "testgetpublicaddress")
-        FIOSDK.sharedInstance().getPublicAddress(fioAddress: requesteeFioName, tokenCode: "BTC") { (response, error) in
+        FIOSDK.sharedInstance().getPublicAddress(fioAddress: requesteeFioName, tokenCode: "FIO") { (response, error) in
             XCTAssert(error.kind == .Success, "testgetpublicaddress not succesful")
             XCTAssertNotNil(response, "testgetpublicaddress not successful: \(error.localizedDescription)")
             XCTAssertFalse(response!.publicAddress.isEmpty, "testgetpublicadddress not succesful no public address was found")
+            expectation.fulfill()
+        }
+        wait(for: [expectation], timeout: TIMEOUT)
+    }
+    
+    func testGetPublicAddressWithNonRegisteredTokenShouldFail(){
+        let expectation = XCTestExpectation(description: "testgetpublicaddress")
+        FIOSDK.sharedInstance().getPublicAddress(fioAddress: requesteeFioName, tokenCode: "NOTVALID") { (response, error) in
+            XCTAssert(error.kind == .Failure, "should've failed")
             expectation.fulfill()
         }
         wait(for: [expectation], timeout: TIMEOUT)
