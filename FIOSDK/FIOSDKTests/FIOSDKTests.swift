@@ -136,11 +136,43 @@ class FIOSDKTests: XCTestCase {
     /// publicAddress = self.requesteeAddress
     func testGetPendingFioRequests(){
         let expectation = XCTestExpectation(description: "testgetpendingfiorequest")
-        FIOSDK.sharedInstance().getPendingFioRequests(fioPublicAddress: self.requesteeAddress) { (data, error) in
-            XCTAssert(error?.kind == FIOError.ErrorKind.Success, "testgetpendingfiorequest not successful: \(error?.localizedDescription ?? "unknown")")
-            XCTAssertNotNil(data, "testgetpendingfiorequest result came out nil")
-            expectation.fulfill()
+        let metadata = FIOSDK.RequestFundsRequest.MetaData(memo: "Invoice1234", hash: nil, offlineUrl: nil)
+        
+        let doTest: (FIOError?) -> Void = { error in
+            guard error?.kind == .Success else {
+                XCTFail("Failed getting pending requests")
+                expectation.fulfill()
+                return
+            }
+            FIOSDK.sharedInstance().requestFunds(from: "adam.brd ", to: "casey.brd", toPublicAddress: "0xab5801a7d398351b8be11c439e05c5b3259aec9b", amount: 1.0, tokenCode: "DAI", metadata: metadata) { (response, error) in
+                if error?.kind == .Success {
+                    FIOSDK.sharedInstance().getPendingFioRequests(fioPublicAddress: self.requesteeAddress) { (data, error) in
+                        XCTAssert(error?.kind == FIOError.ErrorKind.Success, "testgetpendingfiorequest not successful: \(error?.localizedDescription ?? "unknown")")
+                        XCTAssertNotNil(data, "testgetpendingfiorequest result came out nil")
+                        expectation.fulfill()
+                    }
+                }
+                else {
+                    XCTFail("Failed to call requestFunds prior to getting pending requests")
+                    expectation.fulfill()
+                }
+            }
         }
+        
+        let onAddPublicAddressFinished: (FIOError?) -> Void = { (error) in
+            if error?.kind == .Failure {
+                FIOSDK.sharedInstance().addPublicAddress(fioAddress: "casey.brd", chain: "DAI", publicAddress: "0xab5801a7d398351b8be11c439e05c5b3259aec9b", completion: doTest)
+            }
+            else {
+                doTest(FIOError(kind: .Success, localizedDescription: ""))
+            }
+        }
+        
+        FIOSDK.sharedInstance().getPublicAddress(fioAddress: "casey.brd", tokenCode: "DAI") { (response, error) in
+            onAddPublicAddressFinished(error)
+        }
+        
+        
         wait(for: [expectation], timeout: TIMEOUT)
     }
     

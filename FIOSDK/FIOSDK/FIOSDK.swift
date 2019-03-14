@@ -28,13 +28,14 @@ public class FIOSDK: NSObject {
     
     //MARK: - Chain routes
     enum ChainRoutes: String {
-        case serializeJSON      = "/chain/serialize_json"
-        case registerFIOName    = "/chain/register_fio_name"
-        case newFundsRequest    = "/chain/new_funds_request"
-        case rejectFundsRequest = "/chain/reject_funds_request"
-        case addPublicAddress   = "/chain/add_pub_address"
-        case pubAddressLookup   = "/chain/pub_address_lookup"
-        case getFIONames        = "/chain/get_fio_names"
+        case serializeJSON          = "/chain/serialize_json"
+        case registerFIOName        = "/chain/register_fio_name"
+        case newFundsRequest        = "/chain/new_funds_request"
+        case rejectFundsRequest     = "/chain/reject_funds_request"
+        case addPublicAddress       = "/chain/add_pub_address"
+        case pubAddressLookup       = "/chain/pub_address_lookup"
+        case getFIONames            = "/chain/get_fio_names"
+        case getPendingFIORequests  = "/chain/get_pending_fio_requests"
     }
     
     struct ChainRouteBuilder {
@@ -613,20 +614,30 @@ public class FIOSDK: NSObject {
         task.resume()
     }
     
+    //MARK: Get Pending FIO Requests
     
+    private struct GetPendingFIORequestsRequest: Codable {
+        
+        public let address: String
+        
+        enum CodingKeys: String, CodingKey{
+            case address = "fiopubadd"
+        }
+        
+    }
     
     /// getPendingFioRequest DTO response
     public struct PendingFioRequestsResponse: Codable {
-       public let address: String
-       public let requests: [PendingFioRequest]
+            
+        public let requests: [PendingFioRequest]
         
         enum CodingKeys: String, CodingKey{
-            case address = "fio_pub_address"
             case requests
         }
         
         /// PendingFioRequestsResponse.request DTO
-        public struct PendingFioRequest: Codable{
+        public struct PendingFioRequest: Codable {
+            
             public let fundsRequestId: String
             public let fromFioAddress: String
             public let toFioAddress: String
@@ -637,65 +648,56 @@ public class FIOSDK: NSObject {
             public let metadata: MetaData
             public let timeStamp: Date
             
-            enum CodingKeys: String, CodingKey{
-                case fundsRequestId = "fio_funds_request_id"
-                case fromFioAddress = "from_fio_address"
-                case toFioAddress = "to_fio_address"
-                case toPublicAddress = "to_pub_address"
+            enum CodingKeys: String, CodingKey {
+                case fundsRequestId = "fioreqid"
+                case fromFioAddress = "fromfioaddr"
+                case toFioAddress = "tofioaddr"
+                case toPublicAddress = "topubaddr"
                 case amount
-                case tokenCode = "token_code"
-                case chainCode = "chain_code"
+                case tokenCode = "tokencode"
+                case chainCode = "chaincode"
                 case metadata
-                case timeStamp = "time_stamp"
+                case timeStamp = "fiotime"
             }
             
-            public struct MetaData: Codable{
+            public struct MetaData: Codable {
+                
                 public let memo: String
+                
             }
+            
         }
+
     }
     
-    /// Pending requests call polls for any pending requests sent to a receiver.
+    /// Pending requests call polls for any pending requests sent to a receiver. [visit api specs](https://stealth.atlassian.net/wiki/spaces/DEV/pages/53280776/API#API-/get_pending_fio_requests-GetpendingFIORequests)
     ///
     /// - Parameters:
     ///   - fioPublicAddress: FIO public address of new owner. Has to match signature
     ///   - completion: Completion hanlder
     public func getPendingFioRequests(fioPublicAddress: String, completion: @escaping (_ pendingRequests: PendingFioRequestsResponse?, _ error:FIOError?) -> ()) {
-        
-
-        var jsonData: Data
-        do{
-            jsonData = try JSONEncoder().encode(["fio_pub_address": fioPublicAddress])
-        }catch {
-            completion (nil, FIOError(kind: .Failure, localizedDescription: ""))
-            return
-        }
-        
-        let url = URL(string: "\(getMockURI() != nil ? getMockURI()! : getURI())/chain/get_pending_fio_requests")!
-        var request = URLRequest(url: url)
-        request.httpMethod = "POST"
-        request.httpBody = jsonData
-        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-        
-        let task = URLSession.shared.dataTask(with: request) { data, response, error in
-            guard let data = data, error == nil else {
-                print(error?.localizedDescription ?? "No data")
-                completion(nil, FIOError(kind: .NoDataReturned, localizedDescription: ""))
-                return
-            }
-            do {
-                let decoder = JSONDecoder()
-                decoder.dateDecodingStrategy = .iso8601
-                let result = try decoder.decode(PendingFioRequestsResponse.self, from: data)
-                completion(result, FIOError(kind: .Success, localizedDescription: ""))
-                
-            }catch let error{
-                let err = FIOError(kind: .Failure, localizedDescription: error.localizedDescription)
-                completion(nil, err)
+        let body = GetPendingFIORequestsRequest(address: fioPublicAddress)
+        let url = ChainRouteBuilder.build(route: ChainRoutes.getPendingFIORequests)
+        FIOHTTPHelper.postRequestTo(url, withBody: body) { (data, error) in
+            if let data = data {
+                do {
+                    let decoder = JSONDecoder()
+                    decoder.dateDecodingStrategy = .iso8601
+                    let result = try JSONDecoder().decode(PendingFioRequestsResponse.self, from: data)
+                    completion(result, FIOError(kind: .Success, localizedDescription: ""))
+                }
+                catch {
+                    completion(nil, FIOError(kind:.Failure, localizedDescription: "Parsing json failed."))
+                }
+            } else {
+                if let error = error {
+                    completion(nil, error)
+                }
+                else {
+                    completion(nil, FIOError(kind:.Failure, localizedDescription: ChainRoutes.getPendingFIORequests.rawValue + " request failed."))
+                }
             }
         }
-        
-        task.resume()
     }
     
     //MARK: Get FIO Names
