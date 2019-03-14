@@ -22,42 +22,16 @@ struct AccountNameGenerator {
      * - Return: account name value.
      */
     public static func run(withPublicKey publicKey: String) -> String {
-        guard publicKey.count > 4 else { return "" }
+        guard publicKey.count > 3 else { return "" }
         //STEP 1 AND STEP 2 are not needed we receive the public key
         var pubKey = publicKey
         //STEP 3 remove 4 chars
-        pubKey.removeSubrange(pubKey.startIndex..<pubKey.index(pubKey.startIndex, offsetBy: 4))
+        pubKey.removeSubrange(pubKey.startIndex..<pubKey.index(pubKey.startIndex, offsetBy: 3))
         //STEP 4 Base58 the pubkey
-        guard let base58 = pubKey.data(using: .ascii)?.base58EncodedData() else { return "" }
-        let hash = String(data: base58, encoding: .ascii) ?? ""
-        //STEP 5 Get a long
-        let long = stringToUInt64T(value: hash)
-        //STEP 6 Generate the name from long
+        guard let decoded58 = Data.decode(base58: pubKey) else { return "" }
+        let long = shortenKey(decoded58)
+        //STEP 5 Generate the name from long
         return longToString(long)
-    }
-    
-    private static func stringToUInt64T(value: String) -> UInt64 {
-        let characters = value.ascii
-        let length = value.count
-        
-        var number: UInt64 = 0
-        
-        for i in 0...12 {
-            var c: UInt64 = 0
-            if (i < length && i <= 12) {
-                c = UInt64(characters[i])
-            }
-            if (i < 12) {
-                c &= 0x1f
-                let toShift = 64 - 5 * (i+1)
-                c = c << toShift
-            } else {
-                c &= 0x0f
-            }
-            number |= c
-        }
-        
-        return number
     }
     
     private static func longToString(_ value: UInt64) -> String {
@@ -80,6 +54,29 @@ struct AccountNameGenerator {
             result = String(result[..<result.index(result.startIndex, offsetBy: 12)])
         }
         return result
+    }
+    
+    private static func shortenKey(_ key: Data) -> UInt64 {
+        var res: UInt64 = 0
+        var temp: UInt64 = 0
+        var toShift = 0
+        var i = 1
+        var len = 0
+    
+        while (len <= 12) {
+            assert(i < 33, "Means the key has > 20 bytes with trailing zeroes...")
+            temp = UInt64(key[i]) & (len == 12 ? 0x0f : 0x1f)
+            if (temp == 0) {
+                i+=1
+                continue
+            }
+            toShift = len == 12 ? 0 : (5 * (12 - len) - 1)
+            res = res | temp << toShift
+            len+=1
+            i+=1
+        }
+    
+        return res;
     }
     
 }
