@@ -34,6 +34,7 @@ public class FIOSDK: NSObject {
         case rejectFundsRequest = "/chain/reject_funds_request"
         case addPublicAddress   = "/chain/add_pub_address"
         case pubAddressLookup   = "/chain/pub_address_lookup"
+        case getFIONames        = "/chain/get_fio_names"
     }
     
     struct ChainRouteBuilder {
@@ -697,6 +698,17 @@ public class FIOSDK: NSObject {
         task.resume()
     }
     
+    //MARK: Get FIO Names
+    
+    public struct GetFIONamesRequest: Codable {
+        
+        var fioPubAddress: String
+        
+        enum CodingKeys: String, CodingKey {
+            case fioPubAddress = "fio_pub_address"
+        }
+        
+    }
     
     /// DTO to represent the response of /get_fio_names
     public struct FioNamesResponse: Codable{
@@ -745,41 +757,26 @@ public class FIOSDK: NSObject {
     ///   - publicAddress: FIO public address of new owner. Has to match signature
     ///   - completion: Completion handler
     public func getFioNames(publicAddress: String, completion: @escaping (_ names: FioNamesResponse?, _ error: FIOError?) -> ()){
-        
-        var jsonData: Data
-        do{
-            jsonData = try JSONEncoder().encode(["fio_pub_address": publicAddress])
-        }catch {
-            completion (nil, FIOError(kind: .Failure, localizedDescription: ""))
-            return
-        }
-        
-        let url = URL(string: "\(getMockURI() != nil ? getMockURI()! : getURI())/chain/get_fio_names")!
-
-        var request = URLRequest(url: url)
-        request.httpMethod = "POST"
-        request.httpBody = jsonData
-        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-        
-        let task = URLSession.shared.dataTask(with: request) { data, response, error in
-            guard let data = data, error == nil else {
-                print(error?.localizedDescription ?? "No data")
-                completion(nil, FIOError(kind: .NoDataReturned, localizedDescription: ""))
-                return
-            }
-            do {
-                let decoder = JSONDecoder()
-                decoder.dateDecodingStrategy = .secondsSince1970
-                let result = try decoder.decode(FioNamesResponse.self, from: data)
-                completion(result, FIOError(kind: .Success, localizedDescription: ""))
-                
-            }catch let error{
-                let err = FIOError(kind: .Failure, localizedDescription: error.localizedDescription)
-                completion(nil, err)
+        let body = GetFIONamesRequest(fioPubAddress: publicAddress)
+        let url = ChainRouteBuilder.build(route: ChainRoutes.getFIONames)
+        FIOHTTPHelper.postRequestTo(url, withBody: body) { (data, error) in
+            if let data = data {
+                do {
+                    let result = try JSONDecoder().decode(FioNamesResponse.self, from: data)
+                    completion(result, FIOError(kind: .Success, localizedDescription: ""))
+                }
+                catch {
+                    completion(nil, FIOError(kind:.Failure, localizedDescription: "Parsing json failed."))
+                }
+            } else {
+                if let error = error {
+                    completion(nil, error)
+                }
+                else {
+                    completion(nil, FIOError(kind:.Failure, localizedDescription: ChainRoutes.getFIONames.rawValue + " request failed."))
+                }
             }
         }
-        
-        task.resume()
     }
     
     

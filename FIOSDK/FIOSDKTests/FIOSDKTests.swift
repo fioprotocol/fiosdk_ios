@@ -158,6 +158,15 @@ class FIOSDKTests: XCTestCase {
         wait(for: [expectation], timeout: TIMEOUT)
     }
     
+    func testGetFioNamesWithUnvalidAddressShouldRespondWithNotFound(){
+        let expectation = XCTestExpectation(description: "testgetfionames")
+        FIOSDK.sharedInstance().getFioNames(publicAddress: "NOT VALID ADDRESS") { (data, error) in
+            XCTAssert(error?.kind == FIOError.ErrorKind.Failure, "Should have failed")
+            expectation.fulfill()
+        }
+        wait(for: [expectation], timeout: TIMEOUT)
+    }
+    
     
     /// Tests the getPublicAddress method on FIOSDK using constant values ->
     /// fioAddress: self.requesteeFioName, tokenCode: "BTC"
