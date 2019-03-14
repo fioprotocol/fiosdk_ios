@@ -638,24 +638,30 @@ public class FIOSDK: NSObject {
         /// PendingFioRequestsResponse.request DTO
         public struct PendingFioRequest: Codable {
             
-            public let fundsRequestId: String
+            public var fundsRequestId: String {
+                return String(fioreqid)
+            }
+            private let fioreqid: Int
             public let fromFioAddress: String
             public let toFioAddress: String
             public let toPublicAddress: String
             public let amount: String
             public let tokenCode: String
-            public let chainCode: String
+            //Specified in docs but not present in the response
+            //TODO: Put it back once response has it
+            #warning("Chain code must be put back once BC Team set it in the response")
+//            public let chainCode: String
             public let metadata: MetaData
-            public let timeStamp: Date
+            public let timeStamp: TimeInterval
             
             enum CodingKeys: String, CodingKey {
-                case fundsRequestId = "fioreqid"
+                case fioreqid = "fioreqid"
                 case fromFioAddress = "fromfioaddr"
                 case toFioAddress = "tofioaddr"
                 case toPublicAddress = "topubaddr"
                 case amount
                 case tokenCode = "tokencode"
-                case chainCode = "chaincode"
+//                case chainCode = "chaincode"
                 case metadata
                 case timeStamp = "fiotime"
             }
@@ -664,6 +670,55 @@ public class FIOSDK: NSObject {
                 
                 public let memo: String
                 
+            }
+            
+            init(fioreqid: Int,
+                 fromFioAddress: String,
+                 toFioAddress: String,
+                 toPublicAddress: String,
+                 amount: String,
+                 tokenCode: String,
+                 metadata: MetaData,
+                 timeStamp: TimeInterval) {
+                self.fioreqid = fioreqid
+                self.fromFioAddress = fromFioAddress
+                self.toFioAddress = toFioAddress
+                self.toPublicAddress = toPublicAddress
+                self.amount = amount
+                self.tokenCode = tokenCode
+                //self.chainCode = chainCode
+                self.metadata = metadata
+                self.timeStamp = timeStamp
+            }
+            
+            public init(from decoder: Decoder) throws {
+                let container = try decoder.container(keyedBy: CodingKeys.self)
+                
+                let fioreqid = try container.decodeIfPresent(Int.self, forKey: .fioreqid) ?? 0
+                let fromFioAddress = try container.decodeIfPresent(String.self, forKey: .fromFioAddress) ?? ""
+                let toFioAddress = try container.decodeIfPresent(String.self, forKey: .toFioAddress) ?? ""
+                let toPublicAddress = try container.decodeIfPresent(String.self, forKey: .toPublicAddress) ?? ""
+                let amount = try container.decodeIfPresent(String.self, forKey: .amount) ?? ""
+                let tokenCode = try container.decodeIfPresent(String.self, forKey: .tokenCode) ?? ""
+                let timeStampValue = try container.decodeIfPresent(String.self, forKey: .timeStamp)
+                var timeStamp: TimeInterval = Date().timeIntervalSince1970
+                if let unwrappedTimeStamp = timeStampValue, let timeStampDouble = Double(unwrappedTimeStamp) {
+                    timeStamp = TimeInterval(timeStampDouble)
+                }
+                var metadata = PendingFioRequest.MetaData(memo: "")
+                let metadataString = try container.decodeIfPresent(String.self, forKey: .metadata)
+                if let metadataData = metadataString?.data(using: .utf8) {
+                  metadata = try JSONDecoder().decode(PendingFioRequest.MetaData.self, from: metadataData)
+                }
+                
+                self.init(fioreqid: fioreqid,
+                    fromFioAddress: fromFioAddress,
+                    toFioAddress: toFioAddress,
+                    toPublicAddress: toPublicAddress,
+                    amount: amount,
+                    tokenCode: tokenCode,
+                    metadata: metadata,
+                    timeStamp: timeStamp)
             }
             
         }
@@ -681,8 +736,6 @@ public class FIOSDK: NSObject {
         FIOHTTPHelper.postRequestTo(url, withBody: body) { (data, error) in
             if let data = data {
                 do {
-                    let decoder = JSONDecoder()
-                    decoder.dateDecodingStrategy = .iso8601
                     let result = try JSONDecoder().decode(PendingFioRequestsResponse.self, from: data)
                     completion(result, FIOError(kind: .Success, localizedDescription: ""))
                 }

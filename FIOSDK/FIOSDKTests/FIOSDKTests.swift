@@ -42,7 +42,7 @@ class FIOSDKTests: XCTestCase {
             
            // _ = FIOSDK.sharedInstance(accountName: "fio.system", privateKey: "5KBX1dwHME4VyuUss2sYM25D5ZTDvyYrbEz37UJqwAVAsR4tGuY", publicKey: "EOS7isxEua78KPVbGzKemH4nj2bWE52gqj8Hkac3tc7jKNvpfWzYS",systemPrivateKey:"5KBX1dwHME4VyuUss2sYM25D5ZTDvyYrbEz37UJqwAVAsR4tGuY", systemPublicKey:"EOS7isxEua78KPVbGzKemH4nj2bWE52gqj8Hkac3tc7jKNvpfWzYS", url: "http://34.220.213.187:8889/v1")
 //            _ = FIOSDK.sharedInstance(accountName: "fioname11111", privateKey: "5K2HBexbraViJLQUJVJqZc42A8dxkouCmzMamdrZsLHhUHv77jF", publicKey: "EOS5GpUwQtFrfvwqxAv24VvMJFeMHutpQJseTz8JYUBfZXP2zR8VY",systemPrivateKey:"5KBX1dwHME4VyuUss2sYM25D5ZTDvyYrbEz37UJqwAVAsR4tGuY", systemPublicKey:"EOS7isxEua78KPVbGzKemH4nj2bWE52gqj8Hkac3tc7jKNvpfWzYS", url: "http://18.210.240.10:8889/v1", mockUrl: "http://localhost:8080")
-            _ = FIOSDK.sharedInstance(accountName: "fioname11111", privateKey: "5K2HBexbraViJLQUJVJqZc42A8dxkouCmzMamdrZsLHhUHv77jF", publicKey: "EOS5GpUwQtFrfvwqxAv24VvMJFeMHutpQJseTz8JYUBfZXP2zR8VY",systemPrivateKey:"5KBX1dwHME4VyuUss2sYM25D5ZTDvyYrbEz37UJqwAVAsR4tGuY", systemPublicKey:"EOS7isxEua78KPVbGzKemH4nj2bWE52gqj8Hkac3tc7jKNvpfWzYS", url: "http://34.213.160.31:8889/v1", mockUrl: "http://localhost:8080")
+            _ = FIOSDK.sharedInstance(accountName: "fioname11111", privateKey: "5K2HBexbraViJLQUJVJqZc42A8dxkouCmzMamdrZsLHhUHv77jF", publicKey: "EOS5GpUwQtFrfvwqxAv24VvMJFeMHutpQJseTz8JYUBfZXP2zR8VY",systemPrivateKey:"5KBX1dwHME4VyuUss2sYM25D5ZTDvyYrbEz37UJqwAVAsR4tGuY", systemPublicKey:"EOS7isxEua78KPVbGzKemH4nj2bWE52gqj8Hkac3tc7jKNvpfWzYS", url: "http://54.202.124.82:8889/v1", mockUrl: "http://localhost:8080")//34.213.160.31:8889
             
         }
 
@@ -65,7 +65,7 @@ class FIOSDKTests: XCTestCase {
             })
 
         })
-
+        
         wait(for: [expectation], timeout: TIMEOUT)
 
 
@@ -138,41 +138,25 @@ class FIOSDKTests: XCTestCase {
         let expectation = XCTestExpectation(description: "testgetpendingfiorequest")
         let metadata = FIOSDK.RequestFundsRequest.MetaData(memo: "Invoice1234", hash: nil, offlineUrl: nil)
         
-        let doTest: (FIOError?) -> Void = { error in
-            guard error?.kind == .Success else {
-                XCTFail("Failed getting pending requests")
-                expectation.fulfill()
-                return
-            }
-            FIOSDK.sharedInstance().requestFunds(from: "adam.brd ", to: "casey.brd", toPublicAddress: "0xab5801a7d398351b8be11c439e05c5b3259aec9b", amount: 1.0, tokenCode: "DAI", metadata: metadata) { (response, error) in
-                if error?.kind == .Success {
-                    FIOSDK.sharedInstance().getPendingFioRequests(fioPublicAddress: self.requesteeAddress) { (data, error) in
-                        XCTAssert(error?.kind == FIOError.ErrorKind.Success, "testgetpendingfiorequest not successful: \(error?.localizedDescription ?? "unknown")")
-                        XCTAssertNotNil(data, "testgetpendingfiorequest result came out nil")
+        FIOSDK.sharedInstance().addPublicAddress(fioAddress: "adam.brd", chain: "BTC", publicAddress: "fromadd") { (error) in
+            XCTAssert((error?.kind == FIOError.ErrorKind.Success), "testAddPublicAddress NOT SUCCESSFUL: \(error?.localizedDescription ?? "")")
+            FIOSDK.sharedInstance().addPublicAddress(fioAddress: "casey.brd", chain: "BTC", publicAddress: "toadd") { (error) in
+                XCTAssert((error?.kind == FIOError.ErrorKind.Success), "testAddPublicAddress NOT SUCCESSFUL: \(error?.localizedDescription ?? "")")
+                FIOSDK.sharedInstance().requestFunds(from: "adam.brd", to: "casey.brd", toPublicAddress: "toadd", amount: 1.0, tokenCode: "BTC", metadata: metadata) { (response, error) in
+                    if error?.kind == .Success {
+                        FIOSDK.sharedInstance().getPendingFioRequests(fioPublicAddress: "fromadd") { (data, error) in
+                            XCTAssert(error?.kind == FIOError.ErrorKind.Success, "testgetpendingfiorequest not successful: \(error?.localizedDescription ?? "unknown")")
+                            XCTAssertNotNil(data, "testgetpendingfiorequest result came out nil")
+                            expectation.fulfill()
+                        }
+                    }
+                    else {
+                        XCTFail("Failed to call requestFunds prior to getting pending requests")
                         expectation.fulfill()
                     }
                 }
-                else {
-                    XCTFail("Failed to call requestFunds prior to getting pending requests")
-                    expectation.fulfill()
-                }
             }
         }
-        
-        let onAddPublicAddressFinished: (FIOError?) -> Void = { (error) in
-            if error?.kind == .Failure {
-                FIOSDK.sharedInstance().addPublicAddress(fioAddress: "casey.brd", chain: "DAI", publicAddress: "0xab5801a7d398351b8be11c439e05c5b3259aec9b", completion: doTest)
-            }
-            else {
-                doTest(FIOError(kind: .Success, localizedDescription: ""))
-            }
-        }
-        
-        FIOSDK.sharedInstance().getPublicAddress(fioAddress: "casey.brd", tokenCode: "DAI") { (response, error) in
-            onAddPublicAddressFinished(error)
-        }
-        
-        
         wait(for: [expectation], timeout: TIMEOUT)
     }
     
@@ -319,7 +303,7 @@ class FIOSDKTests: XCTestCase {
     
     func testGenerateAccountNameGeneratorWithProperValuesOutputCorrectResult() {
         let publicKey = "EOS6cDpi7vPnvRwMEdXtLnAmFwygaQ8CzD7vqKLBJ2GfgtHBQ4PPy"
-        let expectedOutput = "cp3r4smnrq4l"
+        let expectedOutput = "2odzomo2v4pe"
         let accountName = AccountNameGenerator.run(withPublicKey: publicKey)
         XCTAssertEqual(accountName, expectedOutput)
     }
