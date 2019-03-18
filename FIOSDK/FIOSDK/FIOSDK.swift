@@ -36,6 +36,7 @@ public class FIOSDK: NSObject {
         case pubAddressLookup       = "/chain/pub_address_lookup"
         case getFIONames            = "/chain/get_fio_names"
         case getPendingFIORequests  = "/chain/get_pending_fio_requests"
+        case getSentFIORequests     = "/chain/get_sent_fio_requests"
     }
     
     struct ChainRouteBuilder {
@@ -628,10 +629,12 @@ public class FIOSDK: NSObject {
     
     /// getPendingFioRequest DTO response
     public struct PendingFioRequestsResponse: Codable {
-            
+        
+        public let fioPubAdd: String
         public let requests: [PendingFioRequest]
         
         enum CodingKeys: String, CodingKey{
+            case fioPubAdd = "fiopubadd"
             case requests
         }
         
@@ -1066,94 +1069,185 @@ public class FIOSDK: NSObject {
         }
     }
     
-    //MARK: -
+    //MARK: Get Sent FIO Requests
     
-    public struct SentFioRequestResponse: Codable{
-        public let publicAddress: String
+    private struct GetSentFIORequestsRequest: Codable {
+        
+        public let address: String
+        
+        enum CodingKeys: String, CodingKey{
+            case address = "fiopubadd"
+        }
+        
+    }
+    
+    public struct SentFioRequestResponse: Codable {
+        
+        public let fioPublicAddress: String
         public let requests: [SentFioRequest]
         
         enum CodingKeys: String, CodingKey{
-            case publicAddress = "fio_pub_address"
+            case fioPublicAddress = "fiopubadd"
             case requests
         }
         
         /// PendingFioRequestsResponse.request DTO
-        public struct SentFioRequest: Codable{
-            public let fundsRequestId: String
+        public struct SentFioRequest: Codable {
+            
+            public var fundsRequestId: String {
+                return String(fioreqid)
+            }
+            private let fioreqid: Int
             public let fromFioAddress: String
             public let toFioAddress: String
             public let toPublicAddress: String
             public let amount: String
             public let tokenCode: String
-            public let chainCode: String
+            //Specified in docs but not present in the response
+            //TODO: Put it back once response has it
+            #warning("Chain code must be put back once BC Team set it in the response")
+            //            public let chainCode: String
             public let metadata: MetaData
-            public let timeStamp: Date
+            public let timeStamp: TimeInterval
             public let status: String
             
-            enum CodingKeys: String, CodingKey{
-                case fundsRequestId = "fio_funds_request_id"
-                case fromFioAddress = "from_fio_address"
-                case toFioAddress = "to_fio_address"
-                case toPublicAddress = "to_pub_address"
+            enum CodingKeys: String, CodingKey {
+                case fioreqid = "fioreqid"
+                case fromFioAddress = "fromfioaddr"
+                case toFioAddress = "tofioaddr"
+                case toPublicAddress = "topubaddr"
                 case amount
-                case tokenCode = "token_code"
-                case chainCode = "chain_code"
+                case tokenCode = "tokencode"
+                //                case chainCode = "chaincode"
                 case metadata
-                case timeStamp = "time_stamp"
+                case timeStamp = "fiotime"
                 case status
             }
             
-            public struct MetaData: Codable{
+            public struct MetaData: Codable {
+                
                 public let memo: String
+                
             }
+            
+            init(fioreqid: Int,
+                 fromFioAddress: String,
+                 toFioAddress: String,
+                 toPublicAddress: String,
+                 amount: String,
+                 tokenCode: String,
+                 metadata: MetaData,
+                 timeStamp: TimeInterval,
+                 status: String) {
+                self.fioreqid = fioreqid
+                self.fromFioAddress = fromFioAddress
+                self.toFioAddress = toFioAddress
+                self.toPublicAddress = toPublicAddress
+                self.amount = amount
+                self.tokenCode = tokenCode
+                //self.chainCode = chainCode
+                self.metadata = metadata
+                self.timeStamp = timeStamp
+                self.status = status
+            }
+            
+            public init(from decoder: Decoder) throws {
+                let container = try decoder.container(keyedBy: CodingKeys.self)
+                
+                let fioreqid = try container.decodeIfPresent(Int.self, forKey: .fioreqid) ?? 0
+                let fromFioAddress = try container.decodeIfPresent(String.self, forKey: .fromFioAddress) ?? ""
+                let toFioAddress = try container.decodeIfPresent(String.self, forKey: .toFioAddress) ?? ""
+                let toPublicAddress = try container.decodeIfPresent(String.self, forKey: .toPublicAddress) ?? ""
+                let amount = try container.decodeIfPresent(String.self, forKey: .amount) ?? ""
+                let tokenCode = try container.decodeIfPresent(String.self, forKey: .tokenCode) ?? ""
+                let timeStampValue = try container.decodeIfPresent(String.self, forKey: .timeStamp)
+                var timeStamp: TimeInterval = Date().timeIntervalSince1970
+                if let unwrappedTimeStamp = timeStampValue, let timeStampDouble = Double(unwrappedTimeStamp) {
+                    timeStamp = TimeInterval(timeStampDouble)
+                }
+                var metadata = SentFioRequest.MetaData(memo: "")
+                let metadataString = try container.decodeIfPresent(String.self, forKey: .metadata)
+                if let metadataData = metadataString?.data(using: .utf8) {
+                    metadata = try JSONDecoder().decode(SentFioRequest.MetaData.self, from: metadataData)
+                }
+                let status = try container.decodeIfPresent(String.self, forKey: .status) ?? ""
+                
+                self.init(fioreqid: fioreqid,
+                          fromFioAddress: fromFioAddress,
+                          toFioAddress: toFioAddress,
+                          toPublicAddress: toPublicAddress,
+                          amount: amount,
+                          tokenCode: tokenCode,
+                          metadata: metadata,
+                          timeStamp: timeStamp,
+                          status: status)
+            }
+            
         }
+        
     }
     
-    
     /// Sent requests call polls for any requests sent be sender.
-    /// To read further infomation about this [visit the API specs] [1]
-    ///
-    ///    [1]: https://stealth.atlassian.net/wiki/spaces/DEV/pages/53280776/API#API-/get_sent_fio_requests-GetFIORequestssentout        "api specs"
+    /// To read further infomation about this [visit the API specs](https://stealth.atlassian.net/wiki/spaces/DEV/pages/53280776/API#API-/get_sent_fio_requests-GetFIORequestssentout)
     /// - Parameters:
     ///   - publicAddress: FIO public address of owner.
     ///   - completion: The completion result
     public func getSentFioRequest(publicAddress: String, completion: @escaping (_ response: SentFioRequestResponse?, _ error: FIOError) -> ()){
-        
-        var jsonData: Data
-        
-        do{
-            jsonData = try JSONEncoder().encode(["fio_pub_address": publicAddress])
-        }catch {
-            completion (nil, FIOError(kind: .Failure, localizedDescription: ""))
-            return
-        }
-        
-        let url = URL(string: "\(getMockURI() != nil ? getMockURI()! : getURI())/chain/get_sent_fio_requests")!
-        
-        var request = URLRequest(url: url)
-        request.httpMethod = "POST"
-        request.httpBody = jsonData
-        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-        
-        let task = URLSession.shared.dataTask(with: request) { data, response, error in
-            guard let data = data, error == nil else {
-                print(error?.localizedDescription ?? "No data")
-                completion(nil, FIOError(kind: .NoDataReturned, localizedDescription: ""))
-                return
-            }
-            do {
-                let decoder = JSONDecoder()
-                decoder.dateDecodingStrategy = .iso8601
-                let result = try decoder.decode(SentFioRequestResponse.self, from: data)
-                completion(result, FIOError(kind: .Success, localizedDescription: ""))
-                
-            }catch let error{
-                let err = FIOError(kind: .Failure, localizedDescription: error.localizedDescription)
-                completion(nil, err)
+        let body = GetSentFIORequestsRequest(address: publicAddress)
+        let url = ChainRouteBuilder.build(route: ChainRoutes.getSentFIORequests)
+        FIOHTTPHelper.postRequestTo(url, withBody: body) { (data, error) in
+            if let data = data {
+                do {
+                    let result = try JSONDecoder().decode(SentFioRequestResponse.self, from: data)
+                    completion(result, FIOError(kind: .Success, localizedDescription: ""))
+                }
+                catch {
+                    completion(nil, FIOError(kind:.Failure, localizedDescription: "Parsing json failed."))
+                }
+            } else {
+                if let error = error {
+                    completion(nil, error)
+                }
+                else {
+                    completion(nil, FIOError(kind:.Failure, localizedDescription: ChainRoutes.getPendingFIORequests.rawValue + " request failed."))
+                }
             }
         }
-        
-        task.resume()
+//        var jsonData: Data
+//
+//        do{
+//            jsonData = try JSONEncoder().encode(["fio_pub_address": publicAddress])
+//        }catch {
+//            completion (nil, FIOError(kind: .Failure, localizedDescription: ""))
+//            return
+//        }
+//
+//        let url = URL(string: "\(getMockURI() != nil ? getMockURI()! : getURI())/chain/get_sent_fio_requests")!
+//
+//        var request = URLRequest(url: url)
+//        request.httpMethod = "POST"
+//        request.httpBody = jsonData
+//        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+//
+//        let task = URLSession.shared.dataTask(with: request) { data, response, error in
+//            guard let data = data, error == nil else {
+//                print(error?.localizedDescription ?? "No data")
+//                completion(nil, FIOError(kind: .NoDataReturned, localizedDescription: ""))
+//                return
+//            }
+//            do {
+//                let decoder = JSONDecoder()
+//                decoder.dateDecodingStrategy = .iso8601
+//                let result = try decoder.decode(SentFioRequestResponse.self, from: data)
+//                completion(result, FIOError(kind: .Success, localizedDescription: ""))
+//
+//            }catch let error{
+//                let err = FIOError(kind: .Failure, localizedDescription: error.localizedDescription)
+//                completion(nil, err)
+//            }
+//        }
+//
+//        task.resume()
     }
 }
 
