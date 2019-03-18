@@ -302,8 +302,12 @@ class FIOSDKTests: XCTestCase {
                 XCTAssert((error?.kind == FIOError.ErrorKind.Success), "testAddPublicAddress NOT SUCCESSFUL: \(error?.localizedDescription ?? "")")
                 FIOSDK.sharedInstance().requestFunds(from: from, to: to, toPublicAddress: toPubAdd, amount: amount, tokenCode: "BTC", metadata: FIOSDK.RequestFundsRequest.MetaData(memo: "", hash: nil, offlineUrl: nil)) { (response, error) in
                     XCTAssert(error?.kind == .Success && response != nil, "testGetSentRequests Couldn't create mock request")
-                    let fundsRequestId = String(response!.fundsRequestId)
                     expRequestFunds.fulfill()
+                    guard let fundsRequestId = response?.fundsRequestId else {
+                        expGetSentRequest.fulfill()
+                        expRejectRequest.fulfill()
+                        return
+                    }
                     FIOSDK.sharedInstance().getSentFioRequest(publicAddress: toPubAdd, completion: { (response, error) in
                         XCTAssert(error.kind == .Success && response != nil, "testGetSentRequest couldn't retreive request")
                         XCTAssertFalse(response!.requests.filter({ (request) -> Bool in

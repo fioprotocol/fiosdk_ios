@@ -650,10 +650,6 @@ public class FIOSDK: NSObject {
             public let toPublicAddress: String
             public let amount: String
             public let tokenCode: String
-            //Specified in docs but not present in the response
-            //TODO: Put it back once response has it
-            #warning("Chain code must be put back once BC Team set it in the response")
-//            public let chainCode: String
             public let metadata: MetaData
             public let timeStamp: TimeInterval
             
@@ -664,7 +660,6 @@ public class FIOSDK: NSObject {
                 case toPublicAddress = "topubaddr"
                 case amount
                 case tokenCode = "tokencode"
-//                case chainCode = "chaincode"
                 case metadata
                 case timeStamp = "fiotime"
             }
@@ -1103,10 +1098,6 @@ public class FIOSDK: NSObject {
             public let toPublicAddress: String
             public let amount: String
             public let tokenCode: String
-            //Specified in docs but not present in the response
-            //TODO: Put it back once response has it
-            #warning("Chain code must be put back once BC Team set it in the response")
-            //            public let chainCode: String
             public let metadata: MetaData
             public let timeStamp: TimeInterval
             public let status: String
@@ -1118,7 +1109,6 @@ public class FIOSDK: NSObject {
                 case toPublicAddress = "topubaddr"
                 case amount
                 case tokenCode = "tokencode"
-                //                case chainCode = "chaincode"
                 case metadata
                 case timeStamp = "fiotime"
                 case status
@@ -1145,7 +1135,6 @@ public class FIOSDK: NSObject {
                 self.toPublicAddress = toPublicAddress
                 self.amount = amount
                 self.tokenCode = tokenCode
-                //self.chainCode = chainCode
                 self.metadata = metadata
                 self.timeStamp = timeStamp
                 self.status = status
