@@ -18,7 +18,7 @@ class FIOSDKTests: XCTestCase {
     private let url:String = "http://52.14.221.174:8889/v1"
     
     // stage 1 server: 18.223.14.244
-    private let TIMEOUT:Double = 120.0
+    private let TIMEOUT:Double = 240.0
     
     private let useStaging = true
     
