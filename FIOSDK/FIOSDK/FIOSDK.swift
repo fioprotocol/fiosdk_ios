@@ -37,6 +37,7 @@ public class FIOSDK: NSObject {
         case getFIONames            = "/chain/get_fio_names"
         case getPendingFIORequests  = "/chain/get_pending_fio_requests"
         case getSentFIORequests     = "/chain/get_sent_fio_requests"
+        case recordSend             = "/chain/record_send"
     }
     
     struct ChainRouteBuilder {
@@ -58,6 +59,7 @@ public class FIOSDK: NSObject {
         case newFundsRequest    = "newfundsreq"
         case rejectFundsRequest = "rejectfndreq"
         case addPublicAddress   = "addaddress"
+        case recordSend         = "recordsend"
     }
     
     //MARK: -
@@ -655,9 +657,9 @@ public class FIOSDK: NSObject {
             
             enum CodingKeys: String, CodingKey {
                 case fioreqid = "fioreqid"
-                case fromFioAddress = "fromfioaddr"
-                case toFioAddress = "tofioaddr"
-                case toPublicAddress = "topubaddr"
+                case fromFioAddress = "fromfioadd"
+                case toFioAddress = "tofioadd"
+                case toPublicAddress = "topubadd"
                 case amount
                 case tokenCode = "tokencode"
                 case metadata
@@ -684,7 +686,6 @@ public class FIOSDK: NSObject {
                 self.toPublicAddress = toPublicAddress
                 self.amount = amount
                 self.tokenCode = tokenCode
-                //self.chainCode = chainCode
                 self.metadata = metadata
                 self.timeStamp = timeStamp
             }
@@ -1104,13 +1105,13 @@ public class FIOSDK: NSObject {
             
             enum CodingKeys: String, CodingKey {
                 case fioreqid = "fioreqid"
-                case fromFioAddress = "fromfioaddr"
-                case toFioAddress = "tofioaddr"
-                case toPublicAddress = "topubaddr"
+                case fromFioAddress = "fromfioadd"
+                case toFioAddress = "tofioadd"
+                case toPublicAddress = "topubadd"
                 case amount
                 case tokenCode = "tokencode"
                 case metadata
-                case timeStamp = "fiotime"
+                case timeStamp = "timestamp"
                 case status
             }
             
@@ -1149,11 +1150,11 @@ public class FIOSDK: NSObject {
                 let toPublicAddress = try container.decodeIfPresent(String.self, forKey: .toPublicAddress) ?? ""
                 let amount = try container.decodeIfPresent(String.self, forKey: .amount) ?? ""
                 let tokenCode = try container.decodeIfPresent(String.self, forKey: .tokenCode) ?? ""
-                let timeStampValue = try container.decodeIfPresent(String.self, forKey: .timeStamp)
-                var timeStamp: TimeInterval = Date().timeIntervalSince1970
-                if let unwrappedTimeStamp = timeStampValue, let timeStampDouble = Double(unwrappedTimeStamp) {
-                    timeStamp = TimeInterval(timeStampDouble)
-                }
+                let timeStamp = try container.decodeIfPresent(TimeInterval.self, forKey: .timeStamp) ?? Date().timeIntervalSince1970
+//                var timeStamp: TimeInterval = Date().timeIntervalSince1970
+//                if let unwrappedTimeStamp = timeStampValue, let timeStampDouble = Double(unwrappedTimeStamp) {
+//                    timeStamp = TimeInterval(timeStampDouble)
+//                }
                 var metadata = SentFioRequest.MetaData(memo: "")
                 let metadataString = try container.decodeIfPresent(String.self, forKey: .metadata)
                 if let metadataData = metadataString?.data(using: .utf8) {
@@ -1202,42 +1203,222 @@ public class FIOSDK: NSObject {
                 }
             }
         }
-//        var jsonData: Data
-//
-//        do{
-//            jsonData = try JSONEncoder().encode(["fio_pub_address": publicAddress])
-//        }catch {
-//            completion (nil, FIOError(kind: .Failure, localizedDescription: ""))
-//            return
-//        }
-//
-//        let url = URL(string: "\(getMockURI() != nil ? getMockURI()! : getURI())/chain/get_sent_fio_requests")!
-//
-//        var request = URLRequest(url: url)
-//        request.httpMethod = "POST"
-//        request.httpBody = jsonData
-//        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-//
-//        let task = URLSession.shared.dataTask(with: request) { data, response, error in
-//            guard let data = data, error == nil else {
-//                print(error?.localizedDescription ?? "No data")
-//                completion(nil, FIOError(kind: .NoDataReturned, localizedDescription: ""))
-//                return
-//            }
-//            do {
-//                let decoder = JSONDecoder()
-//                decoder.dateDecodingStrategy = .iso8601
-//                let result = try decoder.decode(SentFioRequestResponse.self, from: data)
-//                completion(result, FIOError(kind: .Success, localizedDescription: ""))
-//
-//            }catch let error{
-//                let err = FIOError(kind: .Failure, localizedDescription: error.localizedDescription)
-//                completion(nil, err)
-//            }
-//        }
-//
-//        task.resume()
     }
+    
+    //MARK: Record Send Models
+    
+    public struct RecordSend: Codable {
+        
+        let fromFIOAdd: String
+        let toFIOAdd: String
+        let fromPubAdd: String
+        let toPubAdd: String
+        let amount: String
+        let tokenCode: String
+        let chainCode: String
+        let status: String
+        let obtID: String
+        let metadata: String
+        
+        enum CodingKeys: String, CodingKey {
+            case fromFIOAdd = "fromfioadd"
+            case toFIOAdd = "tofioadd"
+            case fromPubAdd = "frompubadd"
+            case toPubAdd = "topubadd"
+            case amount = "amount"
+            case tokenCode = "tokencode"
+            case chainCode = "chaincode"
+            case status = "status"
+            case obtID = "obtid"
+            case metadata = "metadata"
+        }
+        
+        public init(fromFIOAdd: String,
+             toFIOAdd: String,
+             fromPubAdd: String,
+             toPubAdd: String,
+             amount: Float,
+             tokenCode: String,
+             chainCode: String,
+             status: String,
+             obtID: String,
+             memo: String) {
+            self.fromFIOAdd = fromFIOAdd
+            self.toFIOAdd = toFIOAdd
+            self.fromPubAdd = fromPubAdd
+            self.toPubAdd = toPubAdd
+            self.amount = String(amount)
+            self.tokenCode = tokenCode
+            self.chainCode = chainCode
+            self.status = status
+            self.obtID = obtID
+            self.metadata = MetaData(memo: memo).toJSONString()
+        }
+        
+        public struct MetaData: Codable {
+            
+            public var memo: String
+            
+            public init(memo: String){
+                self.memo = memo
+            }
+            
+            enum CodingKeys: String, CodingKey {
+                case memo
+            }
+            
+            func toJSONString() -> String {
+                guard let json = try? JSONEncoder().encode(self) else {
+                    return ""
+                }
+                return String(data: json, encoding: .utf8) ?? ""
+            }
+            
+        }
+        
+        func toJSONString() -> String {
+            guard let json = try? JSONEncoder().encode(self) else {
+                return ""
+            }
+            return String(data: json, encoding: .utf8) ?? ""
+        }
+        
+    }
+    
+    public struct RecordSendResponse: Codable {
+        
+        let fioObtID: String
+        let fromFIOAdd: String
+        let toFIOAdd: String
+        let fromPubAdd: String
+        let toPubAdd: String
+        let amount: String
+        let tokenCode: String
+        let chainCode: String
+        let status: String
+        let obtID: String
+        let metadata: MetaData
+        let fioReqID: String?
+        
+        enum CodingKeys: String, CodingKey {
+            case fioObtID = "fioobtid"
+            case fromFIOAdd = "fromfioadd"
+            case toFIOAdd = "tofioadd"
+            case fromPubAdd = "frompubadd"
+            case toPubAdd = "topubadd"
+            case amount = "amount"
+            case tokenCode = "tokencode"
+            case chainCode = "chaincode"
+            case status = "status"
+            case obtID = "obtid"
+            case metadata = "metadata"
+            case fioReqID = "fioreqid"
+        }
+        
+        public struct MetaData: Codable {
+            
+            public let memo: String
+            
+        }
+        
+        init(fioObtID: String,
+             fromFIOAdd: String,
+             toFIOAdd: String,
+             fromPubAdd: String,
+             toPubAdd: String,
+             amount: String,
+             tokenCode: String,
+             chainCode: String,
+             status: String,
+             obtID: String,
+             metadata: MetaData,
+             fioReqID: String?) {
+            self.fioObtID = fioObtID
+            self.fromFIOAdd = fromFIOAdd
+            self.toFIOAdd = toFIOAdd
+            self.fromPubAdd = fromPubAdd
+            self.toPubAdd = toPubAdd
+            self.amount = amount
+            self.tokenCode = tokenCode
+            self.chainCode = chainCode
+            self.status = status
+            self.obtID = obtID
+            self.metadata = metadata
+            self.fioReqID  = fioReqID
+        }
+        
+        public init(from decoder: Decoder) throws {
+            let container = try decoder.container(keyedBy: CodingKeys.self)
+            
+            let fioObtID = try container.decodeIfPresent(String.self, forKey: .fioObtID) ?? ""
+            let fioReqID = try container.decodeIfPresent(String.self, forKey: .fioReqID)
+            let fromFIOAdd = try container.decodeIfPresent(String.self, forKey: .fromFIOAdd) ?? ""
+            let toFIOAdd = try container.decodeIfPresent(String.self, forKey: .toFIOAdd) ?? ""
+            let fromPubAdd = try container.decodeIfPresent(String.self, forKey: .fromPubAdd) ?? ""
+            let toPubAdd = try container.decodeIfPresent(String.self, forKey: .toPubAdd) ?? ""
+            let amount = try container.decodeIfPresent(String.self, forKey: .amount) ?? ""
+            let tokenCode = try container.decodeIfPresent(String.self, forKey: .tokenCode) ?? ""
+            let chainCode = try container.decodeIfPresent(String.self, forKey: .chainCode) ?? ""
+            let obtID = try container.decodeIfPresent(String.self, forKey: .obtID) ?? ""
+            let status = try container.decodeIfPresent(String.self, forKey: .status) ?? ""
+            var metadata = RecordSendResponse.MetaData(memo: "")
+            let metadataString = try container.decodeIfPresent(String.self, forKey: .metadata)
+            if let metadataData = metadataString?.data(using: .utf8) {
+                metadata = try JSONDecoder().decode(RecordSendResponse.MetaData.self, from: metadataData)
+            }
+            
+            self.init(fioObtID: fioObtID,
+                      fromFIOAdd: fromFIOAdd,
+                      toFIOAdd: toFIOAdd,
+                      fromPubAdd: fromPubAdd,
+                      toPubAdd: toPubAdd,
+                      amount: amount,
+                      tokenCode: tokenCode,
+                      chainCode: chainCode,
+                      status: status,
+                      obtID: obtID,
+                      metadata: metadata,
+                      fioReqID: fioReqID)
+        }
+        
+    }
+    
+    private struct RecordSendRequest: Codable {
+        
+        let recordSend: String
+        let actor: String
+        
+        enum CodingKeys: String, CodingKey {
+            case recordSend = "recordsend"
+            case actor
+        }
+        
+    }
+    
+    //MARK: Record Send
+    
+    /// Register a transation on another blockhain (OBT). Should be called after any transaction. [visit api specs](https://stealth.atlassian.net/wiki/spaces/DEV/pages/53280776/API#API-/record_send-Recordssendonanotherblockchain)
+    ///
+    /// - Parameters:
+    ///   - model: The transaction record to be registered.
+    ///   - onCompletion: Once finished this callback returns optional response and error.
+    public func recordSend(_ model: RecordSend, onCompletion: @escaping (_ response: RecordSendResponse?, _ error: FIOError?) -> ()){
+        let actor = AccountNameGenerator.run(withPublicKey: getSystemPublicKey())
+        let request = RecordSendRequest(recordSend: model.toJSONString(), actor: actor)
+        signedPostRequestTo(route: ChainRoutes.recordSend,
+                            forAction: ChainActions.recordSend,
+                            withBody: request,
+                            code: "fio.reqobt",
+                            account: actor) { (result, error) in
+                                guard let result = result else {
+                                    onCompletion(nil, error ?? FIOError.init(kind: .Failure, localizedDescription: "The request couldn't rejected"))
+                                    return
+                                }
+                                let handledData: (response: RecordSendResponse?, error: FIOError) = self.parseResponseFromTransactionResult(txResult: result)
+                                onCompletion(handledData.response, FIOError.init(kind: FIOError.ErrorKind.Success, localizedDescription: ""))
+        }
+    }
+    
 }
 
 extension FIOSDK.RejectFundsRequestResponse.Status{
