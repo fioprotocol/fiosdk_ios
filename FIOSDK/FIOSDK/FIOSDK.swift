@@ -1209,6 +1209,7 @@ public class FIOSDK: NSObject {
     
     public struct RecordSend: Codable {
         
+        let fioReqID: String?
         let fromFIOAdd: String
         let toFIOAdd: String
         let fromPubAdd: String
@@ -1231,9 +1232,11 @@ public class FIOSDK: NSObject {
             case status = "status"
             case obtID = "obtid"
             case metadata = "metadata"
+            case fioReqID = "fioreqid"
         }
         
-        public init(fromFIOAdd: String,
+        public init(fioReqID: String? = nil,
+             fromFIOAdd: String,
              toFIOAdd: String,
              fromPubAdd: String,
              toPubAdd: String,
@@ -1243,6 +1246,7 @@ public class FIOSDK: NSObject {
              status: String,
              obtID: String,
              memo: String) {
+            self.fioReqID = fioReqID
             self.fromFIOAdd = fromFIOAdd
             self.toFIOAdd = toFIOAdd
             self.fromPubAdd = fromPubAdd
