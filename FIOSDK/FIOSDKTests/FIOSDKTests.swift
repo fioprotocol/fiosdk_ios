@@ -42,7 +42,8 @@ class FIOSDKTests: XCTestCase {
             
            // _ = FIOSDK.sharedInstance(accountName: "fio.system", privateKey: "5KBX1dwHME4VyuUss2sYM25D5ZTDvyYrbEz37UJqwAVAsR4tGuY", publicKey: "EOS7isxEua78KPVbGzKemH4nj2bWE52gqj8Hkac3tc7jKNvpfWzYS",systemPrivateKey:"5KBX1dwHME4VyuUss2sYM25D5ZTDvyYrbEz37UJqwAVAsR4tGuY", systemPublicKey:"EOS7isxEua78KPVbGzKemH4nj2bWE52gqj8Hkac3tc7jKNvpfWzYS", url: "http://34.220.213.187:8889/v1")
 //            _ = FIOSDK.sharedInstance(accountName: "fioname11111", privateKey: "5K2HBexbraViJLQUJVJqZc42A8dxkouCmzMamdrZsLHhUHv77jF", publicKey: "EOS5GpUwQtFrfvwqxAv24VvMJFeMHutpQJseTz8JYUBfZXP2zR8VY",systemPrivateKey:"5KBX1dwHME4VyuUss2sYM25D5ZTDvyYrbEz37UJqwAVAsR4tGuY", systemPublicKey:"EOS7isxEua78KPVbGzKemH4nj2bWE52gqj8Hkac3tc7jKNvpfWzYS", url: "http://18.210.240.10:8889/v1", mockUrl: "http://localhost:8080")
-            _ = FIOSDK.sharedInstance(accountName: "fioname11111", privateKey: "5K2HBexbraViJLQUJVJqZc42A8dxkouCmzMamdrZsLHhUHv77jF", publicKey: "EOS5GpUwQtFrfvwqxAv24VvMJFeMHutpQJseTz8JYUBfZXP2zR8VY",systemPrivateKey:"5KBX1dwHME4VyuUss2sYM25D5ZTDvyYrbEz37UJqwAVAsR4tGuY", systemPublicKey:"EOS7isxEua78KPVbGzKemH4nj2bWE52gqj8Hkac3tc7jKNvpfWzYS", url: "http://34.214.170.140:8889/v1", mockUrl: "http://localhost:8080")//54.202.124.82:8889// 54.218.97.18:8889 //34.213.160.31:8889 34.214.170.140
+            let keyPair = FIOSDK.privatePubKeyPair(forMnemonic: "valley alien library bread worry brother bundle hammer loyal barely dune brave")
+            _ = FIOSDK.sharedInstance(accountName: "fioname11111", privateKey: keyPair.privateKey, publicKey: keyPair.publicKey,systemPrivateKey:keyPair.privateKey, systemPublicKey:keyPair.publicKey, url: "http://34.214.170.140:8889/v1", mockUrl: "http://localhost:8080")//54.202.124.82:8889// 54.218.97.18:8889 //34.213.160.31:8889 34.214.170.140
             
         }
 
@@ -236,26 +237,6 @@ class FIOSDKTests: XCTestCase {
                     XCTAssertNotNil(response)
                     expectation.fulfill()
                 }
-            }
-        }
-        
-        wait(for: [expectation], timeout: TIMEOUT)
-    }
-    
-    func testRejectFundsRequestWithDefaultAccountsShouldSucceed(){
-        let expectation = XCTestExpectation(description: "testRejectFundsRequest")
-        let amount = Float.random(in: 1111.0...4444)
-        FIOSDK.sharedInstance().requestFunds(from: "adam.brd ", to: "casey.brd", toPublicAddress: "0xab5801a7d398351b8be11c439e05c5b3259aec9b", amount: amount, tokenCode: "BTC", metadata: FIOSDK.RequestFundsRequest.MetaData(memo: "", hash: nil, offlineUrl: nil)) { (response, error) in
-            XCTAssert(error?.kind == .Success && response != nil, "testRejectFundsRequest Couldn't create mock request")
-            
-            if let response = response {
-                FIOSDK.sharedInstance().rejectFundsRequest(fundsRequestId: String(response.fundsRequestId), completion: { (response, error) in
-                    XCTAssert(error.kind == .Success, "testRejectFundsRequest couldn't reject request")
-                    expectation.fulfill()
-                })
-            }
-            else {
-                expectation.fulfill()
             }
         }
         
