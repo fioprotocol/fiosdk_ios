@@ -242,41 +242,33 @@ class FIOSDKTests: XCTestCase {
         wait(for: [expectation], timeout: TIMEOUT)
     }
     
-    func testRejectFundsRequestWithDefaultAccountsShouldSucceed(){
-        let expectation = XCTestExpectation(description: "testRejectFundsRequest")
-        let amount = Float.random(in: 1111.0...4444)
-        FIOSDK.sharedInstance().requestFunds(from: "adam.brd ", to: "casey.brd", toPublicAddress: "0xab5801a7d398351b8be11c439e05c5b3259aec9b", amount: amount, tokenCode: "BTC", metadata: FIOSDK.RequestFundsRequest.MetaData(memo: "", hash: nil, offlineUrl: nil)) { (response, error) in
-            XCTAssert(error?.kind == .Success && response != nil, "testRejectFundsRequest Couldn't create mock request")
-            
-            if let response = response {
-                FIOSDK.sharedInstance().rejectFundsRequest(fundsRequestId: String(response.fundsRequestId), completion: { (response, error) in
-                    XCTAssert(error.kind == .Success, "testRejectFundsRequest couldn't reject request")
-                    expectation.fulfill()
-                })
-            }
-            else {
-                expectation.fulfill()
-            }
-        }
-        
-        wait(for: [expectation], timeout: TIMEOUT)
-    }
-    
     func testRejectFundsRequest(){
         let expectation = XCTestExpectation(description: "testRejectFundsRequest")
         let amount = Float.random(in: 1111.0...4444)
-        //requestor is sender, requestee is receiver
-        FIOSDK.sharedInstance().requestFunds(from: self.requestorFioName, to: requesteeFioName, toPublicAddress: requesteeAddress, amount: amount, tokenCode: "BTC", metadata: FIOSDK.RequestFundsRequest.MetaData(memo: "", hash: nil, offlineUrl: nil)) { (response, error) in
-            XCTAssert(error?.kind == .Success && response != nil, "testRejectFundsRequest Couldn't create mock request")
-            
-            if let response = response {
-                FIOSDK.sharedInstance().rejectFundsRequest(fundsRequestId: String(response.fundsRequestId), completion: { (response, error) in
-                    XCTAssert(error.kind == .Success, "testRejectFundsRequest couldn't reject request")
-                    expectation.fulfill()
-                })
-            }
-            else {
-                expectation.fulfill()
+        let from = self.requestorFioName
+        let to = self.requesteeFioName
+        let timestamp = NSDate().timeIntervalSince1970
+        let fromPubAdd = "from\(Int(timestamp.rounded()))"
+        let toPubAdd = "to\(Int(timestamp.rounded()))"
+        FIOSDK.sharedInstance().addPublicAddress(fioAddress: from, chain: "BTC", publicAddress: fromPubAdd) { (error) in
+            XCTAssert((error?.kind == FIOError.ErrorKind.Success), "testAddPublicAddress NOT SUCCESSFUL: \(error?.localizedDescription ?? "")")
+            FIOSDK.sharedInstance().addPublicAddress(fioAddress: to, chain: "BTC", publicAddress: toPubAdd) { (error) in
+                XCTAssert((error?.kind == FIOError.ErrorKind.Success), "testAddPublicAddress NOT SUCCESSFUL: \(error?.localizedDescription ?? "")")
+                
+                //requestor is sender, requestee is receiver
+                FIOSDK.sharedInstance().requestFunds(from: from, to: to, toPublicAddress: toPubAdd, amount: amount, tokenCode: "BTC", metadata: FIOSDK.RequestFundsRequest.MetaData(memo: "", hash: nil, offlineUrl: nil)) { (response, error) in
+                    XCTAssert(error?.kind == .Success && response != nil, "testRejectFundsRequest Couldn't create mock request")
+                    
+                    if let response = response {
+                        FIOSDK.sharedInstance().rejectFundsRequest(fundsRequestId: String(response.fundsRequestId), completion: { (response, error) in
+                            XCTAssert(error.kind == .Success, "testRejectFundsRequest couldn't reject request")
+                            expectation.fulfill()
+                        })
+                    }
+                    else {
+                        expectation.fulfill()
+                    }
+                }
             }
         }
         
