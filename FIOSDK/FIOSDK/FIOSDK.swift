@@ -479,12 +479,6 @@ public class FIOSDK: NSObject {
         }
     }
     
-    public func approveRequestFunds (requesteeAccountName:String, fioAppId:Int, obtId:String, memo:String, completion: @escaping ( _ error:FIOError?) -> ()) {
-        self.requestFunds.approveFundsRequest(requesteeAccountName: requesteeAccountName, fioAppId: fioAppId, obtid:obtId, memo: memo) { (err) in
-            completion(err)
-        }
-    }
-    
     private func transfer(newAccountName:String){
         let account = getAccountName()
         let importedPk = try! PrivateKey(keyString: getPrivateKey())
