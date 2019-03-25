@@ -15,6 +15,8 @@
 
 import UIKit
 
+private let slipFIO: UInt32 = 235
+
 public class FIOSDK: NSObject {
     
     private let ERROR_DOMAIN = "FIO Wallet SDK"
@@ -1434,6 +1436,24 @@ public class FIOSDK: NSObject {
                                 }
                                 let handledData: (response: RecordSendResponse?, error: FIOError) = self.parseResponseFromTransactionResult(txResult: result)
                                 onCompletion(handledData.response, FIOError.init(kind: FIOError.ErrorKind.Success, localizedDescription: ""))
+        }
+    }
+    
+    //MARK: Private/Public Key
+    
+    /// This method creates a private and public key based on a mnemonic. Use it to setup FIOSDK properly.
+    ///
+    /// - Parameters:
+    ///   - mnemonic: The text to use in key pair generation.
+    /// - Return: A tuple containing both private and public keys to be used in FIOSDK setup.
+    static public func privatePubKeyPair(forMnemonic mnemonic: String) -> (privateKey: String, publicKey: String) {
+        do {
+            let privKey = try PrivateKey(enclave: .Secp256k1, mnemonicString: mnemonic, slip: slipFIO)
+            guard let pk = privKey else { return ("", "") }
+            return (pk.rawPrivateKey(), PublicKey(privateKey: pk).rawPublicKey())
+        }
+        catch {
+            return ("", "")
         }
     }
     

@@ -23,3 +23,12 @@ FOUNDATION_EXPORT const unsigned char FIOSDKVersionString[];
 #import "ripemd160.h"
 #import "uECC.h"
 #import "libbase58.h"
+#import "bip32.h"
+#import "bip39.h"
+#import "bignum.h"
+#import "options.h"
+#import "ecdsa.h"
+#import "macros.h"
+#import "hmac.h"
+#import "sha2.h"
+

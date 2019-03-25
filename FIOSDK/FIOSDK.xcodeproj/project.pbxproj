@@ -13,15 +13,6 @@
 		0203C570217A487A0054FA10 /* AnyDecodable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0203C539217A487A0054FA10 /* AnyDecodable.swift */; };
 		0203C571217A487A0054FA10 /* AnyCodable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0203C53A217A487A0054FA10 /* AnyCodable.swift */; };
 		0203C572217A487A0054FA10 /* AnyEncodable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0203C53B217A487A0054FA10 /* AnyEncodable.swift */; };
-		0203C573217A487A0054FA10 /* uECC.h in Headers */ = {isa = PBXBuildFile; fileRef = 0203C53E217A487A0054FA10 /* uECC.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		0203C574217A487A0054FA10 /* ripemd160.h in Headers */ = {isa = PBXBuildFile; fileRef = 0203C53F217A487A0054FA10 /* ripemd160.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		0203C575217A487A0054FA10 /* asm_arm.inc.h in Headers */ = {isa = PBXBuildFile; fileRef = 0203C540217A487A0054FA10 /* asm_arm.inc.h */; };
-		0203C577217A487A0054FA10 /* libbase58.h in Headers */ = {isa = PBXBuildFile; fileRef = 0203C542217A487A0054FA10 /* libbase58.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		0203C579217A487A0054FA10 /* types.h in Headers */ = {isa = PBXBuildFile; fileRef = 0203C544217A487A0054FA10 /* types.h */; };
-		0203C57B217A487A0054FA10 /* Bridging-Header.h in Headers */ = {isa = PBXBuildFile; fileRef = 0203C546217A487A0054FA10 /* Bridging-Header.h */; };
-		0203C57C217A487A0054FA10 /* ripemd160.c in Sources */ = {isa = PBXBuildFile; fileRef = 0203C548217A487A0054FA10 /* ripemd160.c */; };
-		0203C57D217A487A0054FA10 /* uECC.c in Sources */ = {isa = PBXBuildFile; fileRef = 0203C549217A487A0054FA10 /* uECC.c */; };
-		0203C57E217A487A0054FA10 /* base58.c in Sources */ = {isa = PBXBuildFile; fileRef = 0203C54A217A487A0054FA10 /* base58.c */; };
 		0203C57F217A487A0054FA10 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 0203C54B217A487A0054FA10 /* README.md */; };
 		0203C580217A487A0054FA10 /* Crypto.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0203C54F217A487A0054FA10 /* Crypto.swift */; };
 		0203C581217A487A0054FA10 /* TransactionUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0203C552217A487A0054FA10 /* TransactionUtil.swift */; };
@@ -47,11 +38,48 @@
 		0203C5CB217A6A6D0054FA10 /* FIOSDK.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0203C5C9217A6A6D0054FA10 /* FIOSDK.swift */; };
 		0203C5CC217A6A6D0054FA10 /* Settings.plist in Resources */ = {isa = PBXBuildFile; fileRef = 0203C5CA217A6A6D0054FA10 /* Settings.plist */; };
 		0203C5D8217A71330054FA10 /* FIOError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0203C5D7217A71330054FA10 /* FIOError.swift */; };
-		0243269D217FD88A00337CF1 /* curve-specific.inc in Resources */ = {isa = PBXBuildFile; fileRef = 0203C543217A487A0054FA10 /* curve-specific.inc */; };
-		0243269E217FD89200337CF1 /* platform-specific.inc in Resources */ = {isa = PBXBuildFile; fileRef = 0203C545217A487A0054FA10 /* platform-specific.inc */; };
 		0245A5B12193BF6900C5A870 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0245A5B02193BF6900C5A870 /* Extensions.swift */; };
 		02B93140218A280300877149 /* AccountUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02B9313F218A280200877149 /* AccountUtil.swift */; };
 		02BAEC522191F53700B251B4 /* RequestFunds.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02BAEC512191F53700B251B4 /* RequestFunds.swift */; };
+		283438222245439100E60314 /* sha3.h in Headers */ = {isa = PBXBuildFile; fileRef = 2834380A2245439000E60314 /* sha3.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		283438232245439100E60314 /* rand.h in Headers */ = {isa = PBXBuildFile; fileRef = 2834380B2245439000E60314 /* rand.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		283438242245439100E60314 /* curves.h in Headers */ = {isa = PBXBuildFile; fileRef = 2834380C2245439000E60314 /* curves.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		283438252245439100E60314 /* hmac.h in Headers */ = {isa = PBXBuildFile; fileRef = 2834380D2245439000E60314 /* hmac.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		283438262245439100E60314 /* curve-specific.inc in Sources */ = {isa = PBXBuildFile; fileRef = 2834380E2245439000E60314 /* curve-specific.inc */; };
+		283438272245439100E60314 /* types.h in Headers */ = {isa = PBXBuildFile; fileRef = 2834380F2245439000E60314 /* types.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		283438282245439100E60314 /* ecdsa.h in Headers */ = {isa = PBXBuildFile; fileRef = 283438102245439000E60314 /* ecdsa.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		283438292245439100E60314 /* Bridging-Header.h in Headers */ = {isa = PBXBuildFile; fileRef = 283438112245439000E60314 /* Bridging-Header.h */; };
+		2834382A2245439100E60314 /* options.h in Headers */ = {isa = PBXBuildFile; fileRef = 283438122245439000E60314 /* options.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		2834382B2245439100E60314 /* pbkdf2.h in Headers */ = {isa = PBXBuildFile; fileRef = 283438132245439000E60314 /* pbkdf2.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		2834382C2245439100E60314 /* platform-specific.inc in Sources */ = {isa = PBXBuildFile; fileRef = 283438142245439000E60314 /* platform-specific.inc */; };
+		2834382D2245439100E60314 /* uECC_vli.h in Headers */ = {isa = PBXBuildFile; fileRef = 283438152245439000E60314 /* uECC_vli.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		2834382E2245439100E60314 /* uECC.h in Headers */ = {isa = PBXBuildFile; fileRef = 283438162245439000E60314 /* uECC.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		2834382F2245439100E60314 /* secp256k1.h in Headers */ = {isa = PBXBuildFile; fileRef = 283438172245439000E60314 /* secp256k1.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		283438302245439100E60314 /* bip39.h in Headers */ = {isa = PBXBuildFile; fileRef = 283438182245439000E60314 /* bip39.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		283438312245439100E60314 /* macros.h in Headers */ = {isa = PBXBuildFile; fileRef = 283438192245439100E60314 /* macros.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		283438322245439100E60314 /* bip39_english.h in Headers */ = {isa = PBXBuildFile; fileRef = 2834381A2245439100E60314 /* bip39_english.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		283438332245439100E60314 /* libbase58.h in Headers */ = {isa = PBXBuildFile; fileRef = 2834381B2245439100E60314 /* libbase58.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		283438342245439100E60314 /* bip32.h in Headers */ = {isa = PBXBuildFile; fileRef = 2834381C2245439100E60314 /* bip32.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		283438352245439100E60314 /* ripemd160.h in Headers */ = {isa = PBXBuildFile; fileRef = 2834381D2245439100E60314 /* ripemd160.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		283438362245439100E60314 /* sha2.h in Headers */ = {isa = PBXBuildFile; fileRef = 2834381E2245439100E60314 /* sha2.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		283438372245439100E60314 /* bignum.h in Headers */ = {isa = PBXBuildFile; fileRef = 2834381F2245439100E60314 /* bignum.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		283438382245439100E60314 /* secp256k1.table in Resources */ = {isa = PBXBuildFile; fileRef = 283438202245439100E60314 /* secp256k1.table */; };
+		283438392245439100E60314 /* asm_arm.inc.h in Headers */ = {isa = PBXBuildFile; fileRef = 283438212245439100E60314 /* asm_arm.inc.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		283438482245439B00E60314 /* bip32.c in Sources */ = {isa = PBXBuildFile; fileRef = 2834383A2245439A00E60314 /* bip32.c */; };
+		283438492245439B00E60314 /* uECC.c in Sources */ = {isa = PBXBuildFile; fileRef = 2834383B2245439A00E60314 /* uECC.c */; };
+		2834384A2245439B00E60314 /* rand.c in Sources */ = {isa = PBXBuildFile; fileRef = 2834383C2245439A00E60314 /* rand.c */; };
+		2834384B2245439B00E60314 /* secp256k1.c in Sources */ = {isa = PBXBuildFile; fileRef = 2834383D2245439A00E60314 /* secp256k1.c */; };
+		2834384C2245439B00E60314 /* pbkdf2.c in Sources */ = {isa = PBXBuildFile; fileRef = 2834383E2245439A00E60314 /* pbkdf2.c */; };
+		2834384D2245439B00E60314 /* sha2.c in Sources */ = {isa = PBXBuildFile; fileRef = 2834383F2245439A00E60314 /* sha2.c */; };
+		2834384E2245439B00E60314 /* hmac.c in Sources */ = {isa = PBXBuildFile; fileRef = 283438402245439A00E60314 /* hmac.c */; };
+		2834384F2245439B00E60314 /* bip39.c in Sources */ = {isa = PBXBuildFile; fileRef = 283438412245439A00E60314 /* bip39.c */; };
+		283438502245439B00E60314 /* ripemd160.c in Sources */ = {isa = PBXBuildFile; fileRef = 283438422245439A00E60314 /* ripemd160.c */; };
+		283438512245439B00E60314 /* base58.c in Sources */ = {isa = PBXBuildFile; fileRef = 283438432245439A00E60314 /* base58.c */; };
+		283438522245439B00E60314 /* ecdsa.c in Sources */ = {isa = PBXBuildFile; fileRef = 283438442245439A00E60314 /* ecdsa.c */; };
+		283438532245439B00E60314 /* bignum.c in Sources */ = {isa = PBXBuildFile; fileRef = 283438452245439B00E60314 /* bignum.c */; };
+		283438542245439B00E60314 /* sha3.c in Sources */ = {isa = PBXBuildFile; fileRef = 283438462245439B00E60314 /* sha3.c */; };
+		283438552245439B00E60314 /* curves.c in Sources */ = {isa = PBXBuildFile; fileRef = 283438472245439B00E60314 /* curves.c */; };
+		283438572245733800E60314 /* PrivateKey+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 283438562245733800E60314 /* PrivateKey+Extensions.swift */; };
 		285649522229C031006E2533 /* AccountNameGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 285649512229C031006E2533 /* AccountNameGenerator.swift */; };
 		285649542229C3AE006E2533 /* FIOHTTPHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 285649532229C3AE006E2533 /* FIOHTTPHelper.swift */; };
 		28564957222DBBF2006E2533 /* TransactionUtil+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28564956222DBBF2006E2533 /* TransactionUtil+Extensions.swift */; };
@@ -78,18 +106,6 @@
 		0203C539217A487A0054FA10 /* AnyDecodable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AnyDecodable.swift; sourceTree = "<group>"; };
 		0203C53A217A487A0054FA10 /* AnyCodable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AnyCodable.swift; sourceTree = "<group>"; };
 		0203C53B217A487A0054FA10 /* AnyEncodable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AnyEncodable.swift; sourceTree = "<group>"; };
-		0203C53E217A487A0054FA10 /* uECC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = uECC.h; sourceTree = "<group>"; };
-		0203C53F217A487A0054FA10 /* ripemd160.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ripemd160.h; sourceTree = "<group>"; };
-		0203C540217A487A0054FA10 /* asm_arm.inc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = asm_arm.inc.h; sourceTree = "<group>"; };
-		0203C541217A487A0054FA10 /* uECC_vli.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = uECC_vli.h; sourceTree = "<group>"; };
-		0203C542217A487A0054FA10 /* libbase58.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = libbase58.h; sourceTree = "<group>"; };
-		0203C543217A487A0054FA10 /* curve-specific.inc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; path = "curve-specific.inc"; sourceTree = "<group>"; };
-		0203C544217A487A0054FA10 /* types.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = types.h; sourceTree = "<group>"; };
-		0203C545217A487A0054FA10 /* platform-specific.inc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; path = "platform-specific.inc"; sourceTree = "<group>"; };
-		0203C546217A487A0054FA10 /* Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Bridging-Header.h"; sourceTree = "<group>"; };
-		0203C548217A487A0054FA10 /* ripemd160.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ripemd160.c; sourceTree = "<group>"; };
-		0203C549217A487A0054FA10 /* uECC.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = uECC.c; sourceTree = "<group>"; };
-		0203C54A217A487A0054FA10 /* base58.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = base58.c; sourceTree = "<group>"; };
 		0203C54B217A487A0054FA10 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		0203C54F217A487A0054FA10 /* Crypto.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Crypto.swift; sourceTree = "<group>"; };
 		0203C552217A487A0054FA10 /* TransactionUtil.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TransactionUtil.swift; sourceTree = "<group>"; };
@@ -117,6 +133,45 @@
 		0245A5B02193BF6900C5A870 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		02B9313F218A280200877149 /* AccountUtil.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AccountUtil.swift; sourceTree = "<group>"; };
 		02BAEC512191F53700B251B4 /* RequestFunds.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestFunds.swift; sourceTree = "<group>"; };
+		2834380A2245439000E60314 /* sha3.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sha3.h; sourceTree = "<group>"; };
+		2834380B2245439000E60314 /* rand.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = rand.h; sourceTree = "<group>"; };
+		2834380C2245439000E60314 /* curves.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = curves.h; sourceTree = "<group>"; };
+		2834380D2245439000E60314 /* hmac.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = hmac.h; sourceTree = "<group>"; };
+		2834380E2245439000E60314 /* curve-specific.inc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; path = "curve-specific.inc"; sourceTree = "<group>"; };
+		2834380F2245439000E60314 /* types.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = types.h; sourceTree = "<group>"; };
+		283438102245439000E60314 /* ecdsa.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ecdsa.h; sourceTree = "<group>"; };
+		283438112245439000E60314 /* Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Bridging-Header.h"; sourceTree = "<group>"; };
+		283438122245439000E60314 /* options.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = options.h; sourceTree = "<group>"; };
+		283438132245439000E60314 /* pbkdf2.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = pbkdf2.h; sourceTree = "<group>"; };
+		283438142245439000E60314 /* platform-specific.inc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; path = "platform-specific.inc"; sourceTree = "<group>"; };
+		283438152245439000E60314 /* uECC_vli.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = uECC_vli.h; sourceTree = "<group>"; };
+		283438162245439000E60314 /* uECC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = uECC.h; sourceTree = "<group>"; };
+		283438172245439000E60314 /* secp256k1.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = secp256k1.h; sourceTree = "<group>"; };
+		283438182245439000E60314 /* bip39.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = bip39.h; sourceTree = "<group>"; };
+		283438192245439100E60314 /* macros.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = macros.h; sourceTree = "<group>"; };
+		2834381A2245439100E60314 /* bip39_english.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = bip39_english.h; sourceTree = "<group>"; };
+		2834381B2245439100E60314 /* libbase58.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = libbase58.h; sourceTree = "<group>"; };
+		2834381C2245439100E60314 /* bip32.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = bip32.h; sourceTree = "<group>"; };
+		2834381D2245439100E60314 /* ripemd160.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ripemd160.h; sourceTree = "<group>"; };
+		2834381E2245439100E60314 /* sha2.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sha2.h; sourceTree = "<group>"; };
+		2834381F2245439100E60314 /* bignum.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = bignum.h; sourceTree = "<group>"; };
+		283438202245439100E60314 /* secp256k1.table */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = secp256k1.table; sourceTree = "<group>"; };
+		283438212245439100E60314 /* asm_arm.inc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = asm_arm.inc.h; sourceTree = "<group>"; };
+		2834383A2245439A00E60314 /* bip32.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = bip32.c; sourceTree = "<group>"; };
+		2834383B2245439A00E60314 /* uECC.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = uECC.c; sourceTree = "<group>"; };
+		2834383C2245439A00E60314 /* rand.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = rand.c; sourceTree = "<group>"; };
+		2834383D2245439A00E60314 /* secp256k1.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = secp256k1.c; sourceTree = "<group>"; };
+		2834383E2245439A00E60314 /* pbkdf2.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = pbkdf2.c; sourceTree = "<group>"; };
+		2834383F2245439A00E60314 /* sha2.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = sha2.c; sourceTree = "<group>"; };
+		283438402245439A00E60314 /* hmac.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = hmac.c; sourceTree = "<group>"; };
+		283438412245439A00E60314 /* bip39.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = bip39.c; sourceTree = "<group>"; };
+		283438422245439A00E60314 /* ripemd160.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ripemd160.c; sourceTree = "<group>"; };
+		283438432245439A00E60314 /* base58.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = base58.c; sourceTree = "<group>"; };
+		283438442245439A00E60314 /* ecdsa.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ecdsa.c; sourceTree = "<group>"; };
+		283438452245439B00E60314 /* bignum.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = bignum.c; sourceTree = "<group>"; };
+		283438462245439B00E60314 /* sha3.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = sha3.c; sourceTree = "<group>"; };
+		283438472245439B00E60314 /* curves.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = curves.c; sourceTree = "<group>"; };
+		283438562245733800E60314 /* PrivateKey+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PrivateKey+Extensions.swift"; sourceTree = "<group>"; };
 		285649512229C031006E2533 /* AccountNameGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountNameGenerator.swift; sourceTree = "<group>"; };
 		285649532229C3AE006E2533 /* FIOHTTPHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FIOHTTPHelper.swift; sourceTree = "<group>"; };
 		28564956222DBBF2006E2533 /* TransactionUtil+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TransactionUtil+Extensions.swift"; sourceTree = "<group>"; };
@@ -241,15 +296,30 @@
 		0203C53D217A487A0054FA10 /* include */ = {
 			isa = PBXGroup;
 			children = (
-				0203C53E217A487A0054FA10 /* uECC.h */,
-				0203C53F217A487A0054FA10 /* ripemd160.h */,
-				0203C540217A487A0054FA10 /* asm_arm.inc.h */,
-				0203C541217A487A0054FA10 /* uECC_vli.h */,
-				0203C542217A487A0054FA10 /* libbase58.h */,
-				0203C543217A487A0054FA10 /* curve-specific.inc */,
-				0203C544217A487A0054FA10 /* types.h */,
-				0203C545217A487A0054FA10 /* platform-specific.inc */,
-				0203C546217A487A0054FA10 /* Bridging-Header.h */,
+				283438212245439100E60314 /* asm_arm.inc.h */,
+				2834381F2245439100E60314 /* bignum.h */,
+				2834381C2245439100E60314 /* bip32.h */,
+				2834381A2245439100E60314 /* bip39_english.h */,
+				283438182245439000E60314 /* bip39.h */,
+				283438112245439000E60314 /* Bridging-Header.h */,
+				2834380E2245439000E60314 /* curve-specific.inc */,
+				2834380C2245439000E60314 /* curves.h */,
+				283438102245439000E60314 /* ecdsa.h */,
+				2834380D2245439000E60314 /* hmac.h */,
+				2834381B2245439100E60314 /* libbase58.h */,
+				283438192245439100E60314 /* macros.h */,
+				283438122245439000E60314 /* options.h */,
+				283438132245439000E60314 /* pbkdf2.h */,
+				283438142245439000E60314 /* platform-specific.inc */,
+				2834380B2245439000E60314 /* rand.h */,
+				2834381D2245439100E60314 /* ripemd160.h */,
+				283438172245439000E60314 /* secp256k1.h */,
+				283438202245439100E60314 /* secp256k1.table */,
+				2834381E2245439100E60314 /* sha2.h */,
+				2834380A2245439000E60314 /* sha3.h */,
+				2834380F2245439000E60314 /* types.h */,
+				283438152245439000E60314 /* uECC_vli.h */,
+				283438162245439000E60314 /* uECC.h */,
 			);
 			path = include;
 			sourceTree = "<group>";
@@ -257,9 +327,20 @@
 		0203C547217A487A0054FA10 /* src */ = {
 			isa = PBXGroup;
 			children = (
-				0203C548217A487A0054FA10 /* ripemd160.c */,
-				0203C549217A487A0054FA10 /* uECC.c */,
-				0203C54A217A487A0054FA10 /* base58.c */,
+				283438432245439A00E60314 /* base58.c */,
+				283438452245439B00E60314 /* bignum.c */,
+				2834383A2245439A00E60314 /* bip32.c */,
+				283438412245439A00E60314 /* bip39.c */,
+				283438472245439B00E60314 /* curves.c */,
+				283438442245439A00E60314 /* ecdsa.c */,
+				283438402245439A00E60314 /* hmac.c */,
+				2834383E2245439A00E60314 /* pbkdf2.c */,
+				2834383C2245439A00E60314 /* rand.c */,
+				283438422245439A00E60314 /* ripemd160.c */,
+				2834383D2245439A00E60314 /* secp256k1.c */,
+				2834383F2245439A00E60314 /* sha2.c */,
+				283438462245439B00E60314 /* sha3.c */,
+				2834383B2245439A00E60314 /* uECC.c */,
 			);
 			path = src;
 			sourceTree = "<group>";
@@ -428,6 +509,7 @@
 				285649512229C031006E2533 /* AccountNameGenerator.swift */,
 				285649532229C3AE006E2533 /* FIOHTTPHelper.swift */,
 				28564956222DBBF2006E2533 /* TransactionUtil+Extensions.swift */,
+				283438562245733800E60314 /* PrivateKey+Extensions.swift */,
 			);
 			path = Core;
 			sourceTree = "<group>";
@@ -446,13 +528,28 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				0203C574217A487A0054FA10 /* ripemd160.h in Headers */,
-				0203C577217A487A0054FA10 /* libbase58.h in Headers */,
-				0203C573217A487A0054FA10 /* uECC.h in Headers */,
+				283438302245439100E60314 /* bip39.h in Headers */,
+				283438272245439100E60314 /* types.h in Headers */,
+				2834382D2245439100E60314 /* uECC_vli.h in Headers */,
+				2834382F2245439100E60314 /* secp256k1.h in Headers */,
+				283438252245439100E60314 /* hmac.h in Headers */,
+				283438392245439100E60314 /* asm_arm.inc.h in Headers */,
+				283438322245439100E60314 /* bip39_english.h in Headers */,
+				283438332245439100E60314 /* libbase58.h in Headers */,
 				0203C597217A4DD70054FA10 /* FIOSDK.h in Headers */,
-				0203C579217A487A0054FA10 /* types.h in Headers */,
-				0203C57B217A487A0054FA10 /* Bridging-Header.h in Headers */,
-				0203C575217A487A0054FA10 /* asm_arm.inc.h in Headers */,
+				283438292245439100E60314 /* Bridging-Header.h in Headers */,
+				283438342245439100E60314 /* bip32.h in Headers */,
+				283438362245439100E60314 /* sha2.h in Headers */,
+				283438352245439100E60314 /* ripemd160.h in Headers */,
+				283438282245439100E60314 /* ecdsa.h in Headers */,
+				283438222245439100E60314 /* sha3.h in Headers */,
+				283438242245439100E60314 /* curves.h in Headers */,
+				2834382E2245439100E60314 /* uECC.h in Headers */,
+				283438312245439100E60314 /* macros.h in Headers */,
+				2834382B2245439100E60314 /* pbkdf2.h in Headers */,
+				2834382A2245439100E60314 /* options.h in Headers */,
+				283438232245439100E60314 /* rand.h in Headers */,
+				283438372245439100E60314 /* bignum.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -509,6 +606,7 @@
 				TargetAttributes = {
 					0203C518217A48100054FA10 = {
 						CreatedOnToolsVersion = 10.0;
+						LastSwiftMigration = 1010;
 					};
 					0203C521217A48100054FA10 = {
 						CreatedOnToolsVersion = 10.0;
@@ -539,10 +637,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				0203C57F217A487A0054FA10 /* README.md in Resources */,
+				283438382245439100E60314 /* secp256k1.table in Resources */,
 				0203C56F217A487A0054FA10 /* LICENSE in Resources */,
 				0203C5CC217A6A6D0054FA10 /* Settings.plist in Resources */,
-				0243269D217FD88A00337CF1 /* curve-specific.inc in Resources */,
-				0243269E217FD89200337CF1 /* platform-specific.inc in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -597,19 +694,28 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				0203C57C217A487A0054FA10 /* ripemd160.c in Sources */,
+				2834384E2245439B00E60314 /* hmac.c in Sources */,
 				0203C582217A487A0054FA10 /* Transaction.swift in Sources */,
 				0203C599217A4EC90054FA10 /* Utilities.swift in Sources */,
+				283438482245439B00E60314 /* bip32.c in Sources */,
 				02BAEC522191F53700B251B4 /* RequestFunds.swift in Sources */,
+				283438572245733800E60314 /* PrivateKey+Extensions.swift in Sources */,
+				2834384C2245439B00E60314 /* pbkdf2.c in Sources */,
 				285649522229C031006E2533 /* AccountNameGenerator.swift in Sources */,
+				2834384B2245439B00E60314 /* secp256k1.c in Sources */,
 				0203C589217A487A0054FA10 /* HistoryRouter.swift in Sources */,
 				28564957222DBBF2006E2533 /* TransactionUtil+Extensions.swift in Sources */,
 				02B93140218A280300877149 /* AccountUtil.swift in Sources */,
 				0203C592217A487A0054FA10 /* SEWallet.swift in Sources */,
-				0203C57E217A487A0054FA10 /* base58.c in Sources */,
+				2834384F2245439B00E60314 /* bip39.c in Sources */,
 				0203C585217A487A0054FA10 /* Signature.swift in Sources */,
+				283438492245439B00E60314 /* uECC.c in Sources */,
 				0203C58D217A487A0054FA10 /* PublicKey.swift in Sources */,
+				283438522245439B00E60314 /* ecdsa.c in Sources */,
+				2834382C2245439100E60314 /* platform-specific.inc in Sources */,
 				0203C586217A487A0054FA10 /* ChainRouter.swift in Sources */,
+				283438532245439B00E60314 /* bignum.c in Sources */,
+				283438502245439B00E60314 /* ripemd160.c in Sources */,
 				0203C581217A487A0054FA10 /* TransactionUtil.swift in Sources */,
 				0203C58B217A487A0054FA10 /* BaseRouter.swift in Sources */,
 				0203C58E217A487A0054FA10 /* PrivateKey.swift in Sources */,
@@ -617,12 +723,18 @@
 				0203C58C217A487A0054FA10 /* KeyPair.swift in Sources */,
 				0203C588217A487A0054FA10 /* EOSRPC+History.swift in Sources */,
 				0203C587217A487A0054FA10 /* EOSRPC+Chain.swift in Sources */,
+				283438552245439B00E60314 /* curves.c in Sources */,
+				283438542245439B00E60314 /* sha3.c in Sources */,
+				283438262245439100E60314 /* curve-specific.inc in Sources */,
 				0203C580217A487A0054FA10 /* Crypto.swift in Sources */,
 				0245A5B12193BF6900C5A870 /* Extensions.swift in Sources */,
+				2834384D2245439B00E60314 /* sha2.c in Sources */,
+				283438512245439B00E60314 /* base58.c in Sources */,
 				0203C570217A487A0054FA10 /* AnyDecodable.swift in Sources */,
 				0203C58A217A487A0054FA10 /* EOSRPC.swift in Sources */,
 				0203C5CB217A6A6D0054FA10 /* FIOSDK.swift in Sources */,
 				0203C5D8217A71330054FA10 /* FIOError.swift in Sources */,
+				2834384A2245439B00E60314 /* rand.c in Sources */,
 				0203C583217A487A0054FA10 /* ResourceUtil.swift in Sources */,
 				0203C584217A487A0054FA10 /* Currency.swift in Sources */,
 				0203C572217A487A0054FA10 /* AnyEncodable.swift in Sources */,
@@ -630,7 +742,6 @@
 				0203C590217A487A0054FA10 /* Error.swift in Sources */,
 				285649542229C3AE006E2533 /* FIOHTTPHelper.swift in Sources */,
 				0203C571217A487A0054FA10 /* AnyCodable.swift in Sources */,
-				0203C57D217A487A0054FA10 /* uECC.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -778,6 +889,7 @@
 		0203C52E217A48100054FA10 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_SCHEME = FIOSDK;
@@ -803,6 +915,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = io.dapix.FIOSDK;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -811,6 +924,7 @@
 		0203C52F217A48100054FA10 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_SCHEME = FIOSDK;
