@@ -385,8 +385,7 @@ class FIOSDKTests: XCTestCase {
                     return
                 }
                 
-                let transaction = FIOSDK.RecordSend(fromFIOAdd: from, toFIOAdd: to, fromPubAdd: fromPubAdd, toPubAdd: toPubAdd, amount: amount, tokenCode: "VIT", chainCode: "VIT", status: "sent_to_blockchain", obtID: obtID, memo: "Record Send Unit Test")
-                FIOSDK.sharedInstance().recordSend(transaction) { (response, error) in
+                FIOSDK.sharedInstance().recordSend(fromFIOAdd: from, toFIOAdd: to, fromPubAdd: fromPubAdd, toPubAdd: toPubAdd, amount: amount, fromTokenCode: "VIT", toTokenCode: "VIT", obtID: obtID, memo: "Record Send Unit Test") { (response, error) in
                     XCTAssert((error?.kind == FIOError.ErrorKind.Success), "recordSend NOT SUCCESSFUL")
                     expectation.fulfill()
                 }

@@ -1201,7 +1201,7 @@ public class FIOSDK: NSObject {
     
     //MARK: Record Send Models
     
-    public struct RecordSend: Codable {
+    private struct RecordSend: Codable {
         
         let fioReqID: String?
         let fromFIOAdd: String
@@ -1395,14 +1395,34 @@ public class FIOSDK: NSObject {
     
     //MARK: Record Send
     
-    /// Register a transation on another blockhain (OBT). Should be called after any transaction. [visit api specs](https://stealth.atlassian.net/wiki/spaces/DEV/pages/53280776/API#API-/record_send-Recordssendonanotherblockchain)
+    /// Register a transation on another blockhain (OBT: other block chain transaction). Should be called after any transaction. [visit api specs](https://stealth.atlassian.net/wiki/spaces/DEV/pages/53280776/API#API-/record_send-Recordssendonanotherblockchain)
     ///
     /// - Parameters:
-    ///   - model: The transaction record to be registered.
-    ///   - onCompletion: Once finished this callback returns optional response and error.
-    public func recordSend(_ model: RecordSend, onCompletion: @escaping (_ response: RecordSendResponse?, _ error: FIOError?) -> ()){
+    ///     - fioReqID: The FIO request ID to register the transaction for. Only required when approving transaction request.
+    ///     - fromFIOAdd: FIO address that is sending currency. (requestor)
+    ///     - toFIOAdd: FIO address that is receiving currency. (requestee)
+    ///     - fromPubAdd: FIO public address related to the token code being sent by from user (requestor)
+    ///     - toPubAdd: FIO public address related to the token code being received by to user (requestee)
+    ///     - amount: The value being sent.
+    ///     - fromTokenCode: Token code being sent. BTC, ETH, etc.
+    ///     - toTokenCode: Token code being received. BTC, ETH, etc.
+    ///     - obtID: The transaction ID (OBT) representing the transaction from one blockchain to another one.
+    ///     - memo: A note for that transaction.
+    ///     - onCompletion: Once finished this callback returns optional response and error.
+    public func recordSend(fioReqID: String? = nil,
+                           fromFIOAdd: String,
+                           toFIOAdd: String,
+                           fromPubAdd: String,
+                           toPubAdd: String,
+                           amount: Float,
+                           fromTokenCode: String,
+                           toTokenCode: String,
+                           obtID: String,
+                           memo: String,
+                           onCompletion: @escaping (_ response: RecordSendResponse?, _ error: FIOError?) -> ()){
         let actor = AccountNameGenerator.run(withPublicKey: getSystemPublicKey())
-        let request = RecordSendRequest(recordSend: model.toJSONString(), actor: actor)
+        let recordSend = RecordSend(fioReqID: fioReqID, fromFIOAdd: fromFIOAdd, toFIOAdd: toFIOAdd, fromPubAdd: fromPubAdd, toPubAdd: toPubAdd, amount: amount, tokenCode: fromTokenCode, chainCode: toTokenCode, status: "sent_to_blockchain", obtID: obtID, memo: memo)
+        let request = RecordSendRequest(recordSend: recordSend.toJSONString(), actor: actor)
         signedPostRequestTo(route: ChainRoutes.recordSend,
                             forAction: ChainActions.recordSend,
                             withBody: request,
