@@ -42,7 +42,7 @@ class FIOSDKTests: XCTestCase {
             
            // _ = FIOSDK.sharedInstance(accountName: "fio.system", privateKey: "5KBX1dwHME4VyuUss2sYM25D5ZTDvyYrbEz37UJqwAVAsR4tGuY", publicKey: "EOS7isxEua78KPVbGzKemH4nj2bWE52gqj8Hkac3tc7jKNvpfWzYS",systemPrivateKey:"5KBX1dwHME4VyuUss2sYM25D5ZTDvyYrbEz37UJqwAVAsR4tGuY", systemPublicKey:"EOS7isxEua78KPVbGzKemH4nj2bWE52gqj8Hkac3tc7jKNvpfWzYS", url: "http://34.220.213.187:8889/v1")
 //            _ = FIOSDK.sharedInstance(accountName: "fioname11111", privateKey: "5K2HBexbraViJLQUJVJqZc42A8dxkouCmzMamdrZsLHhUHv77jF", publicKey: "EOS5GpUwQtFrfvwqxAv24VvMJFeMHutpQJseTz8JYUBfZXP2zR8VY",systemPrivateKey:"5KBX1dwHME4VyuUss2sYM25D5ZTDvyYrbEz37UJqwAVAsR4tGuY", systemPublicKey:"EOS7isxEua78KPVbGzKemH4nj2bWE52gqj8Hkac3tc7jKNvpfWzYS", url: "http://18.210.240.10:8889/v1", mockUrl: "http://localhost:8080")
-            _ = FIOSDK.sharedInstance(accountName: "fioname11111", privateKey: "5K2HBexbraViJLQUJVJqZc42A8dxkouCmzMamdrZsLHhUHv77jF", publicKey: "EOS5GpUwQtFrfvwqxAv24VvMJFeMHutpQJseTz8JYUBfZXP2zR8VY",systemPrivateKey:"5KBX1dwHME4VyuUss2sYM25D5ZTDvyYrbEz37UJqwAVAsR4tGuY", systemPublicKey:"EOS7isxEua78KPVbGzKemH4nj2bWE52gqj8Hkac3tc7jKNvpfWzYS", url: "http://34.214.170.140:8889/v1", mockUrl: "http://localhost:8080")//54.202.124.82:8889// 54.218.97.18:8889 //34.213.160.31:8889
+            _ = FIOSDK.sharedInstance(accountName: "fioname11111", privateKey: "5K2HBexbraViJLQUJVJqZc42A8dxkouCmzMamdrZsLHhUHv77jF", publicKey: "EOS5GpUwQtFrfvwqxAv24VvMJFeMHutpQJseTz8JYUBfZXP2zR8VY",systemPrivateKey:"5KBX1dwHME4VyuUss2sYM25D5ZTDvyYrbEz37UJqwAVAsR4tGuY", systemPublicKey:"EOS7isxEua78KPVbGzKemH4nj2bWE52gqj8Hkac3tc7jKNvpfWzYS", url: "http://34.214.170.140:8889/v1", mockUrl: "http://localhost:8080")//54.202.124.82:8889// 54.218.97.18:8889 //34.213.160.31:8889 34.214.170.140
             
         }
 
@@ -242,41 +242,33 @@ class FIOSDKTests: XCTestCase {
         wait(for: [expectation], timeout: TIMEOUT)
     }
     
-    func testRejectFundsRequestWithDefaultAccountsShouldSucceed(){
-        let expectation = XCTestExpectation(description: "testRejectFundsRequest")
-        let amount = Float.random(in: 1111.0...4444)
-        FIOSDK.sharedInstance().requestFunds(from: "adam.brd ", to: "casey.brd", toPublicAddress: "0xab5801a7d398351b8be11c439e05c5b3259aec9b", amount: amount, tokenCode: "BTC", metadata: FIOSDK.RequestFundsRequest.MetaData(memo: "", hash: nil, offlineUrl: nil)) { (response, error) in
-            XCTAssert(error?.kind == .Success && response != nil, "testRejectFundsRequest Couldn't create mock request")
-            
-            if let response = response {
-                FIOSDK.sharedInstance().rejectFundsRequest(fundsRequestId: String(response.fundsRequestId), completion: { (response, error) in
-                    XCTAssert(error.kind == .Success, "testRejectFundsRequest couldn't reject request")
-                    expectation.fulfill()
-                })
-            }
-            else {
-                expectation.fulfill()
-            }
-        }
-        
-        wait(for: [expectation], timeout: TIMEOUT)
-    }
-    
     func testRejectFundsRequest(){
         let expectation = XCTestExpectation(description: "testRejectFundsRequest")
         let amount = Float.random(in: 1111.0...4444)
-        //requestor is sender, requestee is receiver
-        FIOSDK.sharedInstance().requestFunds(from: self.requestorFioName, to: requesteeFioName, toPublicAddress: requesteeAddress, amount: amount, tokenCode: "BTC", metadata: FIOSDK.RequestFundsRequest.MetaData(memo: "", hash: nil, offlineUrl: nil)) { (response, error) in
-            XCTAssert(error?.kind == .Success && response != nil, "testRejectFundsRequest Couldn't create mock request")
-            
-            if let response = response {
-                FIOSDK.sharedInstance().rejectFundsRequest(fundsRequestId: String(response.fundsRequestId), completion: { (response, error) in
-                    XCTAssert(error.kind == .Success, "testRejectFundsRequest couldn't reject request")
-                    expectation.fulfill()
-                })
-            }
-            else {
-                expectation.fulfill()
+        let from = self.requestorFioName
+        let to = self.requesteeFioName
+        let timestamp = NSDate().timeIntervalSince1970
+        let fromPubAdd = "from\(Int(timestamp.rounded()))"
+        let toPubAdd = "to\(Int(timestamp.rounded()))"
+        FIOSDK.sharedInstance().addPublicAddress(fioAddress: from, chain: "BTC", publicAddress: fromPubAdd) { (error) in
+            XCTAssert((error?.kind == FIOError.ErrorKind.Success), "testAddPublicAddress NOT SUCCESSFUL: \(error?.localizedDescription ?? "")")
+            FIOSDK.sharedInstance().addPublicAddress(fioAddress: to, chain: "BTC", publicAddress: toPubAdd) { (error) in
+                XCTAssert((error?.kind == FIOError.ErrorKind.Success), "testAddPublicAddress NOT SUCCESSFUL: \(error?.localizedDescription ?? "")")
+                
+                //requestor is sender, requestee is receiver
+                FIOSDK.sharedInstance().requestFunds(from: from, to: to, toPublicAddress: toPubAdd, amount: amount, tokenCode: "BTC", metadata: FIOSDK.RequestFundsRequest.MetaData(memo: "", hash: nil, offlineUrl: nil)) { (response, error) in
+                    XCTAssert(error?.kind == .Success && response != nil, "testRejectFundsRequest Couldn't create mock request")
+                    
+                    if let response = response {
+                        FIOSDK.sharedInstance().rejectFundsRequest(fundsRequestId: String(response.fundsRequestId), completion: { (response, error) in
+                            XCTAssert(error.kind == .Success, "testRejectFundsRequest couldn't reject request")
+                            expectation.fulfill()
+                        })
+                    }
+                    else {
+                        expectation.fulfill()
+                    }
+                }
             }
         }
         
@@ -366,6 +358,40 @@ class FIOSDKTests: XCTestCase {
             })
         })
 
+        wait(for: [expectation], timeout: TIMEOUT)
+    }
+    
+    func testRecordSendWithFakeDataShouldSucceeded() {
+        let expectation = XCTestExpectation(description: "testRecordSendWithFakeDataShouldSucceeded")
+        
+        let amount = Float.random(in: 1111.0...4444)
+        let from = self.requestorFioName
+        let to = self.requesteeFioName
+        let timestamp = NSDate().timeIntervalSince1970
+        let fromPubAdd = "from\(Int(timestamp.rounded()))"
+        let toPubAdd = "to\(Int(timestamp.rounded()))"
+        let obtID = "0xf6eaddd3851923f6f9653838d3021c02ab123a4a6e4485e83f5063b3711e000b"
+        
+        FIOSDK.sharedInstance().addPublicAddress(fioAddress: from, chain: "VIT", publicAddress: fromPubAdd) { (error) in
+            XCTAssert((error?.kind == FIOError.ErrorKind.Success), "testAddPublicAddress NOT SUCCESSFUL: \(error?.localizedDescription ?? "")")
+            guard error?.kind == FIOError.ErrorKind.Success else {
+                expectation.fulfill()
+                return
+            }
+            FIOSDK.sharedInstance().addPublicAddress(fioAddress: to, chain: "VIT", publicAddress: toPubAdd) { (error) in
+                XCTAssert((error?.kind == FIOError.ErrorKind.Success), "testAddPublicAddress NOT SUCCESSFUL: \(error?.localizedDescription ?? "")")
+                guard error?.kind == FIOError.ErrorKind.Success else {
+                    expectation.fulfill()
+                    return
+                }
+                
+                FIOSDK.sharedInstance().recordSend(fromFIOAdd: from, toFIOAdd: to, fromPubAdd: fromPubAdd, toPubAdd: toPubAdd, amount: amount, fromTokenCode: "VIT", toTokenCode: "VIT", obtID: obtID, memo: "Record Send Unit Test") { (response, error) in
+                    XCTAssert((error?.kind == FIOError.ErrorKind.Success), "recordSend NOT SUCCESSFUL")
+                    expectation.fulfill()
+                }
+            }
+        }
+        
         wait(for: [expectation], timeout: TIMEOUT)
     }
     
