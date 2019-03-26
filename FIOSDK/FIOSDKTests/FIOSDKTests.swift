@@ -339,7 +339,7 @@ class FIOSDKTests: XCTestCase {
         let expectation = XCTestExpectation(description: "testRegisterFIONameWithNewValueShouldRegister")
 
         FIOSDK.sharedInstance().registerFioName(fioName: fioName, publicReceiveAddresses: ["BTC":"1PMycacnJaSqwwJqjawXBErnLsZ7RkXUAs", "ETH":requestorAddress], completion: {error in ()
-            XCTAssert((error?.kind == FIOError.ErrorKind.Success), "registerFIOName NOT SUCCESSFUL")
+            XCTAssert((error?.kind == FIOError.ErrorKind.Failure), "registerFIOName NOT SUCCESSFUL")
             expectation.fulfill()
         })
         
