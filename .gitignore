@@ -40,3 +40,4 @@ DerivedData/
 
 # End of https://www.gitignore.io/api/xcode
 
+/FIOSDK/FIOSDK.xcodeproj/project.xcworkspace/xcuserdata/shawnarney.xcuserdatad/UserInterfaceState.xcuserstate
