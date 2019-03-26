@@ -396,4 +396,18 @@ class FIOSDKTests: XCTestCase {
         wait(for: [expectation], timeout: TIMEOUT)
     }
     
+    
+    func testGetFIOPublicAddressWithKeysShouldExist() {
+        let keyPair = FIOSDK.privatePubKeyPair(forMnemonic: "valley alien library bread worry brother bundle hammer loyal barely dune brave")
+        let fioPublicAddress = FIOSDK.sharedInstance(accountName: "fioname11111", privateKey: keyPair.privateKey, publicKey: keyPair.publicKey,systemPrivateKey:keyPair.privateKey, systemPublicKey:keyPair.publicKey, url: "http://34.214.170.140:8889/v1").getFIOPublicAddress()
+        let expected = "ltwagbt4qpuk"
+        XCTAssertEqual(fioPublicAddress, expected)
+    }
+    
+    func testGetFIOPublicAddressWithoutKeysShouldBeEmpty() {
+        let fioPublicAddress = FIOSDK.sharedInstance(accountName: "fioname11111", privateKey: "", publicKey: "",systemPrivateKey:"", systemPublicKey:"", url: "http://34.214.170.140:8889/v1").getFIOPublicAddress()
+        let expected = ""
+        XCTAssertEqual(fioPublicAddress, expected)
+    }
+    
 }

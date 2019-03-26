@@ -1457,6 +1457,13 @@ public class FIOSDK: NSObject {
         }
     }
     
+    //MARK: FIO Public Address
+    /// Call this to get the FIO pub address.
+    /// - Return: the FIO public address String value.
+    public func getFIOPublicAddress() -> String {
+        return AccountNameGenerator.run(withPublicKey: getSystemPublicKey())
+    }
+    
 }
 
 extension FIOSDK.RejectFundsRequestResponse.Status{
