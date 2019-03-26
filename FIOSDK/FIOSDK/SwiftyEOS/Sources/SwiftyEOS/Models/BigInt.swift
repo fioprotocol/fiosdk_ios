@@ -117,7 +117,7 @@ public struct _BigInt<Word: FixedWidthInteger & UnsignedInteger> :
         
         // FIXME: This is broken on 32-bit arch w/ Word = UInt64
         let wordRatio = UInt.bitWidth / Word.bitWidth
-        _sanityCheck(wordRatio != 0)
+        //_sanityCheck(wordRatio != 0)
         for var sourceWord in source.words {
             for _ in 0..<wordRatio {
                 _data.append(Word(truncatingIfNeeded: sourceWord))
@@ -239,25 +239,30 @@ public struct _BigInt<Word: FixedWidthInteger & UnsignedInteger> :
     ///
     /// - Precondition: `rhs <= self.magnitude`
     mutating func _unsignedSubtract(_ rhs: Word) {
-        _precondition(_data.count > 1 || _data[0] > rhs)
+        //_precondition(_data.count > 1 || _data[0] > rhs)
         
-        // Quick return if `rhs == 0`
-        guard rhs != 0 else { return }
+        if ((_data.count > 1) || _data[0] > rhs){
         
-        // If `isZero == true`, then `rhs` must also be zero.
-        _precondition(!isZero)
-        
-        var carry: Word
-        (carry, _data[0]) = _data[0].subtractingWithBorrow(rhs)
-        
-        for i in 1..<_data.count {
-            // No more action needed if there's nothing to carry
-            if carry == 0 { break }
-            (carry, _data[i]) = _data[i].subtractingWithBorrow(carry)
+            // Quick return if `rhs == 0`
+            guard rhs != 0 else { return }
+            
+            // If `isZero == true`, then `rhs` must also be zero.
+            //_precondition(!isZero)
+            if (!isZero){
+                
+                var carry: Word
+                (carry, _data[0]) = _data[0].subtractingWithBorrow(rhs)
+                
+                for i in 1..<_data.count {
+                    // No more action needed if there's nothing to carry
+                    if carry == 0 { break }
+                    (carry, _data[i]) = _data[i].subtractingWithBorrow(carry)
+                }
+                //_sanityCheck(carry == 0)
+                
+                _standardize()
+            }
         }
-        _sanityCheck(carry == 0)
-        
-        _standardize()
     }
     
     /// Adds `rhs` to this instance.
@@ -327,28 +332,32 @@ public struct _BigInt<Word: FixedWidthInteger & UnsignedInteger> :
     /// Divides this instance by `rhs`, returning the remainder.
     @discardableResult
     mutating func divide(by rhs: Word) -> Word {
-        _precondition(rhs != 0, "divide by zero")
+        //_precondition(rhs != 0, "divide by zero")
         
-        // No-op if `rhs == 1` or `self == 0`.
-        if rhs == 1 || isZero {
-            return 0
+        if (rhs != 0) {
+        
+            // No-op if `rhs == 1` or `self == 0`.
+            if rhs == 1 || isZero {
+                return 0
+            }
+            
+            // If `rhs` is a power of two, can just right shift `self`.
+            let rhsLSB = rhs.trailingZeroBitCount
+            if rhs >> rhsLSB == 1 {
+                defer { self >>= rhsLSB }
+                return _data[0] & ~(~0 << rhsLSB)
+            }
+            
+            var carry: Word = 0
+            for i in (0..<_data.count).reversed() {
+                let lhs = (high: carry, low: _data[i])
+                (_data[i], carry) = rhs.dividingFullWidth(lhs)
+            }
+            
+            _standardize()
+            return carry
         }
-        
-        // If `rhs` is a power of two, can just right shift `self`.
-        let rhsLSB = rhs.trailingZeroBitCount
-        if rhs >> rhsLSB == 1 {
-            defer { self >>= rhsLSB }
-            return _data[0] & ~(~0 << rhsLSB)
-        }
-        
-        var carry: Word = 0
-        for i in (0..<_data.count).reversed() {
-            let lhs = (high: carry, low: _data[i])
-            (_data[i], carry) = rhs.dividingFullWidth(lhs)
-        }
-        
-        _standardize()
-        return carry
+        return 0
     }
     
     //===--- Numeric --------------------------------------------------------===//
@@ -407,21 +416,24 @@ public struct _BigInt<Word: FixedWidthInteger & UnsignedInteger> :
     /// - Precondition: `rhs.magnitude <= self.magnitude` (unchecked)
     /// - Precondition: `rhs._data.count <= self._data.count`
     mutating func _unsignedSubtract(_ rhs: _BigInt) {
-        _precondition(rhs._data.count <= _data.count)
+        //_precondition(rhs._data.count <= _data.count)
         
-        var carry: Word = 0
-        for i in 0..<rhs._data.count {
-            (carry, _data[i]) = _data[i].subtractingWithBorrow(rhs._data[i], carry)
+        if (rhs._data.count <= _data.count) {
+            
+            var carry: Word = 0
+            for i in 0..<rhs._data.count {
+                (carry, _data[i]) = _data[i].subtractingWithBorrow(rhs._data[i], carry)
+            }
+            
+            for i in rhs._data.count..<_data.count {
+                // No more action needed if there's nothing to carry
+                if carry == 0 { break }
+                (carry, _data[i]) = _data[i].subtractingWithBorrow(carry)
+            }
+            //_sanityCheck(carry == 0)
+            
+            _standardize()
         }
-        
-        for i in rhs._data.count..<_data.count {
-            // No more action needed if there's nothing to carry
-            if carry == 0 { break }
-            (carry, _data[i]) = _data[i].subtractingWithBorrow(carry)
-        }
-        _sanityCheck(carry == 0)
-        
-        _standardize()
     }
     
     public static func +=(lhs: inout _BigInt, rhs: _BigInt) {
@@ -470,7 +482,7 @@ public struct _BigInt<Word: FixedWidthInteger & UnsignedInteger> :
         let (a, b) = lhs._data.count > rhs._data.count
             ? (lhs._data, rhs._data)
             : (rhs._data, lhs._data)
-        _sanityCheck(a.count >= b.count)
+        //_sanityCheck(a.count >= b.count)
         
         var carry: Word = 0
         for ai in 0..<a.count {
@@ -507,12 +519,12 @@ public struct _BigInt<Word: FixedWidthInteger & UnsignedInteger> :
                 //      0b11111111 + (0b11111101_____00000010) + 0b11111111
                 //                   (0b11111110_____00000001) + 0b11111111
                 //                   (0b11111111_____00000000)
-                _sanityCheck(!product.high.addingReportingOverflow(carry).overflow)
+                //_sanityCheck(!product.high.addingReportingOverflow(carry).overflow)
                 carry = product.high &+ carry
             }
             
             // Leftover `carry` is inserted in new highest word.
-            _sanityCheck(newData[ai + b.count] == 0)
+            //_sanityCheck(newData[ai + b.count] == 0)
             newData[ai + b.count] = carry
         }
         
@@ -524,47 +536,51 @@ public struct _BigInt<Word: FixedWidthInteger & UnsignedInteger> :
     /// Divides this instance by `rhs`, returning the remainder.
     @discardableResult
     mutating func _internalDivide(by rhs: _BigInt) -> _BigInt {
-        _precondition(!rhs.isZero, "Divided by zero")
-        defer { _checkInvariants() }
-        
-        // Handle quick cases that don't require division:
-        // If `abs(self) < abs(rhs)`, the result is zero, remainder = self
-        // If `abs(self) == abs(rhs)`, the result is 1 or -1, remainder = 0
-        switch _compareMagnitude(to: rhs) {
-        case .lessThan:
-            defer { self = 0 }
-            return self
-        case .equal:
-            self = isNegative != rhs.isNegative ? -1 : 1
-            return 0
-        default:
-            break
-        }
-        
-        var tempSelf = self.magnitude
-        let n = tempSelf.bitWidth - rhs.magnitude.bitWidth
-        var quotient: _BigInt = 0
-        var tempRHS = rhs.magnitude << n
-        var tempQuotient: _BigInt = 1 << n
-        
-        for _ in (0...n).reversed() {
-            if tempRHS._compareMagnitude(to: tempSelf) != .greaterThan {
-                tempSelf -= tempRHS
-                quotient += tempQuotient
+        //_precondition(!rhs.isZero, "Divided by zero")
+        if (!rhs.isZero){
+     
+            defer { _checkInvariants() }
+            
+            // Handle quick cases that don't require division:
+            // If `abs(self) < abs(rhs)`, the result is zero, remainder = self
+            // If `abs(self) == abs(rhs)`, the result is 1 or -1, remainder = 0
+            switch _compareMagnitude(to: rhs) {
+            case .lessThan:
+                defer { self = 0 }
+                return self
+            case .equal:
+                self = isNegative != rhs.isNegative ? -1 : 1
+                return 0
+            default:
+                break
             }
-            tempRHS >>= 1
-            tempQuotient >>= 1
+            
+            var tempSelf = self.magnitude
+            let n = tempSelf.bitWidth - rhs.magnitude.bitWidth
+            var quotient: _BigInt = 0
+            var tempRHS = rhs.magnitude << n
+            var tempQuotient: _BigInt = 1 << n
+            
+            for _ in (0...n).reversed() {
+                if tempRHS._compareMagnitude(to: tempSelf) != .greaterThan {
+                    tempSelf -= tempRHS
+                    quotient += tempQuotient
+                }
+                tempRHS >>= 1
+                tempQuotient >>= 1
+            }
+            
+            // `tempSelf` is the remainder - match sign of original `self`
+            tempSelf.isNegative = self.isNegative
+            tempSelf._standardize()
+            
+            quotient.isNegative = isNegative != rhs.isNegative
+            self = quotient
+            _standardize()
+            
+            return tempSelf
         }
-        
-        // `tempSelf` is the remainder - match sign of original `self`
-        tempSelf.isNegative = self.isNegative
-        tempSelf._standardize()
-        
-        quotient.isNegative = isNegative != rhs.isNegative
-        self = quotient
-        _standardize()
-        
-        return tempSelf
+        return 0
     }
     
     public static func /=(lhs: inout _BigInt, rhs: _BigInt) {
@@ -651,7 +667,7 @@ public struct _BigInt<Word: FixedWidthInteger & UnsignedInteger> :
     }
     
     public var words: [UInt] {
-        _sanityCheck(UInt.bitWidth % Word.bitWidth == 0)
+        //_sanityCheck(UInt.bitWidth % Word.bitWidth == 0)
         let twosComplementData = _dataAsTwosComplement()
         var words: [UInt] = []
         words.reserveCapacity((twosComplementData.count * Word.bitWidth
@@ -705,7 +721,7 @@ public struct _BigInt<Word: FixedWidthInteger & UnsignedInteger> :
         }
         
         let i = _data.index(where: { $0 != 0 })!
-        _sanityCheck(_data[i] != 0)
+        //_sanityCheck(_data[i] != 0)
         return i * Word.bitWidth + _data[i].trailingZeroBitCount
     }
     
