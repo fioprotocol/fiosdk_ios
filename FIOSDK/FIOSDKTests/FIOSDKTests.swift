@@ -36,6 +36,10 @@ class FIOSDKTests: XCTestCase {
     private let fioPublicKey  = "EOS5oBUYbtGTxMS66pPkjC2p8pbA3zCtc8XD4dq9fMut867GRdh82"
     private let fioServer     = "http://35.161.240.168:8889/v1"
     
+    private let fioAccountAlternative    = "htjonrkf1lgs"
+    private let fioPrivateKeyAlternative = "5JCpqkvsrCzrAC3YWhx7pnLodr3Wr9dNMULYU8yoUrPRzu269Xz"
+    private let fioPublicKeyAlternative  = "EOS7uRvrLVrZCbCM2DtCgUMospqUMnP3JUC1sKHA8zNoF835kJBvN"
+    
     //MARK: test variables
     private var requesteeFioName: String = ""
     private let requesteeAddress:String = "0xc39b2845E3CFAdE5f5b2864fe73f5960B8dB483B"
@@ -456,6 +460,41 @@ class FIOSDKTests: XCTestCase {
         
         fioSDK.getFIOBalance(fioPublicAddress: fioPubAddress) { (response, error) in
             XCTAssert((error.kind == FIOError.ErrorKind.Failure), "Get FIO Balance Found non existent account: \(error.localizedDescription )")
+            expectation.fulfill()
+        }
+        
+        wait(for: [expectation], timeout: TIMEOUT)
+    }
+    
+    func testTransferTokensWithGoodAccountsShouldBeSuccessful() {
+        let expectation = XCTestExpectation(description: "testTransferTokensWithGoodAccountsShouldBeSuccessful")
+        
+        let fioSDK = FIOSDK.sharedInstance(accountName: fioAccount, privateKey: fioPrivateKey, publicKey: fioPublicKey,systemPrivateKey:fioPrivateKey, systemPublicKey:fioPublicKey, url: fioServer)
+        let toFIOPubAddress = "htjonrkf1lgs"
+        let fromFIOPubAddress = "r41zuwovtn44"
+        let amount: Float = 1.0
+        
+        fioSDK.transferFIOTokens(toFIOPublicAddress: toFIOPubAddress, amount: amount) { (response, error) in
+            XCTAssert((error.kind == FIOError.ErrorKind.Success), "transfer failed: \(error.localizedDescription )")
+            //Transfer back
+            FIOSDK.sharedInstance(accountName: self.fioAccountAlternative, privateKey: self.fioPrivateKeyAlternative, publicKey: self.fioPublicKeyAlternative, systemPrivateKey:self.fioPrivateKeyAlternative, systemPublicKey:self.fioPublicKeyAlternative, url: self.fioServer).transferFIOTokens(toFIOPublicAddress: fromFIOPubAddress, amount: amount) { (response, error) in
+                XCTAssert((error.kind == FIOError.ErrorKind.Success), "transfer failed: \(error.localizedDescription )")
+                expectation.fulfill()
+            }
+        }
+        
+        wait(for: [expectation], timeout: TIMEOUT)
+    }
+    
+    func testTransferTokensWithInsufficientAmountShouldNotBeSuccessful() {
+        let expectation = XCTestExpectation(description: "testTransferTokensWithInsufficientAmountShouldNotBeSuccessful")
+        
+        let fioSDK = FIOSDK.sharedInstance(accountName: fioAccount, privateKey: fioPrivateKey, publicKey: fioPublicKey,systemPrivateKey:fioPrivateKey, systemPublicKey:fioPublicKey, url: fioServer)
+        let toFIOPubAddress = "htjonrkf1lgs"
+        let amount: Float = 9000000.0
+        
+        fioSDK.transferFIOTokens(toFIOPublicAddress: toFIOPubAddress, amount: amount) { (response, error) in
+            XCTAssert((error.kind == FIOError.ErrorKind.Failure), "transfer failed: \(error.localizedDescription )")
             expectation.fulfill()
         }
         

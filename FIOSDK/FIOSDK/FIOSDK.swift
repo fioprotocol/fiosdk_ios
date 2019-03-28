@@ -1432,10 +1432,10 @@ public class FIOSDK: NSObject {
     
     //MARK: Get FIO Balance
     
-    /// Retrieves balance of FIO tokens.
+    /// Retrieves balance of FIO tokens. [visit API specs](https://stealth.atlassian.net/wiki/spaces/DEV/pages/53280776/API#API-/get_fio_balance-GetFIObalance)
     /// - Parameters:
     ///     - fioPublicAddress: The FIO public address to get FIO tokens balance for.
-    ///     - completion: A function that is called once request is over with an optional response that should contain balance and error containing the result of the call.
+    ///     - completion: A function that is called once request is over with an optional response that should contain balance and error containing the status of the call.
     public func getFIOBalance(fioPublicAddress: String, completion: @escaping (_ response: GetFIOBalanceResponse?, _ error: FIOError) -> ()){
         let body = GetFIOBalanceRequest(fioPubAddress: fioPublicAddress)
         let url = ChainRouteBuilder.build(route: ChainRoutes.getFIOBalance)
@@ -1456,6 +1456,54 @@ public class FIOSDK: NSObject {
                     completion(nil, FIOError(kind:.Failure, localizedDescription: ChainRoutes.getFIOBalance.rawValue + " request failed."))
                 }
             }
+        }
+    }
+    
+    //MARK: Transfer Tokens
+    
+    private struct TransferFIOTokensRequest: Codable {
+        
+        let amount: String
+        let actor: String
+        let toFIOPubAdd: String
+        
+        enum CodingKeys: String, CodingKey {
+            case amount = "amount"
+            case actor = "actor"
+            case toFIOPubAdd = "tofiopubadd"
+        }
+        
+    }
+    
+    public struct TransferFIOTokensResponse: Codable {
+        
+        let status: String
+        
+        enum CodingKeys: String, CodingKey {
+            case status = "status"
+        }
+        
+    }    
+    
+    /// Transfers FIO tokens. [visit API specs](https://stealth.atlassian.net/wiki/spaces/DEV/pages/53280776/API#API-/transfer_tokens-TransferFIOtokens)
+    /// - Parameters:
+    ///     - toFIOPublicAddress: The FIO public address that will receive funds.
+    ///     - amount: The value that will be transfered from the calling account to the especified account.
+    ///     - completion: A function that is called once request is over with an optional response with results and error containing the status of the call.
+    public func transferFIOTokens(toFIOPublicAddress: String, amount: Float, completion: @escaping (_ response: TransferFIOTokensResponse?, _ error: FIOError) -> ()){
+        let actor = AccountNameGenerator.run(withPublicKey: getSystemPublicKey())
+        let transfer = TransferFIOTokensRequest(amount: String(amount), actor: actor, toFIOPubAdd: toFIOPublicAddress)
+        signedPostRequestTo(route: ChainRoutes.transferTokens,
+                            forAction: ChainActions.transferTokens,
+                            withBody: transfer,
+                            code: "fio.token",
+                            account: actor) { (result, error) in
+                                guard let result = result else {
+                                    completion(nil, error ?? FIOError.init(kind: .Failure, localizedDescription: "\(ChainActions.transferTokens.rawValue) call failed."))
+                                    return
+                                }
+                                let handledData: (response: TransferFIOTokensResponse?, error: FIOError) = self.parseResponseFromTransactionResult(txResult: result)
+                                completion(handledData.response, FIOError.init(kind: FIOError.ErrorKind.Success, localizedDescription: ""))
         }
     }
     

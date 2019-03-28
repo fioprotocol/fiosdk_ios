@@ -20,4 +20,5 @@ internal enum ChainRoutes: String {
     case getSentFIORequests     = "/chain/get_sent_fio_requests"
     case recordSend             = "/chain/record_send"
     case getFIOBalance          = "/chain/get_fio_balance"
+    case transferTokens         = "/chain/transfer_tokens"
 }

@@ -14,4 +14,5 @@ internal enum ChainActions: String {
     case rejectFundsRequest = "rejectfndreq"
     case addPublicAddress   = "addaddress"
     case recordSend         = "recordsend"
+    case transferTokens     = "transferfio"
 }

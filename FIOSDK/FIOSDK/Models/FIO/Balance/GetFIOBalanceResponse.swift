@@ -10,7 +10,7 @@ import Foundation
 
 public struct GetFIOBalanceResponse: Codable {
     
-    let balance: String
+    public let balance: String
     
     enum CodingKeys: String, CodingKey {
         case balance = "balance"
