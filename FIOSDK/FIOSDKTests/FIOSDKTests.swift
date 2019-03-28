@@ -417,7 +417,7 @@ class FIOSDKTests: XCTestCase {
         let fioPubAddress = fioSDK.getFIOPublicAddress()
         
         fioSDK.getFIOBalance(fioPublicAddress: fioPubAddress) { (response, error) in
-            XCTAssert((error.kind == FIOError.ErrorKind.Success), "Get FIO Balance NOT SUCCESSFUL: \(error.localizedDescription ?? "")")
+            XCTAssert((error.kind == FIOError.ErrorKind.Success), "Get FIO Balance NOT SUCCESSFUL: \(error.localizedDescription )")
             XCTAssert((response?.balance != nil && !response!.balance.isEmpty), "Balance is empty:")
             expectation.fulfill()
         }
@@ -432,7 +432,7 @@ class FIOSDKTests: XCTestCase {
         let fioPubAddress = "ltwagbt4qpuk"
         
         fioSDK.getFIOBalance(fioPublicAddress: fioPubAddress) { (response, error) in
-            XCTAssert((error.kind == FIOError.ErrorKind.Failure), "Get FIO Balance Found non existent account: \(error.localizedDescription ?? "")")
+            XCTAssert((error.kind == FIOError.ErrorKind.Failure), "Get FIO Balance Found non existent account: \(error.localizedDescription )")
             expectation.fulfill()
         }
         

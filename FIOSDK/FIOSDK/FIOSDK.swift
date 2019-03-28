@@ -1517,7 +1517,7 @@ public class FIOSDK: NSObject {
                     completion(nil, error)
                 }
                 else {
-                    completion(nil, FIOError(kind:.Failure, localizedDescription: ChainRoutes.getPendingFIORequests.rawValue + " request failed."))
+                    completion(nil, FIOError(kind:.Failure, localizedDescription: ChainRoutes.getFIOBalance.rawValue + " request failed."))
                 }
             }
         }
