@@ -813,7 +813,11 @@ public class FIOSDK: NSObject {
             if let data = data {
                 do {
                     let result = try JSONDecoder().decode(FioNamesResponse.self, from: data)
-                    completion(result, FIOError(kind: .Success, localizedDescription: ""))
+                    let newestAddresses = result.addresses.sorted(by: { (address, nextAddress) -> Bool in
+                        address.expiration > nextAddress.expiration
+                    })
+                    let newResult = FioNamesResponse(publicAddress: result.publicAddress, domains: result.domains, addresses: newestAddresses)
+                    completion(newResult, FIOError(kind: .Success, localizedDescription: ""))
                 }
                 catch {
                     completion(nil, FIOError(kind:.Failure, localizedDescription: "Parsing json failed."))
