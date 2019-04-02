@@ -399,15 +399,44 @@ class FIOSDKTests: XCTestCase {
     
     func testGetFIOPublicAddressWithKeysShouldExist() {
         let keyPair = FIOSDK.privatePubKeyPair(forMnemonic: "valley alien library bread worry brother bundle hammer loyal barely dune brave")
-        let fioPublicAddress = FIOSDK.sharedInstance(accountName: "fioname11111", privateKey: keyPair.privateKey, publicKey: keyPair.publicKey,systemPrivateKey:keyPair.privateKey, systemPublicKey:keyPair.publicKey, url: "http://34.214.170.140:8889/v1").getFIOPublicAddress()
+        let fioPublicAddress = FIOSDK().configure(accountName: "fioname11111", privateKey: keyPair.privateKey, publicKey: keyPair.publicKey,systemPrivateKey:keyPair.privateKey, systemPublicKey:keyPair.publicKey, url: "http://34.214.170.140:8889/v1").getFIOPublicAddress()
         let expected = "ltwagbt4qpuk"
         XCTAssertEqual(fioPublicAddress, expected)
     }
     
     func testGetFIOPublicAddressWithoutKeysShouldBeEmpty() {
-        let fioPublicAddress = FIOSDK.sharedInstance(accountName: "fioname11111", privateKey: "", publicKey: "",systemPrivateKey:"", systemPublicKey:"", url: "http://34.214.170.140:8889/v1").getFIOPublicAddress()
+        let fioPublicAddress = FIOSDK().configure(accountName: "fioname11111", privateKey: "", publicKey: "",systemPrivateKey:"", systemPublicKey:"", url: "http://34.214.170.140:8889/v1").getFIOPublicAddress()
         let expected = ""
         XCTAssertEqual(fioPublicAddress, expected)
+    }
+    
+    func testGetFIOBalanceWithProperSetupShouldReturnValue() {
+        let expectation = XCTestExpectation(description: "testGetFIOBalanceWithProperSetupShouldReturnValue")
+
+        let fioSDK = FIOSDK().configure(accountName: "r41zuwovtn44", privateKey: "5JLxoeRoMDGBbkLdXJjxuh3zHsSS7Lg6Ak9Ft8v8sSdYPkFuABF", publicKey: "EOS5oBUYbtGTxMS66pPkjC2p8pbA3zCtc8XD4dq9fMut867GRdh82",systemPrivateKey:"5JLxoeRoMDGBbkLdXJjxuh3zHsSS7Lg6Ak9Ft8v8sSdYPkFuABF", systemPublicKey:"EOS5oBUYbtGTxMS66pPkjC2p8pbA3zCtc8XD4dq9fMut867GRdh82", url: "http://35.161.240.168:8889/v1")
+        let fioPubAddress = fioSDK.getFIOPublicAddress()
+        
+        fioSDK.getFIOBalance(fioPublicAddress: fioPubAddress) { (response, error) in
+            XCTAssert((error.kind == FIOError.ErrorKind.Success), "Get FIO Balance NOT SUCCESSFUL: \(error.localizedDescription )")
+            XCTAssert((response?.balance != nil && !response!.balance.isEmpty), "Balance is empty:")
+            expectation.fulfill()
+        }
+        
+        wait(for: [expectation], timeout: TIMEOUT)
+    }
+    
+    func testGetFIOBalanceWithWrongAccountShouldReturnError() {
+        let expectation = XCTestExpectation(description: "testGetFIOBalanceWithWrongAccountShouldReturnError")
+        
+        let fioSDK = FIOSDK().configure(accountName: "r41zuwovtn44", privateKey: "5JLxoeRoMDGBbkLdXJjxuh3zHsSS7Lg6Ak9Ft8v8sSdYPkFuABF", publicKey: "EOS5oBUYbtGTxMS66pPkjC2p8pbA3zCtc8XD4dq9fMut867GRdh82",systemPrivateKey:"5JLxoeRoMDGBbkLdXJjxuh3zHsSS7Lg6Ak9Ft8v8sSdYPkFuABF", systemPublicKey:"EOS5oBUYbtGTxMS66pPkjC2p8pbA3zCtc8XD4dq9fMut867GRdh82", url: "http://35.161.240.168:8889/v1")
+        let fioPubAddress = "ltwagbt4qpuk"
+        
+        fioSDK.getFIOBalance(fioPublicAddress: fioPubAddress) { (response, error) in
+            XCTAssert((error.kind == FIOError.ErrorKind.Failure), "Get FIO Balance Found non existent account: \(error.localizedDescription )")
+            expectation.fulfill()
+        }
+        
+        wait(for: [expectation], timeout: TIMEOUT)
     }
     
 }
