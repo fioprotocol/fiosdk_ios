@@ -19,16 +19,31 @@ class FIOSDKTests: XCTestCase {
     
     // stage 1 server: 18.223.14.244
     private let TIMEOUT:Double = 240.0
-    
     private let useStaging = true
     
-    // test variables
+    //MARK: Constants
+    private let defaultAccount  = "fioname11111"
+    private let defaultServer   = "http://34.214.170.140:8889/v1"
+    private let defaultMnemonic = "valley alien library bread worry brother bundle hammer loyal barely dune brave"
+    
+    private let alternativeServerA = "http://54.202.124.82:8889/v1"
+    private let alternativeServerB = "http://54.218.97.18:8889/v1"
+    private let alternativeServerC = "http://34.213.160.31:8889/v1"
+    private let alternativeServerD = "http://34.214.170.140:8889/v1"
+    
+    private let fioAccount    = "r41zuwovtn44"
+    private let fioPrivateKey = "5JLxoeRoMDGBbkLdXJjxuh3zHsSS7Lg6Ak9Ft8v8sSdYPkFuABF"
+    private let fioPublicKey  = "EOS5oBUYbtGTxMS66pPkjC2p8pbA3zCtc8XD4dq9fMut867GRdh82"
+    private let fioServer     = "http://35.161.240.168:8889/v1"
+    
+    //MARK: test variables
     private var requesteeFioName: String = ""
     private let requesteeAddress:String = "0xc39b2845E3CFAdE5f5b2864fe73f5960B8dB483B"
     private var requestorFioName: String = ""
     private let requestorAddress:String = "0x3A2522321656285661Df2012a3A05bEF84C8B1ed"
     
-    // {"table_key":"","lower_bound":"","key_type":"","index_position":"","code":"fio.finance","scope":"fio.finance","table":"trxlogs","limit":10,"encode_type":"dec","upper_bound":"","json":true}
+    //MARK: Setup
+    
     override func setUp() {
         // Put setup code here. This method is called before the invocation of each test method in the class.
         
@@ -37,14 +52,8 @@ class FIOSDKTests: XCTestCase {
         requestorFioName = "bar\(Int(timestamp.rounded())).brd"
         
         if (useStaging){
-            //
-           // _ = FIOSDK.sharedInstance(accountName: "fioname11111", privateKey: "5K2HBexbraViJLQUJVJqZc42A8dxkouCmzMamdrZsLHhUHv77jF", publicKey: "EOS5GpUwQtFrfvwqxAv24VvMJFeMHutpQJseTz8JYUBfZXP2zR8VY",systemPrivateKey:"5KBX1dwHME4VyuUss2sYM25D5ZTDvyYrbEz37UJqwAVAsR4tGuY", systemPublicKey:"EOS7isxEua78KPVbGzKemH4nj2bWE52gqj8Hkac3tc7jKNvpfWzYS", url: "http://18.223.14.244:8889/v1")
-            
-           // _ = FIOSDK.sharedInstance(accountName: "fio.system", privateKey: "5KBX1dwHME4VyuUss2sYM25D5ZTDvyYrbEz37UJqwAVAsR4tGuY", publicKey: "EOS7isxEua78KPVbGzKemH4nj2bWE52gqj8Hkac3tc7jKNvpfWzYS",systemPrivateKey:"5KBX1dwHME4VyuUss2sYM25D5ZTDvyYrbEz37UJqwAVAsR4tGuY", systemPublicKey:"EOS7isxEua78KPVbGzKemH4nj2bWE52gqj8Hkac3tc7jKNvpfWzYS", url: "http://34.220.213.187:8889/v1")
-//            _ = FIOSDK.sharedInstance(accountName: "fioname11111", privateKey: "5K2HBexbraViJLQUJVJqZc42A8dxkouCmzMamdrZsLHhUHv77jF", publicKey: "EOS5GpUwQtFrfvwqxAv24VvMJFeMHutpQJseTz8JYUBfZXP2zR8VY",systemPrivateKey:"5KBX1dwHME4VyuUss2sYM25D5ZTDvyYrbEz37UJqwAVAsR4tGuY", systemPublicKey:"EOS7isxEua78KPVbGzKemH4nj2bWE52gqj8Hkac3tc7jKNvpfWzYS", url: "http://18.210.240.10:8889/v1", mockUrl: "http://localhost:8080")
-            let keyPair = FIOSDK.privatePubKeyPair(forMnemonic: "valley alien library bread worry brother bundle hammer loyal barely dune brave")
-            _ = FIOSDK.sharedInstance(accountName: "fioname11111", privateKey: keyPair.privateKey, publicKey: keyPair.publicKey,systemPrivateKey:keyPair.privateKey, systemPublicKey:keyPair.publicKey, url: "http://34.214.170.140:8889/v1", mockUrl: "http://localhost:8080")//54.202.124.82:8889// 54.218.97.18:8889 //34.213.160.31:8889 34.214.170.140
-            
+            let keyPair = FIOSDK.privatePubKeyPair(forMnemonic: defaultMnemonic)
+            _ = FIOSDK.sharedInstance(accountName: defaultAccount, privateKey: keyPair.privateKey, publicKey: keyPair.publicKey,systemPrivateKey:keyPair.privateKey, systemPublicKey:keyPair.publicKey, url: defaultServer, mockUrl: "http://localhost:8080")
         }
 
         else{
@@ -75,6 +84,8 @@ class FIOSDKTests: XCTestCase {
     override func tearDown() {
         // Put teardown code here. This method is called after the invocation of each test method in the class.
     }
+    
+    //MARK: -
 
     func testValidation(){
         
@@ -122,7 +133,10 @@ class FIOSDKTests: XCTestCase {
     /// Tests the getPendingFioRequests method on FIOSDK using constant values ->
     /// publicAddress = self.requesteeAddress
     func testGetPendingFioRequests(){
-        let expectation = XCTestExpectation(description: "testgetpendingfiorequest")
+        let expectationAddPubAddA = XCTestExpectation(description: "testgetpendingfiorequest")
+        let expectationAddPubAddB = XCTestExpectation(description: "testgetpendingfiorequest")
+        let expectationReqFunds = XCTestExpectation(description: "testgetpendingfiorequest")
+        let expectationPendingReq = XCTestExpectation(description: "testgetpendingfiorequest")
         let metadata = FIOSDK.RequestFundsRequest.MetaData(memo: "Invoice1234", hash: nil, offlineUrl: nil)
         let timestamp = NSDate().timeIntervalSince1970
         let from = self.requestorFioName
@@ -131,24 +145,27 @@ class FIOSDKTests: XCTestCase {
         let toPubAdd = "to\(Int(timestamp.rounded()))"
         FIOSDK.sharedInstance().addPublicAddress(fioAddress: from, chain: "BTC", publicAddress: fromPubAdd) { (error) in
             XCTAssert((error?.kind == FIOError.ErrorKind.Success), "testAddPublicAddress NOT SUCCESSFUL: \(error?.localizedDescription ?? "")")
+            expectationAddPubAddA.fulfill()
             FIOSDK.sharedInstance().addPublicAddress(fioAddress: to, chain: "BTC", publicAddress: toPubAdd) { (error) in
                 XCTAssert((error?.kind == FIOError.ErrorKind.Success), "testAddPublicAddress NOT SUCCESSFUL: \(error?.localizedDescription ?? "")")
+                expectationAddPubAddB.fulfill()
                 FIOSDK.sharedInstance().requestFunds(from: from, to: to, toPublicAddress: toPubAdd, amount: 1.0, tokenCode: "BTC", metadata: metadata) { (response, error) in
                     if error?.kind == .Success {
+                        expectationReqFunds.fulfill()
                         FIOSDK.sharedInstance().getPendingFioRequests(fioPublicAddress: fromPubAdd) { (data, error) in
                             XCTAssert(error?.kind == FIOError.ErrorKind.Success, "testgetpendingfiorequest not successful: \(error?.localizedDescription ?? "unknown")")
                             XCTAssertNotNil(data, "testgetpendingfiorequest result came out nil")
-                            expectation.fulfill()
+                            expectationPendingReq.fulfill()
                         }
                     }
                     else {
                         XCTFail("Failed to call requestFunds prior to getting pending requests")
-                        expectation.fulfill()
+                        expectationReqFunds.fulfill()
                     }
                 }
             }
         }
-        wait(for: [expectation], timeout: TIMEOUT)
+        wait(for: [expectationAddPubAddA,expectationAddPubAddB, expectationReqFunds, expectationPendingReq], timeout: TIMEOUT)
     }
     
     func testGetFIONameFromPubAddress(){
@@ -289,9 +306,9 @@ class FIOSDKTests: XCTestCase {
         let timestamp = NSDate().timeIntervalSince1970
         let fromPubAdd = "from\(Int(timestamp.rounded()))"
         let toPubAdd = "to\(Int(timestamp.rounded()))"
-        FIOSDK.sharedInstance().addPublicAddress(fioAddress: from, chain: "BTC", publicAddress: fromPubAdd) { (error) in
+        FIOSDK.sharedInstance().addPublicAddress(fioAddress: from, chain: "ETH", publicAddress: fromPubAdd) { (error) in
             XCTAssert((error?.kind == FIOError.ErrorKind.Success), "testAddPublicAddress NOT SUCCESSFUL: \(error?.localizedDescription ?? "")")
-            FIOSDK.sharedInstance().addPublicAddress(fioAddress: to, chain: "BTC", publicAddress: toPubAdd) { (error) in
+            FIOSDK.sharedInstance().addPublicAddress(fioAddress: to, chain: "ETH", publicAddress: toPubAdd) { (error) in
                 XCTAssert((error?.kind == FIOError.ErrorKind.Success), "testAddPublicAddress NOT SUCCESSFUL: \(error?.localizedDescription ?? "")")
                 FIOSDK.sharedInstance().requestFunds(from: from, to: to, toPublicAddress: toPubAdd, amount: amount, tokenCode: "BTC", metadata: FIOSDK.RequestFundsRequest.MetaData(memo: "", hash: nil, offlineUrl: nil)) { (response, error) in
                     XCTAssert(error?.kind == .Success && response != nil, "testGetSentRequests Couldn't create mock request")
@@ -303,6 +320,12 @@ class FIOSDKTests: XCTestCase {
                     }
                     FIOSDK.sharedInstance().getSentFioRequest(publicAddress: toPubAdd, completion: { (response, error) in
                         XCTAssert(error.kind == .Success && response != nil, "testGetSentRequest couldn't retreive request")
+                        guard error.kind == .Success, response != nil else {
+                            XCTFail("getSentFioRequest Request should have sent fio requests")
+                            expGetSentRequest.fulfill()
+                            expRejectRequest.fulfill()
+                            return
+                        }
                         XCTAssertFalse(response!.requests.filter({ (request) -> Bool in
                             return request.fundsRequestId == fundsRequestId
                         }).isEmpty,  "testGetsentRequest couldn't found the request")
@@ -398,14 +421,14 @@ class FIOSDKTests: XCTestCase {
     
     
     func testGetFIOPublicAddressWithKeysShouldExist() {
-        let keyPair = FIOSDK.privatePubKeyPair(forMnemonic: "valley alien library bread worry brother bundle hammer loyal barely dune brave")
-        let fioPublicAddress = FIOSDK().configure(accountName: "fioname11111", privateKey: keyPair.privateKey, publicKey: keyPair.publicKey,systemPrivateKey:keyPair.privateKey, systemPublicKey:keyPair.publicKey, url: "http://34.214.170.140:8889/v1").getFIOPublicAddress()
+        let keyPair = FIOSDK.privatePubKeyPair(forMnemonic: defaultMnemonic)
+        let fioPublicAddress = FIOSDK.sharedInstance(accountName: defaultAccount, privateKey: keyPair.privateKey, publicKey: keyPair.publicKey,systemPrivateKey:keyPair.privateKey, systemPublicKey:keyPair.publicKey, url: defaultServer).getFIOPublicAddress()
         let expected = "ltwagbt4qpuk"
         XCTAssertEqual(fioPublicAddress, expected)
     }
     
     func testGetFIOPublicAddressWithoutKeysShouldBeEmpty() {
-        let fioPublicAddress = FIOSDK().configure(accountName: "fioname11111", privateKey: "", publicKey: "",systemPrivateKey:"", systemPublicKey:"", url: "http://34.214.170.140:8889/v1").getFIOPublicAddress()
+        let fioPublicAddress = FIOSDK.sharedInstance(accountName: defaultAccount, privateKey: "", publicKey: "",systemPrivateKey:"", systemPublicKey:"", url: defaultServer).getFIOPublicAddress()
         let expected = ""
         XCTAssertEqual(fioPublicAddress, expected)
     }
@@ -413,7 +436,7 @@ class FIOSDKTests: XCTestCase {
     func testGetFIOBalanceWithProperSetupShouldReturnValue() {
         let expectation = XCTestExpectation(description: "testGetFIOBalanceWithProperSetupShouldReturnValue")
 
-        let fioSDK = FIOSDK().configure(accountName: "r41zuwovtn44", privateKey: "5JLxoeRoMDGBbkLdXJjxuh3zHsSS7Lg6Ak9Ft8v8sSdYPkFuABF", publicKey: "EOS5oBUYbtGTxMS66pPkjC2p8pbA3zCtc8XD4dq9fMut867GRdh82",systemPrivateKey:"5JLxoeRoMDGBbkLdXJjxuh3zHsSS7Lg6Ak9Ft8v8sSdYPkFuABF", systemPublicKey:"EOS5oBUYbtGTxMS66pPkjC2p8pbA3zCtc8XD4dq9fMut867GRdh82", url: "http://35.161.240.168:8889/v1")
+        let fioSDK = FIOSDK.sharedInstance(accountName: fioAccount, privateKey: fioPrivateKey, publicKey: fioPublicKey,systemPrivateKey:fioPrivateKey, systemPublicKey:fioPublicKey, url: fioServer)
         let fioPubAddress = fioSDK.getFIOPublicAddress()
         
         fioSDK.getFIOBalance(fioPublicAddress: fioPubAddress) { (response, error) in
@@ -428,7 +451,7 @@ class FIOSDKTests: XCTestCase {
     func testGetFIOBalanceWithWrongAccountShouldReturnError() {
         let expectation = XCTestExpectation(description: "testGetFIOBalanceWithWrongAccountShouldReturnError")
         
-        let fioSDK = FIOSDK().configure(accountName: "r41zuwovtn44", privateKey: "5JLxoeRoMDGBbkLdXJjxuh3zHsSS7Lg6Ak9Ft8v8sSdYPkFuABF", publicKey: "EOS5oBUYbtGTxMS66pPkjC2p8pbA3zCtc8XD4dq9fMut867GRdh82",systemPrivateKey:"5JLxoeRoMDGBbkLdXJjxuh3zHsSS7Lg6Ak9Ft8v8sSdYPkFuABF", systemPublicKey:"EOS5oBUYbtGTxMS66pPkjC2p8pbA3zCtc8XD4dq9fMut867GRdh82", url: "http://35.161.240.168:8889/v1")
+        let fioSDK = FIOSDK.sharedInstance(accountName: fioAccount, privateKey: fioPrivateKey, publicKey: fioPublicKey,systemPrivateKey:fioPrivateKey, systemPublicKey:fioPublicKey, url: fioServer)
         let fioPubAddress = "ltwagbt4qpuk"
         
         fioSDK.getFIOBalance(fioPublicAddress: fioPubAddress) { (response, error) in
