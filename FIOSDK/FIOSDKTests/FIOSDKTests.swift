@@ -362,7 +362,7 @@ class FIOSDKTests: XCTestCase {
         let expectation = XCTestExpectation(description: "testRegisterFIONameWithNewValueShouldRegister")
 
         FIOSDK.sharedInstance().registerFioName(fioName: fioName, publicReceiveAddresses: ["BTC":"1PMycacnJaSqwwJqjawXBErnLsZ7RkXUAs", "ETH":requestorAddress], completion: {error in ()
-            XCTAssert((error?.kind == FIOError.ErrorKind.Failure), "registerFIOName NOT SUCCESSFUL")
+            XCTAssert((error?.kind == FIOError.ErrorKind.Success), "registerFIOName NOT SUCCESSFUL")
             expectation.fulfill()
         })
         
@@ -456,40 +456,6 @@ class FIOSDKTests: XCTestCase {
         
         fioSDK.getFIOBalance(fioPublicAddress: fioPubAddress) { (response, error) in
             XCTAssert((error.kind == FIOError.ErrorKind.Failure), "Get FIO Balance Found non existent account: \(error.localizedDescription )")
-            expectation.fulfill()
-        }
-        
-        wait(for: [expectation], timeout: TIMEOUT)
-    }
-    
-    func testTransferTokensWithGoodAccountsShouldBeSuccessful() {
-        let expectation = XCTestExpectation(description: "testTransferTokensWithGoodAccountsShouldBeSuccessful")
-        
-        let fioSDK = FIOSDK().configure(accountName: "r41zuwovtn44", privateKey: "5JLxoeRoMDGBbkLdXJjxuh3zHsSS7Lg6Ak9Ft8v8sSdYPkFuABF", publicKey: "EOS5oBUYbtGTxMS66pPkjC2p8pbA3zCtc8XD4dq9fMut867GRdh82",systemPrivateKey:"5JLxoeRoMDGBbkLdXJjxuh3zHsSS7Lg6Ak9Ft8v8sSdYPkFuABF", systemPublicKey:"EOS5oBUYbtGTxMS66pPkjC2p8pbA3zCtc8XD4dq9fMut867GRdh82", url: "http://35.161.240.168:8889/v1")
-        let toFIOPubAddress = "htjonrkf1lgs"
-        let amount: Float = 1.0
-        
-        fioSDK.transferFIOTokens(toFIOPublicAddress: toFIOPubAddress, amount: amount) { (response, error) in
-            XCTAssert((error.kind == FIOError.ErrorKind.Success), "transfer failed: \(error.localizedDescription )")
-            //Transfer back
-            FIOSDK().configure(accountName: "htjonrkf1lgs", privateKey: "5JCpqkvsrCzrAC3YWhx7pnLodr3Wr9dNMULYU8yoUrPRzu269Xz", publicKey: "EOS7uRvrLVrZCbCM2DtCgUMospqUMnP3JUC1sKHA8zNoF835kJBvN",systemPrivateKey:"5JCpqkvsrCzrAC3YWhx7pnLodr3Wr9dNMULYU8yoUrPRzu269Xz", systemPublicKey:"EOS7uRvrLVrZCbCM2DtCgUMospqUMnP3JUC1sKHA8zNoF835kJBvN", url: "http://35.161.240.168:8889/v1").transferFIOTokens(toFIOPublicAddress: "r41zuwovtn44", amount: amount) { (response, error) in
-                XCTAssert((error.kind == FIOError.ErrorKind.Success), "transfer failed: \(error.localizedDescription )")
-                expectation.fulfill()
-            }
-        }
-        
-        wait(for: [expectation], timeout: TIMEOUT)
-    }
-    
-    func testTransferTokensWithInsufficientAmountShouldNotBeSuccessful() {
-        let expectation = XCTestExpectation(description: "testTransferTokensWithInsufficientAmountShouldNotBeSuccessful")
-        
-        let fioSDK = FIOSDK().configure(accountName: "r41zuwovtn44", privateKey: "5JLxoeRoMDGBbkLdXJjxuh3zHsSS7Lg6Ak9Ft8v8sSdYPkFuABF", publicKey: "EOS5oBUYbtGTxMS66pPkjC2p8pbA3zCtc8XD4dq9fMut867GRdh82",systemPrivateKey:"5JLxoeRoMDGBbkLdXJjxuh3zHsSS7Lg6Ak9Ft8v8sSdYPkFuABF", systemPublicKey:"EOS5oBUYbtGTxMS66pPkjC2p8pbA3zCtc8XD4dq9fMut867GRdh82", url: "http://35.161.240.168:8889/v1")
-        let toFIOPubAddress = "htjonrkf1lgs"
-        let amount: Float = 9000000.0
-        
-        fioSDK.transferFIOTokens(toFIOPublicAddress: toFIOPubAddress, amount: amount) { (response, error) in
-            XCTAssert((error.kind == FIOError.ErrorKind.Failure), "transfer failed: \(error.localizedDescription )")
             expectation.fulfill()
         }
         
