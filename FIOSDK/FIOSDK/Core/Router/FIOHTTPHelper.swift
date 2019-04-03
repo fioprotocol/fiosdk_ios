@@ -8,7 +8,7 @@
 
 import Foundation
 
-struct FIOHTTPHelper {
+internal struct FIOHTTPHelper {
     
     /**
      * Do a post request to the given url with a body parameter

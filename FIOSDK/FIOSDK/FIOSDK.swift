@@ -27,46 +27,6 @@ public class FIOSDK: NSObject {
     private var systemPublicKey:String = ""
     private let requestFunds = RequestFunds()
     
-    
-    //MARK: - Chain routes
-    enum ChainRoutes: String {
-        case serializeJSON          = "/chain/serialize_json"
-        case registerFIOName        = "/chain/register_fio_name"
-        case newFundsRequest        = "/chain/new_funds_request"
-        case rejectFundsRequest     = "/chain/reject_funds_request"
-        case addPublicAddress       = "/chain/add_pub_address"
-        case pubAddressLookup       = "/chain/pub_address_lookup"
-        case getFIONames            = "/chain/get_fio_names"
-        case getPendingFIORequests  = "/chain/get_pending_fio_requests"
-        case getSentFIORequests     = "/chain/get_sent_fio_requests"
-        case recordSend             = "/chain/record_send"
-        case getFIOBalance          = "/chain/get_fio_balance"
-        case transferTokens         = "/chain/transfer_tokens"
-    }
-    
-    struct ChainRouteBuilder {
-        
-        static func build(route: ChainRoutes) -> String {
-            return ChainRouteBuilder.getBaseURL() + route.rawValue
-        }
-        
-        private static func getBaseURL() -> String {
-            return Utilities.sharedInstance().URL
-        }
-        
-    }
-    
-    //MARK: - Chain Actions
-    
-    enum ChainActions: String {
-        case registerFIOName    = "registername"
-        case newFundsRequest    = "newfundsreq"
-        case rejectFundsRequest = "rejectfndreq"
-        case addPublicAddress   = "addaddress"
-        case recordSend         = "recordsend"
-        case transferTokens     = "transferfio"
-    }
-    
     //MARK: -
     
     public struct Request{
@@ -98,57 +58,51 @@ public class FIOSDK: NSObject {
         return sharedInstance
     }()
     
-    public class func sharedInstance(accountName: String? = nil, privateKey:String? = nil, publicKey:String? = nil, systemPrivateKey:String?=nil, systemPublicKey:String? = nil, url:String? = nil, mockUrl: String? = nil) -> FIOSDK {
-        
-        return _sharedInstance.configure(accountName: accountName, privateKey: privateKey, publicKey: publicKey, systemPrivateKey: systemPrivateKey, systemPublicKey: systemPublicKey, url: url, mockUrl: mockUrl)
-    }
-    
-    public func configure(accountName: String? = nil, privateKey:String? = nil, publicKey:String? = nil, systemPrivateKey:String?=nil, systemPublicKey:String? = nil, url:String? = nil, mockUrl: String? = nil) -> FIOSDK {
-        
+    public class func sharedInstance(accountName: String? = nil, privateKey:String? = nil, publicKey:String? = nil, systemPrivateKey:String?=nil, systemPublicKey:String? = nil, url:String? = nil, mockUrl: String? = nil) -> FIOSDK {        
         if (accountName == nil ){
-            if (self.accountName.count < 2 ){
+            if (_sharedInstance.accountName.count < 2 ){
                 //throw FIOError(kind:FIOError.ErrorKind.Failure, localizedDescription: "Account name hasn't been set yet, for the SDK Shared Instance, this needs to be passed in with the first usage")
                 fatalError("Account name hasn't been set yet, for the FIOWalletSDK Shared Instance, this needs to be passed in with the first usage")
             }
         }
         else{
-            self.accountName = accountName!
+            _sharedInstance.accountName = accountName!
         }
         
         if (privateKey == nil){
-            if (self.privateKey.count < 2){
+            if (_sharedInstance.privateKey.count < 2){
                 fatalError("Private Key hasn't been set yet, for the FIOWalletSDK Shared Instance, this needs to be passed in with the first usage")
             }
         }
         else {
-            self.privateKey = privateKey!
+            _sharedInstance.privateKey = privateKey!
         }
         
         if (publicKey == nil){
-            if (self.publicKey.count < 2){
+            if (_sharedInstance.publicKey.count < 2){
                 fatalError("Public Key hasn't been set yet, for the FIOWalletSDK Shared Instance, this needs to be passed in with the first usage")
             }
         }
         else {
-            self.publicKey = publicKey!
+            _sharedInstance.publicKey = publicKey!
         }
         
         if (systemPrivateKey == nil){
-            if (self.systemPrivateKey.count < 2){
+            if (_sharedInstance.systemPrivateKey.count < 2){
                 fatalError("System Private Key hasn't been set yet, for the FIOWalletSDK Shared Instance, this needs to be passed in with the first usage")
             }
         }
         else {
-            self.systemPrivateKey = systemPrivateKey!
+            _sharedInstance.systemPrivateKey = systemPrivateKey!
         }
         
         if (systemPublicKey == nil){
-            if (self.systemPublicKey.count < 2){
+            if (_sharedInstance.systemPublicKey.count < 2){
                 fatalError("System Public Key hasn't been set yet, for the FIOWalletSDK Shared Instance, this needs to be passed in with the first usage")
             }
         }
         else {
-            self.systemPublicKey = systemPublicKey!
+            _sharedInstance.systemPublicKey = systemPublicKey!
         }
         
         if (url == nil){
@@ -165,7 +119,7 @@ public class FIOSDK: NSObject {
         }
         
         
-        return self
+        return _sharedInstance
     }
     
     public func isFioNameValid(fioName:String) -> Bool{
@@ -1478,30 +1432,10 @@ public class FIOSDK: NSObject {
     
     //MARK: Get FIO Balance
     
-    private struct GetFIOBalanceRequest: Codable {
-        
-        let fioPubAddress: String
-        
-        enum CodingKeys: String, CodingKey {
-            case fioPubAddress = "fio_pub_address"
-        }
-        
-    }
-    
-    public struct GetFIOBalanceResponse: Codable {
-        
-        let balance: String
-        
-        enum CodingKeys: String, CodingKey {
-            case balance = "balance"
-        }
-        
-    }
-    
-    /// Retrieves balance of FIO tokens. [visit API specs](https://stealth.atlassian.net/wiki/spaces/DEV/pages/53280776/API#API-/get_fio_balance-GetFIObalance)
+    /// Retrieves balance of FIO tokens.
     /// - Parameters:
     ///     - fioPublicAddress: The FIO public address to get FIO tokens balance for.
-    ///     - completion: A function that is called once request is over with an optional response that should contain balance and error containing the status of the call.
+    ///     - completion: A function that is called once request is over with an optional response that should contain balance and error containing the result of the call.
     public func getFIOBalance(fioPublicAddress: String, completion: @escaping (_ response: GetFIOBalanceResponse?, _ error: FIOError) -> ()){
         let body = GetFIOBalanceRequest(fioPubAddress: fioPublicAddress)
         let url = ChainRouteBuilder.build(route: ChainRoutes.getFIOBalance)
@@ -1522,55 +1456,6 @@ public class FIOSDK: NSObject {
                     completion(nil, FIOError(kind:.Failure, localizedDescription: ChainRoutes.getFIOBalance.rawValue + " request failed."))
                 }
             }
-        }
-    }
-    
-    //MARK: Transfer Tokens
-    
-    private struct TransferFIOTokensRequest: Codable {
-        
-        let amount: String
-        let actor: String
-        let toFIOPubAdd: String
-        
-        enum CodingKeys: String, CodingKey {
-            case amount = "amount"
-            case actor = "actor"
-            case toFIOPubAdd = "tofiopubadd"
-        }
-        
-    }
-    
-    public struct TransferFIOTokensResponse: Codable {
-        
-        let status: String
-        
-        enum CodingKeys: String, CodingKey {
-            case status = "status"
-        }
-        
-    }
-    
-    
-    /// Transfers FIO tokens. [visit API specs](https://stealth.atlassian.net/wiki/spaces/DEV/pages/53280776/API#API-/transfer_tokens-TransferFIOtokens)
-    /// - Parameters:
-    ///     - toFIOPublicAddress: The FIO public address that will receive funds.
-    ///     - amount: The value that will be transfered from the calling account to the especified account.
-    ///     - completion: A function that is called once request is over with an optional response with results and error containing the status of the call.
-    public func transferFIOTokens(toFIOPublicAddress: String, amount: Float, completion: @escaping (_ response: TransferFIOTokensResponse?, _ error: FIOError) -> ()){
-        let actor = AccountNameGenerator.run(withPublicKey: getSystemPublicKey())
-        let transfer = TransferFIOTokensRequest(amount: String(amount), actor: actor, toFIOPubAdd: toFIOPublicAddress)
-        signedPostRequestTo(route: ChainRoutes.transferTokens,
-                            forAction: ChainActions.transferTokens,
-                            withBody: transfer,
-                            code: "fio.token",
-                            account: actor) { (result, error) in
-                                guard let result = result else {
-                                    completion(nil, error ?? FIOError.init(kind: .Failure, localizedDescription: "\(ChainActions.transferTokens.rawValue) call failed."))
-                                    return
-                                }
-                                let handledData: (response: TransferFIOTokensResponse?, error: FIOError) = self.parseResponseFromTransactionResult(txResult: result)
-                                completion(handledData.response, FIOError.init(kind: FIOError.ErrorKind.Success, localizedDescription: ""))
         }
     }
     
