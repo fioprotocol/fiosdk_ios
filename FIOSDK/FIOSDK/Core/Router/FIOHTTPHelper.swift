@@ -27,6 +27,7 @@ internal struct FIOHTTPHelper {
         
         // create post request
         guard let url = URL(string: fullUrl) else {
+            print("[FIOSDK] Failed to post request to \(fullUrl)")
             onCompletion(nil, FIOError(kind: .MalformedURL, localizedDescription: ""))
             return
         }
