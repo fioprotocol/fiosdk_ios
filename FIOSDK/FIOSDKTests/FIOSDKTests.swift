@@ -132,7 +132,16 @@ class FIOSDKTests: XCTestCase {
         wait(for: [expectation], timeout: TIMEOUT)
     }
     
-    
+    func testAddPublicAddressWithFIOTokenShouldFail(){
+        let expectation = XCTestExpectation(description: "testaddpublicaddress")
+        let timestamp = NSDate().timeIntervalSince1970
+        let pubAdd = "pubAdd\(Int(timestamp.rounded()))"
+        FIOSDK.sharedInstance().addPublicAddress(fioAddress: self.requestorFioName, chain: "FIO", publicAddress: pubAdd) { (error) in
+            XCTAssert((error?.kind == FIOError.ErrorKind.Failure), "testAddPublicAddressWithFIOTokenShouldFail tried to add FIO Token address.")
+            expectation.fulfill()
+        }
+        wait(for: [expectation], timeout: TIMEOUT)
+    }
     
     /// Tests the getPendingFioRequests method on FIOSDK using constant values ->
     /// publicAddress = self.requesteeAddress
@@ -386,6 +395,22 @@ class FIOSDKTests: XCTestCase {
             })
         })
 
+        wait(for: [expectation], timeout: TIMEOUT)
+    }
+    
+    func testRegisterFIONameWithFIOTokenAddressShouldNotAddAddress() {
+        let timestamp = NSDate().timeIntervalSince1970
+        let fioName = "sha\(Int(timestamp.rounded())).brd"
+        let expectation = XCTestExpectation(description: "testRegisterFIONameWithAlreadyRegisteredValueShouldFail")
+        
+        FIOSDK.sharedInstance().registerFioName(fioName: fioName, publicReceiveAddresses: ["FIO":"ignoreme"], completion: {error in ()
+            XCTAssert((error?.kind == FIOError.ErrorKind.Success), "registerFIOName NOT SUCCESSFUL")
+            FIOSDK.sharedInstance().getFioNames(publicAddress: "ignoreme", completion: { (response, error) in
+                XCTAssert((error?.kind == FIOError.ErrorKind.Failure), "Added the address it shouldn´t be added")
+                expectation.fulfill()
+            })
+        })
+        
         wait(for: [expectation], timeout: TIMEOUT)
     }
     

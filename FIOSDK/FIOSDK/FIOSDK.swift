@@ -26,6 +26,7 @@ public class FIOSDK: NSObject {
     private var systemPrivateKey:String = ""
     private var systemPublicKey:String = ""
     private let requestFunds = RequestFunds()
+    private let pubAddressTokenFilter: [String: UInt8] = ["fio": 1]
     
     //MARK: -
     
@@ -403,7 +404,7 @@ public class FIOSDK: NSObject {
                 completion(error)
                 return
             }
-            var addresses:Dictionary<String,String> = publicReceiveAddresses
+            let addresses:Dictionary<String,String> = publicReceiveAddresses
         
             var anyFail = false
         
@@ -411,6 +412,7 @@ public class FIOSDK: NSObject {
             var operations: [AddPubAddressOperation] = []
             var index = 0
             for (chain, receiveAddress) in addresses {
+                if self.pubAddressTokenFilter[chain.lowercased()] != nil { continue }
                 group.enter()
                 let operation = AddPubAddressOperation(action: { operation in
                     self.addPublicAddress(fioAddress: fioName, chain: chain, publicAddress: receiveAddress, completion: { (error) in
@@ -496,6 +498,10 @@ public class FIOSDK: NSObject {
     ///   - publicAddress: A string representing the public address for that FIO Address and coin.
     ///   - completion: The completion handler, providing an optional error in case something goes wrong
     public func addPublicAddress(fioAddress: String, chain: String, publicAddress: String, completion: @escaping ( _ error:FIOError?) -> ()) {
+        guard chain.lowercased() != "fio" else {
+            completion(FIOError(kind: .Failure, localizedDescription: "[FIO SDK] FIO Token pub address should not be added manually."))
+            return
+        }
         let actor = AccountNameGenerator.run(withPublicKey: getSystemPublicKey())
         let data = AddPublicAddress(fioAddress: fioAddress, tokenCode: chain, publicAddress: publicAddress, actor: actor)
         signedPostRequestTo(route: ChainRoutes.addPublicAddress,
