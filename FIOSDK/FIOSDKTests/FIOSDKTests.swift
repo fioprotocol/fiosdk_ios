@@ -34,7 +34,7 @@ class FIOSDKTests: XCTestCase {
     private let fioAccount    = "r41zuwovtn44"
     private let fioPrivateKey = "5JLxoeRoMDGBbkLdXJjxuh3zHsSS7Lg6Ak9Ft8v8sSdYPkFuABF"
     private let fioPublicKey  = "EOS5oBUYbtGTxMS66pPkjC2p8pbA3zCtc8XD4dq9fMut867GRdh82"
-    private let fioServer     = "http://35.161.240.168:8889/v1"
+    private let fioServer     = "http://18.236.248.110:8889/v1"
     
     private let fioAccountAlternative    = "htjonrkf1lgs"
     private let fioPrivateKeyAlternative = "5JCpqkvsrCzrAC3YWhx7pnLodr3Wr9dNMULYU8yoUrPRzu269Xz"

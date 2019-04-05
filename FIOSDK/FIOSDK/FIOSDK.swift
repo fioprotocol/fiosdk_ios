@@ -15,8 +15,6 @@
 
 import UIKit
 
-private let slipFIO: UInt32 = 235
-
 public class FIOSDK: NSObject {
     
     private let ERROR_DOMAIN = "FIO Wallet SDK"
@@ -25,6 +23,7 @@ public class FIOSDK: NSObject {
     private var publicKey:String = ""
     private var systemPrivateKey:String = ""
     private var systemPublicKey:String = ""
+    private static let keyManager = FIOKeyManager()
     
     //MARK: -
     
@@ -632,14 +631,11 @@ public class FIOSDK: NSObject {
     ///   - mnemonic: The text to use in key pair generation.
     /// - Return: A tuple containing both private and public keys to be used in FIOSDK setup.
     static public func privatePubKeyPair(forMnemonic mnemonic: String) -> (privateKey: String, publicKey: String) {
-        do {
-            let privKey = try PrivateKey(enclave: .Secp256k1, mnemonicString: mnemonic, slip: slipFIO)
-            guard let pk = privKey else { return ("", "") }
-            return (pk.rawPrivateKey(), PublicKey(privateKey: pk).rawPublicKey())
-        }
-        catch {
-            return ("", "")
-        }
+        return keyManager.privatePubKeyPair(mnemonic: mnemonic)
+    }
+    
+    static public func wipePrivPubKeys() throws {
+        try keyManager.wipeKeys()
     }
     
     //MARK: FIO Public Address
