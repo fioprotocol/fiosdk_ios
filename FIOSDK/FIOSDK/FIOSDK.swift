@@ -16,6 +16,7 @@
 import UIKit
 
 private let slipFIO: UInt32 = 235
+private let decimalsFIO: Int = 4
 
 public class FIOSDK: NSObject {
     
@@ -1498,7 +1499,10 @@ public class FIOSDK: NSObject {
     ///     - completion: A function that is called once request is over with an optional response with results and error containing the status of the call.
     public func transferFIOTokens(toFIOPublicAddress: String, amount: Float, completion: @escaping (_ response: TransferFIOTokensResponse?, _ error: FIOError) -> ()){
         let actor = AccountNameGenerator.run(withPublicKey: getSystemPublicKey())
-        let transfer = TransferFIOTokensRequest(amount: String(amount), actor: actor, toFIOPubAdd: toFIOPublicAddress)
+        var transferAmount = String(amount)
+        var places = decimalsFIO - transferAmount.split(separator: ".")[1].count
+        for _ in 0..<places { transferAmount.append("0") }
+        let transfer = TransferFIOTokensRequest(amount: transferAmount, actor: actor, toFIOPubAdd: toFIOPublicAddress)
         signedPostRequestTo(route: ChainRoutes.transferTokens,
                             forAction: ChainActions.transferTokens,
                             withBody: transfer,
