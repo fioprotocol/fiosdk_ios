@@ -9,6 +9,7 @@
 import Foundation
 
 public struct FIOError: Error {
+    
     public enum ErrorKind {
         case Success
         case NoDataReturned
@@ -19,4 +20,13 @@ public struct FIOError: Error {
     }
     public let kind: ErrorKind
     public let localizedDescription: String
+    
+    static func failure(localizedDescription: String) -> FIOError {
+        return FIOError(kind: .Failure, localizedDescription: localizedDescription)
+    }
+    
+    static func success() -> FIOError {
+        return FIOError(kind: .Success, localizedDescription: "")
+    }
+    
 }

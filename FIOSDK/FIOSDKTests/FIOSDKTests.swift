@@ -193,13 +193,45 @@ class FIOSDKTests: XCTestCase {
         wait(for: [expectation], timeout: TIMEOUT)
     }
     
-    
     func testGetFioNamesWithUnvalidAddressShouldRespondWithNotFound(){
         let expectation = XCTestExpectation(description: "testgetfionames")
         FIOSDK.sharedInstance().getFioNames(publicAddress: "NOT VALID ADDRESS") { (data, error) in
             XCTAssert(error?.kind == FIOError.ErrorKind.Failure, "Should have failed")
             expectation.fulfill()
         }
+        wait(for: [expectation], timeout: TIMEOUT)
+    }
+    
+    
+    func testGetFIONameDetailsWithGoodNameShouldSucceed() {
+        let expectation = XCTestExpectation(description: "testGetFIONameDetailsWithGoodNameShouldSucceed")
+        
+        FIOSDK.sharedInstance().getFIONameDetails(self.requesteeFioName) { (response, error) in
+            XCTAssert(error.kind == .Success, "getPublicAddress error")
+            XCTAssertNotNil(response, "getPublicAddress error")
+            
+            if error.kind != .Success {
+                expectation.fulfill()
+            }
+            else {
+                XCTAssertNotNil(response?.address, "name NOT FOUND")
+                XCTAssertNotNil(response?.expiration, "date NOT FOUND")
+                expectation.fulfill()
+            }
+        }
+        
+        wait(for: [expectation], timeout: TIMEOUT)
+    }
+    
+    func testGetFIONameDetailsWithBadNameShouldFail() {
+        let expectation = XCTestExpectation(description: "testGetFIONameDetailsWithBadNameShouldFail")
+        
+        FIOSDK.sharedInstance().getFIONameDetails("NOT_VALID_NAME") { (response, error) in
+            XCTAssert(error.kind == .Failure, "Should've failed but succeeded")
+            XCTAssertNil(response)
+            expectation.fulfill()
+        }
+        
         wait(for: [expectation], timeout: TIMEOUT)
     }
     
@@ -226,8 +258,42 @@ class FIOSDKTests: XCTestCase {
         wait(for: [expectation], timeout: TIMEOUT)
     }
     
+    func testGetTokenPublicAddressWithValidPubAddressShouldSucceed() {
+        let expectation = XCTestExpectation(description: "testGetTokenPublicAddressWithValidPubAddressShouldSucceed")
+        
+        let timestamp = NSDate().timeIntervalSince1970
+        let tokenPubAdd = "smp\(Int(timestamp.rounded()))"
+        
+        FIOSDK.sharedInstance().addPublicAddress(fioAddress: self.requestorFioName, chain: "SMP", publicAddress: tokenPubAdd) { (error) in
+            XCTAssert((error?.kind == FIOError.ErrorKind.Success), "getTokenPublicAddress NOT SUCCESSFUL: \(error?.localizedDescription ?? "")")
+            
+            FIOSDK.sharedInstance().getTokenPublicAddress(forToken: "SMP", withFIOPublicAddress: tokenPubAdd, onCompletion: { (response, error) in
+                XCTAssert(error.kind == .Success, "getTokenPublicAddress failed")
+                XCTAssertNotNil(response)
+                expectation.fulfill()
+            })
+        }
+        
+        wait(for: [expectation], timeout: TIMEOUT)
+    }
+    
+    
+    func testGetTokenPublicAddressWithInvalidTokenShouldFail() {
+        let expectation = XCTestExpectation(description: "testGetTokenPublicAddressWithInvalidTokenShouldFail")
+        
+        let timestamp = NSDate().timeIntervalSince1970
+        let tokenPubAdd = "smp\(Int(timestamp.rounded()))"
+        
+        FIOSDK.sharedInstance().getTokenPublicAddress(forToken: "NOTVALIDTOKEN", withFIOPublicAddress: tokenPubAdd, onCompletion: { (response, error) in
+            XCTAssert(error.kind == .Failure, "should've failed")
+            expectation.fulfill()
+        })
+        
+        wait(for: [expectation], timeout: TIMEOUT)
+    }
+    
     func testRequestFundsWithGeneratedAccountShouldSucceed(){
-        let expectation = XCTestExpectation(description: "testRequestFunds")
+        let expectation = XCTestExpectation(description: "testRequestFundsWithGeneratedAccountShouldSucceed")
         let metadata = RequestFundsRequest.MetaData(memo: "Invoice1234", hash: nil, offlineUrl: nil)
         
         FIOSDK.sharedInstance().requestFunds(from: self.requestorFioName, to: self.requesteeFioName, toPublicAddress: self.requesteeAddress, amount: 1.0, tokenCode: "DAI", metadata: metadata) { (response, error) in
@@ -240,7 +306,7 @@ class FIOSDKTests: XCTestCase {
     }
     
     func testRequestFundsWithNewPubAddressesAccountsShouldSucceed(){
-        let expectation = XCTestExpectation(description: "testRequestFunds")
+        let expectation = XCTestExpectation(description: "testRequestFundsWithNewPubAddressesAccountsShouldSucceed")
         let metadata = RequestFundsRequest.MetaData(memo: "Invoice1234", hash: nil, offlineUrl: nil)
         
         let from = self.requestorFioName
@@ -414,6 +480,40 @@ class FIOSDKTests: XCTestCase {
                 }
                 
                 FIOSDK.sharedInstance().recordSend(fromFIOAdd: from, toFIOAdd: to, fromPubAdd: fromPubAdd, toPubAdd: toPubAdd, amount: amount, fromTokenCode: "VIT", toTokenCode: "VIT", obtID: obtID, memo: "Record Send Unit Test") { (response, error) in
+                    XCTAssert((error?.kind == FIOError.ErrorKind.Success), "recordSend NOT SUCCESSFUL")
+                    expectation.fulfill()
+                }
+            }
+        }
+        
+        wait(for: [expectation], timeout: TIMEOUT)
+    }
+    
+    func testRecordSendAutoResolveWithFakeDataShouldSucceeded() {
+        let expectation = XCTestExpectation(description: "testRecordSendAutoResolveWithFakeDataShouldSucceeded")
+        
+        let amount = Float.random(in: 1111.0...4444)
+        let from = self.requestorFioName
+        let to = self.requesteeFioName
+        let timestamp = NSDate().timeIntervalSince1970
+        let fromPubAdd = "from\(Int(timestamp.rounded()))"
+        let toPubAdd = "to\(Int(timestamp.rounded()))"
+        let obtID = "0xf6eaddd3851923f6f9653838d3021c02ab123a4a6e4485e83f5063b3711e000b"
+
+        FIOSDK.sharedInstance().addPublicAddress(fioAddress: from, chain: "VIT", publicAddress: fromPubAdd) { (error) in
+            XCTAssert((error?.kind == FIOError.ErrorKind.Success), "testAddPublicAddress NOT SUCCESSFUL: \(error?.localizedDescription ?? "")")
+            guard error?.kind == FIOError.ErrorKind.Success else {
+                expectation.fulfill()
+                return
+            }
+            FIOSDK.sharedInstance().addPublicAddress(fioAddress: to, chain: "VIT", publicAddress: toPubAdd) { (error) in
+                XCTAssert((error?.kind == FIOError.ErrorKind.Success), "testAddPublicAddress NOT SUCCESSFUL: \(error?.localizedDescription ?? "")")
+                guard error?.kind == FIOError.ErrorKind.Success else {
+                    expectation.fulfill()
+                    return
+                }
+                
+                FIOSDK.sharedInstance().recordSendAutoResolvingWith(toFIOAdd: to, andFromPubAdd: fromPubAdd, amountSent: amount, forTokenCode: "VIT", obtID: obtID, memo: "Record send unit test") { (response, error) in
                     XCTAssert((error?.kind == FIOError.ErrorKind.Success), "recordSend NOT SUCCESSFUL")
                     expectation.fulfill()
                 }
