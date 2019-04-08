@@ -125,6 +125,8 @@
 		28BB8B722257BFB20049A761 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28BB8B712257BFB20049A761 /* ViewController.swift */; };
 		28BB8B772257BFB30049A761 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 28BB8B762257BFB30049A761 /* Assets.xcassets */; };
 		28BB8B7A2257BFB30049A761 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 28BB8B782257BFB30049A761 /* LaunchScreen.storyboard */; };
+		28BED284225BD3D900F8606E /* FIODateUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28BED283225BD3D900F8606E /* FIODateUtils.swift */; };
+		28BED286225BD83400F8606E /* FIODateUtilsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28BED285225BD83400F8606E /* FIODateUtilsTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -268,6 +270,8 @@
 		28BB8B762257BFB30049A761 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		28BB8B792257BFB30049A761 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		28BB8B7B2257BFB30049A761 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		28BED283225BD3D900F8606E /* FIODateUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FIODateUtils.swift; sourceTree = "<group>"; };
+		28BED285225BD83400F8606E /* FIODateUtilsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FIODateUtilsTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -338,6 +342,7 @@
 				0203C529217A48100054FA10 /* Info.plist */,
 				28BB8B652257B60E0049A761 /* FIOKeyManagerTests.swift */,
 				28BB8B672257BBAB0049A761 /* KeychainInteractorTests.swift */,
+				28BED285225BD83400F8606E /* FIODateUtilsTests.swift */,
 			);
 			path = FIOSDKTests;
 			sourceTree = "<group>";
@@ -646,9 +651,9 @@
 		2856494D2229BB0A006E2533 /* Core */ = {
 			isa = PBXGroup;
 			children = (
+				28BED282225BD3C400F8606E /* Helpers */,
 				28BB8B5E22578F4A0049A761 /* PrivatePublicKey */,
 				0203C5D7217A71330054FA10 /* FIOError.swift */,
-				0203C598217A4EC90054FA10 /* Utilities.swift */,
 				025859F22255057400622144 /* AccountGenerator */,
 				025859F12255054500622144 /* Extensions */,
 				025859F02255053100622144 /* Router */,
@@ -799,6 +804,15 @@
 				28BB8B7B2257BFB30049A761 /* Info.plist */,
 			);
 			path = HostApplication;
+			sourceTree = "<group>";
+		};
+		28BED282225BD3C400F8606E /* Helpers */ = {
+			isa = PBXGroup;
+			children = (
+				0203C598217A4EC90054FA10 /* Utilities.swift */,
+				28BED283225BD3D900F8606E /* FIODateUtils.swift */,
+			);
+			path = Helpers;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -1054,6 +1068,7 @@
 				0203C58B217A487A0054FA10 /* BaseRouter.swift in Sources */,
 				287F109422569F0B001E3B32 /* Request.swift in Sources */,
 				0203C58E217A487A0054FA10 /* PrivateKey.swift in Sources */,
+				28BED284225BD3D900F8606E /* FIODateUtils.swift in Sources */,
 				0203C58F217A487A0054FA10 /* ChainModels.swift in Sources */,
 				0203C58C217A487A0054FA10 /* KeyPair.swift in Sources */,
 				0203C588217A487A0054FA10 /* EOSRPC+History.swift in Sources */,
@@ -1100,6 +1115,7 @@
 			files = (
 				28BB8B662257B60E0049A761 /* FIOKeyManagerTests.swift in Sources */,
 				0203C528217A48100054FA10 /* FIOSDKTests.swift in Sources */,
+				28BED286225BD83400F8606E /* FIODateUtilsTests.swift in Sources */,
 				28BB8B682257BBAB0049A761 /* KeychainInteractorTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

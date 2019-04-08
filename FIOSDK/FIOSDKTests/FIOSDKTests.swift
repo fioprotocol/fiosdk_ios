@@ -275,8 +275,7 @@ class FIOSDKTests: XCTestCase {
         }
         
         wait(for: [expectation], timeout: TIMEOUT)
-    }
-    
+    }    
     
     func testGetTokenPublicAddressWithInvalidTokenShouldFail() {
         let expectation = XCTestExpectation(description: "testGetTokenPublicAddressWithInvalidTokenShouldFail")
