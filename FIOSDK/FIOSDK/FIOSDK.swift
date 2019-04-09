@@ -499,13 +499,6 @@ public class FIOSDK: NSObject {
         }
     }
     
-    public struct TokenPublicAddressResponse {
-        
-        public let fioAddress: String
-        public let tokenPublicAddress: String
-        
-    }
-    
     /// Returns a public address for the specified token registered under a FIO public address.
     /// - Parameters:
     ///   - forToken: Token code for which public address is to be returned, e.g. "ETH".

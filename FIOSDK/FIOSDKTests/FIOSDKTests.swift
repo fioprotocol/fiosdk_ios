@@ -23,18 +23,19 @@ class FIOSDKTests: XCTestCase {
     
     //MARK: Constants
     private let defaultAccount  = "fioname11111"
-    private let defaultServer   = "http://34.214.170.140:8889/v1"
+    private let defaultServer   = "http://18.236.248.110:8889/v1"
     private let defaultMnemonic = "valley alien library bread worry brother bundle hammer loyal barely dune brave"
     
     private let alternativeServerA = "http://54.202.124.82:8889/v1"
     private let alternativeServerB = "http://54.218.97.18:8889/v1"
     private let alternativeServerC = "http://34.213.160.31:8889/v1"
     private let alternativeServerD = "http://34.214.170.140:8889/v1"
+    private let adamSandbox = "http://35.161.240.168:8889/v1"
     
     private let fioAccount    = "r41zuwovtn44"
     private let fioPrivateKey = "5JLxoeRoMDGBbkLdXJjxuh3zHsSS7Lg6Ak9Ft8v8sSdYPkFuABF"
     private let fioPublicKey  = "EOS5oBUYbtGTxMS66pPkjC2p8pbA3zCtc8XD4dq9fMut867GRdh82"
-    private let fioServer     = "http://18.236.248.110:8889/v1"
+    private let fioServer     = "http://18.236.248.110:8889/v1" //DEV3
     
     private let fioAccountAlternative    = "htjonrkf1lgs"
     private let fioPrivateKeyAlternative = "5JCpqkvsrCzrAC3YWhx7pnLodr3Wr9dNMULYU8yoUrPRzu269Xz"
@@ -263,15 +264,26 @@ class FIOSDKTests: XCTestCase {
         
         let timestamp = NSDate().timeIntervalSince1970
         let tokenPubAdd = "smp\(Int(timestamp.rounded()))"
+        let fioName = "fio\(Int(timestamp.rounded())).brd"
         
-        FIOSDK.sharedInstance().addPublicAddress(fioAddress: self.requestorFioName, chain: "SMP", publicAddress: tokenPubAdd) { (error) in
-            XCTAssert((error?.kind == FIOError.ErrorKind.Success), "getTokenPublicAddress NOT SUCCESSFUL: \(error?.localizedDescription ?? "")")
-            
-            FIOSDK.sharedInstance().getTokenPublicAddress(forToken: "SMP", withFIOPublicAddress: tokenPubAdd, onCompletion: { (response, error) in
-                XCTAssert(error.kind == .Success, "getTokenPublicAddress failed")
-                XCTAssertNotNil(response)
+        FIOSDK.sharedInstance().registerFioName(fioName: fioName, publicReceiveAddresses: ["BTC":tokenPubAdd]) { (error) in
+            guard error?.kind == .Success else {
+                XCTFail("User not registered")
                 expectation.fulfill()
-            })
+                return
+            }
+            FIOSDK.sharedInstance().getPublicAddress(fioAddress: fioName, tokenCode: "FIO") { (response, error) in
+                guard error.kind == .Success, let fioPubAddress = response?.publicAddress else {
+                    XCTFail("Public address not found")
+                    expectation.fulfill()
+                    return
+                }
+                FIOSDK.sharedInstance().getTokenPublicAddress(forToken: "BTC", withFIOPublicAddress: fioPubAddress) { (response, error) in
+                    XCTAssert(error.kind == .Success, "getTokenPublicAddress failed")
+                    XCTAssertNotNil(response)
+                    expectation.fulfill()
+                }
+            }
         }
         
         wait(for: [expectation], timeout: TIMEOUT)
