@@ -8,12 +8,16 @@
 
 import Foundation
 
-public struct TransferFIOTokensResponse: Codable {
-    
-    public let status: String
-    
-    enum CodingKeys: String, CodingKey {
-        case status = "status"
+extension FIOSDK.Responses {
+
+    public struct TransferFIOTokensResponse: Codable {
+        
+        public let status: String
+        
+        enum CodingKeys: String, CodingKey {
+            case status = "status"
+        }
+        
     }
     
 }

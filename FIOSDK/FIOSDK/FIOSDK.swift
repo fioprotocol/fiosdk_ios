@@ -10,6 +10,9 @@ import UIKit
 
 public class FIOSDK: NSObject {
     
+    //Used as a namespace for response classes. Each model will be added with extension feature in its own file.
+    public enum Responses {}
+    
     private let ERROR_DOMAIN = "FIO Wallet SDK"
     private var accountName:String = ""
     private var privateKey:String = ""
@@ -384,13 +387,13 @@ public class FIOSDK: NSObject {
     /// - Parameters:
     ///   - fioPublicAddress: FIO public address of new owner. Has to match signature
     ///   - completion: Completion hanlder
-    public func getPendingFioRequests(fioPublicAddress: String, completion: @escaping (_ pendingRequests: PendingFioRequestsResponse?, _ error:FIOError?) -> ()) {
+    public func getPendingFioRequests(fioPublicAddress: String, completion: @escaping (_ pendingRequests: FIOSDK.Responses.PendingFioRequestsResponse?, _ error:FIOError?) -> ()) {
         let body = GetPendingFIORequestsRequest(address: fioPublicAddress)
         let url = ChainRouteBuilder.build(route: ChainRoutes.getPendingFIORequests)
         FIOHTTPHelper.postRequestTo(url, withBody: body) { (data, error) in
             if let data = data {
                 do {
-                    let result = try JSONDecoder().decode(PendingFioRequestsResponse.self, from: data)
+                    let result = try JSONDecoder().decode(FIOSDK.Responses.PendingFioRequestsResponse.self, from: data)
                     completion(result, FIOError(kind: .Success, localizedDescription: ""))
                 }
                 catch {
@@ -414,17 +417,17 @@ public class FIOSDK: NSObject {
     /// - Parameters:
     ///   - publicAddress: FIO public address of new owner. Has to match signature
     ///   - completion: Completion handler
-    public func getFioNames(publicAddress: String, completion: @escaping (_ names: FioNamesResponse?, _ error: FIOError?) -> ()){
+    public func getFioNames(publicAddress: String, completion: @escaping (_ names: FIOSDK.Responses.FioNamesResponse?, _ error: FIOError?) -> ()){
         let body = GetFIONamesRequest(fioPubAddress: publicAddress)
         let url = ChainRouteBuilder.build(route: ChainRoutes.getFIONames)
         FIOHTTPHelper.postRequestTo(url, withBody: body) { (data, error) in
             if let data = data {
                 do {
-                    let result = try JSONDecoder().decode(FioNamesResponse.self, from: data)
+                    let result = try JSONDecoder().decode(FIOSDK.Responses.FioNamesResponse.self, from: data)
                     let newestAddresses = result.addresses.sorted(by: { (address, nextAddress) -> Bool in
                         address.expiration > nextAddress.expiration
                     })
-                    let newResult = FioNamesResponse(publicAddress: result.publicAddress, domains: result.domains, addresses: newestAddresses)
+                    let newResult = FIOSDK.Responses.FioNamesResponse(publicAddress: result.publicAddress, domains: result.domains, addresses: newestAddresses)
                     completion(newResult, FIOError(kind: .Success, localizedDescription: ""))
                 }
                 catch {
@@ -447,7 +450,7 @@ public class FIOSDK: NSObject {
     /// - Parameters:
     ///   - fioAddress: FIO Address for which to get details to, e.g. "alice.brd"
     ///   - onCompletion: A FioAddressResponse object containing details.
-    public func getFIONameDetails(_ fioAddress: String, onCompletion: @escaping (_ publicAddress: FioAddressResponse?, _ error: FIOError) -> ()) {
+    public func getFIONameDetails(_ fioAddress: String, onCompletion: @escaping (_ publicAddress: FIOSDK.Responses.FioAddressResponse?, _ error: FIOError) -> ()) {
         FIOSDK.sharedInstance().getPublicAddress(fioAddress: fioAddress, tokenCode: "FIO") { (response, error) in
             guard error.kind == .Success, let fioPublicAddress = response?.publicAddress else{
                 onCompletion(nil, error)
@@ -476,13 +479,13 @@ public class FIOSDK: NSObject {
     ///   - fioAddress: FIO Address for which public address is to be returned, e.g. "alice.brd"
     ///   - tokenCode: Token code for which public address is to be returned, e.g. "ETH".
     ///   - completion: result based on DTO PublicAddressResponse
-    public func getPublicAddress(fioAddress: String, tokenCode: String, completion: @escaping (_ publicAddress: PublicAddressResponse?, _ error: FIOError) -> ()){
+    public func getPublicAddress(fioAddress: String, tokenCode: String, completion: @escaping (_ publicAddress: FIOSDK.Responses.PublicAddressResponse?, _ error: FIOError) -> ()){
         let body = PublicAddressLookupRequest(fioAddress: fioAddress, tokenCode: tokenCode)
         let url = ChainRouteBuilder.build(route: ChainRoutes.pubAddressLookup)
         FIOHTTPHelper.postRequestTo(url, withBody: body) { (data, error) in
             if let data = data {
                 do {
-                    let result = try JSONDecoder().decode(PublicAddressResponse.self, from: data)
+                    let result = try JSONDecoder().decode(FIOSDK.Responses.PublicAddressResponse.self, from: data)
                     completion(result, FIOError(kind: .Success, localizedDescription: ""))
                 }
                 catch {
@@ -504,7 +507,7 @@ public class FIOSDK: NSObject {
     ///   - forToken: Token code for which public address is to be returned, e.g. "ETH".
     ///   - withFIOPublicAddress: FIO public Address under which the token was registered.
     ///   - onCompletion: A TokenPublicAddressResponse containing FIO address and public address.
-    public func getTokenPublicAddress(forToken token: String, withFIOPublicAddress publicAddress: String, onCompletion: @escaping (_ publicAddress: TokenPublicAddressResponse?, _ error: FIOError) -> ()) {
+    public func getTokenPublicAddress(forToken token: String, withFIOPublicAddress publicAddress: String, onCompletion: @escaping (_ publicAddress: FIOSDK.Responses.TokenPublicAddressResponse?, _ error: FIOError) -> ()) {
         FIOSDK.sharedInstance().getFioNames(publicAddress: publicAddress) { (response, error) in
             guard error == nil || error?.kind == .Success, let fioAddress = response?.addresses.first?.address else {
                 onCompletion(nil, error ?? FIOError.failure(localizedDescription: "Failed to retrieve token public address."))
@@ -515,7 +518,7 @@ public class FIOSDK: NSObject {
                     onCompletion(nil, error)
                     return
                 }
-                onCompletion(TokenPublicAddressResponse(fioAddress: fioAddress, tokenPublicAddress: tokenPubAddress) , FIOError.success())
+                onCompletion(FIOSDK.Responses.TokenPublicAddressResponse(fioAddress: fioAddress, tokenPublicAddress: tokenPubAddress) , FIOError.success())
             }
         }
     }
@@ -562,7 +565,7 @@ public class FIOSDK: NSObject {
     /// - Parameters:
     ///   - fundsRequestId: ID of that fund request.
     ///   - completion: The completion handler containing the result or error.
-    public func rejectFundsRequest(fundsRequestId: String, completion: @escaping(_ response: RejectFundsRequestResponse?,_ :FIOError) -> ()){
+    public func rejectFundsRequest(fundsRequestId: String, completion: @escaping(_ response: FIOSDK.Responses.RejectFundsRequestResponse?,_ :FIOError) -> ()){
         let actor = AccountNameGenerator.run(withPublicKey: getSystemPublicKey())
         let data = RejectFundsRequest(fioReqID: fundsRequestId, actor: actor)
         
@@ -575,7 +578,7 @@ public class FIOSDK: NSObject {
                                     completion(nil, error ?? FIOError.init(kind: .Failure, localizedDescription: "The request couldn't rejected"))
                                     return
                                 }
-                                let handledData: (response: RejectFundsRequestResponse?, error: FIOError) = self.parseResponseFromTransactionResult(txResult: result)
+                                let handledData: (response: FIOSDK.Responses.RejectFundsRequestResponse?, error: FIOError) = self.parseResponseFromTransactionResult(txResult: result)
                                 guard handledData.response?.status == .rejected else {
                                     completion(nil, FIOError.init(kind: .Failure, localizedDescription: "The request couldn't rejected"))
                                     return
@@ -591,13 +594,13 @@ public class FIOSDK: NSObject {
     /// - Parameters:
     ///   - publicAddress: FIO public address of owner.
     ///   - completion: The completion result
-    public func getSentFioRequest(publicAddress: String, completion: @escaping (_ response: SentFioRequestResponse?, _ error: FIOError) -> ()){
+    public func getSentFioRequests(publicAddress: String, completion: @escaping (_ response: FIOSDK.Responses.SentFioRequestResponse?, _ error: FIOError) -> ()){
         let body = GetSentFIORequestsRequest(address: publicAddress)
         let url = ChainRouteBuilder.build(route: ChainRoutes.getSentFIORequests)
         FIOHTTPHelper.postRequestTo(url, withBody: body) { (data, error) in
             if let data = data {
                 do {
-                    let result = try JSONDecoder().decode(SentFioRequestResponse.self, from: data)
+                    let result = try JSONDecoder().decode(FIOSDK.Responses.SentFioRequestResponse.self, from: data)
                     completion(result, FIOError(kind: .Success, localizedDescription: ""))
                 }
                 catch {
@@ -634,7 +637,7 @@ public class FIOSDK: NSObject {
                                 obtID: String,
                                 fioReqID: String? = nil,
                                 memo: String,
-                                onCompletion: @escaping (_ response: RecordSendResponse?, _ error: FIOError?) -> ()) {
+                                onCompletion: @escaping (_ response: FIOSDK.Responses.RecordSendResponse?, _ error: FIOError?) -> ()) {
         FIOSDK.sharedInstance().getFioNames(publicAddress: fromPubAdd) { (response, error) in
             guard error == nil || error?.kind == .Success, let fromAdd = response?.addresses.first?.address else {
                 onCompletion(nil, error ?? FIOError.failure(localizedDescription: "[FIO SDK] Failed to send record."))
@@ -674,7 +677,7 @@ public class FIOSDK: NSObject {
                            toTokenCode: String,
                            obtID: String,
                            memo: String,
-                           onCompletion: @escaping (_ response: RecordSendResponse?, _ error: FIOError?) -> ()){
+                           onCompletion: @escaping (_ response: FIOSDK.Responses.RecordSendResponse?, _ error: FIOError?) -> ()){
         let actor = AccountNameGenerator.run(withPublicKey: getSystemPublicKey())
         let recordSend = RecordSend(fioReqID: fioReqID, fromFIOAdd: fromFIOAdd, toFIOAdd: toFIOAdd, fromPubAdd: fromPubAdd, toPubAdd: toPubAdd, amount: amount, tokenCode: fromTokenCode, chainCode: toTokenCode, status: "sent_to_blockchain", obtID: obtID, memo: memo)
         let request = RecordSendRequest(recordSend: recordSend.toJSONString(), actor: actor)
@@ -687,7 +690,7 @@ public class FIOSDK: NSObject {
                                     onCompletion(nil, error ?? FIOError.init(kind: .Failure, localizedDescription: "The request couldn't rejected"))
                                     return
                                 }
-                                let handledData: (response: RecordSendResponse?, error: FIOError) = self.parseResponseFromTransactionResult(txResult: result)
+                                let handledData: (response: FIOSDK.Responses.RecordSendResponse?, error: FIOError) = self.parseResponseFromTransactionResult(txResult: result)
                                 onCompletion(handledData.response, FIOError.init(kind: FIOError.ErrorKind.Success, localizedDescription: ""))
         }
     }
@@ -720,13 +723,13 @@ public class FIOSDK: NSObject {
     /// - Parameters:
     ///     - fioPublicAddress: The FIO public address to get FIO tokens balance for.
     ///     - completion: A function that is called once request is over with an optional response that should contain balance and error containing the status of the call.
-    public func getFIOBalance(fioPublicAddress: String, completion: @escaping (_ response: GetFIOBalanceResponse?, _ error: FIOError) -> ()){
+    public func getFIOBalance(fioPublicAddress: String, completion: @escaping (_ response: FIOSDK.Responses.GetFIOBalanceResponse?, _ error: FIOError) -> ()){
         let body = GetFIOBalanceRequest(fioPubAddress: fioPublicAddress)
         let url = ChainRouteBuilder.build(route: ChainRoutes.getFIOBalance)
         FIOHTTPHelper.postRequestTo(url, withBody: body) { (data, error) in
             if let data = data {
                 do {
-                    let result = try JSONDecoder().decode(GetFIOBalanceResponse.self, from: data)
+                    let result = try JSONDecoder().decode(FIOSDK.Responses.GetFIOBalanceResponse.self, from: data)
                     completion(result, FIOError(kind: .Success, localizedDescription: ""))
                 }
                 catch {
@@ -750,7 +753,7 @@ public class FIOSDK: NSObject {
     ///     - toFIOPublicAddress: The FIO public address that will receive funds.
     ///     - amount: The value that will be transfered from the calling account to the especified account.
     ///     - completion: A function that is called once request is over with an optional response with results and error containing the status of the call.
-    public func transferFIOTokens(toFIOPublicAddress: String, amount: Float, completion: @escaping (_ response: TransferFIOTokensResponse?, _ error: FIOError) -> ()){
+    public func transferFIOTokens(toFIOPublicAddress: String, amount: Float, completion: @escaping (_ response: FIOSDK.Responses.TransferFIOTokensResponse?, _ error: FIOError) -> ()){
         let actor = AccountNameGenerator.run(withPublicKey: getSystemPublicKey())
         let transfer = TransferFIOTokensRequest(amount: String(amount), actor: actor, toFIOPubAdd: toFIOPublicAddress)
         signedPostRequestTo(route: ChainRoutes.transferTokens,
@@ -762,7 +765,7 @@ public class FIOSDK: NSObject {
                                     completion(nil, error ?? FIOError.init(kind: .Failure, localizedDescription: "\(ChainActions.transferTokens.rawValue) call failed."))
                                     return
                                 }
-                                let handledData: (response: TransferFIOTokensResponse?, error: FIOError) = self.parseResponseFromTransactionResult(txResult: result)
+                                let handledData: (response: FIOSDK.Responses.TransferFIOTokensResponse?, error: FIOError) = self.parseResponseFromTransactionResult(txResult: result)
                                 completion(handledData.response, FIOError.init(kind: FIOError.ErrorKind.Success, localizedDescription: ""))
         }
     }

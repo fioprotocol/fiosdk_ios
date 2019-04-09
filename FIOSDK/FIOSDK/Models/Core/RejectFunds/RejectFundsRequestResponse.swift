@@ -8,26 +8,30 @@
 
 import Foundation
 
-public struct RejectFundsRequestResponse: Codable {
-    
-    public let fioReqID: String
-    public let status: Status
-    
-    enum CodingKeys: String, CodingKey {
-        case fioReqID = "fioreqid"
-        case status
-    }
-    
-    public enum Status: String, Codable {
-        case rejected = "request_rejected", unknown
+extension FIOSDK.Responses {
+
+    public struct RejectFundsRequestResponse: Codable {
+        
+        public let fioReqID: String
+        public let status: Status
+        
+        enum CodingKeys: String, CodingKey {
+            case fioReqID = "fioreqid"
+            case status
+        }
+        
+        public enum Status: String, Codable {
+            case rejected = "request_rejected", unknown
+        }
+        
     }
     
 }
 
-extension RejectFundsRequestResponse.Status {
+extension FIOSDK.Responses.RejectFundsRequestResponse.Status {
     
     public init(from decoder: Decoder) throws {
-        self = try RejectFundsRequestResponse.Status(rawValue: decoder.singleValueContainer().decode(RawValue.self)) ?? .unknown
+        self = try FIOSDK.Responses.RejectFundsRequestResponse.Status(rawValue: decoder.singleValueContainer().decode(RawValue.self)) ?? .unknown
     }
     
 }

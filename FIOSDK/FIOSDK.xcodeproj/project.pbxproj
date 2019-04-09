@@ -126,7 +126,7 @@
 		28BB8B722257BFB20049A761 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28BB8B712257BFB20049A761 /* ViewController.swift */; };
 		28BB8B772257BFB30049A761 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 28BB8B762257BFB30049A761 /* Assets.xcassets */; };
 		28BB8B7A2257BFB30049A761 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 28BB8B782257BFB30049A761 /* LaunchScreen.storyboard */; };
-		28BED284225BD3D900F8606E /* FIODateUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28BED283225BD3D900F8606E /* FIODateUtils.swift */; };
+		28BED284225BD3D900F8606E /* DateUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28BED283225BD3D900F8606E /* DateUtils.swift */; };
 		28BED286225BD83400F8606E /* FIODateUtilsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28BED285225BD83400F8606E /* FIODateUtilsTests.swift */; };
 /* End PBXBuildFile section */
 
@@ -272,7 +272,7 @@
 		28BB8B762257BFB30049A761 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		28BB8B792257BFB30049A761 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		28BB8B7B2257BFB30049A761 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		28BED283225BD3D900F8606E /* FIODateUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FIODateUtils.swift; sourceTree = "<group>"; };
+		28BED283225BD3D900F8606E /* DateUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateUtils.swift; sourceTree = "<group>"; };
 		28BED285225BD83400F8606E /* FIODateUtilsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FIODateUtilsTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -813,7 +813,7 @@
 			isa = PBXGroup;
 			children = (
 				0203C598217A4EC90054FA10 /* Utilities.swift */,
-				28BED283225BD3D900F8606E /* FIODateUtils.swift */,
+				28BED283225BD3D900F8606E /* DateUtils.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -1072,7 +1072,7 @@
 				0203C58B217A487A0054FA10 /* BaseRouter.swift in Sources */,
 				287F109422569F0B001E3B32 /* Request.swift in Sources */,
 				0203C58E217A487A0054FA10 /* PrivateKey.swift in Sources */,
-				28BED284225BD3D900F8606E /* FIODateUtils.swift in Sources */,
+				28BED284225BD3D900F8606E /* DateUtils.swift in Sources */,
 				0203C58F217A487A0054FA10 /* ChainModels.swift in Sources */,
 				0203C58C217A487A0054FA10 /* KeyPair.swift in Sources */,
 				0203C588217A487A0054FA10 /* EOSRPC+History.swift in Sources */,

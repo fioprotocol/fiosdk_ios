@@ -8,12 +8,16 @@
 
 import Foundation
 
-public struct GetFIOBalanceResponse: Codable {
-    
-    public let balance: String
-    
-    enum CodingKeys: String, CodingKey {
-        case balance = "balance"
+extension FIOSDK.Responses {
+
+    public struct GetFIOBalanceResponse: Codable {
+        
+        public let balance: String
+        
+        enum CodingKeys: String, CodingKey {
+            case balance = "balance"
+        }
+        
     }
-    
+
 }
