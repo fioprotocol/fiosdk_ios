@@ -563,20 +563,6 @@ class FIOSDKTests: XCTestCase {
         wait(for: [expectation], timeout: TIMEOUT)
     }
     
-    func testGetFIOBalanceWithWrongAccountShouldReturnError() {
-        let expectation = XCTestExpectation(description: "testGetFIOBalanceWithWrongAccountShouldReturnError")
-        
-        let fioSDK = FIOSDK.sharedInstance(accountName: fioAccount, privateKey: fioPrivateKey, publicKey: fioPublicKey,systemPrivateKey:fioPrivateKey, systemPublicKey:fioPublicKey, url: fioServer)
-        let fioPubAddress = "ltwagbt4qpuk"
-        
-        fioSDK.getFIOBalance(fioPublicAddress: fioPubAddress) { (response, error) in
-            XCTAssert((error.kind == FIOError.ErrorKind.Failure), "Get FIO Balance Found non existent account: \(error.localizedDescription )")
-            expectation.fulfill()
-        }
-        
-        wait(for: [expectation], timeout: TIMEOUT)
-    }
-    
     func testTransferTokensWithGoodAccountsShouldBeSuccessful() {
         let expectation = XCTestExpectation(description: "testTransferTokensWithGoodAccountsShouldBeSuccessful")
         
