@@ -40,7 +40,6 @@
 		0203C5D8217A71330054FA10 /* FIOError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0203C5D7217A71330054FA10 /* FIOError.swift */; };
 		0245A5B12193BF6900C5A870 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0245A5B02193BF6900C5A870 /* Extensions.swift */; };
 		02B93140218A280300877149 /* AccountUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02B9313F218A280200877149 /* AccountUtil.swift */; };
-		02BAEC522191F53700B251B4 /* RequestFunds.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02BAEC512191F53700B251B4 /* RequestFunds.swift */; };
 		283438222245439100E60314 /* sha3.h in Headers */ = {isa = PBXBuildFile; fileRef = 2834380A2245439000E60314 /* sha3.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		283438232245439100E60314 /* rand.h in Headers */ = {isa = PBXBuildFile; fileRef = 2834380B2245439000E60314 /* rand.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		283438242245439100E60314 /* curves.h in Headers */ = {isa = PBXBuildFile; fileRef = 2834380C2245439000E60314 /* curves.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -184,7 +183,6 @@
 		0203C5D7217A71330054FA10 /* FIOError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FIOError.swift; sourceTree = "<group>"; };
 		0245A5B02193BF6900C5A870 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		02B9313F218A280200877149 /* AccountUtil.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AccountUtil.swift; sourceTree = "<group>"; };
-		02BAEC512191F53700B251B4 /* RequestFunds.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestFunds.swift; sourceTree = "<group>"; };
 		2834380A2245439000E60314 /* sha3.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sha3.h; sourceTree = "<group>"; };
 		2834380B2245439000E60314 /* rand.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = rand.h; sourceTree = "<group>"; };
 		2834380C2245439000E60314 /* curves.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = curves.h; sourceTree = "<group>"; };
@@ -329,7 +327,6 @@
 				2856494D2229BB0A006E2533 /* Core */,
 				0203C51C217A48100054FA10 /* FIOSDK.h */,
 				0203C5C9217A6A6D0054FA10 /* FIOSDK.swift */,
-				02BAEC512191F53700B251B4 /* RequestFunds.swift */,
 				0203C533217A487A0054FA10 /* SwiftyEOS */,
 				0203C51D217A48100054FA10 /* Info.plist */,
 				0203C5CA217A6A6D0054FA10 /* Settings.plist */,
@@ -1031,7 +1028,6 @@
 				0203C582217A487A0054FA10 /* Transaction.swift in Sources */,
 				0203C599217A4EC90054FA10 /* Utilities.swift in Sources */,
 				283438482245439B00E60314 /* bip32.c in Sources */,
-				02BAEC522191F53700B251B4 /* RequestFunds.swift in Sources */,
 				287F105E22552432001E3B32 /* TransferFIOTokensResponse.swift in Sources */,
 				287F107322565902001E3B32 /* PublicAddressResponse.swift in Sources */,
 				2856D26F225CC90800BC5D36 /* TokenPublicAddressResponse.swift in Sources */,
