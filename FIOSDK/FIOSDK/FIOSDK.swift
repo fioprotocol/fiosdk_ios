@@ -54,6 +54,10 @@ public class FIOSDK: NSObject {
         case Approved = "Approved"
     }
     
+    public static func isInitialized() -> Bool {
+        return !_sharedInstance.accountName.isEmpty && !_sharedInstance.privateKey.isEmpty && !_sharedInstance.publicKey.isEmpty && !_sharedInstance.systemPrivateKey.isEmpty && !_sharedInstance.systemPublicKey.isEmpty && !Utilities.sharedInstance().URL.isEmpty
+    }
+    
     private static var _sharedInstance: FIOSDK = {
         let sharedInstance = FIOSDK()
         
