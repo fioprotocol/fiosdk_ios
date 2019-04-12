@@ -9,10 +9,12 @@
 import Foundation
 
 internal enum ChainActions: String {
+    
     case registerFIOName    = "registername"
     case newFundsRequest    = "newfundsreq"
     case rejectFundsRequest = "rejectfndreq"
     case addPublicAddress   = "addaddress"
     case recordSend         = "recordsend"
     case transferTokens     = "transferfio"
+    
 }

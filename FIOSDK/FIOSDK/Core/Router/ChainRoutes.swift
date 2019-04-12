@@ -9,6 +9,7 @@
 import Foundation
 
 internal enum ChainRoutes: String {
+    
     case serializeJSON          = "/chain/serialize_json"
     case registerFIOName        = "/chain/register_fio_name"
     case newFundsRequest        = "/chain/new_funds_request"
@@ -21,4 +22,7 @@ internal enum ChainRoutes: String {
     case recordSend             = "/chain/record_send"
     case getFIOBalance          = "/chain/get_fio_balance"
     case transferTokens         = "/chain/transfer_tokens"
+    case getInfo                = "/chain/get_info"
+    case getBlock               = "/chain/get_block"
+    
 }
