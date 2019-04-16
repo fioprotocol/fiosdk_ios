@@ -6,16 +6,8 @@
 //  Copyright © 2018 Dapix, Inc. All rights reserved.
 //
 
-/*
- internals:
-     getFioTranslatedAddress
-        getFioname(string name, currency)
-            fio_name_lookup - returns the BC address to use
- */
-
 import UIKit
 
-private let slipFIO: UInt32 = 235
 private let decimalsFIO: Int = 4
 
 public class FIOSDK: NSObject {
@@ -26,6 +18,7 @@ public class FIOSDK: NSObject {
     private var publicKey:String = ""
     private var systemPrivateKey:String = ""
     private var systemPublicKey:String = ""
+    private static let keyManager = FIOKeyManager()
     private let requestFunds = RequestFunds()
     private let pubAddressTokenFilter: [String: UInt8] = ["fio": 1]
     
@@ -484,6 +477,27 @@ public class FIOSDK: NSObject {
         }
     }
     
+    //MARK: Single FIO Name
+    
+    /// Returns details about the FIO address.
+    /// - Parameters:
+    ///   - fioAddress: FIO Address for which to get details to, e.g. "alice.brd"
+    ///   - onCompletion: A FioAddressResponse object containing details.
+    public func getFIONameDetails(_ fioAddress: String, onCompletion: @escaping (_ publicAddress: FioAddressResponse?, _ error: FIOError) -> ()) {
+        FIOSDK.sharedInstance().getPublicAddress(fioAddress: fioAddress, tokenCode: "FIO") { (response, error) in
+            guard error.kind == .Success, let fioPublicAddress = response?.publicAddress else{
+                onCompletion(nil, error)
+                return
+            }
+            FIOSDK.sharedInstance().getFioNames(publicAddress: fioPublicAddress, completion: { (response, error) in
+                guard error?.kind == .Success, let result = response?.addresses.first else {
+                    onCompletion(nil, error ?? FIOError.failure(localizedDescription: "FIO details not found"))
+                    return
+                }
+                onCompletion(result, error ?? FIOError.success())
+            })
+        }
+    }    
     
     //MARK: Public Address Lookup
     
@@ -517,6 +531,27 @@ public class FIOSDK: NSObject {
                 else {
                     completion(nil, FIOError(kind:.Failure, localizedDescription: ChainRoutes.pubAddressLookup.rawValue + " request failed."))
                 }
+            }
+        }
+    }
+    
+    /// Returns a public address for the specified token registered under a FIO public address.
+    /// - Parameters:
+    ///   - forToken: Token code for which public address is to be returned, e.g. "ETH".
+    ///   - withFIOPublicAddress: FIO public Address under which the token was registered.
+    ///   - onCompletion: A TokenPublicAddressResponse containing FIO address and public address.
+    public func getTokenPublicAddress(forToken token: String, withFIOPublicAddress publicAddress: String, onCompletion: @escaping (_ publicAddress: TokenPublicAddressResponse?, _ error: FIOError) -> ()) {
+        FIOSDK.sharedInstance().getFioNames(publicAddress: publicAddress) { (response, error) in
+            guard error == nil || error?.kind == .Success, let fioAddress = response?.addresses.first?.address else {
+                onCompletion(nil, error ?? FIOError.failure(localizedDescription: "Failed to retrieve token public address."))
+                return
+            }
+            FIOSDK.sharedInstance().getPublicAddress(fioAddress: fioAddress, tokenCode: token) { (response, error) in
+                guard error.kind == .Success, let tokenPubAddress = response?.publicAddress else {
+                    onCompletion(nil, error)
+                    return
+                }
+                onCompletion(TokenPublicAddressResponse(fioAddress: fioAddress, tokenPublicAddress: tokenPubAddress) , FIOError.success())
             }
         }
     }
@@ -617,7 +652,41 @@ public class FIOSDK: NSObject {
     
     //MARK: Record Send
     
-    /// Register a transation on another blockhain (OBT: other block chain transaction). Should be called after any transaction. [visit api specs](https://stealth.atlassian.net/wiki/spaces/DEV/pages/53280776/API#API-/record_send-Recordssendonanotherblockchain)
+    /// Register a transation on another blockhain (OBT: other block chain transaction), it does auto resolve from (requestor) FIO address and to (requestee) token public address. Should be called after any transaction if recordSend is not called. [visit api specs](https://stealth.atlassian.net/wiki/spaces/DEV/pages/53280776/API#API-/record_send-Recordssendonanotherblockchain)
+    ///
+    /// - Parameters:
+    ///     - toFIOAdd: FIO address that is receiving currency. (requestee)
+    ///     - fromPubAdd: FIO public address related to the token code being sent by from user (requestor)
+    ///     - amount: The value being sent.
+    ///     - tokenCode: Token code being transactioned. BTC, ETH, etc.
+    ///     - obtID: The transaction ID (OBT) representing the transaction from one blockchain to another one.
+    ///     - fioReqID: The FIO request ID to register the transaction for. Only required when approving transaction request.
+    ///     - memo: The note for that transaction.
+    ///     - onCompletion: Once finished this callback returns optional response and error.
+    public func recordSendAutoResolvingWith(toFIOAdd: String,
+                                andFromPubAdd fromPubAdd: String,
+                                amountSent amount: Float,
+                                forTokenCode tokenCode: String,
+                                obtID: String,
+                                fioReqID: String? = nil,
+                                memo: String,
+                                onCompletion: @escaping (_ response: RecordSendResponse?, _ error: FIOError?) -> ()) {
+        FIOSDK.sharedInstance().getFioNames(publicAddress: fromPubAdd) { (response, error) in
+            guard error == nil || error?.kind == .Success, let fromAdd = response?.addresses.first?.address else {
+                onCompletion(nil, error ?? FIOError.failure(localizedDescription: "[FIO SDK] Failed to send record."))
+                    return
+            }
+            FIOSDK.sharedInstance().getPublicAddress(fioAddress: toFIOAdd, tokenCode: tokenCode) { (response, error) in
+                guard error.kind == .Success, let toPubAdd = response?.publicAddress else {
+                    onCompletion(nil, error)
+                    return
+                }
+                FIOSDK.sharedInstance().recordSend(fioReqID: fioReqID, fromFIOAdd: fromAdd, toFIOAdd: toFIOAdd, fromPubAdd: fromPubAdd, toPubAdd: toPubAdd, amount: amount, fromTokenCode: tokenCode, toTokenCode: tokenCode, obtID: obtID, memo: memo, onCompletion: onCompletion)
+            }
+        }
+    }
+    
+    /// Register a transation on another blockhain (OBT: other block chain transaction). Should be called after any transaction if recordSendAutoResolvingWith is not called. [visit api specs](https://stealth.atlassian.net/wiki/spaces/DEV/pages/53280776/API#API-/record_send-Recordssendonanotherblockchain)
     ///
     /// - Parameters:
     ///     - fioReqID: The FIO request ID to register the transaction for. Only required when approving transaction request.
@@ -667,14 +736,11 @@ public class FIOSDK: NSObject {
     ///   - mnemonic: The text to use in key pair generation.
     /// - Return: A tuple containing both private and public keys to be used in FIOSDK setup.
     static public func privatePubKeyPair(forMnemonic mnemonic: String) -> (privateKey: String, publicKey: String) {
-        do {
-            let privKey = try PrivateKey(enclave: .Secp256k1, mnemonicString: mnemonic, slip: slipFIO)
-            guard let pk = privKey else { return ("", "") }
-            return (pk.rawPrivateKey(), PublicKey(privateKey: pk).rawPublicKey())
-        }
-        catch {
-            return ("", "")
-        }
+        return keyManager.privatePubKeyPair(mnemonic: mnemonic)
+    }
+    
+    static public func wipePrivPubKeys() throws {
+        try keyManager.wipeKeys()
     }
     
     //MARK: FIO Public Address

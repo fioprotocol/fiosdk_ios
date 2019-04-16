@@ -83,6 +83,7 @@
 		285649522229C031006E2533 /* AccountNameGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 285649512229C031006E2533 /* AccountNameGenerator.swift */; };
 		285649542229C3AE006E2533 /* FIOHTTPHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 285649532229C3AE006E2533 /* FIOHTTPHelper.swift */; };
 		28564957222DBBF2006E2533 /* TransactionUtil+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28564956222DBBF2006E2533 /* TransactionUtil+Extensions.swift */; };
+		2856D26F225CC90800BC5D36 /* TokenPublicAddressResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2856D26E225CC90800BC5D36 /* TokenPublicAddressResponse.swift */; };
 		287F10512253DAA5001E3B32 /* GetFIOBalanceRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 287F10502253DAA5001E3B32 /* GetFIOBalanceRequest.swift */; };
 		287F10532253DAC0001E3B32 /* GetFIOBalanceResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 287F10522253DAC0001E3B32 /* GetFIOBalanceResponse.swift */; };
 		287F10552253ECE5001E3B32 /* ChainActions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 287F10542253ECE5001E3B32 /* ChainActions.swift */; };
@@ -116,6 +117,17 @@
 		287F1090225679CE001E3B32 /* TxResultActionTrace.swift in Sources */ = {isa = PBXBuildFile; fileRef = 287F108F225679CE001E3B32 /* TxResultActionTrace.swift */; };
 		287F109222567A07001E3B32 /* TxResultReceipt.swift in Sources */ = {isa = PBXBuildFile; fileRef = 287F109122567A07001E3B32 /* TxResultReceipt.swift */; };
 		287F109422569F0B001E3B32 /* Request.swift in Sources */ = {isa = PBXBuildFile; fileRef = 287F109322569F0B001E3B32 /* Request.swift */; };
+		28BB8B6022578F6B0049A761 /* KeychainInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28BB8B5F22578F6B0049A761 /* KeychainInteractor.swift */; };
+		28BB8B622257909E0049A761 /* FIOKeyManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28BB8B612257909E0049A761 /* FIOKeyManager.swift */; };
+		28BB8B642257938A0049A761 /* KeychainKeys.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28BB8B632257938A0049A761 /* KeychainKeys.swift */; };
+		28BB8B662257B60E0049A761 /* FIOKeyManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28BB8B652257B60E0049A761 /* FIOKeyManagerTests.swift */; };
+		28BB8B682257BBAB0049A761 /* KeychainInteractorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28BB8B672257BBAB0049A761 /* KeychainInteractorTests.swift */; };
+		28BB8B702257BFB20049A761 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28BB8B6F2257BFB20049A761 /* AppDelegate.swift */; };
+		28BB8B722257BFB20049A761 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28BB8B712257BFB20049A761 /* ViewController.swift */; };
+		28BB8B772257BFB30049A761 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 28BB8B762257BFB30049A761 /* Assets.xcassets */; };
+		28BB8B7A2257BFB30049A761 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 28BB8B782257BFB30049A761 /* LaunchScreen.storyboard */; };
+		28BED284225BD3D900F8606E /* FIODateUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28BED283225BD3D900F8606E /* FIODateUtils.swift */; };
+		28BED286225BD83400F8606E /* FIODateUtilsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28BED285225BD83400F8606E /* FIODateUtilsTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -125,6 +137,13 @@
 			proxyType = 1;
 			remoteGlobalIDString = 0203C518217A48100054FA10;
 			remoteInfo = FIOSDK;
+		};
+		28BB8B7F2257BFB80049A761 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 0203C510217A48100054FA10 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 28BB8B6C2257BFB20049A761;
+			remoteInfo = HostApplication;
 		};
 /* End PBXContainerItemProxy section */
 
@@ -208,6 +227,7 @@
 		285649512229C031006E2533 /* AccountNameGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountNameGenerator.swift; sourceTree = "<group>"; };
 		285649532229C3AE006E2533 /* FIOHTTPHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FIOHTTPHelper.swift; sourceTree = "<group>"; };
 		28564956222DBBF2006E2533 /* TransactionUtil+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TransactionUtil+Extensions.swift"; sourceTree = "<group>"; };
+		2856D26E225CC90800BC5D36 /* TokenPublicAddressResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenPublicAddressResponse.swift; sourceTree = "<group>"; };
 		287F10502253DAA5001E3B32 /* GetFIOBalanceRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetFIOBalanceRequest.swift; sourceTree = "<group>"; };
 		287F10522253DAC0001E3B32 /* GetFIOBalanceResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetFIOBalanceResponse.swift; sourceTree = "<group>"; };
 		287F10542253ECE5001E3B32 /* ChainActions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChainActions.swift; sourceTree = "<group>"; };
@@ -241,6 +261,19 @@
 		287F108F225679CE001E3B32 /* TxResultActionTrace.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TxResultActionTrace.swift; sourceTree = "<group>"; };
 		287F109122567A07001E3B32 /* TxResultReceipt.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TxResultReceipt.swift; sourceTree = "<group>"; };
 		287F109322569F0B001E3B32 /* Request.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Request.swift; sourceTree = "<group>"; };
+		28BB8B5F22578F6B0049A761 /* KeychainInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainInteractor.swift; sourceTree = "<group>"; };
+		28BB8B612257909E0049A761 /* FIOKeyManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FIOKeyManager.swift; sourceTree = "<group>"; };
+		28BB8B632257938A0049A761 /* KeychainKeys.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainKeys.swift; sourceTree = "<group>"; };
+		28BB8B652257B60E0049A761 /* FIOKeyManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FIOKeyManagerTests.swift; sourceTree = "<group>"; };
+		28BB8B672257BBAB0049A761 /* KeychainInteractorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainInteractorTests.swift; sourceTree = "<group>"; };
+		28BB8B6D2257BFB20049A761 /* HostApplication.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HostApplication.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		28BB8B6F2257BFB20049A761 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		28BB8B712257BFB20049A761 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		28BB8B762257BFB30049A761 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		28BB8B792257BFB30049A761 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		28BB8B7B2257BFB30049A761 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		28BED283225BD3D900F8606E /* FIODateUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FIODateUtils.swift; sourceTree = "<group>"; };
+		28BED285225BD83400F8606E /* FIODateUtilsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FIODateUtilsTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -259,6 +292,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		28BB8B6A2257BFB20049A761 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -267,6 +307,7 @@
 			children = (
 				0203C51B217A48100054FA10 /* FIOSDK */,
 				0203C526217A48100054FA10 /* FIOSDKTests */,
+				28BB8B6E2257BFB20049A761 /* HostApplication */,
 				0203C51A217A48100054FA10 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -276,6 +317,7 @@
 			children = (
 				0203C519217A48100054FA10 /* FIOSDK.framework */,
 				0203C522217A48100054FA10 /* FIOSDKTests.xctest */,
+				28BB8B6D2257BFB20049A761 /* HostApplication.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -300,6 +342,9 @@
 			children = (
 				0203C527217A48100054FA10 /* FIOSDKTests.swift */,
 				0203C529217A48100054FA10 /* Info.plist */,
+				28BB8B652257B60E0049A761 /* FIOKeyManagerTests.swift */,
+				28BB8B672257BBAB0049A761 /* KeychainInteractorTests.swift */,
+				28BED285225BD83400F8606E /* FIODateUtilsTests.swift */,
 			);
 			path = FIOSDKTests;
 			sourceTree = "<group>";
@@ -608,11 +653,15 @@
 		2856494D2229BB0A006E2533 /* Core */ = {
 			isa = PBXGroup;
 			children = (
+				28BED282225BD3C400F8606E /* Helpers */,
+				28BB8B5E22578F4A0049A761 /* PrivatePublicKey */,
 				0203C5D7217A71330054FA10 /* FIOError.swift */,
-				0203C598217A4EC90054FA10 /* Utilities.swift */,
 				025859F22255057400622144 /* AccountGenerator */,
 				025859F12255054500622144 /* Extensions */,
 				025859F02255053100622144 /* Router */,
+				28BB8B5F22578F6B0049A761 /* KeychainInteractor.swift */,
+				28BB8B612257909E0049A761 /* FIOKeyManager.swift */,
+				28BB8B632257938A0049A761 /* KeychainKeys.swift */,
 			);
 			path = Core;
 			sourceTree = "<group>";
@@ -678,6 +727,7 @@
 				287F10742256591C001E3B32 /* PublicAddressLookupRequest.swift */,
 				287F108222566813001E3B32 /* AddPublicAddress.swift */,
 				287F1084225673CF001E3B32 /* AddPubAddressOperation.swift */,
+				2856D26E225CC90800BC5D36 /* TokenPublicAddressResponse.swift */,
 			);
 			path = PublicAddress;
 			sourceTree = "<group>";
@@ -738,6 +788,34 @@
 				287F107C22566486001E3B32 /* GetPendingFIORequestsRequest.swift */,
 			);
 			path = PendingRequest;
+			sourceTree = "<group>";
+		};
+		28BB8B5E22578F4A0049A761 /* PrivatePublicKey */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = PrivatePublicKey;
+			sourceTree = "<group>";
+		};
+		28BB8B6E2257BFB20049A761 /* HostApplication */ = {
+			isa = PBXGroup;
+			children = (
+				28BB8B6F2257BFB20049A761 /* AppDelegate.swift */,
+				28BB8B712257BFB20049A761 /* ViewController.swift */,
+				28BB8B762257BFB30049A761 /* Assets.xcassets */,
+				28BB8B782257BFB30049A761 /* LaunchScreen.storyboard */,
+				28BB8B7B2257BFB30049A761 /* Info.plist */,
+			);
+			path = HostApplication;
+			sourceTree = "<group>";
+		};
+		28BED282225BD3C400F8606E /* Helpers */ = {
+			isa = PBXGroup;
+			children = (
+				0203C598217A4EC90054FA10 /* Utilities.swift */,
+				28BED283225BD3D900F8606E /* FIODateUtils.swift */,
+			);
+			path = Helpers;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -807,11 +885,29 @@
 			);
 			dependencies = (
 				0203C525217A48100054FA10 /* PBXTargetDependency */,
+				28BB8B802257BFB80049A761 /* PBXTargetDependency */,
 			);
 			name = FIOSDKTests;
 			productName = FIOSDKTests;
 			productReference = 0203C522217A48100054FA10 /* FIOSDKTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		28BB8B6C2257BFB20049A761 /* HostApplication */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 28BB8B7C2257BFB30049A761 /* Build configuration list for PBXNativeTarget "HostApplication" */;
+			buildPhases = (
+				28BB8B692257BFB20049A761 /* Sources */,
+				28BB8B6A2257BFB20049A761 /* Frameworks */,
+				28BB8B6B2257BFB20049A761 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = HostApplication;
+			productName = HostApplication;
+			productReference = 28BB8B6D2257BFB20049A761 /* HostApplication.app */;
+			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
 
@@ -819,7 +915,7 @@
 		0203C510217A48100054FA10 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastSwiftUpdateCheck = 1000;
+				LastSwiftUpdateCheck = 1010;
 				LastUpgradeCheck = 1000;
 				ORGANIZATIONNAME = "Dapix, Inc.";
 				TargetAttributes = {
@@ -829,6 +925,10 @@
 					};
 					0203C521217A48100054FA10 = {
 						CreatedOnToolsVersion = 10.0;
+						TestTargetID = 28BB8B6C2257BFB20049A761;
+					};
+					28BB8B6C2257BFB20049A761 = {
+						CreatedOnToolsVersion = 10.1;
 					};
 				};
 			};
@@ -838,6 +938,7 @@
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
+				Base,
 			);
 			mainGroup = 0203C50F217A48100054FA10;
 			productRefGroup = 0203C51A217A48100054FA10 /* Products */;
@@ -846,6 +947,7 @@
 			targets = (
 				0203C518217A48100054FA10 /* FIOSDK */,
 				0203C521217A48100054FA10 /* FIOSDKTests */,
+				28BB8B6C2257BFB20049A761 /* HostApplication */,
 			);
 		};
 /* End PBXProject section */
@@ -866,6 +968,15 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		28BB8B6B2257BFB20049A761 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				28BB8B7A2257BFB30049A761 /* LaunchScreen.storyboard in Resources */,
+				28BB8B772257BFB30049A761 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -915,6 +1026,7 @@
 			files = (
 				287F108322566813001E3B32 /* AddPublicAddress.swift in Sources */,
 				287F10752256591C001E3B32 /* PublicAddressLookupRequest.swift in Sources */,
+				28BB8B6022578F6B0049A761 /* KeychainInteractor.swift in Sources */,
 				2834384E2245439B00E60314 /* hmac.c in Sources */,
 				0203C582217A487A0054FA10 /* Transaction.swift in Sources */,
 				0203C599217A4EC90054FA10 /* Utilities.swift in Sources */,
@@ -922,6 +1034,7 @@
 				02BAEC522191F53700B251B4 /* RequestFunds.swift in Sources */,
 				287F105E22552432001E3B32 /* TransferFIOTokensResponse.swift in Sources */,
 				287F107322565902001E3B32 /* PublicAddressResponse.swift in Sources */,
+				2856D26F225CC90800BC5D36 /* TokenPublicAddressResponse.swift in Sources */,
 				287F1071225656D6001E3B32 /* RequestFundsRequest.swift in Sources */,
 				283438572245733800E60314 /* PrivateKey+Extensions.swift in Sources */,
 				2834384C2245439B00E60314 /* pbkdf2.c in Sources */,
@@ -945,6 +1058,7 @@
 				287F106D22565578001E3B32 /* RejectFundsRequest.swift in Sources */,
 				287F107922565999001E3B32 /* GetFIONamesRequest.swift in Sources */,
 				287F1065225527D1001E3B32 /* RecordSend.swift in Sources */,
+				28BB8B642257938A0049A761 /* KeychainKeys.swift in Sources */,
 				283438492245439B00E60314 /* uECC.c in Sources */,
 				0203C58D217A487A0054FA10 /* PublicKey.swift in Sources */,
 				287F105C22552414001E3B32 /* TransferFIOTokensRequest.swift in Sources */,
@@ -958,6 +1072,7 @@
 				0203C58B217A487A0054FA10 /* BaseRouter.swift in Sources */,
 				287F109422569F0B001E3B32 /* Request.swift in Sources */,
 				0203C58E217A487A0054FA10 /* PrivateKey.swift in Sources */,
+				28BED284225BD3D900F8606E /* FIODateUtils.swift in Sources */,
 				0203C58F217A487A0054FA10 /* ChainModels.swift in Sources */,
 				0203C58C217A487A0054FA10 /* KeyPair.swift in Sources */,
 				0203C588217A487A0054FA10 /* EOSRPC+History.swift in Sources */,
@@ -965,6 +1080,7 @@
 				0203C587217A487A0054FA10 /* EOSRPC+Chain.swift in Sources */,
 				287F10772256597D001E3B32 /* FioNamesResponse.swift in Sources */,
 				283438552245439B00E60314 /* curves.c in Sources */,
+				28BB8B622257909E0049A761 /* FIOKeyManager.swift in Sources */,
 				283438542245439B00E60314 /* sha3.c in Sources */,
 				283438262245439100E60314 /* curve-specific.inc in Sources */,
 				0203C580217A487A0054FA10 /* Crypto.swift in Sources */,
@@ -1001,7 +1117,19 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				28BB8B662257B60E0049A761 /* FIOKeyManagerTests.swift in Sources */,
 				0203C528217A48100054FA10 /* FIOSDKTests.swift in Sources */,
+				28BED286225BD83400F8606E /* FIODateUtilsTests.swift in Sources */,
+				28BB8B682257BBAB0049A761 /* KeychainInteractorTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		28BB8B692257BFB20049A761 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				28BB8B722257BFB20049A761 /* ViewController.swift in Sources */,
+				28BB8B702257BFB20049A761 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1013,7 +1141,23 @@
 			target = 0203C518217A48100054FA10 /* FIOSDK */;
 			targetProxy = 0203C524217A48100054FA10 /* PBXContainerItemProxy */;
 		};
+		28BB8B802257BFB80049A761 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 28BB8B6C2257BFB20049A761 /* HostApplication */;
+			targetProxy = 28BB8B7F2257BFB80049A761 /* PBXContainerItemProxy */;
+		};
 /* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		28BB8B782257BFB30049A761 /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				28BB8B792257BFB30049A761 /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
 		0203C52B217A48100054FA10 /* Debug */ = {
@@ -1220,6 +1364,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/HostApplication.app/HostApplication";
 			};
 			name = Debug;
 		};
@@ -1236,6 +1381,45 @@
 					"@loader_path/Frameworks",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.dapix.FIOSDKTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 4.2;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/HostApplication.app/HostApplication";
+			};
+			name = Release;
+		};
+		28BB8B7D2257BFB30049A761 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 68WZX8BXAP;
+				INFOPLIST_FILE = HostApplication/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.1;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = io.dapix.HostApplication;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 4.2;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		28BB8B7E2257BFB30049A761 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 68WZX8BXAP;
+				INFOPLIST_FILE = HostApplication/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.1;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = io.dapix.HostApplication;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -1268,6 +1452,15 @@
 			buildConfigurations = (
 				0203C531217A48100054FA10 /* Debug */,
 				0203C532217A48100054FA10 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		28BB8B7C2257BFB30049A761 /* Build configuration list for PBXNativeTarget "HostApplication" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				28BB8B7D2257BFB30049A761 /* Debug */,
+				28BB8B7E2257BFB30049A761 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

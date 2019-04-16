@@ -35,18 +35,18 @@ public struct FioNamesResponse: Codable {
         }
     }
     
-    public struct FioAddressResponse: Codable{
-        public let address: String
-        private let _expiration: String
-        
-        public var expiration: Date{
-            return Date(timeIntervalSince1970: (Double(_expiration) ?? 0))
-        }
-        
-        enum CodingKeys: String, CodingKey{
-            case address = "fio_address"
-            case _expiration = "expiration"
-        }
+}
+
+public struct FioAddressResponse: Codable{
+    public let address: String
+    private let _expiration: String
+    
+    public var expiration: Date{
+        return Date(timeIntervalSince1970: (Double(_expiration) ?? 0))
     }
     
+    enum CodingKeys: String, CodingKey{
+        case address = "fio_address"
+        case _expiration = "expiration"
+    }
 }
