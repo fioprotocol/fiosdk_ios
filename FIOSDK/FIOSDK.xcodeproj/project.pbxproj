@@ -88,6 +88,34 @@
 		287F10552253ECE5001E3B32 /* ChainActions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 287F10542253ECE5001E3B32 /* ChainActions.swift */; };
 		287F10572253ED05001E3B32 /* ChainRouteBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 287F10562253ED05001E3B32 /* ChainRouteBuilder.swift */; };
 		287F10592253ED21001E3B32 /* ChainRoutes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 287F10582253ED21001E3B32 /* ChainRoutes.swift */; };
+		287F105C22552414001E3B32 /* TransferFIOTokensRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 287F105B22552414001E3B32 /* TransferFIOTokensRequest.swift */; };
+		287F105E22552432001E3B32 /* TransferFIOTokensResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 287F105D22552432001E3B32 /* TransferFIOTokensResponse.swift */; };
+		287F1061225524DB001E3B32 /* RecordSendRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 287F1060225524DB001E3B32 /* RecordSendRequest.swift */; };
+		287F106322552543001E3B32 /* RecordSendResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 287F106222552543001E3B32 /* RecordSendResponse.swift */; };
+		287F1065225527D1001E3B32 /* RecordSend.swift in Sources */ = {isa = PBXBuildFile; fileRef = 287F1064225527D0001E3B32 /* RecordSend.swift */; };
+		287F106722552809001E3B32 /* SentFioRequestResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 287F106622552809001E3B32 /* SentFioRequestResponse.swift */; };
+		287F10692255282D001E3B32 /* GetSentFIORequestsRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 287F10682255282D001E3B32 /* GetSentFIORequestsRequest.swift */; };
+		287F106B225654D7001E3B32 /* RejectFundsRequestResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 287F106A225654D7001E3B32 /* RejectFundsRequestResponse.swift */; };
+		287F106D22565578001E3B32 /* RejectFundsRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 287F106C22565578001E3B32 /* RejectFundsRequest.swift */; };
+		287F106F22565603001E3B32 /* RequestFundsResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 287F106E22565603001E3B32 /* RequestFundsResponse.swift */; };
+		287F1071225656D6001E3B32 /* RequestFundsRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 287F1070225656D6001E3B32 /* RequestFundsRequest.swift */; };
+		287F107322565902001E3B32 /* PublicAddressResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 287F107222565902001E3B32 /* PublicAddressResponse.swift */; };
+		287F10752256591C001E3B32 /* PublicAddressLookupRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 287F10742256591C001E3B32 /* PublicAddressLookupRequest.swift */; };
+		287F10772256597D001E3B32 /* FioNamesResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 287F10762256597D001E3B32 /* FioNamesResponse.swift */; };
+		287F107922565999001E3B32 /* GetFIONamesRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 287F107822565999001E3B32 /* GetFIONamesRequest.swift */; };
+		287F107B22566465001E3B32 /* PendingFioRequestsResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 287F107A22566464001E3B32 /* PendingFioRequestsResponse.swift */; };
+		287F107D22566486001E3B32 /* GetPendingFIORequestsRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 287F107C22566486001E3B32 /* GetPendingFIORequestsRequest.swift */; };
+		287F107F2256654B001E3B32 /* AvailCheckResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 287F107E2256654B001E3B32 /* AvailCheckResponse.swift */; };
+		287F10812256658A001E3B32 /* AvailCheckRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 287F10802256658A001E3B32 /* AvailCheckRequest.swift */; };
+		287F108322566813001E3B32 /* AddPublicAddress.swift in Sources */ = {isa = PBXBuildFile; fileRef = 287F108222566813001E3B32 /* AddPublicAddress.swift */; };
+		287F1085225673CF001E3B32 /* AddPubAddressOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 287F1084225673CF001E3B32 /* AddPubAddressOperation.swift */; };
+		287F1087225673EB001E3B32 /* RegisterName.swift in Sources */ = {isa = PBXBuildFile; fileRef = 287F1086225673EB001E3B32 /* RegisterName.swift */; };
+		287F1089225676B1001E3B32 /* JSONSerialization.swift in Sources */ = {isa = PBXBuildFile; fileRef = 287F1088225676B1001E3B32 /* JSONSerialization.swift */; };
+		287F108C22567729001E3B32 /* TxResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 287F108B22567729001E3B32 /* TxResult.swift */; };
+		287F108E225679B6001E3B32 /* TxResultProcessed.swift in Sources */ = {isa = PBXBuildFile; fileRef = 287F108D225679B6001E3B32 /* TxResultProcessed.swift */; };
+		287F1090225679CE001E3B32 /* TxResultActionTrace.swift in Sources */ = {isa = PBXBuildFile; fileRef = 287F108F225679CE001E3B32 /* TxResultActionTrace.swift */; };
+		287F109222567A07001E3B32 /* TxResultReceipt.swift in Sources */ = {isa = PBXBuildFile; fileRef = 287F109122567A07001E3B32 /* TxResultReceipt.swift */; };
+		287F109422569F0B001E3B32 /* Request.swift in Sources */ = {isa = PBXBuildFile; fileRef = 287F109322569F0B001E3B32 /* Request.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -185,6 +213,34 @@
 		287F10542253ECE5001E3B32 /* ChainActions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChainActions.swift; sourceTree = "<group>"; };
 		287F10562253ED05001E3B32 /* ChainRouteBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChainRouteBuilder.swift; sourceTree = "<group>"; };
 		287F10582253ED21001E3B32 /* ChainRoutes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChainRoutes.swift; sourceTree = "<group>"; };
+		287F105B22552414001E3B32 /* TransferFIOTokensRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransferFIOTokensRequest.swift; sourceTree = "<group>"; };
+		287F105D22552432001E3B32 /* TransferFIOTokensResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransferFIOTokensResponse.swift; sourceTree = "<group>"; };
+		287F1060225524DB001E3B32 /* RecordSendRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordSendRequest.swift; sourceTree = "<group>"; };
+		287F106222552543001E3B32 /* RecordSendResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordSendResponse.swift; sourceTree = "<group>"; };
+		287F1064225527D0001E3B32 /* RecordSend.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordSend.swift; sourceTree = "<group>"; };
+		287F106622552809001E3B32 /* SentFioRequestResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SentFioRequestResponse.swift; sourceTree = "<group>"; };
+		287F10682255282D001E3B32 /* GetSentFIORequestsRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetSentFIORequestsRequest.swift; sourceTree = "<group>"; };
+		287F106A225654D7001E3B32 /* RejectFundsRequestResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RejectFundsRequestResponse.swift; sourceTree = "<group>"; };
+		287F106C22565578001E3B32 /* RejectFundsRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RejectFundsRequest.swift; sourceTree = "<group>"; };
+		287F106E22565603001E3B32 /* RequestFundsResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestFundsResponse.swift; sourceTree = "<group>"; };
+		287F1070225656D6001E3B32 /* RequestFundsRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestFundsRequest.swift; sourceTree = "<group>"; };
+		287F107222565902001E3B32 /* PublicAddressResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PublicAddressResponse.swift; sourceTree = "<group>"; };
+		287F10742256591C001E3B32 /* PublicAddressLookupRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PublicAddressLookupRequest.swift; sourceTree = "<group>"; };
+		287F10762256597D001E3B32 /* FioNamesResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FioNamesResponse.swift; sourceTree = "<group>"; };
+		287F107822565999001E3B32 /* GetFIONamesRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetFIONamesRequest.swift; sourceTree = "<group>"; };
+		287F107A22566464001E3B32 /* PendingFioRequestsResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PendingFioRequestsResponse.swift; sourceTree = "<group>"; };
+		287F107C22566486001E3B32 /* GetPendingFIORequestsRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetPendingFIORequestsRequest.swift; sourceTree = "<group>"; };
+		287F107E2256654B001E3B32 /* AvailCheckResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AvailCheckResponse.swift; sourceTree = "<group>"; };
+		287F10802256658A001E3B32 /* AvailCheckRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AvailCheckRequest.swift; sourceTree = "<group>"; };
+		287F108222566813001E3B32 /* AddPublicAddress.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddPublicAddress.swift; sourceTree = "<group>"; };
+		287F1084225673CF001E3B32 /* AddPubAddressOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddPubAddressOperation.swift; sourceTree = "<group>"; };
+		287F1086225673EB001E3B32 /* RegisterName.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterName.swift; sourceTree = "<group>"; };
+		287F1088225676B1001E3B32 /* JSONSerialization.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSONSerialization.swift; sourceTree = "<group>"; };
+		287F108B22567729001E3B32 /* TxResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TxResult.swift; sourceTree = "<group>"; };
+		287F108D225679B6001E3B32 /* TxResultProcessed.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TxResultProcessed.swift; sourceTree = "<group>"; };
+		287F108F225679CE001E3B32 /* TxResultActionTrace.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TxResultActionTrace.swift; sourceTree = "<group>"; };
+		287F109122567A07001E3B32 /* TxResultReceipt.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TxResultReceipt.swift; sourceTree = "<group>"; };
+		287F109322569F0B001E3B32 /* Request.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Request.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -509,6 +565,7 @@
 				287F10542253ECE5001E3B32 /* ChainActions.swift */,
 				287F10562253ED05001E3B32 /* ChainRouteBuilder.swift */,
 				287F10582253ED21001E3B32 /* ChainRoutes.swift */,
+				287F1088225676B1001E3B32 /* JSONSerialization.swift */,
 			);
 			path = Router;
 			sourceTree = "<group>";
@@ -563,17 +620,124 @@
 		2856494E2229BDCE006E2533 /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				287F104F2253DA85001E3B32 /* FIO */,
+				287F105F225524C0001E3B32 /* Core */,
+				287F104F2253DA85001E3B32 /* FIOTokens */,
 			);
 			path = Models;
 			sourceTree = "<group>";
 		};
-		287F104F2253DA85001E3B32 /* FIO */ = {
+		287F104F2253DA85001E3B32 /* FIOTokens */ = {
 			isa = PBXGroup;
 			children = (
+				287F105A225523F4001E3B32 /* Transfer */,
 				025859F32255059A00622144 /* Balance */,
 			);
-			path = FIO;
+			path = FIOTokens;
+			sourceTree = "<group>";
+		};
+		287F105A225523F4001E3B32 /* Transfer */ = {
+			isa = PBXGroup;
+			children = (
+				287F105B22552414001E3B32 /* TransferFIOTokensRequest.swift */,
+				287F105D22552432001E3B32 /* TransferFIOTokensResponse.swift */,
+			);
+			path = Transfer;
+			sourceTree = "<group>";
+		};
+		287F105F225524C0001E3B32 /* Core */ = {
+			isa = PBXGroup;
+			children = (
+				287F109E2256A6A3001E3B32 /* PendingRequest */,
+				287F109D2256A698001E3B32 /* SentRequest */,
+				287F109C2256A68C001E3B32 /* RecordSend */,
+				287F109B2256A67F001E3B32 /* RejectFunds */,
+				287F109A2256A673001E3B32 /* RequestFunds */,
+				287F10982256A630001E3B32 /* FIOName */,
+				287F10972256A5F4001E3B32 /* PublicAddress */,
+				287F108A22567708001E3B32 /* Transaction */,
+				287F109322569F0B001E3B32 /* Request.swift */,
+			);
+			path = Core;
+			sourceTree = "<group>";
+		};
+		287F108A22567708001E3B32 /* Transaction */ = {
+			isa = PBXGroup;
+			children = (
+				287F108B22567729001E3B32 /* TxResult.swift */,
+				287F108D225679B6001E3B32 /* TxResultProcessed.swift */,
+				287F108F225679CE001E3B32 /* TxResultActionTrace.swift */,
+				287F109122567A07001E3B32 /* TxResultReceipt.swift */,
+			);
+			path = Transaction;
+			sourceTree = "<group>";
+		};
+		287F10972256A5F4001E3B32 /* PublicAddress */ = {
+			isa = PBXGroup;
+			children = (
+				287F107222565902001E3B32 /* PublicAddressResponse.swift */,
+				287F10742256591C001E3B32 /* PublicAddressLookupRequest.swift */,
+				287F108222566813001E3B32 /* AddPublicAddress.swift */,
+				287F1084225673CF001E3B32 /* AddPubAddressOperation.swift */,
+			);
+			path = PublicAddress;
+			sourceTree = "<group>";
+		};
+		287F10982256A630001E3B32 /* FIOName */ = {
+			isa = PBXGroup;
+			children = (
+				287F107E2256654B001E3B32 /* AvailCheckResponse.swift */,
+				287F10802256658A001E3B32 /* AvailCheckRequest.swift */,
+				287F107822565999001E3B32 /* GetFIONamesRequest.swift */,
+				287F10762256597D001E3B32 /* FioNamesResponse.swift */,
+				287F1086225673EB001E3B32 /* RegisterName.swift */,
+			);
+			path = FIOName;
+			sourceTree = "<group>";
+		};
+		287F109A2256A673001E3B32 /* RequestFunds */ = {
+			isa = PBXGroup;
+			children = (
+				287F106E22565603001E3B32 /* RequestFundsResponse.swift */,
+				287F1070225656D6001E3B32 /* RequestFundsRequest.swift */,
+			);
+			path = RequestFunds;
+			sourceTree = "<group>";
+		};
+		287F109B2256A67F001E3B32 /* RejectFunds */ = {
+			isa = PBXGroup;
+			children = (
+				287F106A225654D7001E3B32 /* RejectFundsRequestResponse.swift */,
+				287F106C22565578001E3B32 /* RejectFundsRequest.swift */,
+			);
+			path = RejectFunds;
+			sourceTree = "<group>";
+		};
+		287F109C2256A68C001E3B32 /* RecordSend */ = {
+			isa = PBXGroup;
+			children = (
+				287F1060225524DB001E3B32 /* RecordSendRequest.swift */,
+				287F106222552543001E3B32 /* RecordSendResponse.swift */,
+				287F1064225527D0001E3B32 /* RecordSend.swift */,
+			);
+			path = RecordSend;
+			sourceTree = "<group>";
+		};
+		287F109D2256A698001E3B32 /* SentRequest */ = {
+			isa = PBXGroup;
+			children = (
+				287F106622552809001E3B32 /* SentFioRequestResponse.swift */,
+				287F10682255282D001E3B32 /* GetSentFIORequestsRequest.swift */,
+			);
+			path = SentRequest;
+			sourceTree = "<group>";
+		};
+		287F109E2256A6A3001E3B32 /* PendingRequest */ = {
+			isa = PBXGroup;
+			children = (
+				287F107A22566464001E3B32 /* PendingFioRequestsResponse.swift */,
+				287F107C22566486001E3B32 /* GetPendingFIORequestsRequest.swift */,
+			);
+			path = PendingRequest;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -749,25 +913,42 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				287F108322566813001E3B32 /* AddPublicAddress.swift in Sources */,
+				287F10752256591C001E3B32 /* PublicAddressLookupRequest.swift in Sources */,
 				2834384E2245439B00E60314 /* hmac.c in Sources */,
 				0203C582217A487A0054FA10 /* Transaction.swift in Sources */,
 				0203C599217A4EC90054FA10 /* Utilities.swift in Sources */,
 				283438482245439B00E60314 /* bip32.c in Sources */,
 				02BAEC522191F53700B251B4 /* RequestFunds.swift in Sources */,
+				287F105E22552432001E3B32 /* TransferFIOTokensResponse.swift in Sources */,
+				287F107322565902001E3B32 /* PublicAddressResponse.swift in Sources */,
+				287F1071225656D6001E3B32 /* RequestFundsRequest.swift in Sources */,
 				283438572245733800E60314 /* PrivateKey+Extensions.swift in Sources */,
 				2834384C2245439B00E60314 /* pbkdf2.c in Sources */,
 				287F10512253DAA5001E3B32 /* GetFIOBalanceRequest.swift in Sources */,
 				285649522229C031006E2533 /* AccountNameGenerator.swift in Sources */,
 				2834384B2245439B00E60314 /* secp256k1.c in Sources */,
 				0203C589217A487A0054FA10 /* HistoryRouter.swift in Sources */,
+				287F106F22565603001E3B32 /* RequestFundsResponse.swift in Sources */,
+				287F106722552809001E3B32 /* SentFioRequestResponse.swift in Sources */,
+				287F1061225524DB001E3B32 /* RecordSendRequest.swift in Sources */,
+				287F108E225679B6001E3B32 /* TxResultProcessed.swift in Sources */,
 				287F10532253DAC0001E3B32 /* GetFIOBalanceResponse.swift in Sources */,
 				28564957222DBBF2006E2533 /* TransactionUtil+Extensions.swift in Sources */,
 				02B93140218A280300877149 /* AccountUtil.swift in Sources */,
+				287F1085225673CF001E3B32 /* AddPubAddressOperation.swift in Sources */,
 				0203C592217A487A0054FA10 /* SEWallet.swift in Sources */,
+				287F106322552543001E3B32 /* RecordSendResponse.swift in Sources */,
 				2834384F2245439B00E60314 /* bip39.c in Sources */,
+				287F1087225673EB001E3B32 /* RegisterName.swift in Sources */,
 				0203C585217A487A0054FA10 /* Signature.swift in Sources */,
+				287F106D22565578001E3B32 /* RejectFundsRequest.swift in Sources */,
+				287F107922565999001E3B32 /* GetFIONamesRequest.swift in Sources */,
+				287F1065225527D1001E3B32 /* RecordSend.swift in Sources */,
 				283438492245439B00E60314 /* uECC.c in Sources */,
 				0203C58D217A487A0054FA10 /* PublicKey.swift in Sources */,
+				287F105C22552414001E3B32 /* TransferFIOTokensRequest.swift in Sources */,
+				287F1089225676B1001E3B32 /* JSONSerialization.swift in Sources */,
 				283438522245439B00E60314 /* ecdsa.c in Sources */,
 				2834382C2245439100E60314 /* platform-specific.inc in Sources */,
 				0203C586217A487A0054FA10 /* ChainRouter.swift in Sources */,
@@ -775,30 +956,41 @@
 				283438502245439B00E60314 /* ripemd160.c in Sources */,
 				0203C581217A487A0054FA10 /* TransactionUtil.swift in Sources */,
 				0203C58B217A487A0054FA10 /* BaseRouter.swift in Sources */,
+				287F109422569F0B001E3B32 /* Request.swift in Sources */,
 				0203C58E217A487A0054FA10 /* PrivateKey.swift in Sources */,
 				0203C58F217A487A0054FA10 /* ChainModels.swift in Sources */,
 				0203C58C217A487A0054FA10 /* KeyPair.swift in Sources */,
 				0203C588217A487A0054FA10 /* EOSRPC+History.swift in Sources */,
+				287F108C22567729001E3B32 /* TxResult.swift in Sources */,
 				0203C587217A487A0054FA10 /* EOSRPC+Chain.swift in Sources */,
+				287F10772256597D001E3B32 /* FioNamesResponse.swift in Sources */,
 				283438552245439B00E60314 /* curves.c in Sources */,
 				283438542245439B00E60314 /* sha3.c in Sources */,
 				283438262245439100E60314 /* curve-specific.inc in Sources */,
 				0203C580217A487A0054FA10 /* Crypto.swift in Sources */,
 				287F10552253ECE5001E3B32 /* ChainActions.swift in Sources */,
+				287F109222567A07001E3B32 /* TxResultReceipt.swift in Sources */,
 				287F10592253ED21001E3B32 /* ChainRoutes.swift in Sources */,
 				0245A5B12193BF6900C5A870 /* Extensions.swift in Sources */,
+				287F107B22566465001E3B32 /* PendingFioRequestsResponse.swift in Sources */,
 				2834384D2245439B00E60314 /* sha2.c in Sources */,
 				283438512245439B00E60314 /* base58.c in Sources */,
+				287F10812256658A001E3B32 /* AvailCheckRequest.swift in Sources */,
 				0203C570217A487A0054FA10 /* AnyDecodable.swift in Sources */,
 				0203C58A217A487A0054FA10 /* EOSRPC.swift in Sources */,
+				287F106B225654D7001E3B32 /* RejectFundsRequestResponse.swift in Sources */,
 				0203C5CB217A6A6D0054FA10 /* FIOSDK.swift in Sources */,
 				0203C5D8217A71330054FA10 /* FIOError.swift in Sources */,
 				2834384A2245439B00E60314 /* rand.c in Sources */,
+				287F1090225679CE001E3B32 /* TxResultActionTrace.swift in Sources */,
+				287F10692255282D001E3B32 /* GetSentFIORequestsRequest.swift in Sources */,
 				0203C583217A487A0054FA10 /* ResourceUtil.swift in Sources */,
 				0203C584217A487A0054FA10 /* Currency.swift in Sources */,
 				0203C572217A487A0054FA10 /* AnyEncodable.swift in Sources */,
 				0203C591217A487A0054FA10 /* BigInt.swift in Sources */,
+				287F107D22566486001E3B32 /* GetPendingFIORequestsRequest.swift in Sources */,
 				0203C590217A487A0054FA10 /* Error.swift in Sources */,
+				287F107F2256654B001E3B32 /* AvailCheckResponse.swift in Sources */,
 				285649542229C3AE006E2533 /* FIOHTTPHelper.swift in Sources */,
 				0203C571217A487A0054FA10 /* AnyCodable.swift in Sources */,
 				287F10572253ED05001E3B32 /* ChainRouteBuilder.swift in Sources */,

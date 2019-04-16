@@ -177,78 +177,8 @@ public class FIOSDK: NSObject {
     internal func getPublicKey() -> String {
         return self.publicKey
     }
-    
-    private struct SerializeJsonRequest<T: Codable>: Codable {
-        let action: String
-        let json: T
-        
-        enum CodingKeys: String, CodingKey {
-            case action
-            case json
-        }
-    }
-    
-    private struct SerializeJsonResponse: Codable {
-        let json: String
-        
-        enum CodingKeys: String, CodingKey {
-            case json = "serialized_json"
-        }
-    }
-    
-    //MARK: - Serialize JSON
-    
-    /**
-     * Call serialize_json (POST) in order to serialize the given json object for an API action (ChainAction).
-     * - Parameters:
-     *      - json: A json object to serialize. Must implement Codable.
-     *      - forAction: The API action (ChainActions) that will use the serialized json
-     *      - onCompletion: A callback with either SerializeJsonResponse or FIOError as serialization result.
-     */
-    private func serializeJsonToData<T: Codable>(_ json: T, forAction action: ChainActions, onCompletion: @escaping (SerializeJsonResponse?, FIOError?) -> Void) {
-        let toSerialize = SerializeJsonRequest(action: action.rawValue, json: json)
-        let url = ChainRouteBuilder.build(route: ChainRoutes.serializeJSON)
-        FIOHTTPHelper.postRequestTo(url, withBody: toSerialize) { (data, error) in
-            if let data = data {
-                do {
-                    let result = try JSONDecoder().decode(SerializeJsonResponse.self, from: data)
-                    onCompletion(result, nil)
-                }
-                catch {
-                    onCompletion(nil, FIOError(kind:.Failure, localizedDescription: "Parsing json serialize_json failed."))
-                }
-            } else {
-                if let error = error {
-                    onCompletion(nil, error)
-                }
-                else {
-                    onCompletion(nil, FIOError(kind:.Failure, localizedDescription: "serialize_json request failed."))
-                }
-            }
-        }
-    }
 
     //MARK: - Signed Post Request
-    
-    private struct TxResult: Codable {
-        var processed: TxResultProcessed?
-    }
-    
-    private struct TxResultProcessed: Codable {
-        var actionTraces: [TxResultActionTrace]
-        
-        enum CodingKeys: String, CodingKey {
-            case actionTraces = "action_traces"
-        }
-    }
-    
-    private struct TxResultActionTrace: Codable{
-        var receipt: TxResultReceipt
-    }
-    
-    private struct TxResultReceipt: Codable{
-        var response: AnyCodable
-    }
     
     /**
      * This function does a signed post request to our API. It uses TransactionUtil.packAndSignTransaction to pack and sign body before doing the POST request to the required route.
@@ -337,44 +267,6 @@ public class FIOSDK: NSObject {
         }
     }
     
-    //MARK: - Register FIO Name Models
-    private struct RegisterName: Codable {
-        
-        let fioName:String
-        let actor:String
-        
-        enum CodingKeys: String, CodingKey {
-            case fioName = "fioname"
-            case actor = "actor"
-        }
-        
-    }
-    
-    private class AddPubAddressOperation {
-        
-        typealias AddPubAdddressOperationAction = (_ operation: AddPubAddressOperation) -> Void
-        
-        var action: AddPubAdddressOperationAction!
-        var operations: [AddPubAddressOperation]!
-        var index: Int!
-        
-        init(action: @escaping AddPubAdddressOperationAction, index: Int) {
-            self.action = action
-            self.index = index
-        }
-        
-        func run() {
-            action(self)
-        }
-        
-        func next() {
-            let nextIndex = index+1
-            guard nextIndex < operations.count else { return }
-            operations[nextIndex].run()
-        }
-        
-    }
-    
     //MARK: - Register FIO Name request
     
     /**
@@ -441,57 +333,8 @@ public class FIOSDK: NSObject {
             }
         })
     }
-
-    //MARK: -
-    
-    public func cancelRequestFunds (requestorAccountName:String, requestId:Int, memo:String, completion: @escaping ( _ error:FIOError?) -> ()) {
-       self.requestFunds.cancelFundsRequest(requestorAccountName: requestorAccountName, requestId: requestId, memo: memo) { (error) in
-            completion(error)
-        }
-    }
-    
-    private func transfer(newAccountName:String){
-        let account = getAccountName()
-        let importedPk = try! PrivateKey(keyString: getPrivateKey())
-        let transfer = Transfer()
-        transfer.from = account
-        transfer.to = newAccountName
-        transfer.quantity = "200.0000 FIO"
-        transfer.memo = "for register"
-        
-        Currency.transferCurrency(transfer: transfer, code: account, privateKey: importedPk!, completion: { (result, error) in
-            if error != nil {
-                if (error! as NSError).code == RPCErrorResponse.ErrorCode {
-                    print("\(((error! as NSError).userInfo[RPCErrorResponse.ErrorKey] as! RPCErrorResponse).errorDescription())")
-                } else {
-                    print("other error: \(String(describing: error?.localizedDescription))")
-                }
-                
-            } else {
-                print("Ok.  Transfer Currency. Txid: \(result!.transactionId)")
-                
-            }
-        })
-    }
     
     //MARK: - Add Public Address
-
-    /// Struct to use as DTO for the addpublic address method
-    public struct AddPublicAddress: Codable {
-        
-        let fioAddress: String
-        let tokenCode: String
-        let publicAddress: String
-        let actor: String
-        
-        enum CodingKeys: String, CodingKey {
-            case fioAddress    = "fioaddress"
-            case tokenCode     = "tokencode"
-            case publicAddress = "pubaddress"
-            case actor
-        }
-        
-    }
     
     /// Register a public address for a tokenCode under a FIO Address.
     /// SDK method that calls the addpubaddrs from the fio
@@ -527,16 +370,7 @@ public class FIOSDK: NSObject {
         }
     }
     
-    //MARK: -
-    
-    struct AvailCheckRequest: Codable {
-        let fio_name: String
-    }
-    
-    struct AvailCheckResponse: Codable {
-        let fio_name: String
-        let is_registered: Bool
-    }
+    //MARK: FIO Name Availability
     
     public func isAvailable(fioAddress:String, completion: @escaping (_ isAvailable: Bool, _ error:FIOError?) -> ()) {
         var fioRsvp : AvailCheckResponse = AvailCheckResponse(fio_name: "", is_registered: false)
@@ -588,111 +422,6 @@ public class FIOSDK: NSObject {
     
     //MARK: Get Pending FIO Requests
     
-    private struct GetPendingFIORequestsRequest: Codable {
-        
-        public let address: String
-        
-        enum CodingKeys: String, CodingKey{
-            case address = "fiopubadd"
-        }
-        
-    }
-    
-    /// getPendingFioRequest DTO response
-    public struct PendingFioRequestsResponse: Codable {
-        
-        public let fioPubAdd: String
-        public let requests: [PendingFioRequest]
-        
-        enum CodingKeys: String, CodingKey{
-            case fioPubAdd = "fiopubadd"
-            case requests
-        }
-        
-        /// PendingFioRequestsResponse.request DTO
-        public struct PendingFioRequest: Codable {
-            
-            public var fundsRequestId: String {
-                return String(fioreqid)
-            }
-            private let fioreqid: Int
-            public let fromFioAddress: String
-            public let toFioAddress: String
-            public let toPublicAddress: String
-            public let amount: String
-            public let tokenCode: String
-            public let metadata: MetaData
-            public let timeStamp: TimeInterval
-            
-            enum CodingKeys: String, CodingKey {
-                case fioreqid = "fioreqid"
-                case fromFioAddress = "fromfioadd"
-                case toFioAddress = "tofioadd"
-                case toPublicAddress = "topubadd"
-                case amount
-                case tokenCode = "tokencode"
-                case metadata
-                case timeStamp = "fiotime"
-            }
-            
-            public struct MetaData: Codable {
-                
-                public let memo: String
-                
-            }
-            
-            init(fioreqid: Int,
-                 fromFioAddress: String,
-                 toFioAddress: String,
-                 toPublicAddress: String,
-                 amount: String,
-                 tokenCode: String,
-                 metadata: MetaData,
-                 timeStamp: TimeInterval) {
-                self.fioreqid = fioreqid
-                self.fromFioAddress = fromFioAddress
-                self.toFioAddress = toFioAddress
-                self.toPublicAddress = toPublicAddress
-                self.amount = amount
-                self.tokenCode = tokenCode
-                self.metadata = metadata
-                self.timeStamp = timeStamp
-            }
-            
-            public init(from decoder: Decoder) throws {
-                let container = try decoder.container(keyedBy: CodingKeys.self)
-                
-                let fioreqid = try container.decodeIfPresent(Int.self, forKey: .fioreqid) ?? 0
-                let fromFioAddress = try container.decodeIfPresent(String.self, forKey: .fromFioAddress) ?? ""
-                let toFioAddress = try container.decodeIfPresent(String.self, forKey: .toFioAddress) ?? ""
-                let toPublicAddress = try container.decodeIfPresent(String.self, forKey: .toPublicAddress) ?? ""
-                let amount = try container.decodeIfPresent(String.self, forKey: .amount) ?? ""
-                let tokenCode = try container.decodeIfPresent(String.self, forKey: .tokenCode) ?? ""
-                let timeStampValue = try container.decodeIfPresent(String.self, forKey: .timeStamp)
-                var timeStamp: TimeInterval = Date().timeIntervalSince1970
-                if let unwrappedTimeStamp = timeStampValue, let timeStampDouble = Double(unwrappedTimeStamp) {
-                    timeStamp = TimeInterval(timeStampDouble)
-                }
-                var metadata = PendingFioRequest.MetaData(memo: "")
-                let metadataString = try container.decodeIfPresent(String.self, forKey: .metadata)
-                if let metadataData = metadataString?.data(using: .utf8) {
-                  metadata = try JSONDecoder().decode(PendingFioRequest.MetaData.self, from: metadataData)
-                }
-                
-                self.init(fioreqid: fioreqid,
-                    fromFioAddress: fromFioAddress,
-                    toFioAddress: toFioAddress,
-                    toPublicAddress: toPublicAddress,
-                    amount: amount,
-                    tokenCode: tokenCode,
-                    metadata: metadata,
-                    timeStamp: timeStamp)
-            }
-            
-        }
-
-    }
-    
     /// Pending requests call polls for any pending requests sent to a receiver. [visit api specs](https://stealth.atlassian.net/wiki/spaces/DEV/pages/53280776/API#API-/get_pending_fio_requests-GetpendingFIORequests)
     ///
     /// - Parameters:
@@ -722,57 +451,6 @@ public class FIOSDK: NSObject {
     }
     
     //MARK: Get FIO Names
-    
-    public struct GetFIONamesRequest: Codable {
-        
-        var fioPubAddress: String
-        
-        enum CodingKeys: String, CodingKey {
-            case fioPubAddress = "fio_pub_address"
-        }
-        
-    }
-    
-    /// DTO to represent the response of /get_fio_names
-    public struct FioNamesResponse: Codable{
-        public let publicAddress: String
-        public let domains: [FioDomainResponse]
-        public let addresses: [FioAddressResponse]
-        
-        enum CodingKeys: String, CodingKey {
-            case publicAddress = "fio_pub_address"
-            case domains = "fio_domains"
-            case addresses = "fio_addresses"
-        }
-        
-        public struct FioDomainResponse: Codable{
-            public let domain: String
-            private let _expiration: String
-            
-            public var expiration: Date{
-                return Date(timeIntervalSince1970: (Double(_expiration) ?? 0))
-            }
-            
-            enum CodingKeys: String, CodingKey{
-                case domain = "fio_domain"
-                case _expiration = "expiration"
-            }
-        }
-        
-        public struct FioAddressResponse: Codable{
-            public let address: String
-            private let _expiration: String
-            
-            public var expiration: Date{
-                return Date(timeIntervalSince1970: (Double(_expiration) ?? 0))
-            }
-            
-            enum CodingKeys: String, CodingKey{
-                case address = "fio_address"
-                case _expiration = "expiration"
-            }
-        }
-    }
     
     /// Returns FIO Addresses and FIO Domains owned by this public address.
     ///
@@ -808,39 +486,6 @@ public class FIOSDK: NSObject {
     
     
     //MARK: Public Address Lookup
-    
-    private struct PublicAddressLookupRequest: Codable {
-        
-        public let fioAddress: String
-        public let tokenCode: String
-        
-        enum CodingKeys: String, CodingKey{
-            case fioAddress = "fio_address"
-            case tokenCode = "token_code"
-        }
-        
-    }
-    
-    /// Structure used as response body for getPublicAddress
-    public struct PublicAddressResponse: Codable {
-        
-        /// FIO Address for which public address is returned.
-        public let fioAddress: String
-        
-        /// Token code for which public address is returned.
-        public let tokenCode: String
-        
-        /// public address for the specified FIO Address.
-        public let publicAddress: String
-        
-        enum CodingKeys: String, CodingKey{
-            case fioAddress = "fio_address"
-            case tokenCode = "token_code"
-            case publicAddress = "pub_address"
-        }
-        
-    }
-    
     
     /// Returns a public address for a specified FIO Address, based on a given token for example ETH. [visit the API specs](https://stealth.atlassian.net/wiki/spaces/DEV/pages/53280776/API#API-/pub_address_lookup-FIOAddresslookup)
     /// example response:
@@ -878,78 +523,6 @@ public class FIOSDK: NSObject {
     
     //MARK: - Request Funds
     
-    public struct RequestFundsRequest: Codable {
-        
-        public let from: String
-        public let to: String
-        public let toPublicAddress: String
-        public let amount: String
-        public let tokenCode: String
-        public let metadata: String
-        public let actor: String
-
-        enum CodingKeys: String, CodingKey{
-            case from = "fromfioadd"
-            case to = "tofioadd"
-            case toPublicAddress = "topubadd"
-            case amount
-            case tokenCode = "tokencode"
-            case metadata
-            case actor
-        }
-        
-        public struct MetaData: Codable{
-            public var memo: String?
-            public var hash: String?
-            public var offlineUrl: String?
-            
-            public init(memo: String?, hash: String?, offlineUrl: String?){
-                self.memo = memo
-                self.hash = hash
-                self.offlineUrl = offlineUrl
-            }
-            
-            enum CodingKeys: String, CodingKey {
-                case memo
-                case hash
-                case offlineUrl = "offline_url"
-            }
-            
-            func toJSONString() -> String {
-                guard let json = try? JSONEncoder().encode(self) else {
-                    return ""
-                }
-                return String(data: json, encoding: .utf8) ?? ""
-            }
-        }
-        
-    }
-    
-    public struct RequestFundsResponse: Codable {
-        
-        public var fundsRequestId: String {
-            return String(fioreqid)
-        }
-        var fioreqid: Int //TODO: Change it back to String if Ed confirm it should be String
-        
-        enum CodingKeys: String, CodingKey {
-            case fioreqid
-        }
-        
-        init(fioreqid: Int) {
-            self.fioreqid = fioreqid
-        }
-        
-        public init(from decoder: Decoder) throws {
-            let container = try decoder.container(keyedBy: CodingKeys.self)
-            
-            let fioreqid: Int = try container.decodeIfPresent(Int.self, forKey: .fioreqid) ?? 0
-            
-            self.init(fioreqid: fioreqid)
-        }
-        
-    }
-    
     /// Creates a new funds request.
     /// To read further infomation about this [visit the API specs](https://stealth.atlassian.net/wiki/spaces/DEV/pages/53280776/API#API-/new_funds_request-Createnewfundsrequest)
     /// Note: requestor is sender, requestee is receiver
@@ -981,32 +554,6 @@ public class FIOSDK: NSObject {
     }
     
     //MARK: - Reject Funds
-    
-    private struct RejectFundsRequest: Codable {
-        var fioReqID: String
-        var actor: String
-            
-        enum CodingKeys: String, CodingKey {
-            case fioReqID = "fioreqid"
-            case actor
-        }
-    }
-
-    public struct RejectFundsRequestResponse: Codable{
-        
-        var fioReqID: String
-        var status: Status
-        
-        enum CodingKeys: String, CodingKey {
-            case fioReqID = "fioreqid"
-            case status
-        }
-        
-        enum Status: String, Codable{
-            case rejected = "request_rejected", unknown
-        }        
-        
-    }
     
     /// Reject funds request.
     /// To read further infomation about this [visit the API specs] [1]
@@ -1040,116 +587,6 @@ public class FIOSDK: NSObject {
     
     //MARK: Get Sent FIO Requests
     
-    private struct GetSentFIORequestsRequest: Codable {
-        
-        public let address: String
-        
-        enum CodingKeys: String, CodingKey{
-            case address = "fiopubadd"
-        }
-        
-    }
-    
-    public struct SentFioRequestResponse: Codable {
-        
-        public let fioPublicAddress: String
-        public let requests: [SentFioRequest]
-        
-        enum CodingKeys: String, CodingKey{
-            case fioPublicAddress = "fiopubadd"
-            case requests
-        }
-        
-        /// PendingFioRequestsResponse.request DTO
-        public struct SentFioRequest: Codable {
-            
-            public var fundsRequestId: String {
-                return String(fioreqid)
-            }
-            private let fioreqid: Int
-            public let fromFioAddress: String
-            public let toFioAddress: String
-            public let toPublicAddress: String
-            public let amount: String
-            public let tokenCode: String
-            public let metadata: MetaData
-            public let timeStamp: TimeInterval
-            public let status: String
-            
-            enum CodingKeys: String, CodingKey {
-                case fioreqid = "fioreqid"
-                case fromFioAddress = "fromfioadd"
-                case toFioAddress = "tofioadd"
-                case toPublicAddress = "topubadd"
-                case amount
-                case tokenCode = "tokencode"
-                case metadata
-                case timeStamp = "timestamp"
-                case status
-            }
-            
-            public struct MetaData: Codable {
-                
-                public let memo: String
-                
-            }
-            
-            init(fioreqid: Int,
-                 fromFioAddress: String,
-                 toFioAddress: String,
-                 toPublicAddress: String,
-                 amount: String,
-                 tokenCode: String,
-                 metadata: MetaData,
-                 timeStamp: TimeInterval,
-                 status: String) {
-                self.fioreqid = fioreqid
-                self.fromFioAddress = fromFioAddress
-                self.toFioAddress = toFioAddress
-                self.toPublicAddress = toPublicAddress
-                self.amount = amount
-                self.tokenCode = tokenCode
-                self.metadata = metadata
-                self.timeStamp = timeStamp
-                self.status = status
-            }
-            
-            public init(from decoder: Decoder) throws {
-                let container = try decoder.container(keyedBy: CodingKeys.self)
-                
-                let fioreqid = try container.decodeIfPresent(Int.self, forKey: .fioreqid) ?? 0
-                let fromFioAddress = try container.decodeIfPresent(String.self, forKey: .fromFioAddress) ?? ""
-                let toFioAddress = try container.decodeIfPresent(String.self, forKey: .toFioAddress) ?? ""
-                let toPublicAddress = try container.decodeIfPresent(String.self, forKey: .toPublicAddress) ?? ""
-                let amount = try container.decodeIfPresent(String.self, forKey: .amount) ?? ""
-                let tokenCode = try container.decodeIfPresent(String.self, forKey: .tokenCode) ?? ""
-                let timeStamp = try container.decodeIfPresent(TimeInterval.self, forKey: .timeStamp) ?? Date().timeIntervalSince1970
-//                var timeStamp: TimeInterval = Date().timeIntervalSince1970
-//                if let unwrappedTimeStamp = timeStampValue, let timeStampDouble = Double(unwrappedTimeStamp) {
-//                    timeStamp = TimeInterval(timeStampDouble)
-//                }
-                var metadata = SentFioRequest.MetaData(memo: "")
-                let metadataString = try container.decodeIfPresent(String.self, forKey: .metadata)
-                if let metadataData = metadataString?.data(using: .utf8) {
-                    metadata = try JSONDecoder().decode(SentFioRequest.MetaData.self, from: metadataData)
-                }
-                let status = try container.decodeIfPresent(String.self, forKey: .status) ?? ""
-                
-                self.init(fioreqid: fioreqid,
-                          fromFioAddress: fromFioAddress,
-                          toFioAddress: toFioAddress,
-                          toPublicAddress: toPublicAddress,
-                          amount: amount,
-                          tokenCode: tokenCode,
-                          metadata: metadata,
-                          timeStamp: timeStamp,
-                          status: status)
-            }
-            
-        }
-        
-    }
-    
     /// Sent requests call polls for any requests sent be sender.
     /// To read further infomation about this [visit the API specs](https://stealth.atlassian.net/wiki/spaces/DEV/pages/53280776/API#API-/get_sent_fio_requests-GetFIORequestssentout)
     /// - Parameters:
@@ -1176,200 +613,6 @@ public class FIOSDK: NSObject {
                 }
             }
         }
-    }
-    
-    //MARK: Record Send Models
-    
-    private struct RecordSend: Codable {
-        
-        let fioReqID: String?
-        let fromFIOAdd: String
-        let toFIOAdd: String
-        let fromPubAdd: String
-        let toPubAdd: String
-        let amount: String
-        let tokenCode: String
-        let chainCode: String
-        let status: String
-        let obtID: String
-        let metadata: String
-        
-        enum CodingKeys: String, CodingKey {
-            case fromFIOAdd = "fromfioadd"
-            case toFIOAdd = "tofioadd"
-            case fromPubAdd = "frompubadd"
-            case toPubAdd = "topubadd"
-            case amount = "amount"
-            case tokenCode = "tokencode"
-            case chainCode = "chaincode"
-            case status = "status"
-            case obtID = "obtid"
-            case metadata = "metadata"
-            case fioReqID = "fioreqid"
-        }
-        
-        public init(fioReqID: String? = nil,
-             fromFIOAdd: String,
-             toFIOAdd: String,
-             fromPubAdd: String,
-             toPubAdd: String,
-             amount: Float,
-             tokenCode: String,
-             chainCode: String,
-             status: String,
-             obtID: String,
-             memo: String) {
-            self.fioReqID = fioReqID
-            self.fromFIOAdd = fromFIOAdd
-            self.toFIOAdd = toFIOAdd
-            self.fromPubAdd = fromPubAdd
-            self.toPubAdd = toPubAdd
-            self.amount = String(amount)
-            self.tokenCode = tokenCode
-            self.chainCode = chainCode
-            self.status = status
-            self.obtID = obtID
-            self.metadata = MetaData(memo: memo).toJSONString()
-        }
-        
-        public struct MetaData: Codable {
-            
-            public var memo: String
-            
-            public init(memo: String){
-                self.memo = memo
-            }
-            
-            enum CodingKeys: String, CodingKey {
-                case memo
-            }
-            
-            func toJSONString() -> String {
-                guard let json = try? JSONEncoder().encode(self) else {
-                    return ""
-                }
-                return String(data: json, encoding: .utf8) ?? ""
-            }
-            
-        }
-        
-        func toJSONString() -> String {
-            guard let json = try? JSONEncoder().encode(self) else {
-                return ""
-            }
-            return String(data: json, encoding: .utf8) ?? ""
-        }
-        
-    }
-    
-    public struct RecordSendResponse: Codable {
-        
-        let fioObtID: String
-        let fromFIOAdd: String
-        let toFIOAdd: String
-        let fromPubAdd: String
-        let toPubAdd: String
-        let amount: String
-        let tokenCode: String
-        let chainCode: String
-        let status: String
-        let obtID: String
-        let metadata: MetaData
-        let fioReqID: String?
-        
-        enum CodingKeys: String, CodingKey {
-            case fioObtID = "fioobtid"
-            case fromFIOAdd = "fromfioadd"
-            case toFIOAdd = "tofioadd"
-            case fromPubAdd = "frompubadd"
-            case toPubAdd = "topubadd"
-            case amount = "amount"
-            case tokenCode = "tokencode"
-            case chainCode = "chaincode"
-            case status = "status"
-            case obtID = "obtid"
-            case metadata = "metadata"
-            case fioReqID = "fioreqid"
-        }
-        
-        public struct MetaData: Codable {
-            
-            public let memo: String
-            
-        }
-        
-        init(fioObtID: String,
-             fromFIOAdd: String,
-             toFIOAdd: String,
-             fromPubAdd: String,
-             toPubAdd: String,
-             amount: String,
-             tokenCode: String,
-             chainCode: String,
-             status: String,
-             obtID: String,
-             metadata: MetaData,
-             fioReqID: String?) {
-            self.fioObtID = fioObtID
-            self.fromFIOAdd = fromFIOAdd
-            self.toFIOAdd = toFIOAdd
-            self.fromPubAdd = fromPubAdd
-            self.toPubAdd = toPubAdd
-            self.amount = amount
-            self.tokenCode = tokenCode
-            self.chainCode = chainCode
-            self.status = status
-            self.obtID = obtID
-            self.metadata = metadata
-            self.fioReqID  = fioReqID
-        }
-        
-        public init(from decoder: Decoder) throws {
-            let container = try decoder.container(keyedBy: CodingKeys.self)
-            
-            let fioObtID = try container.decodeIfPresent(String.self, forKey: .fioObtID) ?? ""
-            let fioReqID = try container.decodeIfPresent(String.self, forKey: .fioReqID)
-            let fromFIOAdd = try container.decodeIfPresent(String.self, forKey: .fromFIOAdd) ?? ""
-            let toFIOAdd = try container.decodeIfPresent(String.self, forKey: .toFIOAdd) ?? ""
-            let fromPubAdd = try container.decodeIfPresent(String.self, forKey: .fromPubAdd) ?? ""
-            let toPubAdd = try container.decodeIfPresent(String.self, forKey: .toPubAdd) ?? ""
-            let amount = try container.decodeIfPresent(String.self, forKey: .amount) ?? ""
-            let tokenCode = try container.decodeIfPresent(String.self, forKey: .tokenCode) ?? ""
-            let chainCode = try container.decodeIfPresent(String.self, forKey: .chainCode) ?? ""
-            let obtID = try container.decodeIfPresent(String.self, forKey: .obtID) ?? ""
-            let status = try container.decodeIfPresent(String.self, forKey: .status) ?? ""
-            var metadata = RecordSendResponse.MetaData(memo: "")
-            let metadataString = try container.decodeIfPresent(String.self, forKey: .metadata)
-            if let metadataData = metadataString?.data(using: .utf8) {
-                metadata = try JSONDecoder().decode(RecordSendResponse.MetaData.self, from: metadataData)
-            }
-            
-            self.init(fioObtID: fioObtID,
-                      fromFIOAdd: fromFIOAdd,
-                      toFIOAdd: toFIOAdd,
-                      fromPubAdd: fromPubAdd,
-                      toPubAdd: toPubAdd,
-                      amount: amount,
-                      tokenCode: tokenCode,
-                      chainCode: chainCode,
-                      status: status,
-                      obtID: obtID,
-                      metadata: metadata,
-                      fioReqID: fioReqID)
-        }
-        
-    }
-    
-    private struct RecordSendRequest: Codable {
-        
-        let recordSend: String
-        let actor: String
-        
-        enum CodingKeys: String, CodingKey {
-            case recordSend = "recordsend"
-            case actor
-        }
-        
     }
     
     //MARK: Record Send
@@ -1472,30 +715,6 @@ public class FIOSDK: NSObject {
     
     //MARK: Transfer Tokens
     
-    private struct TransferFIOTokensRequest: Codable {
-        
-        let amount: String
-        let actor: String
-        let toFIOPubAdd: String
-        
-        enum CodingKeys: String, CodingKey {
-            case amount = "amount"
-            case actor = "actor"
-            case toFIOPubAdd = "tofiopubadd"
-        }
-        
-    }
-    
-    public struct TransferFIOTokensResponse: Codable {
-        
-        let status: String
-        
-        enum CodingKeys: String, CodingKey {
-            case status = "status"
-        }
-        
-    }    
-    
     /// Transfers FIO tokens. [visit API specs](https://stealth.atlassian.net/wiki/spaces/DEV/pages/53280776/API#API-/transfer_tokens-TransferFIOtokens)
     /// - Parameters:
     ///     - toFIOPublicAddress: The FIO public address that will receive funds.
@@ -1521,10 +740,4 @@ public class FIOSDK: NSObject {
         }
     }
     
-}
-
-extension FIOSDK.RejectFundsRequestResponse.Status{
-    public init(from decoder: Decoder) throws {
-        self = try FIOSDK.RejectFundsRequestResponse.Status(rawValue: decoder.singleValueContainer().decode(RawValue.self)) ?? .unknown
-    }
 }

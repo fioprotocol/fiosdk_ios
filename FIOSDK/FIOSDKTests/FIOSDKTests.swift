@@ -150,7 +150,7 @@ class FIOSDKTests: XCTestCase {
         let expectationAddPubAddB = XCTestExpectation(description: "testgetpendingfiorequest")
         let expectationReqFunds = XCTestExpectation(description: "testgetpendingfiorequest")
         let expectationPendingReq = XCTestExpectation(description: "testgetpendingfiorequest")
-        let metadata = FIOSDK.RequestFundsRequest.MetaData(memo: "Invoice1234", hash: nil, offlineUrl: nil)
+        let metadata = RequestFundsRequest.MetaData(memo: "Invoice1234", hash: nil, offlineUrl: nil)
         let timestamp = NSDate().timeIntervalSince1970
         let from = self.requestorFioName
         let to = self.requesteeFioName
@@ -237,7 +237,7 @@ class FIOSDKTests: XCTestCase {
     
     func testRequestFundsWithGeneratedAccountShouldSucceed(){
         let expectation = XCTestExpectation(description: "testRequestFunds")
-        let metadata = FIOSDK.RequestFundsRequest.MetaData(memo: "Invoice1234", hash: nil, offlineUrl: nil)
+        let metadata = RequestFundsRequest.MetaData(memo: "Invoice1234", hash: nil, offlineUrl: nil)
         
         FIOSDK.sharedInstance().requestFunds(from: self.requestorFioName, to: self.requesteeFioName, toPublicAddress: self.requesteeAddress, amount: 1.0, tokenCode: "DAI", metadata: metadata) { (response, error) in
             XCTAssert(error?.kind == .Success, "requestFunds failed")
@@ -250,7 +250,7 @@ class FIOSDKTests: XCTestCase {
     
     func testRequestFundsWithNewPubAddressesAccountsShouldSucceed(){
         let expectation = XCTestExpectation(description: "testRequestFunds")
-        let metadata = FIOSDK.RequestFundsRequest.MetaData(memo: "Invoice1234", hash: nil, offlineUrl: nil)
+        let metadata = RequestFundsRequest.MetaData(memo: "Invoice1234", hash: nil, offlineUrl: nil)
         
         let from = self.requestorFioName
         let to = self.requesteeFioName
@@ -287,7 +287,7 @@ class FIOSDKTests: XCTestCase {
                 XCTAssert((error?.kind == FIOError.ErrorKind.Success), "testAddPublicAddress NOT SUCCESSFUL: \(error?.localizedDescription ?? "")")
                 
                 //requestor is sender, requestee is receiver
-                FIOSDK.sharedInstance().requestFunds(from: from, to: to, toPublicAddress: toPubAdd, amount: amount, tokenCode: "BTC", metadata: FIOSDK.RequestFundsRequest.MetaData(memo: "", hash: nil, offlineUrl: nil)) { (response, error) in
+                FIOSDK.sharedInstance().requestFunds(from: from, to: to, toPublicAddress: toPubAdd, amount: amount, tokenCode: "BTC", metadata: RequestFundsRequest.MetaData(memo: "", hash: nil, offlineUrl: nil)) { (response, error) in
                     XCTAssert(error?.kind == .Success && response != nil, "testRejectFundsRequest Couldn't create mock request")
                     
                     if let response = response {
@@ -323,7 +323,7 @@ class FIOSDKTests: XCTestCase {
             XCTAssert((error?.kind == FIOError.ErrorKind.Success), "testAddPublicAddress NOT SUCCESSFUL: \(error?.localizedDescription ?? "")")
             FIOSDK.sharedInstance().addPublicAddress(fioAddress: to, chain: "ETH", publicAddress: toPubAdd) { (error) in
                 XCTAssert((error?.kind == FIOError.ErrorKind.Success), "testAddPublicAddress NOT SUCCESSFUL: \(error?.localizedDescription ?? "")")
-                FIOSDK.sharedInstance().requestFunds(from: from, to: to, toPublicAddress: toPubAdd, amount: amount, tokenCode: "BTC", metadata: FIOSDK.RequestFundsRequest.MetaData(memo: "", hash: nil, offlineUrl: nil)) { (response, error) in
+                FIOSDK.sharedInstance().requestFunds(from: from, to: to, toPublicAddress: toPubAdd, amount: amount, tokenCode: "BTC", metadata: RequestFundsRequest.MetaData(memo: "", hash: nil, offlineUrl: nil)) { (response, error) in
                     XCTAssert(error?.kind == .Success && response != nil, "testGetSentRequests Couldn't create mock request")
                     expRequestFunds.fulfill()
                     guard let fundsRequestId = response?.fundsRequestId else {
