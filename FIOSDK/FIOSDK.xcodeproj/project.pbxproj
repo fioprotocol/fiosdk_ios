@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		0203C523217A48100054FA10 /* FIOSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0203C519217A48100054FA10 /* FIOSDK.framework */; };
 		0203C528217A48100054FA10 /* FIOSDKTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0203C527217A48100054FA10 /* FIOSDKTests.swift */; };
-		0203C56F217A487A0054FA10 /* LICENSE in Resources */ = {isa = PBXBuildFile; fileRef = 0203C534217A487A0054FA10 /* LICENSE */; };
 		0203C570217A487A0054FA10 /* AnyDecodable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0203C539217A487A0054FA10 /* AnyDecodable.swift */; };
 		0203C571217A487A0054FA10 /* AnyCodable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0203C53A217A487A0054FA10 /* AnyCodable.swift */; };
 		0203C572217A487A0054FA10 /* AnyEncodable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0203C53B217A487A0054FA10 /* AnyEncodable.swift */; };
@@ -142,7 +141,6 @@
 		0203C522217A48100054FA10 /* FIOSDKTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FIOSDKTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		0203C527217A48100054FA10 /* FIOSDKTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FIOSDKTests.swift; sourceTree = "<group>"; };
 		0203C529217A48100054FA10 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		0203C534217A487A0054FA10 /* LICENSE */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
 		0203C539217A487A0054FA10 /* AnyDecodable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AnyDecodable.swift; sourceTree = "<group>"; };
 		0203C53A217A487A0054FA10 /* AnyCodable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AnyCodable.swift; sourceTree = "<group>"; };
 		0203C53B217A487A0054FA10 /* AnyEncodable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AnyEncodable.swift; sourceTree = "<group>"; };
@@ -482,7 +480,6 @@
 			isa = PBXGroup;
 			children = (
 				2818C6462260BF9A001871C8 /* Keychain */,
-				0203C534217A487A0054FA10 /* LICENSE */,
 				0203C536217A487A0054FA10 /* AnyCodable */,
 				2818C632225FBF47001871C8 /* Transaction */,
 				28BED282225BD3C400F8606E /* Helpers */,
@@ -794,7 +791,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				283438382245439100E60314 /* secp256k1.table in Resources */,
-				0203C56F217A487A0054FA10 /* LICENSE in Resources */,
 				0203C5CC217A6A6D0054FA10 /* Settings.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
