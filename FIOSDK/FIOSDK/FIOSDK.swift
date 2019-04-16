@@ -263,6 +263,22 @@ public class FIOSDK: NSObject {
         }
     }
     
+    //MARK: Private/Public Key
+    
+    /// This method creates a private and public key based on a mnemonic, it does store both keys in keychain. Use it to setup FIOSDK properly.
+    ///
+    /// - Parameters:
+    ///   - mnemonic: The text to use in key pair generation.
+    /// - Return: A tuple containing both private and public keys to be used in FIOSDK setup.
+    static public func privatePubKeyPair(forMnemonic mnemonic: String) -> (privateKey: String, publicKey: String) {
+        return keyManager.privatePubKeyPair(mnemonic: mnemonic)
+    }
+    
+    /// This method remove private and public keys from keychain. It may throw keychain access errors while doing so.
+    static public func wipePrivPubKeys() throws {
+        try keyManager.wipeKeys()
+    }
+    
     //MARK: - Register FIO Name request
     
     /**
@@ -625,7 +641,7 @@ public class FIOSDK: NSObject {
     
     //MARK: Get Sent FIO Requests
     
-    /// Sent requests call polls for any requests sent be sender.
+    /// Get all requests sent by the given public address. Usually made with requestFunds.
     /// To read further infomation about this [visit the API specs](https://stealth.atlassian.net/wiki/spaces/DEV/pages/53280776/API#API-/get_sent_fio_requests-GetFIORequestssentout)
     /// - Parameters:
     ///   - publicAddress: FIO public address of owner.
@@ -655,7 +671,7 @@ public class FIOSDK: NSObject {
     
     //MARK: Record Send
     
-    /// Register a transation on another blockhain (OBT: other block chain transaction), it does auto resolve from (requestor) FIO address and to (requestee) token public address. Should be called after any transaction if recordSend is not called. [visit api specs](https://stealth.atlassian.net/wiki/spaces/DEV/pages/53280776/API#API-/record_send-Recordssendonanotherblockchain)
+    /// Register a transaction on another blockhain (OBT: other block chain transaction), it does auto resolve from (requestor) FIO address and to (requestee) token public address. Must be called after any transaction if recordSend is not called. [visit api specs](https://stealth.atlassian.net/wiki/spaces/DEV/pages/53280776/API#API-/record_send-Recordssendonanotherblockchain)
     ///
     /// - Parameters:
     ///     - toFIOAdd: FIO address that is receiving currency. (requestee)
@@ -729,21 +745,6 @@ public class FIOSDK: NSObject {
                                 let handledData: (response: FIOSDK.Responses.RecordSendResponse?, error: FIOError) = self.parseResponseFromTransactionResult(txResult: result)
                                 onCompletion(handledData.response, FIOError.init(kind: FIOError.ErrorKind.Success, localizedDescription: ""))
         }
-    }
-    
-    //MARK: Private/Public Key
-    
-    /// This method creates a private and public key based on a mnemonic. Use it to setup FIOSDK properly.
-    ///
-    /// - Parameters:
-    ///   - mnemonic: The text to use in key pair generation.
-    /// - Return: A tuple containing both private and public keys to be used in FIOSDK setup.
-    static public func privatePubKeyPair(forMnemonic mnemonic: String) -> (privateKey: String, publicKey: String) {
-        return keyManager.privatePubKeyPair(mnemonic: mnemonic)
-    }
-    
-    static public func wipePrivPubKeys() throws {
-        try keyManager.wipeKeys()
     }
     
     //MARK: FIO Public Address
