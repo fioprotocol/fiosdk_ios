@@ -8,6 +8,8 @@
 
 import UIKit
 
+private let decimalsFIO: Int = 4
+
 public class FIOSDK: NSObject {
     
     //Used as a namespace for response classes. Each model will be added with extension feature in its own file.
@@ -20,8 +22,37 @@ public class FIOSDK: NSObject {
     private var systemPrivateKey:String = ""
     private var systemPublicKey:String = ""
     private static let keyManager = FIOKeyManager()
+    private let requestFunds = RequestFunds()
+    private let pubAddressTokenFilter: [String: UInt8] = ["fio": 1]
     
     //MARK: -
+    
+    public struct Request{
+        public let amount:Float
+        public let currencyCode:String
+        public var status:RequestStatus
+        public let requestTimeStamp:Int
+        public let requestDate:Date
+        public let requestDateFormatted:String
+        public let fromFioName:String
+        public let toFioName:String
+        public let requestorAccountName:String
+        public let requesteeAccountName:String
+        public let memo:String
+        public let fioappid:Int
+        public let requestid:Int
+        public let statusDescription:String
+    }
+    
+    public enum RequestStatus:String, Codable {
+        case Requested = "Requested"
+        case Rejected = "Rejected"
+        case Approved = "Approved"
+    }
+    
+    public static func isInitialized() -> Bool {
+        return !_sharedInstance.accountName.isEmpty && !_sharedInstance.privateKey.isEmpty && !_sharedInstance.publicKey.isEmpty && !_sharedInstance.systemPrivateKey.isEmpty && !_sharedInstance.systemPublicKey.isEmpty && !Utilities.sharedInstance().URL.isEmpty
+    }
     
     private static var _sharedInstance: FIOSDK = {
         let sharedInstance = FIOSDK()
@@ -282,7 +313,7 @@ public class FIOSDK: NSObject {
                 completion(error)
                 return
             }
-            var addresses:Dictionary<String,String> = publicReceiveAddresses
+            let addresses:Dictionary<String,String> = publicReceiveAddresses
         
             var anyFail = false
         
@@ -290,6 +321,7 @@ public class FIOSDK: NSObject {
             var operations: [AddPubAddressOperation] = []
             var index = 0
             for (chain, receiveAddress) in addresses {
+                if self.pubAddressTokenFilter[chain.lowercased()] != nil { continue }
                 group.enter()
                 let operation = AddPubAddressOperation(action: { operation in
                     self.addPublicAddress(fioAddress: fioName, chain: chain, publicAddress: receiveAddress, completion: { (error) in
@@ -326,6 +358,10 @@ public class FIOSDK: NSObject {
     ///   - publicAddress: A string representing the public address for that FIO Address and coin.
     ///   - completion: The completion handler, providing an optional error in case something goes wrong
     public func addPublicAddress(fioAddress: String, chain: String, publicAddress: String, completion: @escaping ( _ error:FIOError?) -> ()) {
+        guard chain.lowercased() != "fio" else {
+            completion(FIOError(kind: .Failure, localizedDescription: "[FIO SDK] FIO Token pub address should not be added manually."))
+            return
+        }
         let actor = AccountNameGenerator.run(withPublicKey: getSystemPublicKey())
         let data = AddPublicAddress(fioAddress: fioAddress, tokenCode: chain, publicAddress: publicAddress, actor: actor)
         signedPostRequestTo(route: ChainRoutes.addPublicAddress,
@@ -756,7 +792,10 @@ public class FIOSDK: NSObject {
     ///     - completion: A function that is called once request is over with an optional response with results and error containing the status of the call.
     public func transferFIOTokens(toFIOPublicAddress: String, amount: Float, completion: @escaping (_ response: FIOSDK.Responses.TransferFIOTokensResponse?, _ error: FIOError) -> ()){
         let actor = AccountNameGenerator.run(withPublicKey: getSystemPublicKey())
-        let transfer = TransferFIOTokensRequest(amount: String(amount), actor: actor, toFIOPubAdd: toFIOPublicAddress)
+        var transferAmount = String(amount)
+        var places = decimalsFIO - transferAmount.split(separator: ".")[1].count
+        for _ in 0..<places { transferAmount.append("0") }
+        let transfer = TransferFIOTokensRequest(amount: transferAmount, actor: actor, toFIOPubAdd: toFIOPublicAddress)
         signedPostRequestTo(route: ChainRoutes.transferTokens,
                             forAction: ChainActions.transferTokens,
                             withBody: transfer,
