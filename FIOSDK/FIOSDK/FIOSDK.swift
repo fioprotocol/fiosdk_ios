@@ -22,7 +22,6 @@ public class FIOSDK: NSObject {
     private var systemPrivateKey:String = ""
     private var systemPublicKey:String = ""
     private static let keyManager = FIOKeyManager()
-    private let requestFunds = RequestFunds()
     private let pubAddressTokenFilter: [String: UInt8] = ["fio": 1]
     
     //MARK: -
@@ -193,7 +192,7 @@ public class FIOSDK: NSObject {
         }
         serializeJsonToData(body, forAction: action) { (result, error) in
             if let result = result {
-                TransactionUtil.packAndSignTransaction(code: code, action: action.rawValue, data: result.json, account: account, privateKey: privateKey, completion: { (signedTx, error) in
+                PackedTransactionUtil.packAndSignTransaction(code: code, action: action.rawValue, data: result.json, account: account, privateKey: privateKey, completion: { (signedTx, error) in
                     if let error = self.translateErrorToFIOError(error: error) {
                         onCompletion(nil, error)
                     }
@@ -277,6 +276,18 @@ public class FIOSDK: NSObject {
     /// This method remove private and public keys from keychain. It may throw keychain access errors while doing so.
     static public func wipePrivPubKeys() throws {
         try keyManager.wipeKeys()
+    }
+    
+    
+    //MARK: - Chain Info
+    
+    internal func chainInfo(completion: @escaping (_ result: ChainInfo?, _ error: Error?) -> ()) {
+        FIOHTTPHelper.rpcPostRequestTo(ChainRouteBuilder.build(route: ChainRoutes.getInfo), withBody: nil as String?,  onCompletion: completion)
+    }
+    
+    internal func getBlock(blockNumOrId: AnyObject, completion: @escaping (_ result: BlockInfo?, _ error: Error?) -> ()) {
+        let body = ["block_num_or_id": "\(blockNumOrId)"]
+        FIOHTTPHelper.rpcPostRequestTo(ChainRouteBuilder.build(route: ChainRoutes.getBlock), withBody: body, onCompletion: completion)
     }
     
     //MARK: - Register FIO Name request

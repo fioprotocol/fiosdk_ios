@@ -8,7 +8,7 @@
 
 import Foundation
 
-public class Utilities:NSObject{
+internal class Utilities:NSObject{
     
     private static var _sharedInstance: Utilities = {
         let sharedInstance = Utilities()

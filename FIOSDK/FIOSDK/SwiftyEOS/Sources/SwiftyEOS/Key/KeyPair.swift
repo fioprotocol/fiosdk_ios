@@ -8,9 +8,9 @@
 
 import Foundation
 
-func generateRandomKeyPair(enclave: SecureEnclave) -> (privateKey: PrivateKey?, publicKey: PublicKey?) {
-    let privateKey = PrivateKey.randomPrivateKey(enclave: enclave)
-    let publicKey = PublicKey(privateKey: privateKey!)
-    
-    return (privateKey, publicKey)
-}
+//func generateRandomKeyPair(enclave: SecureEnclave) -> (privateKey: PrivateKey?, publicKey: PublicKey?) {
+//    let privateKey = PrivateKey.randomPrivateKey(enclave: enclave)
+//    let publicKey = PublicKey(privateKey: privateKey!)
+//    
+//    return (privateKey, publicKey)
+//}

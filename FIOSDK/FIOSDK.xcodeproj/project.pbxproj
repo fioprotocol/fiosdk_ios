@@ -9,37 +9,26 @@
 /* Begin PBXBuildFile section */
 		0203C523217A48100054FA10 /* FIOSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0203C519217A48100054FA10 /* FIOSDK.framework */; };
 		0203C528217A48100054FA10 /* FIOSDKTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0203C527217A48100054FA10 /* FIOSDKTests.swift */; };
-		0203C56F217A487A0054FA10 /* LICENSE in Resources */ = {isa = PBXBuildFile; fileRef = 0203C534217A487A0054FA10 /* LICENSE */; };
 		0203C570217A487A0054FA10 /* AnyDecodable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0203C539217A487A0054FA10 /* AnyDecodable.swift */; };
 		0203C571217A487A0054FA10 /* AnyCodable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0203C53A217A487A0054FA10 /* AnyCodable.swift */; };
 		0203C572217A487A0054FA10 /* AnyEncodable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0203C53B217A487A0054FA10 /* AnyEncodable.swift */; };
-		0203C57F217A487A0054FA10 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 0203C54B217A487A0054FA10 /* README.md */; };
 		0203C580217A487A0054FA10 /* Crypto.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0203C54F217A487A0054FA10 /* Crypto.swift */; };
-		0203C581217A487A0054FA10 /* TransactionUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0203C552217A487A0054FA10 /* TransactionUtil.swift */; };
-		0203C582217A487A0054FA10 /* Transaction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0203C553217A487A0054FA10 /* Transaction.swift */; };
-		0203C583217A487A0054FA10 /* ResourceUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0203C555217A487A0054FA10 /* ResourceUtil.swift */; };
-		0203C584217A487A0054FA10 /* Currency.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0203C557217A487A0054FA10 /* Currency.swift */; };
-		0203C585217A487A0054FA10 /* Signature.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0203C559217A487A0054FA10 /* Signature.swift */; };
-		0203C586217A487A0054FA10 /* ChainRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0203C55C217A487A0054FA10 /* ChainRouter.swift */; };
-		0203C587217A487A0054FA10 /* EOSRPC+Chain.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0203C55D217A487A0054FA10 /* EOSRPC+Chain.swift */; };
-		0203C588217A487A0054FA10 /* EOSRPC+History.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0203C55F217A487A0054FA10 /* EOSRPC+History.swift */; };
-		0203C589217A487A0054FA10 /* HistoryRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0203C560217A487A0054FA10 /* HistoryRouter.swift */; };
-		0203C58A217A487A0054FA10 /* EOSRPC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0203C562217A487A0054FA10 /* EOSRPC.swift */; };
-		0203C58B217A487A0054FA10 /* BaseRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0203C563217A487A0054FA10 /* BaseRouter.swift */; };
-		0203C58C217A487A0054FA10 /* KeyPair.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0203C565217A487A0054FA10 /* KeyPair.swift */; };
+		0203C582217A487A0054FA10 /* PackedTransaction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0203C553217A487A0054FA10 /* PackedTransaction.swift */; };
 		0203C58D217A487A0054FA10 /* PublicKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0203C566217A487A0054FA10 /* PublicKey.swift */; };
 		0203C58E217A487A0054FA10 /* PrivateKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0203C567217A487A0054FA10 /* PrivateKey.swift */; };
-		0203C58F217A487A0054FA10 /* ChainModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0203C569217A487A0054FA10 /* ChainModels.swift */; };
 		0203C590217A487A0054FA10 /* Error.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0203C56A217A487A0054FA10 /* Error.swift */; };
-		0203C591217A487A0054FA10 /* BigInt.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0203C56B217A487A0054FA10 /* BigInt.swift */; };
-		0203C592217A487A0054FA10 /* SEWallet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0203C56E217A487A0054FA10 /* SEWallet.swift */; };
 		0203C597217A4DD70054FA10 /* FIOSDK.h in Headers */ = {isa = PBXBuildFile; fileRef = 0203C51C217A48100054FA10 /* FIOSDK.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		0203C599217A4EC90054FA10 /* Utilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0203C598217A4EC90054FA10 /* Utilities.swift */; };
 		0203C5CB217A6A6D0054FA10 /* FIOSDK.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0203C5C9217A6A6D0054FA10 /* FIOSDK.swift */; };
 		0203C5CC217A6A6D0054FA10 /* Settings.plist in Resources */ = {isa = PBXBuildFile; fileRef = 0203C5CA217A6A6D0054FA10 /* Settings.plist */; };
 		0203C5D8217A71330054FA10 /* FIOError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0203C5D7217A71330054FA10 /* FIOError.swift */; };
-		0245A5B12193BF6900C5A870 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0245A5B02193BF6900C5A870 /* Extensions.swift */; };
-		02B93140218A280300877149 /* AccountUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02B9313F218A280200877149 /* AccountUtil.swift */; };
+		0245A5B12193BF6900C5A870 /* String+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0245A5B02193BF6900C5A870 /* String+Extensions.swift */; };
+		2818C6382260B891001871C8 /* BlockInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2818C6372260B891001871C8 /* BlockInfo.swift */; };
+		2818C63A2260B8AB001871C8 /* ChainInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2818C6392260B8AB001871C8 /* ChainInfo.swift */; };
+		2818C63C2260BDF9001871C8 /* RPCDecoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2818C63B2260BDF9001871C8 /* RPCDecoder.swift */; };
+		2818C63F2260BE36001871C8 /* HTTPMethod.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2818C63E2260BE36001871C8 /* HTTPMethod.swift */; };
+		2818C6412260BE55001871C8 /* FIOHTTPErrorResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2818C6402260BE55001871C8 /* FIOHTTPErrorResponse.swift */; };
+		2818C6452260BEF0001871C8 /* PackedTransactionUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2818C6442260BEF0001871C8 /* PackedTransactionUtil.swift */; };
 		283438222245439100E60314 /* sha3.h in Headers */ = {isa = PBXBuildFile; fileRef = 2834380A2245439000E60314 /* sha3.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		283438232245439100E60314 /* rand.h in Headers */ = {isa = PBXBuildFile; fileRef = 2834380B2245439000E60314 /* rand.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		283438242245439100E60314 /* curves.h in Headers */ = {isa = PBXBuildFile; fileRef = 2834380C2245439000E60314 /* curves.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -81,7 +70,6 @@
 		283438572245733800E60314 /* PrivateKey+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 283438562245733800E60314 /* PrivateKey+Extensions.swift */; };
 		285649522229C031006E2533 /* AccountNameGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 285649512229C031006E2533 /* AccountNameGenerator.swift */; };
 		285649542229C3AE006E2533 /* FIOHTTPHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 285649532229C3AE006E2533 /* FIOHTTPHelper.swift */; };
-		28564957222DBBF2006E2533 /* TransactionUtil+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28564956222DBBF2006E2533 /* TransactionUtil+Extensions.swift */; };
 		2856D26F225CC90800BC5D36 /* TokenPublicAddressResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2856D26E225CC90800BC5D36 /* TokenPublicAddressResponse.swift */; };
 		287F10512253DAA5001E3B32 /* GetFIOBalanceRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 287F10502253DAA5001E3B32 /* GetFIOBalanceRequest.swift */; };
 		287F10532253DAC0001E3B32 /* GetFIOBalanceResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 287F10522253DAC0001E3B32 /* GetFIOBalanceResponse.swift */; };
@@ -153,36 +141,25 @@
 		0203C522217A48100054FA10 /* FIOSDKTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FIOSDKTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		0203C527217A48100054FA10 /* FIOSDKTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FIOSDKTests.swift; sourceTree = "<group>"; };
 		0203C529217A48100054FA10 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		0203C534217A487A0054FA10 /* LICENSE */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
 		0203C539217A487A0054FA10 /* AnyDecodable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AnyDecodable.swift; sourceTree = "<group>"; };
 		0203C53A217A487A0054FA10 /* AnyCodable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AnyCodable.swift; sourceTree = "<group>"; };
 		0203C53B217A487A0054FA10 /* AnyEncodable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AnyEncodable.swift; sourceTree = "<group>"; };
-		0203C54B217A487A0054FA10 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		0203C54F217A487A0054FA10 /* Crypto.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Crypto.swift; sourceTree = "<group>"; };
-		0203C552217A487A0054FA10 /* TransactionUtil.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TransactionUtil.swift; sourceTree = "<group>"; };
-		0203C553217A487A0054FA10 /* Transaction.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Transaction.swift; sourceTree = "<group>"; };
-		0203C555217A487A0054FA10 /* ResourceUtil.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ResourceUtil.swift; sourceTree = "<group>"; };
-		0203C557217A487A0054FA10 /* Currency.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Currency.swift; sourceTree = "<group>"; };
-		0203C559217A487A0054FA10 /* Signature.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Signature.swift; sourceTree = "<group>"; };
-		0203C55C217A487A0054FA10 /* ChainRouter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChainRouter.swift; sourceTree = "<group>"; };
-		0203C55D217A487A0054FA10 /* EOSRPC+Chain.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "EOSRPC+Chain.swift"; sourceTree = "<group>"; };
-		0203C55F217A487A0054FA10 /* EOSRPC+History.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "EOSRPC+History.swift"; sourceTree = "<group>"; };
-		0203C560217A487A0054FA10 /* HistoryRouter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HistoryRouter.swift; sourceTree = "<group>"; };
-		0203C562217A487A0054FA10 /* EOSRPC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EOSRPC.swift; sourceTree = "<group>"; };
-		0203C563217A487A0054FA10 /* BaseRouter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BaseRouter.swift; sourceTree = "<group>"; };
-		0203C565217A487A0054FA10 /* KeyPair.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeyPair.swift; sourceTree = "<group>"; };
+		0203C553217A487A0054FA10 /* PackedTransaction.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PackedTransaction.swift; sourceTree = "<group>"; };
 		0203C566217A487A0054FA10 /* PublicKey.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PublicKey.swift; sourceTree = "<group>"; };
 		0203C567217A487A0054FA10 /* PrivateKey.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PrivateKey.swift; sourceTree = "<group>"; };
-		0203C569217A487A0054FA10 /* ChainModels.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChainModels.swift; sourceTree = "<group>"; };
 		0203C56A217A487A0054FA10 /* Error.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Error.swift; sourceTree = "<group>"; };
-		0203C56B217A487A0054FA10 /* BigInt.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BigInt.swift; sourceTree = "<group>"; };
-		0203C56E217A487A0054FA10 /* SEWallet.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SEWallet.swift; sourceTree = "<group>"; };
 		0203C598217A4EC90054FA10 /* Utilities.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Utilities.swift; sourceTree = "<group>"; };
 		0203C5C9217A6A6D0054FA10 /* FIOSDK.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FIOSDK.swift; sourceTree = "<group>"; };
 		0203C5CA217A6A6D0054FA10 /* Settings.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Settings.plist; sourceTree = "<group>"; };
 		0203C5D7217A71330054FA10 /* FIOError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FIOError.swift; sourceTree = "<group>"; };
-		0245A5B02193BF6900C5A870 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
-		02B9313F218A280200877149 /* AccountUtil.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AccountUtil.swift; sourceTree = "<group>"; };
+		0245A5B02193BF6900C5A870 /* String+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Extensions.swift"; sourceTree = "<group>"; };
+		2818C6372260B891001871C8 /* BlockInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlockInfo.swift; sourceTree = "<group>"; };
+		2818C6392260B8AB001871C8 /* ChainInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChainInfo.swift; sourceTree = "<group>"; };
+		2818C63B2260BDF9001871C8 /* RPCDecoder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RPCDecoder.swift; sourceTree = "<group>"; };
+		2818C63E2260BE36001871C8 /* HTTPMethod.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HTTPMethod.swift; sourceTree = "<group>"; };
+		2818C6402260BE55001871C8 /* FIOHTTPErrorResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FIOHTTPErrorResponse.swift; sourceTree = "<group>"; };
+		2818C6442260BEF0001871C8 /* PackedTransactionUtil.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PackedTransactionUtil.swift; path = FIOSDK/Core/Extensions/PackedTransactionUtil.swift; sourceTree = SOURCE_ROOT; };
 		2834380A2245439000E60314 /* sha3.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sha3.h; sourceTree = "<group>"; };
 		2834380B2245439000E60314 /* rand.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = rand.h; sourceTree = "<group>"; };
 		2834380C2245439000E60314 /* curves.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = curves.h; sourceTree = "<group>"; };
@@ -224,7 +201,6 @@
 		283438562245733800E60314 /* PrivateKey+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PrivateKey+Extensions.swift"; sourceTree = "<group>"; };
 		285649512229C031006E2533 /* AccountNameGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountNameGenerator.swift; sourceTree = "<group>"; };
 		285649532229C3AE006E2533 /* FIOHTTPHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FIOHTTPHelper.swift; sourceTree = "<group>"; };
-		28564956222DBBF2006E2533 /* TransactionUtil+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TransactionUtil+Extensions.swift"; sourceTree = "<group>"; };
 		2856D26E225CC90800BC5D36 /* TokenPublicAddressResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenPublicAddressResponse.swift; sourceTree = "<group>"; };
 		287F10502253DAA5001E3B32 /* GetFIOBalanceRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetFIOBalanceRequest.swift; sourceTree = "<group>"; };
 		287F10522253DAC0001E3B32 /* GetFIOBalanceResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetFIOBalanceResponse.swift; sourceTree = "<group>"; };
@@ -323,11 +299,11 @@
 		0203C51B217A48100054FA10 /* FIOSDK */ = {
 			isa = PBXGroup;
 			children = (
+				2818C63422609C1C001871C8 /* External */,
 				2856494E2229BDCE006E2533 /* Models */,
 				2856494D2229BB0A006E2533 /* Core */,
 				0203C51C217A48100054FA10 /* FIOSDK.h */,
 				0203C5C9217A6A6D0054FA10 /* FIOSDK.swift */,
-				0203C533217A487A0054FA10 /* SwiftyEOS */,
 				0203C51D217A48100054FA10 /* Info.plist */,
 				0203C5CA217A6A6D0054FA10 /* Settings.plist */,
 			);
@@ -346,43 +322,7 @@
 			path = FIOSDKTests;
 			sourceTree = "<group>";
 		};
-		0203C533217A487A0054FA10 /* SwiftyEOS */ = {
-			isa = PBXGroup;
-			children = (
-				0203C534217A487A0054FA10 /* LICENSE */,
-				0203C535217A487A0054FA10 /* Dependencies */,
-				0203C53C217A487A0054FA10 /* Libraries */,
-				0203C54B217A487A0054FA10 /* README.md */,
-				0203C54C217A487A0054FA10 /* Sources */,
-			);
-			path = SwiftyEOS;
-			sourceTree = "<group>";
-		};
-		0203C535217A487A0054FA10 /* Dependencies */ = {
-			isa = PBXGroup;
-			children = (
-				0203C536217A487A0054FA10 /* AnyCodable */,
-			);
-			path = Dependencies;
-			sourceTree = "<group>";
-		};
 		0203C536217A487A0054FA10 /* AnyCodable */ = {
-			isa = PBXGroup;
-			children = (
-				0203C537217A487A0054FA10 /* Sources */,
-			);
-			path = AnyCodable;
-			sourceTree = "<group>";
-		};
-		0203C537217A487A0054FA10 /* Sources */ = {
-			isa = PBXGroup;
-			children = (
-				0203C538217A487A0054FA10 /* AnyCodable */,
-			);
-			path = Sources;
-			sourceTree = "<group>";
-		};
-		0203C538217A487A0054FA10 /* AnyCodable */ = {
 			isa = PBXGroup;
 			children = (
 				0203C539217A487A0054FA10 /* AnyDecodable.swift */,
@@ -453,161 +393,12 @@
 			path = src;
 			sourceTree = "<group>";
 		};
-		0203C54C217A487A0054FA10 /* Sources */ = {
-			isa = PBXGroup;
-			children = (
-				0203C54D217A487A0054FA10 /* SwiftyEOS */,
-				0203C56C217A487A0054FA10 /* Utils */,
-			);
-			path = Sources;
-			sourceTree = "<group>";
-		};
-		0203C54D217A487A0054FA10 /* SwiftyEOS */ = {
-			isa = PBXGroup;
-			children = (
-				0203C54E217A487A0054FA10 /* Crypto */,
-				0203C550217A487A0054FA10 /* Contract */,
-				0203C558217A487A0054FA10 /* Signature */,
-				0203C55A217A487A0054FA10 /* Network */,
-				0203C564217A487A0054FA10 /* Key */,
-				0203C568217A487A0054FA10 /* Models */,
-			);
-			path = SwiftyEOS;
-			sourceTree = "<group>";
-		};
-		0203C54E217A487A0054FA10 /* Crypto */ = {
-			isa = PBXGroup;
-			children = (
-				0203C54F217A487A0054FA10 /* Crypto.swift */,
-			);
-			path = Crypto;
-			sourceTree = "<group>";
-		};
-		0203C550217A487A0054FA10 /* Contract */ = {
-			isa = PBXGroup;
-			children = (
-				02B9313E218A280200877149 /* account */,
-				0203C551217A487A0054FA10 /* transaction */,
-				0203C554217A487A0054FA10 /* resource */,
-				0203C556217A487A0054FA10 /* currency */,
-			);
-			path = Contract;
-			sourceTree = "<group>";
-		};
-		0203C551217A487A0054FA10 /* transaction */ = {
-			isa = PBXGroup;
-			children = (
-				0203C552217A487A0054FA10 /* TransactionUtil.swift */,
-				0203C553217A487A0054FA10 /* Transaction.swift */,
-			);
-			path = transaction;
-			sourceTree = "<group>";
-		};
-		0203C554217A487A0054FA10 /* resource */ = {
-			isa = PBXGroup;
-			children = (
-				0203C555217A487A0054FA10 /* ResourceUtil.swift */,
-			);
-			path = resource;
-			sourceTree = "<group>";
-		};
-		0203C556217A487A0054FA10 /* currency */ = {
-			isa = PBXGroup;
-			children = (
-				0203C557217A487A0054FA10 /* Currency.swift */,
-			);
-			path = currency;
-			sourceTree = "<group>";
-		};
-		0203C558217A487A0054FA10 /* Signature */ = {
-			isa = PBXGroup;
-			children = (
-				0203C559217A487A0054FA10 /* Signature.swift */,
-			);
-			path = Signature;
-			sourceTree = "<group>";
-		};
-		0203C55A217A487A0054FA10 /* Network */ = {
-			isa = PBXGroup;
-			children = (
-				0203C55B217A487A0054FA10 /* Chain */,
-				0203C55E217A487A0054FA10 /* History */,
-				0203C561217A487A0054FA10 /* Base */,
-			);
-			path = Network;
-			sourceTree = "<group>";
-		};
-		0203C55B217A487A0054FA10 /* Chain */ = {
-			isa = PBXGroup;
-			children = (
-				0203C55C217A487A0054FA10 /* ChainRouter.swift */,
-				0203C55D217A487A0054FA10 /* EOSRPC+Chain.swift */,
-			);
-			path = Chain;
-			sourceTree = "<group>";
-		};
-		0203C55E217A487A0054FA10 /* History */ = {
-			isa = PBXGroup;
-			children = (
-				0203C55F217A487A0054FA10 /* EOSRPC+History.swift */,
-				0203C560217A487A0054FA10 /* HistoryRouter.swift */,
-			);
-			path = History;
-			sourceTree = "<group>";
-		};
-		0203C561217A487A0054FA10 /* Base */ = {
-			isa = PBXGroup;
-			children = (
-				0203C562217A487A0054FA10 /* EOSRPC.swift */,
-				0203C563217A487A0054FA10 /* BaseRouter.swift */,
-			);
-			path = Base;
-			sourceTree = "<group>";
-		};
-		0203C564217A487A0054FA10 /* Key */ = {
-			isa = PBXGroup;
-			children = (
-				0203C565217A487A0054FA10 /* KeyPair.swift */,
-				0203C566217A487A0054FA10 /* PublicKey.swift */,
-				0203C567217A487A0054FA10 /* PrivateKey.swift */,
-			);
-			path = Key;
-			sourceTree = "<group>";
-		};
-		0203C568217A487A0054FA10 /* Models */ = {
-			isa = PBXGroup;
-			children = (
-				0203C569217A487A0054FA10 /* ChainModels.swift */,
-				0203C56A217A487A0054FA10 /* Error.swift */,
-				0203C56B217A487A0054FA10 /* BigInt.swift */,
-			);
-			path = Models;
-			sourceTree = "<group>";
-		};
-		0203C56C217A487A0054FA10 /* Utils */ = {
-			isa = PBXGroup;
-			children = (
-				0203C56D217A487A0054FA10 /* iOS */,
-			);
-			path = Utils;
-			sourceTree = "<group>";
-		};
-		0203C56D217A487A0054FA10 /* iOS */ = {
-			isa = PBXGroup;
-			children = (
-				0203C56E217A487A0054FA10 /* SEWallet.swift */,
-			);
-			path = iOS;
-			sourceTree = "<group>";
-		};
 		025859F02255053100622144 /* Router */ = {
 			isa = PBXGroup;
 			children = (
-				285649532229C3AE006E2533 /* FIOHTTPHelper.swift */,
 				287F10542253ECE5001E3B32 /* ChainActions.swift */,
 				287F10562253ED05001E3B32 /* ChainRouteBuilder.swift */,
 				287F10582253ED21001E3B32 /* ChainRoutes.swift */,
-				287F1088225676B1001E3B32 /* JSONSerialization.swift */,
 			);
 			path = Router;
 			sourceTree = "<group>";
@@ -615,9 +406,7 @@
 		025859F12255054500622144 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
-				0245A5B02193BF6900C5A870 /* Extensions.swift */,
-				28564956222DBBF2006E2533 /* TransactionUtil+Extensions.swift */,
-				283438562245733800E60314 /* PrivateKey+Extensions.swift */,
+				0245A5B02193BF6900C5A870 /* String+Extensions.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -639,26 +428,66 @@
 			path = Balance;
 			sourceTree = "<group>";
 		};
-		02B9313E218A280200877149 /* account */ = {
+		2818C632225FBF47001871C8 /* Transaction */ = {
 			isa = PBXGroup;
 			children = (
-				02B9313F218A280200877149 /* AccountUtil.swift */,
+				2818C6442260BEF0001871C8 /* PackedTransactionUtil.swift */,
+				0203C553217A487A0054FA10 /* PackedTransaction.swift */,
 			);
-			path = account;
+			path = Transaction;
+			sourceTree = "<group>";
+		};
+		2818C63422609C1C001871C8 /* External */ = {
+			isa = PBXGroup;
+			children = (
+				0203C53C217A487A0054FA10 /* Libraries */,
+			);
+			path = External;
+			sourceTree = "<group>";
+		};
+		2818C6362260B87C001871C8 /* Chain */ = {
+			isa = PBXGroup;
+			children = (
+				0203C56A217A487A0054FA10 /* Error.swift */,
+				2818C6372260B891001871C8 /* BlockInfo.swift */,
+				2818C6392260B8AB001871C8 /* ChainInfo.swift */,
+			);
+			path = Chain;
+			sourceTree = "<group>";
+		};
+		2818C63D2260BE0B001871C8 /* Network */ = {
+			isa = PBXGroup;
+			children = (
+				287F1088225676B1001E3B32 /* JSONSerialization.swift */,
+				2818C63B2260BDF9001871C8 /* RPCDecoder.swift */,
+				285649532229C3AE006E2533 /* FIOHTTPHelper.swift */,
+				2818C63E2260BE36001871C8 /* HTTPMethod.swift */,
+				2818C6402260BE55001871C8 /* FIOHTTPErrorResponse.swift */,
+			);
+			path = Network;
+			sourceTree = "<group>";
+		};
+		2818C6462260BF9A001871C8 /* Keychain */ = {
+			isa = PBXGroup;
+			children = (
+				28BB8B5F22578F6B0049A761 /* KeychainInteractor.swift */,
+				28BB8B632257938A0049A761 /* KeychainKeys.swift */,
+			);
+			path = Keychain;
 			sourceTree = "<group>";
 		};
 		2856494D2229BB0A006E2533 /* Core */ = {
 			isa = PBXGroup;
 			children = (
+				2818C6462260BF9A001871C8 /* Keychain */,
+				0203C536217A487A0054FA10 /* AnyCodable */,
+				2818C632225FBF47001871C8 /* Transaction */,
 				28BED282225BD3C400F8606E /* Helpers */,
-				28BB8B5E22578F4A0049A761 /* PrivatePublicKey */,
-				0203C5D7217A71330054FA10 /* FIOError.swift */,
+				28BB8B5E22578F4A0049A761 /* Key */,
 				025859F22255057400622144 /* AccountGenerator */,
 				025859F12255054500622144 /* Extensions */,
+				2818C63D2260BE0B001871C8 /* Network */,
 				025859F02255053100622144 /* Router */,
-				28BB8B5F22578F6B0049A761 /* KeychainInteractor.swift */,
-				28BB8B612257909E0049A761 /* FIOKeyManager.swift */,
-				28BB8B632257938A0049A761 /* KeychainKeys.swift */,
 			);
 			path = Core;
 			sourceTree = "<group>";
@@ -693,6 +522,8 @@
 		287F105F225524C0001E3B32 /* Core */ = {
 			isa = PBXGroup;
 			children = (
+				0203C5D7217A71330054FA10 /* FIOError.swift */,
+				2818C6362260B87C001871C8 /* Chain */,
 				287F109E2256A6A3001E3B32 /* PendingRequest */,
 				287F109D2256A698001E3B32 /* SentRequest */,
 				287F109C2256A68C001E3B32 /* RecordSend */,
@@ -787,11 +618,15 @@
 			path = PendingRequest;
 			sourceTree = "<group>";
 		};
-		28BB8B5E22578F4A0049A761 /* PrivatePublicKey */ = {
+		28BB8B5E22578F4A0049A761 /* Key */ = {
 			isa = PBXGroup;
 			children = (
+				28BB8B612257909E0049A761 /* FIOKeyManager.swift */,
+				283438562245733800E60314 /* PrivateKey+Extensions.swift */,
+				0203C566217A487A0054FA10 /* PublicKey.swift */,
+				0203C567217A487A0054FA10 /* PrivateKey.swift */,
 			);
-			path = PrivatePublicKey;
+			path = Key;
 			sourceTree = "<group>";
 		};
 		28BB8B6E2257BFB20049A761 /* HostApplication */ = {
@@ -809,6 +644,7 @@
 		28BED282225BD3C400F8606E /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
+				0203C54F217A487A0054FA10 /* Crypto.swift */,
 				0203C598217A4EC90054FA10 /* Utilities.swift */,
 				28BED283225BD3D900F8606E /* DateUtils.swift */,
 			);
@@ -954,9 +790,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				0203C57F217A487A0054FA10 /* README.md in Resources */,
 				283438382245439100E60314 /* secp256k1.table in Resources */,
-				0203C56F217A487A0054FA10 /* LICENSE in Resources */,
 				0203C5CC217A6A6D0054FA10 /* Settings.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1021,11 +855,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2818C6452260BEF0001871C8 /* PackedTransactionUtil.swift in Sources */,
+				2818C6412260BE55001871C8 /* FIOHTTPErrorResponse.swift in Sources */,
 				287F108322566813001E3B32 /* AddPublicAddress.swift in Sources */,
 				287F10752256591C001E3B32 /* PublicAddressLookupRequest.swift in Sources */,
 				28BB8B6022578F6B0049A761 /* KeychainInteractor.swift in Sources */,
 				2834384E2245439B00E60314 /* hmac.c in Sources */,
-				0203C582217A487A0054FA10 /* Transaction.swift in Sources */,
+				0203C582217A487A0054FA10 /* PackedTransaction.swift in Sources */,
 				0203C599217A4EC90054FA10 /* Utilities.swift in Sources */,
 				283438482245439B00E60314 /* bip32.c in Sources */,
 				287F105E22552432001E3B32 /* TransferFIOTokensResponse.swift in Sources */,
@@ -1037,20 +873,15 @@
 				287F10512253DAA5001E3B32 /* GetFIOBalanceRequest.swift in Sources */,
 				285649522229C031006E2533 /* AccountNameGenerator.swift in Sources */,
 				2834384B2245439B00E60314 /* secp256k1.c in Sources */,
-				0203C589217A487A0054FA10 /* HistoryRouter.swift in Sources */,
 				287F106F22565603001E3B32 /* RequestFundsResponse.swift in Sources */,
 				287F106722552809001E3B32 /* SentFioRequestResponse.swift in Sources */,
 				287F1061225524DB001E3B32 /* RecordSendRequest.swift in Sources */,
 				287F108E225679B6001E3B32 /* TxResultProcessed.swift in Sources */,
 				287F10532253DAC0001E3B32 /* GetFIOBalanceResponse.swift in Sources */,
-				28564957222DBBF2006E2533 /* TransactionUtil+Extensions.swift in Sources */,
-				02B93140218A280300877149 /* AccountUtil.swift in Sources */,
 				287F1085225673CF001E3B32 /* AddPubAddressOperation.swift in Sources */,
-				0203C592217A487A0054FA10 /* SEWallet.swift in Sources */,
 				287F106322552543001E3B32 /* RecordSendResponse.swift in Sources */,
 				2834384F2245439B00E60314 /* bip39.c in Sources */,
 				287F1087225673EB001E3B32 /* RegisterName.swift in Sources */,
-				0203C585217A487A0054FA10 /* Signature.swift in Sources */,
 				287F106D22565578001E3B32 /* RejectFundsRequest.swift in Sources */,
 				287F107922565999001E3B32 /* GetFIONamesRequest.swift in Sources */,
 				287F1065225527D1001E3B32 /* RecordSend.swift in Sources */,
@@ -1061,45 +892,38 @@
 				287F1089225676B1001E3B32 /* JSONSerialization.swift in Sources */,
 				283438522245439B00E60314 /* ecdsa.c in Sources */,
 				2834382C2245439100E60314 /* platform-specific.inc in Sources */,
-				0203C586217A487A0054FA10 /* ChainRouter.swift in Sources */,
 				283438532245439B00E60314 /* bignum.c in Sources */,
 				283438502245439B00E60314 /* ripemd160.c in Sources */,
-				0203C581217A487A0054FA10 /* TransactionUtil.swift in Sources */,
-				0203C58B217A487A0054FA10 /* BaseRouter.swift in Sources */,
 				287F109422569F0B001E3B32 /* Request.swift in Sources */,
 				0203C58E217A487A0054FA10 /* PrivateKey.swift in Sources */,
 				28BED284225BD3D900F8606E /* DateUtils.swift in Sources */,
-				0203C58F217A487A0054FA10 /* ChainModels.swift in Sources */,
-				0203C58C217A487A0054FA10 /* KeyPair.swift in Sources */,
-				0203C588217A487A0054FA10 /* EOSRPC+History.swift in Sources */,
+				2818C63C2260BDF9001871C8 /* RPCDecoder.swift in Sources */,
+				2818C63A2260B8AB001871C8 /* ChainInfo.swift in Sources */,
 				287F108C22567729001E3B32 /* TxResult.swift in Sources */,
-				0203C587217A487A0054FA10 /* EOSRPC+Chain.swift in Sources */,
+				2818C63F2260BE36001871C8 /* HTTPMethod.swift in Sources */,
 				287F10772256597D001E3B32 /* FioNamesResponse.swift in Sources */,
 				283438552245439B00E60314 /* curves.c in Sources */,
 				28BB8B622257909E0049A761 /* FIOKeyManager.swift in Sources */,
 				283438542245439B00E60314 /* sha3.c in Sources */,
 				283438262245439100E60314 /* curve-specific.inc in Sources */,
 				0203C580217A487A0054FA10 /* Crypto.swift in Sources */,
+				2818C6382260B891001871C8 /* BlockInfo.swift in Sources */,
 				287F10552253ECE5001E3B32 /* ChainActions.swift in Sources */,
 				287F109222567A07001E3B32 /* TxResultReceipt.swift in Sources */,
 				287F10592253ED21001E3B32 /* ChainRoutes.swift in Sources */,
-				0245A5B12193BF6900C5A870 /* Extensions.swift in Sources */,
+				0245A5B12193BF6900C5A870 /* String+Extensions.swift in Sources */,
 				287F107B22566465001E3B32 /* PendingFioRequestsResponse.swift in Sources */,
 				2834384D2245439B00E60314 /* sha2.c in Sources */,
 				283438512245439B00E60314 /* base58.c in Sources */,
 				287F10812256658A001E3B32 /* AvailCheckRequest.swift in Sources */,
 				0203C570217A487A0054FA10 /* AnyDecodable.swift in Sources */,
-				0203C58A217A487A0054FA10 /* EOSRPC.swift in Sources */,
 				287F106B225654D7001E3B32 /* RejectFundsRequestResponse.swift in Sources */,
 				0203C5CB217A6A6D0054FA10 /* FIOSDK.swift in Sources */,
 				0203C5D8217A71330054FA10 /* FIOError.swift in Sources */,
 				2834384A2245439B00E60314 /* rand.c in Sources */,
 				287F1090225679CE001E3B32 /* TxResultActionTrace.swift in Sources */,
 				287F10692255282D001E3B32 /* GetSentFIORequestsRequest.swift in Sources */,
-				0203C583217A487A0054FA10 /* ResourceUtil.swift in Sources */,
-				0203C584217A487A0054FA10 /* Currency.swift in Sources */,
 				0203C572217A487A0054FA10 /* AnyEncodable.swift in Sources */,
-				0203C591217A487A0054FA10 /* BigInt.swift in Sources */,
 				287F107D22566486001E3B32 /* GetPendingFIORequestsRequest.swift in Sources */,
 				0203C590217A487A0054FA10 /* Error.swift in Sources */,
 				287F107F2256654B001E3B32 /* AvailCheckResponse.swift in Sources */,
@@ -1295,7 +1119,7 @@
 					"$(inherited)",
 					"CURRENT_SCHEME=$(CURRENT_SCHEME)",
 				);
-				HEADER_SEARCH_PATHS = "FIOSDK/SwiftyEOS/Libraries/include/**";
+				HEADER_SEARCH_PATHS = "FIOSDK/External/Libraries/include/**";
 				INFOPLIST_FILE = FIOSDK/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -1327,7 +1151,7 @@
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				GCC_PREPROCESSOR_DEFINITIONS = "CURRENT_SCHEME=$(CURRENT_SCHEME)";
 				"GCC_PREPROCESSOR_DEFINITIONS[arch=*]" = "";
-				HEADER_SEARCH_PATHS = "FIOSDK/SwiftyEOS/Libraries/include/**";
+				HEADER_SEARCH_PATHS = "FIOSDK/External/Libraries/include/**";
 				INFOPLIST_FILE = FIOSDK/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = (
