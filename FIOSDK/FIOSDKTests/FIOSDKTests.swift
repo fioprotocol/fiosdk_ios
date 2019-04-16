@@ -408,7 +408,7 @@ class FIOSDKTests: XCTestCase {
                         expRejectRequest.fulfill()
                         return
                     }
-                    FIOSDK.sharedInstance().getSentFioRequest(publicAddress: toPubAdd, completion: { (response, error) in
+                    FIOSDK.sharedInstance().getSentFioRequests(publicAddress: toPubAdd, completion: { (response, error) in
                         XCTAssert(error.kind == .Success && response != nil, "testGetSentRequest couldn't retreive request")
                         guard error.kind == .Success, response != nil else {
                             XCTFail("getSentFioRequest Request should have sent fio requests")

@@ -8,9 +8,13 @@
 
 import Foundation
 
-public struct TokenPublicAddressResponse {
-    
-    public let fioAddress: String
-    public let tokenPublicAddress: String
-    
+extension FIOSDK.Responses {
+
+    public struct TokenPublicAddressResponse {
+        
+        public let fioAddress: String
+        public let tokenPublicAddress: String
+        
+    }
+
 }
