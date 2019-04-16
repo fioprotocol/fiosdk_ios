@@ -123,8 +123,15 @@ public class FIOSDK: NSObject {
         return _sharedInstance
     }
     
-    public func isFioNameValid(fioName:String) -> Bool{
-        let fullNameArr = fioName.components(separatedBy: ".")
+    public func isFioNameValid(fioName: String) -> Bool{
+        if fioName.contains(".") {
+            return isFIOAddressValid(fioName)
+        }
+        return isFIODomainValid(fioName)
+    }
+    
+    internal func isFIOAddressValid(_ address: String) -> Bool {
+        let fullNameArr = address.components(separatedBy: ".")
         
         if (fullNameArr.count != 2) {
             return false
@@ -136,7 +143,17 @@ public class FIOSDK: NSObject {
             }
         }
         
-        if (fullNameArr[0].count > 20){
+        if fullNameArr[0].count < 3 || fullNameArr[0].count > 100 {
+            return false
+        }
+        
+        return true
+    }
+    
+    internal func isFIODomainValid(_ domain: String) -> Bool {
+        if domain.isEmpty || domain.count > 50 { return false }
+        
+        if domain.range(of:"^(\\w)+(-\\w+)*$", options: .regularExpression) == nil {
             return false
         }
         

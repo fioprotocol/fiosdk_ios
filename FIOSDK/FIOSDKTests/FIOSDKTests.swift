@@ -102,7 +102,26 @@ class FIOSDKTests: XCTestCase {
         
         XCTAssert (!FIOSDK.sharedInstance().isFioNameValid(fioName: "test#!.brd"), "should be invalid")
         
-        XCTAssert (!FIOSDK.sharedInstance().isFioNameValid(fioName: "test12345678901234567.brd"), "should be invalid")
+        XCTAssert (!FIOSDK.sharedInstance().isFioNameValid(fioName: "12.brd"), "should be invalid")
+        
+        XCTAssert (FIOSDK.sharedInstance().isFioNameValid(fioName: "brd"), "should be valid")
+        
+        XCTAssert (FIOSDK.sharedInstance().isFioNameValid(fioName: "brd-brd"), "should be valid")
+        
+        XCTAssert (!FIOSDK.sharedInstance().isFioNameValid(fioName: "brd-"), "should be invalid")
+        
+        XCTAssert (!FIOSDK.sharedInstance().isFioNameValid(fioName: "-brd"), "should be invalid")
+        
+        var domainWith51Chars = ""
+        (0...50).forEach { _ in domainWith51Chars.append("1") }
+        
+        XCTAssert (!FIOSDK.sharedInstance().isFioNameValid(fioName: domainWith51Chars), "should be invalid")
+        
+        var addressWith101Chars = ""
+        (0...100).forEach { _ in addressWith101Chars.append("1") }
+        
+        XCTAssert (!FIOSDK.sharedInstance().isFioNameValid(fioName: addressWith101Chars), "should be invalid")
+        
     }
     
     func testIsAvailable(){
