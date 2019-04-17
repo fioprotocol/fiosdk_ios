@@ -35,7 +35,7 @@ internal class FIOKeyManager {
         do {
             if let fioPrivKey: String? = try? keychain.keychainItem(key: KeychainKeys.fioPrivKey),
                 let fioPubKey: String? = try? keychain.keychainItem(key: KeychainKeys.fioPubKey) {
-                if fioPrivKey != nil && fioPubKey != nil {
+                if fioPrivKey != nil && fioPubKey != nil && !fioPrivKey!.isEmpty && !fioPubKey!.isEmpty {
                     print("[FIOKeyManager] Stored FIO privkey: \(fioPrivKey!) and pubkey: \(fioPubKey!)");
                     return (fioPrivKey!, fioPubKey!)
                 }

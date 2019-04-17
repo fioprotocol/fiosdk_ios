@@ -413,7 +413,7 @@ public class FIOSDK: NSObject {
     //MARK: FIO Name Availability
     
     public func isAvailable(fioAddress:String, completion: @escaping (_ isAvailable: Bool, _ error:FIOError?) -> ()) {
-        var fioRsvp : AvailCheckResponse = AvailCheckResponse(fio_name: "", is_registered: false)
+        var fioRsvp : AvailCheckResponse = AvailCheckResponse(is_registered: false)
         
         let fioRequest = AvailCheckRequest(fio_name: fioAddress)
         var jsonData: Data
@@ -465,7 +465,7 @@ public class FIOSDK: NSObject {
     /// Pending requests call polls for any pending requests sent to a receiver. [visit api specs](https://stealth.atlassian.net/wiki/spaces/DEV/pages/53280776/API#API-/get_pending_fio_requests-GetpendingFIORequests)
     ///
     /// - Parameters:
-    ///   - fioPublicAddress: FIO public address of new owner. Has to match signature
+    ///   - fioPublicAddress: FIO public address of new owner. Has to match signature. (requestee)
     ///   - completion: Completion hanlder
     public func getPendingFioRequests(fioPublicAddress: String, completion: @escaping (_ pendingRequests: FIOSDK.Responses.PendingFioRequestsResponse?, _ error:FIOError?) -> ()) {
         let body = GetPendingFIORequestsRequest(address: fioPublicAddress)
@@ -507,7 +507,7 @@ public class FIOSDK: NSObject {
                     let newestAddresses = result.addresses.sorted(by: { (address, nextAddress) -> Bool in
                         address.expiration > nextAddress.expiration
                     })
-                    let newResult = FIOSDK.Responses.FioNamesResponse(publicAddress: result.publicAddress, domains: result.domains, addresses: newestAddresses)
+                    let newResult = FIOSDK.Responses.FioNamesResponse(domains: result.domains, addresses: newestAddresses)
                     completion(newResult, FIOError(kind: .Success, localizedDescription: ""))
                 }
                 catch {
@@ -610,16 +610,16 @@ public class FIOSDK: NSObject {
     /// Note: requestor is sender, requestee is receiver
     ///
     /// - Parameters:
-    ///   - fromFioAddress: FIO Address of user sending funds, i.e. requestor.brd
-    ///   - toFioAddress: FIO Address of user receiving funds, i.e. requestee.brd
-    ///   - publicAddress: Public address on other blockchain of user receiving funds.
+    ///   - payer: FIO Address of the payer. This address will receive the request and will initiate payment, i.e. requestor.brd
+    ///   - payee: FIO Address of the payee. This address is sending the request and will receive payment, i.e. requestee.brd
+    ///   - payeePublicAddress: Payee's public address where they want funds sent.
     ///   - amount: Amount requested.
     ///   - tokenCode: Code of the token represented in Amount requested, i.e. ETH
     ///   - metadata: Contains the: memo or hash or offlineUrl (they are mutually excludent, fill only one)
     ///   - completion: The completion handler containing the result
-    public func requestFunds(from fromFioAddress:String, to toFioAddress: String, toPublicAddress publicAddress: String, amount: Float, tokenCode: String, metadata: RequestFundsRequest.MetaData, completion: @escaping ( _ response: RequestFundsResponse?, _ error:FIOError? ) -> ()) {
+    public func requestFunds(payer payerFIOAddress:String, payee payeeFIOAddress: String, payeePublicAddress: String, amount: Float, tokenCode: String, metadata: RequestFundsRequest.MetaData, completion: @escaping ( _ response: RequestFundsResponse?, _ error:FIOError? ) -> ()) {
         let actor = AccountNameGenerator.run(withPublicKey: getSystemPublicKey())
-        let data = RequestFundsRequest(from: fromFioAddress, to: toFioAddress, toPublicAddress: publicAddress, amount: String(amount), tokenCode: tokenCode, metadata: metadata.toJSONString(), actor: actor)
+        let data = RequestFundsRequest(payerFIOAddress: payerFIOAddress, payeeFIOAddress: payeeFIOAddress, payeePublicAddress: payeePublicAddress, amount: String(amount), tokenCode: tokenCode, metadata: metadata.toJSONString(), actor: actor)
         
         signedPostRequestTo(route: ChainRoutes.newFundsRequest,
                             forAction: ChainActions.newFundsRequest,
@@ -702,33 +702,33 @@ public class FIOSDK: NSObject {
     /// Register a transaction on another blockhain (OBT: other block chain transaction), it does auto resolve from (requestor) FIO address and to (requestee) token public address. Must be called after any transaction if recordSend is not called. [visit api specs](https://stealth.atlassian.net/wiki/spaces/DEV/pages/53280776/API#API-/record_send-Recordssendonanotherblockchain)
     ///
     /// - Parameters:
-    ///     - toFIOAdd: FIO address that is receiving currency. (requestee)
-    ///     - fromPubAdd: FIO public address related to the token code being sent by from user (requestor)
-    ///     - amount: The value being sent.
-    ///     - tokenCode: Token code being transactioned. BTC, ETH, etc.
+    ///     - payeeFIOAddress: FIO Address of the payer. This address initiated payment. (requestee)
+    ///     - andPayerPublicAddress: Public address on other blockchain of user sending funds. (requestor)
+    ///     - amountSent: The value being sent.
+    ///     - forTokenCode: Token code being transactioned. BTC, ETH, etc.
     ///     - obtID: The transaction ID (OBT) representing the transaction from one blockchain to another one.
     ///     - fioReqID: The FIO request ID to register the transaction for. Only required when approving transaction request.
     ///     - memo: The note for that transaction.
     ///     - onCompletion: Once finished this callback returns optional response and error.
-    public func recordSendAutoResolvingWith(toFIOAdd: String,
-                                andFromPubAdd fromPubAdd: String,
+    public func recordSendAutoResolvingWith(payeeFIOAddress: String,
+                                andPayerPublicAddress payerPublicAddress: String,
                                 amountSent amount: Float,
                                 forTokenCode tokenCode: String,
                                 obtID: String,
                                 fioReqID: String? = nil,
                                 memo: String,
                                 onCompletion: @escaping (_ response: FIOSDK.Responses.RecordSendResponse?, _ error: FIOError?) -> ()) {
-        FIOSDK.sharedInstance().getFioNames(publicAddress: fromPubAdd) { (response, error) in
-            guard error == nil || error?.kind == .Success, let fromAdd = response?.addresses.first?.address else {
+        FIOSDK.sharedInstance().getFioNames(publicAddress: payerPublicAddress) { (response, error) in
+            guard error == nil || error?.kind == .Success, let payerFIOAddress = response?.addresses.first?.address else {
                 onCompletion(nil, error ?? FIOError.failure(localizedDescription: "[FIO SDK] Failed to send record."))
                     return
             }
-            FIOSDK.sharedInstance().getPublicAddress(fioAddress: toFIOAdd, tokenCode: tokenCode) { (response, error) in
-                guard error.kind == .Success, let toPubAdd = response?.publicAddress else {
+            FIOSDK.sharedInstance().getPublicAddress(fioAddress: payeeFIOAddress, tokenCode: tokenCode) { (response, error) in
+                guard error.kind == .Success, let payeePublicAddress = response?.publicAddress else {
                     onCompletion(nil, error)
                     return
                 }
-                FIOSDK.sharedInstance().recordSend(fioReqID: fioReqID, fromFIOAdd: fromAdd, toFIOAdd: toFIOAdd, fromPubAdd: fromPubAdd, toPubAdd: toPubAdd, amount: amount, fromTokenCode: tokenCode, toTokenCode: tokenCode, obtID: obtID, memo: memo, onCompletion: onCompletion)
+                FIOSDK.sharedInstance().recordSend(fioReqID: fioReqID, payerFIOAddress: payerFIOAddress, payeeFIOAddress: payeeFIOAddress, payerPublicAddress: payerPublicAddress, payeePublicAddress: payeePublicAddress, amount: amount, tokenCode: tokenCode, obtID: obtID, memo: memo, onCompletion: onCompletion)
             }
         }
     }
@@ -737,10 +737,10 @@ public class FIOSDK: NSObject {
     ///
     /// - Parameters:
     ///     - fioReqID: The FIO request ID to register the transaction for. Only required when approving transaction request.
-    ///     - fromFIOAdd: FIO address that is sending currency. (requestor)
-    ///     - toFIOAdd: FIO address that is receiving currency. (requestee)
-    ///     - fromPubAdd: FIO public address related to the token code being sent by from user (requestor)
-    ///     - toPubAdd: FIO public address related to the token code being received by to user (requestee)
+    ///     - payerFIOAddress: FIO Address of the payer. This address initiated payment. (requestor)
+    ///     - payeeFIOAddress: FIO Address of the payee. This address is receiving payment. (requestee)
+    ///     - payerPublicAddress: Public address on other blockchain of user sending funds. (requestor)
+    ///     - payeePublicAddress: Public address on other blockchain of user receiving funds. (requestee)
     ///     - amount: The value being sent.
     ///     - fromTokenCode: Token code being sent. BTC, ETH, etc.
     ///     - toTokenCode: Token code being received. BTC, ETH, etc.
@@ -748,19 +748,17 @@ public class FIOSDK: NSObject {
     ///     - memo: A note for that transaction.
     ///     - onCompletion: Once finished this callback returns optional response and error.
     public func recordSend(fioReqID: String? = nil,
-                           fromFIOAdd: String,
-                           toFIOAdd: String,
-                           fromPubAdd: String,
-                           toPubAdd: String,
+                           payerFIOAddress: String,
+                           payeeFIOAddress: String,
+                           payerPublicAddress: String,
+                           payeePublicAddress: String,
                            amount: Float,
-                           fromTokenCode: String,
-                           toTokenCode: String,
+                           tokenCode: String,
                            obtID: String,
                            memo: String,
                            onCompletion: @escaping (_ response: FIOSDK.Responses.RecordSendResponse?, _ error: FIOError?) -> ()){
         let actor = AccountNameGenerator.run(withPublicKey: getSystemPublicKey())
-        let recordSend = RecordSend(fioReqID: fioReqID, fromFIOAdd: fromFIOAdd, toFIOAdd: toFIOAdd, fromPubAdd: fromPubAdd, toPubAdd: toPubAdd, amount: amount, tokenCode: fromTokenCode, chainCode: toTokenCode, status: "sent_to_blockchain", obtID: obtID, memo: memo)
-        let request = RecordSendRequest(recordSend: recordSend.toJSONString(), actor: actor)
+        let request = RecordSendRequest(fioReqID: fioReqID, payerFIOAddress: payerFIOAddress, payeeFIOAddress: payeeFIOAddress, payerPublicAddress: payerPublicAddress, payeePublicAddress: payeePublicAddress, amount: amount, tokenCode: tokenCode, status: "sent_to_blockchain", obtID: obtID, memo: memo, actor: actor)
         signedPostRequestTo(route: ChainRoutes.recordSend,
                             forAction: ChainActions.recordSend,
                             withBody: request,
@@ -815,15 +813,19 @@ public class FIOSDK: NSObject {
     
     /// Transfers FIO tokens. [visit API specs](https://stealth.atlassian.net/wiki/spaces/DEV/pages/53280776/API#API-/transfer_tokens-TransferFIOtokens)
     /// - Parameters:
-    ///     - toFIOPublicAddress: The FIO public address that will receive funds.
+    ///     - payeePublicAddress: The FIO public address that will receive funds.
     ///     - amount: The value that will be transfered from the calling account to the especified account.
     ///     - completion: A function that is called once request is over with an optional response with results and error containing the status of the call.
-    public func transferFIOTokens(toFIOPublicAddress: String, amount: Float, completion: @escaping (_ response: FIOSDK.Responses.TransferFIOTokensResponse?, _ error: FIOError) -> ()){
+    public func transferFIOTokens(payeePublicAddress: String, amount: Float, completion: @escaping (_ response: FIOSDK.Responses.TransferFIOTokensResponse?, _ error: FIOError) -> ()){
         let actor = AccountNameGenerator.run(withPublicKey: getSystemPublicKey())
-        var transferAmount = String(amount)
-        var places = decimalsFIO - transferAmount.split(separator: ".")[1].count
+        let numberFormatter = NumberFormatter()
+        numberFormatter.numberStyle = NumberFormatter.Style.decimal
+        var transferAmount = numberFormatter.string(from: NSNumber(value: amount))!
+        var places = decimalsFIO - (transferAmount.contains(".") ? transferAmount.split(separator: ".")[1].count : 0)
+        if places == 4 { transferAmount.append(".") }
         for _ in 0..<places { transferAmount.append("0") }
-        let transfer = TransferFIOTokensRequest(amount: transferAmount, actor: actor, toFIOPubAdd: toFIOPublicAddress)
+        transferAmount = transferAmount.replacingOccurrences(of: ",", with: "")
+        let transfer = TransferFIOTokensRequest(amount: transferAmount, actor: actor, payeePublicAddress: payeePublicAddress)
         signedPostRequestTo(route: ChainRoutes.transferTokens,
                             forAction: ChainActions.transferTokens,
                             withBody: transfer,

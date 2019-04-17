@@ -16,7 +16,7 @@ public struct RequestFundsResponse: Codable {
     public let fioreqid: Int //TODO: Change it back to String if Ed confirm it should be String
     
     enum CodingKeys: String, CodingKey {
-        case fioreqid
+        case fioreqid = "fio_request_id"
     }
     
     init(fioreqid: Int) {

@@ -12,12 +12,12 @@ internal struct TransferFIOTokensRequest: Codable {
     
     let amount: String
     let actor: String
-    let toFIOPubAdd: String
+    let payeePublicAddress: String
     
     enum CodingKeys: String, CodingKey {
         case amount = "amount"
         case actor = "actor"
-        case toFIOPubAdd = "tofiopubadd"
+        case payeePublicAddress = "payee_public_address"
     }
     
 }

@@ -13,7 +13,7 @@ internal struct GetSentFIORequestsRequest: Codable {
     public let address: String
     
     enum CodingKeys: String, CodingKey{
-        case address = "fiopubadd"
+        case address = "fio_public_address"
     }
     
 }

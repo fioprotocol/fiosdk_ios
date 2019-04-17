@@ -17,9 +17,9 @@ internal struct AddPublicAddress: Codable {
     let actor: String
     
     enum CodingKeys: String, CodingKey {
-        case fioAddress    = "fioaddress"
-        case tokenCode     = "tokencode"
-        case publicAddress = "pubaddress"
+        case fioAddress    = "fio_address"
+        case tokenCode     = "token_code"
+        case publicAddress = "public_address"
         case actor
     }
     

@@ -13,12 +13,10 @@ extension FIOSDK.Responses {
     /// DTO to represent the response of /get_fio_names
     public struct FioNamesResponse: Codable {
         
-        public let publicAddress: String
         public let domains: [FioDomainResponse]
         public let addresses: [FioAddressResponse]
         
         enum CodingKeys: String, CodingKey {
-            case publicAddress = "fio_pub_address"
             case domains = "fio_domains"
             case addresses = "fio_addresses"
         }

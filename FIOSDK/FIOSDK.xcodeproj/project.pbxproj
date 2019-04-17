@@ -80,7 +80,6 @@
 		287F105E22552432001E3B32 /* TransferFIOTokensResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 287F105D22552432001E3B32 /* TransferFIOTokensResponse.swift */; };
 		287F1061225524DB001E3B32 /* RecordSendRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 287F1060225524DB001E3B32 /* RecordSendRequest.swift */; };
 		287F106322552543001E3B32 /* RecordSendResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 287F106222552543001E3B32 /* RecordSendResponse.swift */; };
-		287F1065225527D1001E3B32 /* RecordSend.swift in Sources */ = {isa = PBXBuildFile; fileRef = 287F1064225527D0001E3B32 /* RecordSend.swift */; };
 		287F106722552809001E3B32 /* SentFioRequestResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 287F106622552809001E3B32 /* SentFioRequestResponse.swift */; };
 		287F10692255282D001E3B32 /* GetSentFIORequestsRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 287F10682255282D001E3B32 /* GetSentFIORequestsRequest.swift */; };
 		287F106B225654D7001E3B32 /* RejectFundsRequestResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 287F106A225654D7001E3B32 /* RejectFundsRequestResponse.swift */; };
@@ -211,7 +210,6 @@
 		287F105D22552432001E3B32 /* TransferFIOTokensResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransferFIOTokensResponse.swift; sourceTree = "<group>"; };
 		287F1060225524DB001E3B32 /* RecordSendRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordSendRequest.swift; sourceTree = "<group>"; };
 		287F106222552543001E3B32 /* RecordSendResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordSendResponse.swift; sourceTree = "<group>"; };
-		287F1064225527D0001E3B32 /* RecordSend.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordSend.swift; sourceTree = "<group>"; };
 		287F106622552809001E3B32 /* SentFioRequestResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SentFioRequestResponse.swift; sourceTree = "<group>"; };
 		287F10682255282D001E3B32 /* GetSentFIORequestsRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetSentFIORequestsRequest.swift; sourceTree = "<group>"; };
 		287F106A225654D7001E3B32 /* RejectFundsRequestResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RejectFundsRequestResponse.swift; sourceTree = "<group>"; };
@@ -595,7 +593,6 @@
 			children = (
 				287F1060225524DB001E3B32 /* RecordSendRequest.swift */,
 				287F106222552543001E3B32 /* RecordSendResponse.swift */,
-				287F1064225527D0001E3B32 /* RecordSend.swift */,
 			);
 			path = RecordSend;
 			sourceTree = "<group>";
@@ -884,7 +881,6 @@
 				287F1087225673EB001E3B32 /* RegisterName.swift in Sources */,
 				287F106D22565578001E3B32 /* RejectFundsRequest.swift in Sources */,
 				287F107922565999001E3B32 /* GetFIONamesRequest.swift in Sources */,
-				287F1065225527D1001E3B32 /* RecordSend.swift in Sources */,
 				28BB8B642257938A0049A761 /* KeychainKeys.swift in Sources */,
 				283438492245439B00E60314 /* uECC.c in Sources */,
 				0203C58D217A487A0054FA10 /* PublicKey.swift in Sources */,
