@@ -1,5 +1,5 @@
 //
-//  FioNamesResponse.swift
+//  FIONamesResponse.swift
 //  FIOSDK
 //
 //  Created by Vitor Navarro on 2019-04-04.
@@ -11,17 +11,17 @@ import Foundation
 extension FIOSDK.Responses {
 
     /// DTO to represent the response of /get_fio_names
-    public struct FioNamesResponse: Codable {
+    public struct FIONamesResponse: Codable {
         
-        public let domains: [FioDomainResponse]
-        public let addresses: [FioAddressResponse]
+        public let domains: [FIODomainResponse]
+        public let addresses: [FIOAddressResponse]
         
         enum CodingKeys: String, CodingKey {
             case domains = "fio_domains"
             case addresses = "fio_addresses"
         }
         
-        public struct FioDomainResponse: Codable{
+        public struct FIODomainResponse: Codable{
             public let domain: String
             private let _expiration: String
             
@@ -37,7 +37,7 @@ extension FIOSDK.Responses {
         
     }
 
-    public struct FioAddressResponse: Codable{
+    public struct FIOAddressResponse: Codable{
         public let address: String
         private let _expiration: String
         

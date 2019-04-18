@@ -1,5 +1,5 @@
 //
-//  PendingFioRequestsResponse.swift
+//  PendingFIORequestsResponse.swift
 //  FIOSDK
 //
 //  Created by Vitor Navarro on 2019-04-04.
@@ -11,16 +11,16 @@ import Foundation
 extension FIOSDK.Responses {
 
     /// getPendingFioRequest DTO response
-    public struct PendingFioRequestsResponse: Codable {
+    public struct PendingFIORequestsResponse: Codable {
         
-        public let requests: [PendingFioRequest]
+        public let requests: [PendingFIORequestResponse]
         
         enum CodingKeys: String, CodingKey{
             case requests
         }
         
         /// PendingFioRequestsResponse.request DTO
-        public struct PendingFioRequest: Codable {
+        public struct PendingFIORequestResponse: Codable {
             
             public var fundsRequestId: String {
                 return String(fioreqid)
@@ -83,10 +83,10 @@ extension FIOSDK.Responses {
                 if let timeStampDouble = timeStampValue {
                     timeStamp = TimeInterval(timeStampDouble)
                 }
-                var metadata = PendingFioRequest.MetaData(memo: "")
+                var metadata = PendingFIORequestResponse.MetaData(memo: "")
                 let metadataString = try container.decodeIfPresent(String.self, forKey: .metadata)
                 if let metadataData = metadataString?.data(using: .utf8) {
-                    metadata = try JSONDecoder().decode(PendingFioRequest.MetaData.self, from: metadataData)
+                    metadata = try JSONDecoder().decode(PendingFIORequestResponse.MetaData.self, from: metadataData)
                 }
                 
                 self.init(fioreqid: fioreqid,

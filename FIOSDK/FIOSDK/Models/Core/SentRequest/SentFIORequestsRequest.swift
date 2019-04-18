@@ -1,5 +1,5 @@
 //
-//  GetSentFIORequestsRequest.swift
+//  SentFIORequestsRequest.swift
 //  FIOSDK
 //
 //  Created by Vitor Navarro on 2019-04-03.
@@ -8,7 +8,7 @@
 
 import Foundation
 
-internal struct GetSentFIORequestsRequest: Codable {
+internal struct SentFIORequestsRequest: Codable {
     
     public let address: String
     

@@ -1,5 +1,5 @@
 //
-//  PublicAddressLookupRequest.swift
+//  PublicAddressRequest.swift
 //  FIOSDK
 //
 //  Created by Vitor Navarro on 2019-04-04.
@@ -8,7 +8,7 @@
 
 import Foundation
 
-internal struct PublicAddressLookupRequest: Codable {
+internal struct PublicAddressRequest: Codable {
     
     public let fioAddress: String
     public let tokenCode: String

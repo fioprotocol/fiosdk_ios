@@ -1,5 +1,5 @@
 //
-//  SentFIORequestRespose.swift
+//  SentFIORequestsResponse.swift
 //  FIOSDK
 //
 //  Created by Vitor Navarro on 2019-04-03.
@@ -10,16 +10,16 @@ import Foundation
 
 extension FIOSDK.Responses {
 
-    public struct SentFioRequestResponse: Codable {
+    public struct SentFIORequestsResponse: Codable {
         
-        public let requests: [SentFioRequest]
+        public let requests: [SentFIORequestResponse]
         
         enum CodingKeys: String, CodingKey {
             case requests
         }
         
         /// PendingFioRequestsResponse.request DTO
-        public struct SentFioRequest: Codable {
+        public struct SentFIORequestResponse: Codable {
             
             public var fundsRequestId: String {
                 return String(fioreqid)
@@ -82,10 +82,10 @@ extension FIOSDK.Responses {
                 let amount = try container.decodeIfPresent(String.self, forKey: .amount) ?? ""
                 let tokenCode = try container.decodeIfPresent(String.self, forKey: .tokenCode) ?? ""
                 let timeStamp = try container.decodeIfPresent(TimeInterval.self, forKey: .timeStamp) ?? Date().timeIntervalSince1970
-                var metadata = SentFioRequest.MetaData(memo: "")
+                var metadata = SentFIORequestResponse.MetaData(memo: "")
                 let metadataString = try container.decodeIfPresent(String.self, forKey: .metadata)
                 if let metadataData = metadataString?.data(using: .utf8) {
-                    metadata = try JSONDecoder().decode(SentFioRequest.MetaData.self, from: metadataData)
+                    metadata = try JSONDecoder().decode(SentFIORequestResponse.MetaData.self, from: metadataData)
                 }
                 let status = try container.decodeIfPresent(String.self, forKey: .status) ?? ""
                 

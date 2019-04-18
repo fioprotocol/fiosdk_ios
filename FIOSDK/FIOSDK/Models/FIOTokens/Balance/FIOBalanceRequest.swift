@@ -1,5 +1,5 @@
 //
-//  GetFIOBalanceRequest.swift
+//  FIOBalanceRequest.swift
 //  FIOSDK
 //
 //  Created by Vitor Navarro on 2019-04-02.
@@ -8,7 +8,7 @@
 
 import Foundation
 
-internal struct GetFIOBalanceRequest: Codable {
+internal struct FIOBalanceRequest: Codable {
     
     let fioPubAddress: String
     

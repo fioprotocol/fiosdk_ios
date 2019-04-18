@@ -1,5 +1,5 @@
 //
-//  GetFIOBalanceResponse.swift
+//  FIOBalanceResponse.swift
 //  FIOSDK
 //
 //  Created by Vitor Navarro on 2019-04-02.
@@ -10,7 +10,7 @@ import Foundation
 
 extension FIOSDK.Responses {
 
-    public struct GetFIOBalanceResponse: Codable {
+    public struct FIOBalanceResponse: Codable {
         
         public let balance: String
         
