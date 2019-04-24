@@ -80,4 +80,15 @@ public class BaseFIOSDK: NSObject {
         return self.publicKey
     }
     
+    //MARK: - Chain Info
+    
+    internal func chainInfo(completion: @escaping (_ result: ChainInfo?, _ error: Error?) -> ()) {
+        FIOHTTPHelper.rpcPostRequestTo(ChainRouteBuilder.build(route: ChainRoutes.getInfo), withBody: nil as String?,  onCompletion: completion)
+    }
+    
+    internal func getBlock(blockNumOrId: AnyObject, completion: @escaping (_ result: BlockInfo?, _ error: Error?) -> ()) {
+        let body = ["block_num_or_id": "\(blockNumOrId)"]
+        FIOHTTPHelper.rpcPostRequestTo(ChainRouteBuilder.build(route: ChainRoutes.getBlock), withBody: body, onCompletion: completion)
+    }
+    
 }

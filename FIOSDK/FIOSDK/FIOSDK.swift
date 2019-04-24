@@ -116,18 +116,6 @@ public class FIOSDK: BaseFIOSDK {
         try keyManager.wipeKeys()
     }
     
-    
-    //MARK: - Chain Info
-    
-    internal func chainInfo(completion: @escaping (_ result: ChainInfo?, _ error: Error?) -> ()) {
-        FIOHTTPHelper.rpcPostRequestTo(ChainRouteBuilder.build(route: ChainRoutes.getInfo), withBody: nil as String?,  onCompletion: completion)
-    }
-    
-    internal func getBlock(blockNumOrId: AnyObject, completion: @escaping (_ result: BlockInfo?, _ error: Error?) -> ()) {
-        let body = ["block_num_or_id": "\(blockNumOrId)"]
-        FIOHTTPHelper.rpcPostRequestTo(ChainRouteBuilder.build(route: ChainRoutes.getBlock), withBody: body, onCompletion: completion)
-    }
-    
     //MARK: - Register FIO Name request
     
     /**
@@ -168,12 +156,12 @@ public class FIOSDK: BaseFIOSDK {
             var anyFail = false
         
             let group = DispatchGroup()
-            var operations: [AddPubAddressOperation] = []
+            var operations: [AddPublicAddressOperation] = []
             var index = 0
             for (chain, receiveAddress) in addresses {
                 if self.pubAddressTokenFilter[chain.lowercased()] != nil { continue }
                 group.enter()
-                let operation = AddPubAddressOperation(action: { operation in
+                let operation = AddPublicAddressOperation(action: { operation in
                     self.addPublicAddress(fioAddress: fioName, chain: chain, publicAddress: receiveAddress, completion: { (error) in
                         anyFail = error?.kind == .Failure
                         group.leave()

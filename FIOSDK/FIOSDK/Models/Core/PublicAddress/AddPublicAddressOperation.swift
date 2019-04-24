@@ -1,5 +1,5 @@
 //
-//  AddPubAddressOperation.swift
+//  AddPublicAddressOperation.swift
 //  FIOSDK
 //
 //  Created by Vitor Navarro on 2019-04-04.
@@ -8,15 +8,15 @@
 
 import Foundation
 
-internal class AddPubAddressOperation {
+internal class AddPublicAddressOperation {
     
-    typealias AddPubAdddressOperationAction = (_ operation: AddPubAddressOperation) -> Void
+    typealias AddPublicAdddressOperationAction = (_ operation: AddPublicAddressOperation) -> Void
     
-    var action: AddPubAdddressOperationAction!
-    var operations: [AddPubAddressOperation]!
+    var action: AddPublicAdddressOperationAction!
+    var operations: [AddPublicAddressOperation]!
     var index: Int!
     
-    init(action: @escaping AddPubAdddressOperationAction, index: Int) {
+    init(action: @escaping AddPublicAdddressOperationAction, index: Int) {
         self.action = action
         self.index = index
     }

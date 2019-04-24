@@ -95,7 +95,7 @@
 		287F107F2256654B001E3B32 /* AvailCheckResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 287F107E2256654B001E3B32 /* AvailCheckResponse.swift */; };
 		287F10812256658A001E3B32 /* AvailCheckRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 287F10802256658A001E3B32 /* AvailCheckRequest.swift */; };
 		287F108322566813001E3B32 /* AddPublicAddress.swift in Sources */ = {isa = PBXBuildFile; fileRef = 287F108222566813001E3B32 /* AddPublicAddress.swift */; };
-		287F1085225673CF001E3B32 /* AddPubAddressOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 287F1084225673CF001E3B32 /* AddPubAddressOperation.swift */; };
+		287F1085225673CF001E3B32 /* AddPublicAddressOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 287F1084225673CF001E3B32 /* AddPublicAddressOperation.swift */; };
 		287F1087225673EB001E3B32 /* RegisterName.swift in Sources */ = {isa = PBXBuildFile; fileRef = 287F1086225673EB001E3B32 /* RegisterName.swift */; };
 		287F1089225676B1001E3B32 /* JSONSerialization.swift in Sources */ = {isa = PBXBuildFile; fileRef = 287F1088225676B1001E3B32 /* JSONSerialization.swift */; };
 		287F108C22567729001E3B32 /* TxResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 287F108B22567729001E3B32 /* TxResult.swift */; };
@@ -227,7 +227,7 @@
 		287F107E2256654B001E3B32 /* AvailCheckResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AvailCheckResponse.swift; sourceTree = "<group>"; };
 		287F10802256658A001E3B32 /* AvailCheckRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AvailCheckRequest.swift; sourceTree = "<group>"; };
 		287F108222566813001E3B32 /* AddPublicAddress.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddPublicAddress.swift; sourceTree = "<group>"; };
-		287F1084225673CF001E3B32 /* AddPubAddressOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddPubAddressOperation.swift; sourceTree = "<group>"; };
+		287F1084225673CF001E3B32 /* AddPublicAddressOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddPublicAddressOperation.swift; sourceTree = "<group>"; };
 		287F1086225673EB001E3B32 /* RegisterName.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterName.swift; sourceTree = "<group>"; };
 		287F1088225676B1001E3B32 /* JSONSerialization.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSONSerialization.swift; sourceTree = "<group>"; };
 		287F108B22567729001E3B32 /* TxResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TxResult.swift; sourceTree = "<group>"; };
@@ -558,7 +558,7 @@
 				287F107222565902001E3B32 /* PublicAddressResponse.swift */,
 				287F10742256591C001E3B32 /* PublicAddressRequest.swift */,
 				287F108222566813001E3B32 /* AddPublicAddress.swift */,
-				287F1084225673CF001E3B32 /* AddPubAddressOperation.swift */,
+				287F1084225673CF001E3B32 /* AddPublicAddressOperation.swift */,
 				2856D26E225CC90800BC5D36 /* TokenPublicAddressResponse.swift */,
 			);
 			path = PublicAddress;
@@ -881,7 +881,7 @@
 				287F1061225524DB001E3B32 /* RecordSendRequest.swift in Sources */,
 				287F108E225679B6001E3B32 /* TxResultProcessed.swift in Sources */,
 				287F10532253DAC0001E3B32 /* FIOBalanceResponse.swift in Sources */,
-				287F1085225673CF001E3B32 /* AddPubAddressOperation.swift in Sources */,
+				287F1085225673CF001E3B32 /* AddPublicAddressOperation.swift in Sources */,
 				287F106322552543001E3B32 /* RecordSendResponse.swift in Sources */,
 				2834384F2245439B00E60314 /* bip39.c in Sources */,
 				287F1087225673EB001E3B32 /* RegisterName.swift in Sources */,
