@@ -10,6 +10,7 @@ import Foundation
 
 internal enum ChainRoutes: String {
     
+    case availCheck             = "/chain/avail_check"
     case serializeJSON          = "/chain/serialize_json"
     case registerFIOName        = "/chain/register_fio_name"
     case newFundsRequest        = "/chain/new_funds_request"

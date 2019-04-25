@@ -10,20 +10,20 @@ import Foundation
 
 public struct RequestFundsRequest: Codable {
     
-    public let from: String
-    public let to: String
-    public let toPublicAddress: String
+    public let payerFIOAddress: String
+    public let payeeFIOAddress: String
+    public let payeePublicAddress: String
     public let amount: String
     public let tokenCode: String
     public let metadata: String
     public let actor: String
     
     enum CodingKeys: String, CodingKey{
-        case from = "fromfioadd"
-        case to = "tofioadd"
-        case toPublicAddress = "topubadd"
+        case payerFIOAddress = "payer_fio_address"
+        case payeeFIOAddress = "payee_fio_address"
+        case payeePublicAddress = "payee_public_address"
         case amount
-        case tokenCode = "tokencode"
+        case tokenCode = "token_code"
         case metadata
         case actor
     }

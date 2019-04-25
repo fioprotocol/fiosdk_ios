@@ -10,6 +10,7 @@ import Foundation
 
 extension FIOSDK.Responses {
 
+    /// The response object for getTokenPublicAddress function, contains the requested public address for a given token code.
     public struct TokenPublicAddressResponse {
         
         public let fioAddress: String

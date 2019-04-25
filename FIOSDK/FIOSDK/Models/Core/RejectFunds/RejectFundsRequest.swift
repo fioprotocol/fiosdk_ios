@@ -14,7 +14,7 @@ internal struct RejectFundsRequest: Codable {
     var actor: String
     
     enum CodingKeys: String, CodingKey {
-        case fioReqID = "fioreqid"
+        case fioReqID = "fio_request_id"
         case actor
     }
     

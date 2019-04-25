@@ -1,5 +1,5 @@
 //
-//  GetFioNamesRequest.swift
+//  FIONamesRequest.swift
 //  FIOSDK
 //
 //  Created by Vitor Navarro on 2019-04-04.
@@ -8,12 +8,12 @@
 
 import Foundation
 
-internal struct GetFIONamesRequest: Codable {
+internal struct FIONamesRequest: Codable {
     
     public let fioPubAddress: String
     
     enum CodingKeys: String, CodingKey {
-        case fioPubAddress = "fio_pub_address"
+        case fioPubAddress = "fio_public_address"
     }
     
 }

@@ -14,7 +14,7 @@ internal struct RegisterName: Codable {
     let actor:String
     
     enum CodingKeys: String, CodingKey {
-        case fioName = "fioname"
+        case fioName = "fio_name"
         case actor = "actor"
     }
     

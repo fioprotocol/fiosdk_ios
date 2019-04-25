@@ -10,7 +10,6 @@ import Foundation
 
 internal struct AvailCheckResponse: Codable {
     
-    let fio_name: String
     let is_registered: Bool
     
 }

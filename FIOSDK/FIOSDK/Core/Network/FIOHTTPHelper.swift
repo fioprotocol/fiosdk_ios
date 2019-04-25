@@ -9,8 +9,6 @@
 import Foundation
 
 internal struct FIOHTTPHelper {
-    
-    private static let errorDomain = "FIOSDKDomain"
 
     private static func bodyFromJson<J: Encodable>(_ json: J?) -> Data? {
         guard let json = json else { return nil }
@@ -38,7 +36,7 @@ internal struct FIOHTTPHelper {
     static func rpcPostRequestTo<T: Codable, J: Encodable>(_ fullUrl: String, withBody json: J?, onCompletion: @escaping (_ result: T?, _ error: Error?) -> ()) {
 
         guard let request = request(url: fullUrl, method: .post, body: bodyFromJson(json)) else {
-            onCompletion(nil, FIOError(kind: .MalformedURL, localizedDescription: "[FIOSDK] Failed to post request to \(fullUrl)"))
+            onCompletion(nil, FIOError(kind: .MalformedURL, localizedDescription: "Failed to post request to \(fullUrl)"))
             return
         }
         
@@ -47,7 +45,7 @@ internal struct FIOHTTPHelper {
             
             DispatchQueue.main.async {
                 guard let data = data, error == nil else {
-                    onCompletion(nil, NSError(domain: errorDomain, code: 1,
+                    onCompletion(nil, NSError(domain: Constants.errorDomain, code: 1,
                                             userInfo: [NSLocalizedDescriptionKey: "Networking error \(String(describing: error)) \(String(describing: response))"]))
                     return
                 }
@@ -62,11 +60,11 @@ internal struct FIOHTTPHelper {
                 }
                 guard let responseObject = try? decoder.decode(T.self, from: data) else {
                     guard let errorResponse = try? decoder.decode(RPCErrorResponse.self, from: data) else {
-                        onCompletion(nil, NSError(domain: errorDomain, code: 1, userInfo: [NSLocalizedDescriptionKey: "Decoding error \(String(describing: error))"]))
+                        onCompletion(nil, NSError(domain: Constants.errorDomain, code: 1, userInfo: [NSLocalizedDescriptionKey: "Decoding error \(String(describing: error))"]))
                         return
                     }
                     let userInfo = [RPCErrorResponse.ErrorKey: errorResponse]
-                    onCompletion(nil, NSError(domain: errorDomain, code: RPCErrorResponse.ErrorCode, userInfo: userInfo))
+                    onCompletion(nil, NSError(domain: Constants.errorDomain, code: RPCErrorResponse.ErrorCode, userInfo: userInfo))
                     return
                 }
                 onCompletion(responseObject, error)
@@ -94,7 +92,7 @@ internal struct FIOHTTPHelper {
             DispatchQueue.main.async {
                 guard let data = data, error == nil else {
                     if let message = error?.localizedDescription {
-                        onCompletion(nil, FIOError(kind: .Failure, localizedDescription: message))
+                        onCompletion(nil, FIOError.failure(localizedDescription: message))
                     }
                     else {
                         onCompletion(nil, FIOError(kind: .NoDataReturned, localizedDescription: "No data"))
@@ -104,13 +102,13 @@ internal struct FIOHTTPHelper {
                 let httpResponse = response as? HTTPURLResponse
                 guard let statusCode = httpResponse?.statusCode, statusCode >= 200, statusCode < 400 else {
                     guard let errorResponse = try? JSONDecoder().decode(FIOHTTPErrorResponse.self, from: data) else {
-                        onCompletion(nil, FIOError(kind: .Failure, localizedDescription: String(format: "Failed with code: %d", httpResponse?.statusCode ?? -1)))
+                        onCompletion(nil, FIOError.failure(localizedDescription: String(format: "Failed with code: %d", httpResponse?.statusCode ?? -1)))
                         return
                     }
-                    onCompletion(nil, FIOError(kind: .Failure, localizedDescription: errorResponse.toString()))
+                    onCompletion(nil, FIOError.failure(localizedDescription: errorResponse.toString()))
                     return
                 }
-                onCompletion(data, FIOError(kind: .Success, localizedDescription: ""))
+                onCompletion(data, FIOError.success())
             }
         }
         

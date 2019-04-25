@@ -12,11 +12,9 @@ extension FIOSDK.Responses {
 
     public struct RejectFundsRequestResponse: Codable {
         
-        public let fioReqID: String
         public let status: Status
         
         enum CodingKeys: String, CodingKey {
-            case fioReqID = "fioreqid"
             case status
         }
         
