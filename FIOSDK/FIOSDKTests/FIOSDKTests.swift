@@ -53,9 +53,7 @@ class FIOSDKTests: XCTestCase {
     override func setUp() {
         // Put setup code here. This method is called before the invocation of each test method in the class.
         
-        let timestamp = NSDate().timeIntervalSince1970
-        requesteeFioName = "sha\(Int(timestamp.rounded())).brd"
-        requestorFioName = "bar\(Int(timestamp.rounded())).brd"
+        
         
         if (useStaging){
             let keyPair = FIOSDK.privatePubKeyPair(forMnemonic: defaultMnemonic)
@@ -65,30 +63,35 @@ class FIOSDKTests: XCTestCase {
         else{
             _ = FIOSDK.sharedInstance(accountName: accountName,  privateKey: privateKey, publicKey: publicKey, systemPrivateKey: "", systemPublicKey: "", url: url)
         }
+
+        registerDefaultUsers()
+    }
+    
+    override func tearDown() {
+        // Put teardown code here. This method is called after the invocation of each test method in the class.
+    }
+    
+    func registerDefaultUsers() {
+        let timestamp = NSDate().timeIntervalSince1970
+        requesteeFioName = "sha\(Int(timestamp.rounded())).brd"
+        requestorFioName = "bar\(Int(timestamp.rounded())).brd"
         
-
         let expectation = XCTestExpectation(description: "testRegisterFIOName")
-
+        
         FIOSDK.sharedInstance().registerFioName(fioName: requesteeFioName, publicReceiveAddresses: [:] , completion: {error in ()
             XCTAssert((error?.kind == FIOError.ErrorKind.Success), "registerFIOName NOT SUCCESSFUL")
             print (self.requesteeFioName)
-
+            
             FIOSDK.sharedInstance().registerFioName(fioName: self.requestorFioName,publicReceiveAddresses: [:], completion: {error in ()
                 XCTAssert((error?.kind == FIOError.ErrorKind.Success), "registerFIOName NOT SUCCESSFUL" + (error?.localizedDescription ?? "") )
                 print(error)
                 print(self.requestorFioName)
                 expectation.fulfill()
             })
-
+            
         })
         
         wait(for: [expectation], timeout: TIMEOUT)
-
-
-    }
-    
-    override func tearDown() {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
     }
     
     //MARK: -
@@ -303,6 +306,7 @@ class FIOSDKTests: XCTestCase {
         wait(for: [expectation], timeout: TIMEOUT)
     }
     
+    //THere is something with the ordering after register fio name that is not right, maybe my ordering is not right
     func testGetTokenPublicAddressWithValidPubAddressShouldSucceed() {
         let expectation = XCTestExpectation(description: "testGetTokenPublicAddressWithValidPubAddressShouldSucceed")
         
@@ -694,6 +698,21 @@ class FIOSDKTests: XCTestCase {
         XCTAssert(!keys.privateKey.isEmpty && !keys.publicKey.isEmpty)
         keys = FIOSDK.privatePubKeyPair(forMnemonic: defaultMnemonic)
         XCTAssert(!keys.privateKey.isEmpty && !keys.publicKey.isEmpty)
+    }
+    
+    func testRegisterFIONameOnBehalfOfUserShouldReturnSucess() {
+        let expectation = XCTestExpectation(description: "registerFIONameOnBehalfOfUserShouldReturnSucess")
+        
+        let timestamp = NSDate().timeIntervalSince1970
+        let fioName = "test\(Int(timestamp.rounded())).brd"
+        let publicKey = "EOS8PRe4WRZJj5mkem6qVGKyvNFgPsNnjNN6kPhh6EaCpzCVin5Jj"
+        
+        FIOSDK.sharedInstance().registerFIONameOnBehalfOfUser(fioName: fioName, publicKey: publicKey) { (response, error) in
+            XCTAssert((error?.kind == FIOError.ErrorKind.Success), "FIO Name: \(error?.localizedDescription)")
+            expectation.fulfill()
+        }
+        
+        wait(for: [expectation], timeout: TIMEOUT)
     }
     
 }

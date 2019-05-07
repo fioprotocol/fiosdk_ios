@@ -25,6 +25,11 @@ internal class FIOKeyManager {
         self.init(keychainInteractor: KeychainInteractor())
     }
     
+    func publicKey() -> String? {
+        let pubKey: String? = try? keychain.keychainItem(key: KeychainKeys.fioPubKey)
+        return pubKey
+    }
+    
     /// This method retrieves private and public key. If they are not present it calls private public key generation with the given mnemonic.
     ///
     /// - Parameters:
