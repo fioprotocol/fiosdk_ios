@@ -25,6 +25,7 @@ class FIOSDKTests: XCTestCase {
     private let defaultAccount  = "fioname11111"
     private let defaultServer   = "http://34.220.57.45:8889/v1"
     private let defaultMnemonic = "valley alien library bread worry brother bundle hammer loyal barely dune brave"
+    private let mockUrl = "http://mock.dapix.io/mockd/DEV1/register_fio_name"
     
     private let alternativeServerA = "http://54.202.124.82:8889/v1"
     private let alternativeServerB = "http://54.218.97.18:8889/v1"
@@ -57,7 +58,7 @@ class FIOSDKTests: XCTestCase {
         
         if (useStaging){
             let keyPair = FIOSDK.privatePubKeyPair(forMnemonic: defaultMnemonic)
-            _ = FIOSDK.sharedInstance(accountName: defaultAccount, privateKey: keyPair.privateKey, publicKey: keyPair.publicKey,systemPrivateKey:keyPair.privateKey, systemPublicKey:keyPair.publicKey, url: defaultServer, mockUrl: "http://localhost:8080")
+            _ = FIOSDK.sharedInstance(accountName: defaultAccount, privateKey: keyPair.privateKey, publicKey: keyPair.publicKey,systemPrivateKey:keyPair.privateKey, systemPublicKey:keyPair.publicKey, url: defaultServer, mockUrl: mokUrl)
         }
 
         else{

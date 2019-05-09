@@ -196,7 +196,7 @@ public class FIOSDK: BaseFIOSDK {
      */
     public func registerFIONameOnBehalfOfUser(fioName: String, publicKey: String, onCompletion: @escaping (_ registeredName: RegisterNameForUserResponse? , _ error:FIOError?) -> ()) {
         let registerName = RegisterNameForUserRequest(fioName: fioName, publicKey: publicKey)
-        FIOHTTPHelper.postRequestTo("http://mock.dapix.io/mockd/DEV1/register_fio_name", withBody: registerName) { (result, error) in
+        FIOHTTPHelper.postRequestTo(getMockURI() ?? "http://mock.dapix.io/mockd/DEV1/register_fio_name", withBody: registerName) { (result, error) in
             guard let result = result else {
                 onCompletion(nil, error)
                 return
