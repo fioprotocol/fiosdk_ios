@@ -68,6 +68,8 @@
 		283438542245439B00E60314 /* sha3.c in Sources */ = {isa = PBXBuildFile; fileRef = 283438462245439B00E60314 /* sha3.c */; };
 		283438552245439B00E60314 /* curves.c in Sources */ = {isa = PBXBuildFile; fileRef = 283438472245439B00E60314 /* curves.c */; };
 		283438572245733800E60314 /* PrivateKey+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 283438562245733800E60314 /* PrivateKey+Extensions.swift */; };
+		284853AC2281AEE600B871E9 /* RegisterNameForUserRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 284853AA2281AEE600B871E9 /* RegisterNameForUserRequest.swift */; };
+		284853AD2281AEE600B871E9 /* RegisterNameForUserResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 284853AB2281AEE600B871E9 /* RegisterNameForUserResponse.swift */; };
 		285649522229C031006E2533 /* AccountNameGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 285649512229C031006E2533 /* AccountNameGenerator.swift */; };
 		285649542229C3AE006E2533 /* FIOHTTPHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 285649532229C3AE006E2533 /* FIOHTTPHelper.swift */; };
 		2856D26F225CC90800BC5D36 /* TokenPublicAddressResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2856D26E225CC90800BC5D36 /* TokenPublicAddressResponse.swift */; };
@@ -200,6 +202,8 @@
 		283438462245439B00E60314 /* sha3.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = sha3.c; sourceTree = "<group>"; };
 		283438472245439B00E60314 /* curves.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = curves.c; sourceTree = "<group>"; };
 		283438562245733800E60314 /* PrivateKey+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PrivateKey+Extensions.swift"; sourceTree = "<group>"; };
+		284853AA2281AEE600B871E9 /* RegisterNameForUserRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RegisterNameForUserRequest.swift; sourceTree = "<group>"; };
+		284853AB2281AEE600B871E9 /* RegisterNameForUserResponse.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RegisterNameForUserResponse.swift; sourceTree = "<group>"; };
 		285649512229C031006E2533 /* AccountNameGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountNameGenerator.swift; sourceTree = "<group>"; };
 		285649532229C3AE006E2533 /* FIOHTTPHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FIOHTTPHelper.swift; sourceTree = "<group>"; };
 		2856D26E225CC90800BC5D36 /* TokenPublicAddressResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenPublicAddressResponse.swift; sourceTree = "<group>"; };
@@ -567,6 +571,8 @@
 		287F10982256A630001E3B32 /* FIOName */ = {
 			isa = PBXGroup;
 			children = (
+				284853AA2281AEE600B871E9 /* RegisterNameForUserRequest.swift */,
+				284853AB2281AEE600B871E9 /* RegisterNameForUserResponse.swift */,
 				287F107E2256654B001E3B32 /* AvailCheckResponse.swift */,
 				287F10802256658A001E3B32 /* AvailCheckRequest.swift */,
 				287F107822565999001E3B32 /* FIONamesRequest.swift */,
@@ -889,6 +895,7 @@
 				287F107922565999001E3B32 /* FIONamesRequest.swift in Sources */,
 				28BB8B642257938A0049A761 /* KeychainKeys.swift in Sources */,
 				283438492245439B00E60314 /* uECC.c in Sources */,
+				284853AD2281AEE600B871E9 /* RegisterNameForUserResponse.swift in Sources */,
 				0203C58D217A487A0054FA10 /* PublicKey.swift in Sources */,
 				287F105C22552414001E3B32 /* TransferFIOTokensRequest.swift in Sources */,
 				287F1089225676B1001E3B32 /* JSONSerialization.swift in Sources */,
@@ -924,6 +931,7 @@
 				0203C5D8217A71330054FA10 /* FIOError.swift in Sources */,
 				2834384A2245439B00E60314 /* rand.c in Sources */,
 				287F1090225679CE001E3B32 /* TxResultActionTrace.swift in Sources */,
+				284853AC2281AEE600B871E9 /* RegisterNameForUserRequest.swift in Sources */,
 				287F10692255282D001E3B32 /* SentFIORequestsRequest.swift in Sources */,
 				28FA838822689A220053EA67 /* BaseFIOSDK.swift in Sources */,
 				0203C572217A487A0054FA10 /* AnyEncodable.swift in Sources */,

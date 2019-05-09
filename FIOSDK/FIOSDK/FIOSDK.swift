@@ -102,6 +102,10 @@ public class FIOSDK: BaseFIOSDK {
     
     //MARK: Private/Public Key
     
+    static public func publicKey() -> String? {
+        return keyManager.publicKey()
+    }
+    
     /// This method creates a private and public key based on a mnemonic, it does store both keys in keychain. Use it to setup FIOSDK properly.
     ///
     /// - Parameters:
@@ -182,6 +186,28 @@ public class FIOSDK: BaseFIOSDK {
                 completion(FIOError.init(kind: anyFail ? .Failure : .Success, localizedDescription: ""))
             }
         })
+    }
+    
+    /**
+     * Register a fioName for someone else using that user's public key. CURRENTLY A MOCK!!!!
+     * - Parameter fioName: A string to register as FIO Address
+     * - Parameter publicKey: User's public key to register FIO name for.
+     * - Parameter completion: A callback function that is called when request is finished either with success or failure. Check FIOError.kind to determine if is a success or a failure.
+     */
+    public func registerFIONameOnBehalfOfUser(fioName: String, publicKey: String, onCompletion: @escaping (_ registeredName: RegisterNameForUserResponse? , _ error:FIOError?) -> ()) {
+        let registerName = RegisterNameForUserRequest(fioName: fioName, publicKey: publicKey)
+        FIOHTTPHelper.postRequestTo("http://mock.dapix.io/mockd/DEV1/register_fio_name", withBody: registerName) { (result, error) in
+            guard let result = result else {
+                onCompletion(nil, error)
+                return
+            }
+            do {
+                let response = try JSONDecoder().decode(RegisterNameForUserResponse.self, from: result)
+                onCompletion(response, FIOError.success())
+            }catch let error {
+                onCompletion(nil, FIOError.failure(localizedDescription: error.localizedDescription))
+            }
+        }
     }
     
     //MARK: - Add Public Address
