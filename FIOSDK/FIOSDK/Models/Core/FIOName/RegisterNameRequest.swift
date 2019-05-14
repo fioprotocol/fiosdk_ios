@@ -8,7 +8,7 @@
 
 import Foundation
 
-internal struct RegisterName: Codable {
+internal struct RegisterNameRequest: Codable {
     
     let fioName:String
     let actor:String
