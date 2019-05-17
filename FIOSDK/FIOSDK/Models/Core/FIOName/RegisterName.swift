@@ -12,10 +12,14 @@ internal struct RegisterName: Codable {
     
     let fioName:String
     let actor:String
+    let ownerFIOPublicKey: String
+    let maxFee: Int
     
     enum CodingKeys: String, CodingKey {
-        case fioName = "fio_name"
+        case fioName = "fio_address"
         case actor = "actor"
+        case ownerFIOPublicKey = "owner_fio_public_key"
+        case maxFee = "max_fee"
     }
     
 }

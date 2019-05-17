@@ -23,9 +23,9 @@ class FIOSDKTests: XCTestCase {
     
     //MARK: Constants
     private let defaultAccount  = "fioname11111"
-    private let defaultServer   = "http://34.220.57.45:8889/v1"
+    private let defaultServer   = "http://54.202.124.82:8889/v1"
     private let defaultMnemonic = "valley alien library bread worry brother bundle hammer loyal barely dune brave"
-    private let mockUrl = "http://mock.dapix.io/mockd/DEV1/register_fio_name"
+    private let mockUrl = "http://mock.dapix.io/mockd/DEV2/register_fio_name"
     
     private let alternativeServerA = "http://54.202.124.82:8889/v1"
     private let alternativeServerB = "http://54.218.97.18:8889/v1"
@@ -33,6 +33,7 @@ class FIOSDKTests: XCTestCase {
     private let alternativeServerD = "http://34.214.170.140:8889/v1"
     private let adamSandbox = "http://35.161.240.168:8889/v1"
     private let dev1Server = "http://34.220.57.45:8889/v1"
+    private let dev2Server = "http://54.202.124.82:8889/v1"
     
     private let fioAccount    = "r41zuwovtn44"
     private let fioPrivateKey = "5JLxoeRoMDGBbkLdXJjxuh3zHsSS7Lg6Ak9Ft8v8sSdYPkFuABF"
@@ -57,8 +58,7 @@ class FIOSDKTests: XCTestCase {
         
         
         if (useStaging){
-            let keyPair = FIOSDK.privatePubKeyPair(forMnemonic: defaultMnemonic)
-            _ = FIOSDK.sharedInstance(accountName: defaultAccount, privateKey: keyPair.privateKey, publicKey: keyPair.publicKey,systemPrivateKey:keyPair.privateKey, systemPublicKey:keyPair.publicKey, url: defaultServer, mockUrl: mokUrl)
+            defaultSDKConfig()
         }
 
         else{
@@ -72,6 +72,18 @@ class FIOSDKTests: XCTestCase {
         // Put teardown code here. This method is called after the invocation of each test method in the class.
     }
     
+    private func defaultSDKConfig() {
+        try? FIOSDK.wipePrivPubKeys()
+        let keyPair = FIOSDK.privatePubKeyPair(forMnemonic: defaultMnemonic)
+        _ = FIOSDK.sharedInstance(accountName: defaultAccount, privateKey: keyPair.privateKey, publicKey: keyPair.publicKey,systemPrivateKey:keyPair.privateKey, systemPublicKey:keyPair.publicKey, url: defaultServer, mockUrl: mockUrl)
+    }
+    
+    private func alternativeSDKConfig() {
+        try? FIOSDK.wipePrivPubKeys()
+        let keyPair = FIOSDK.privatePubKeyPair(forMnemonic: "gallery hero weekend notable inherit chuckle village spread business scrap surprise finger")
+        _ = FIOSDK.sharedInstance(accountName: defaultAccount, privateKey: keyPair.privateKey, publicKey: keyPair.publicKey,systemPrivateKey:keyPair.privateKey, systemPublicKey:keyPair.publicKey, url: defaultServer, mockUrl: mockUrl)
+    }
+    
     func registerDefaultUsers() {
         let timestamp = NSDate().timeIntervalSince1970
         requesteeFioName = "sha\(Int(timestamp.rounded())).brd"
@@ -79,18 +91,33 @@ class FIOSDKTests: XCTestCase {
         
         let expectation = XCTestExpectation(description: "testRegisterFIOName")
         
-        FIOSDK.sharedInstance().registerFioName(fioName: requesteeFioName, publicReceiveAddresses: [:] , completion: {error in ()
+        FIOSDK.sharedInstance().registerFIONameOnBehalfOfUser(fioName: requesteeFioName, publicKey: FIOSDK.sharedInstance().getPublicKey(), publicReceiveAddresses: [:], onCompletion: { response, error in ()
             XCTAssert((error?.kind == FIOError.ErrorKind.Success), "registerFIOName NOT SUCCESSFUL")
             print (self.requesteeFioName)
             
-            FIOSDK.sharedInstance().registerFioName(fioName: self.requestorFioName,publicReceiveAddresses: [:], completion: {error in ()
+            self.alternativeSDKConfig()
+            FIOSDK.sharedInstance().registerFIONameOnBehalfOfUser(fioName: self.requestorFioName, publicKey: FIOSDK.sharedInstance().getPublicKey(), publicReceiveAddresses: [:], onCompletion: { response, error in ()
                 XCTAssert((error?.kind == FIOError.ErrorKind.Success), "registerFIOName NOT SUCCESSFUL" + (error?.localizedDescription ?? "") )
                 print(error)
                 print(self.requestorFioName)
+                self.defaultSDKConfig()
                 expectation.fulfill()
             })
             
         })
+        
+//        FIOSDK.sharedInstance().registerFioName(fioName: requesteeFioName, publicReceiveAddresses: [:] , completion: {error in ()
+//            XCTAssert((error?.kind == FIOError.ErrorKind.Success), "registerFIOName NOT SUCCESSFUL")
+//            print (self.requesteeFioName)
+//
+//            FIOSDK.sharedInstance().registerFioName(fioName: self.requestorFioName,publicReceiveAddresses: [:], completion: {error in ()
+//                XCTAssert((error?.kind == FIOError.ErrorKind.Success), "registerFIOName NOT SUCCESSFUL" + (error?.localizedDescription ?? "") )
+//                print(error)
+//                print(self.requestorFioName)
+//                expectation.fulfill()
+//            })
+//
+//        })
         
         wait(for: [expectation], timeout: TIMEOUT)
     }
@@ -165,7 +192,8 @@ class FIOSDKTests: XCTestCase {
         let expectation = XCTestExpectation(description: "testaddpublicaddress")
         let timestamp = NSDate().timeIntervalSince1970
         let pubAdd = "pubAdd\(Int(timestamp.rounded()))"
-        FIOSDK.sharedInstance().addPublicAddress(fioAddress: self.requestorFioName, chain: "ETH", publicAddress: pubAdd) { (error) in
+        self.alternativeSDKConfig()
+        FIOSDK.sharedInstance().addPublicAddress(fioAddress: self.requestorFioName, chain: "ETH", publicAddress: pubAdd, maxFee: 0) { (error) in
             XCTAssert((error?.kind == FIOError.ErrorKind.Success), "testAddPublicAddress NOT SUCCESSFUL: \(error?.localizedDescription ?? "")")
             expectation.fulfill()
         }
@@ -176,9 +204,25 @@ class FIOSDKTests: XCTestCase {
         let expectation = XCTestExpectation(description: "testaddpublicaddress")
         let timestamp = NSDate().timeIntervalSince1970
         let pubAdd = "pubAdd\(Int(timestamp.rounded()))"
-        FIOSDK.sharedInstance().addPublicAddress(fioAddress: self.requestorFioName, chain: "FIO", publicAddress: pubAdd) { (error) in
+        FIOSDK.sharedInstance().addPublicAddress(fioAddress: self.requestorFioName, chain: "FIO", publicAddress: pubAdd, maxFee: 0) { (error) in
             XCTAssert((error?.kind == FIOError.ErrorKind.Failure), "testAddPublicAddressWithFIOTokenShouldFail tried to add FIO Token address.")
             expectation.fulfill()
+        }
+        wait(for: [expectation], timeout: TIMEOUT)
+    }
+    
+    func testAddPublicKeyAsPublicAddress(){
+        let expectation = XCTestExpectation(description: "testaddpublicaddress")
+
+        FIOSDK.sharedInstance().addPublicAddress(fioAddress: self.requestorFioName, chain: "PKEY", publicAddress: FIOSDK.sharedInstance().getPublicKey(), maxFee: 0) { (error) in
+            guard error?.kind == FIOError.ErrorKind.Success else {
+                expectation.fulfill()
+                return
+            }
+            FIOSDK.sharedInstance().getPublicAddress(fioAddress: self.requestorFioName, tokenCode: "PKEY", completion: { (response, error) in
+                XCTAssert((error.kind == FIOError.ErrorKind.Success), "testAddPublicAddress NOT SUCCESSFUL: \(error.localizedDescription)")
+                expectation.fulfill()
+            })
         }
         wait(for: [expectation], timeout: TIMEOUT)
     }
@@ -196,16 +240,19 @@ class FIOSDKTests: XCTestCase {
         let to = self.requesteeFioName
         let fromPubAdd = "from\(Int(timestamp.rounded()))"
         let toPubAdd = "to\(Int(timestamp.rounded()))"
-        FIOSDK.sharedInstance().addPublicAddress(fioAddress: from, chain: "BTC", publicAddress: fromPubAdd) { (error) in
+        self.alternativeSDKConfig()
+        FIOSDK.sharedInstance().addPublicAddress(fioAddress: from, chain: "BTC", publicAddress: fromPubAdd, maxFee: 0) { (error) in
             XCTAssert((error?.kind == FIOError.ErrorKind.Success), "testAddPublicAddress NOT SUCCESSFUL: \(error?.localizedDescription ?? "")")
             expectationAddPubAddA.fulfill()
-            FIOSDK.sharedInstance().addPublicAddress(fioAddress: to, chain: "BTC", publicAddress: toPubAdd) { (error) in
+            self.defaultSDKConfig()
+            FIOSDK.sharedInstance().addPublicAddress(fioAddress: to, chain: "BTC", publicAddress: toPubAdd, maxFee: 0) { (error) in
                 XCTAssert((error?.kind == FIOError.ErrorKind.Success), "testAddPublicAddress NOT SUCCESSFUL: \(error?.localizedDescription ?? "")")
                 expectationAddPubAddB.fulfill()
-                FIOSDK.sharedInstance().requestFunds(payer: from, payee: to, payeePublicAddress: toPubAdd, amount: 1.0, tokenCode: "BTC", metadata: metadata) { (response, error) in
+                FIOSDK.sharedInstance().requestFunds(payer: from, payee: to, payeePublicAddress: toPubAdd, amount: 1.0, tokenCode: "BTC", metadata: metadata, maxFee: 0) { (response, error) in
                     if error?.kind == .Success {
                         expectationReqFunds.fulfill()
-                        FIOSDK.sharedInstance().getPendingFioRequests(fioPublicAddress: fromPubAdd) { (data, error) in
+                        self.alternativeSDKConfig()
+                        FIOSDK.sharedInstance().getPendingFioRequests(fioPublicAddress: FIOSDK.sharedInstance().getPublicKey()) { (data, error) in
                             XCTAssert(error?.kind == FIOError.ErrorKind.Success, "testgetpendingfiorequest not successful: \(error?.localizedDescription ?? "unknown")")
                             XCTAssertNotNil(data, "testgetpendingfiorequest result came out nil")
                             expectationPendingReq.fulfill()
@@ -221,27 +268,6 @@ class FIOSDKTests: XCTestCase {
         wait(for: [expectationAddPubAddA,expectationAddPubAddB, expectationReqFunds, expectationPendingReq], timeout: TIMEOUT)
     }
     
-    func testGetFIONameFromPubAddress(){
-        let expectation = XCTestExpectation(description: "testGetRegisteredFioName")
-        
-        FIOSDK.sharedInstance().getPublicAddress(fioAddress: self.requesteeFioName, tokenCode: "FIO") { (response, error) in
-            XCTAssert(error.kind == .Success, "getPublicAddress error")
-            XCTAssertNotNil(response, "getPublicAddress error")
-            
-            if error.kind != .Success {
-                expectation.fulfill()
-            }
-            else {
-                FIOSDK.sharedInstance().getFioNames(publicAddress: response!.publicAddress, completion: { (response, error) in
-                    XCTAssertNotNil(response?.addresses.first?.address, "getFioNames NOT FOUND")
-                    expectation.fulfill()
-                })
-            }
-        }
-        
-        wait(for: [expectation], timeout: TIMEOUT)
-    }
-    
     func testGetFioNamesWithUnvalidAddressShouldRespondWithNotFound(){
         let expectation = XCTestExpectation(description: "testgetfionames")
         FIOSDK.sharedInstance().getFioNames(publicAddress: "NOT VALID ADDRESS") { (data, error) in
@@ -255,6 +281,7 @@ class FIOSDKTests: XCTestCase {
     func testGetFIONameDetailsWithGoodNameShouldSucceed() {
         let expectation = XCTestExpectation(description: "testGetFIONameDetailsWithGoodNameShouldSucceed")
         
+        self.defaultSDKConfig()
         FIOSDK.sharedInstance().getFIONameDetails(self.requesteeFioName) { (response, error) in
             XCTAssert(error.kind == .Success, "getPublicAddress error")
             XCTAssertNotNil(response, "getPublicAddress error")
@@ -263,6 +290,7 @@ class FIOSDKTests: XCTestCase {
                 expectation.fulfill()
             }
             else {
+                XCTAssert(response?.address == self.requesteeFioName, "Wrong fio address")
                 XCTAssertNotNil(response?.address, "name NOT FOUND")
                 XCTAssertNotNil(response?.expiration, "date NOT FOUND")
                 expectation.fulfill()
@@ -276,8 +304,7 @@ class FIOSDKTests: XCTestCase {
         let expectation = XCTestExpectation(description: "testGetFIONameDetailsWithBadNameShouldFail")
         
         FIOSDK.sharedInstance().getFIONameDetails("NOT_VALID_NAME") { (response, error) in
-            XCTAssert(error.kind == .Failure, "Should've failed but succeeded")
-            XCTAssertNil(response)
+            XCTAssert(response == nil || error.kind == .Failure, "Should've failed but succeeded")
             expectation.fulfill()
         }
         
@@ -289,6 +316,7 @@ class FIOSDKTests: XCTestCase {
     /// fioAddress: self.requesteeFioName, tokenCode: "BTC"
     func testGetPublicAddress(){
         let expectation = XCTestExpectation(description: "testgetpublicaddress")
+        self.defaultSDKConfig()
         FIOSDK.sharedInstance().getPublicAddress(fioAddress: requesteeFioName, tokenCode: "FIO") { (response, error) in
             XCTAssert(error.kind == .Success, "testgetpublicaddress not succesful")
             XCTAssertNotNil(response, "testgetpublicaddress not successful: \(error.localizedDescription)")
@@ -300,6 +328,7 @@ class FIOSDKTests: XCTestCase {
     
     func testGetPublicAddressWithNonRegisteredTokenShouldFail(){
         let expectation = XCTestExpectation(description: "testgetpublicaddress")
+        self.defaultSDKConfig()
         FIOSDK.sharedInstance().getPublicAddress(fioAddress: requesteeFioName, tokenCode: "NOTVALID") { (response, error) in
             XCTAssert(error.kind == .Failure, "should've failed")
             expectation.fulfill()
@@ -315,7 +344,7 @@ class FIOSDKTests: XCTestCase {
         let tokenPubAdd = "smp\(Int(timestamp.rounded()))"
         let fioName = "fio\(Int(timestamp.rounded())).brd"
         
-        FIOSDK.sharedInstance().registerFioName(fioName: fioName, publicReceiveAddresses: ["BTC":tokenPubAdd]) { (error) in
+        FIOSDK.sharedInstance().registerFIOName(fioName: fioName, publicReceiveAddresses: ["BTC":tokenPubAdd]) { (error) in
             guard error?.kind == .Success else {
                 XCTFail("User not registered")
                 expectation.fulfill()
@@ -345,7 +374,7 @@ class FIOSDKTests: XCTestCase {
         let tokenPubAdd = "smp\(Int(timestamp.rounded()))"
         
         FIOSDK.sharedInstance().getTokenPublicAddress(forToken: "NOTVALIDTOKEN", withFIOPublicAddress: tokenPubAdd, onCompletion: { (response, error) in
-            XCTAssert(error.kind == .Failure, "should've failed")
+            XCTAssert(response == nil, "should've failed")
             expectation.fulfill()
         })
         
@@ -356,7 +385,7 @@ class FIOSDKTests: XCTestCase {
         let expectation = XCTestExpectation(description: "testRequestFundsWithGeneratedAccountShouldSucceed")
         let metadata = RequestFundsRequest.MetaData(memo: "Invoice1234", hash: nil, offlineUrl: nil)
         
-        FIOSDK.sharedInstance().requestFunds(payer: self.requestorFioName, payee: self.requesteeFioName, payeePublicAddress: self.requesteeAddress, amount: 1.0, tokenCode: "DAI", metadata: metadata) { (response, error) in
+        FIOSDK.sharedInstance().requestFunds(payer: self.requestorFioName, payee: self.requesteeFioName, payeePublicAddress: self.requesteeAddress, amount: 1.0, tokenCode: "DAI", metadata: metadata, maxFee: 0) { (response, error) in
             XCTAssert(error?.kind == .Success, "requestFunds failed")
             XCTAssertNotNil(response)
             expectation.fulfill()
@@ -374,12 +403,14 @@ class FIOSDKTests: XCTestCase {
         let timestamp = NSDate().timeIntervalSince1970
         let fromPubAdd = "from\(Int(timestamp.rounded()))"
         let toPubAdd = "to\(Int(timestamp.rounded()))"
-        FIOSDK.sharedInstance().addPublicAddress(fioAddress: from, chain: "BTC", publicAddress: fromPubAdd) { (error) in
+        self.alternativeSDKConfig()
+        FIOSDK.sharedInstance().addPublicAddress(fioAddress: from, chain: "BTC", publicAddress: fromPubAdd, maxFee: 0) { (error) in
             XCTAssert((error?.kind == FIOError.ErrorKind.Success), "testAddPublicAddress NOT SUCCESSFUL: \(error?.localizedDescription ?? "")")
-            FIOSDK.sharedInstance().addPublicAddress(fioAddress: to, chain: "BTC", publicAddress: toPubAdd) { (error) in
+            self.defaultSDKConfig()
+            FIOSDK.sharedInstance().addPublicAddress(fioAddress: to, chain: "BTC", publicAddress: toPubAdd, maxFee: 0) { (error) in
                 XCTAssert((error?.kind == FIOError.ErrorKind.Success), "testAddPublicAddress NOT SUCCESSFUL: \(error?.localizedDescription ?? "")")
         
-                FIOSDK.sharedInstance().requestFunds(payer: from, payee: to, payeePublicAddress: toPubAdd, amount: 1.0, tokenCode: "BTC", metadata: metadata) { (response, error) in
+                FIOSDK.sharedInstance().requestFunds(payer: from, payee: to, payeePublicAddress: toPubAdd, amount: 1.0, tokenCode: "BTC", metadata: metadata, maxFee: 0) { (response, error) in
                     XCTAssert(error?.kind == .Success, "requestFunds failed")
                     XCTAssertNotNil(response)
                     expectation.fulfill()
@@ -398,17 +429,20 @@ class FIOSDKTests: XCTestCase {
         let timestamp = NSDate().timeIntervalSince1970
         let fromPubAdd = "from\(Int(timestamp.rounded()))"
         let toPubAdd = "to\(Int(timestamp.rounded()))"
-        FIOSDK.sharedInstance().addPublicAddress(fioAddress: from, chain: "BTC", publicAddress: fromPubAdd) { (error) in
+        self.alternativeSDKConfig()
+        FIOSDK.sharedInstance().addPublicAddress(fioAddress: from, chain: "BTC", publicAddress: fromPubAdd, maxFee: 0) { (error) in
             XCTAssert((error?.kind == FIOError.ErrorKind.Success), "testAddPublicAddress NOT SUCCESSFUL: \(error?.localizedDescription ?? "")")
-            FIOSDK.sharedInstance().addPublicAddress(fioAddress: to, chain: "BTC", publicAddress: toPubAdd) { (error) in
+            self.defaultSDKConfig()
+            FIOSDK.sharedInstance().addPublicAddress(fioAddress: to, chain: "BTC", publicAddress: toPubAdd, maxFee: 0) { (error) in
                 XCTAssert((error?.kind == FIOError.ErrorKind.Success), "testAddPublicAddress NOT SUCCESSFUL: \(error?.localizedDescription ?? "")")
                 
                 //requestor is sender, requestee is receiver
-                FIOSDK.sharedInstance().requestFunds(payer: from, payee: to, payeePublicAddress: toPubAdd, amount: amount, tokenCode: "BTC", metadata: RequestFundsRequest.MetaData(memo: "", hash: nil, offlineUrl: nil)) { (response, error) in
+                FIOSDK.sharedInstance().requestFunds(payer: from, payee: to, payeePublicAddress: toPubAdd, amount: amount, tokenCode: "BTC", metadata: RequestFundsRequest.MetaData(memo: "", hash: nil, offlineUrl: nil), maxFee: 0) { (response, error) in
                     XCTAssert(error?.kind == .Success && response != nil, "testRejectFundsRequest Couldn't create mock request")
                     
                     if let response = response {
-                        FIOSDK.sharedInstance().rejectFundsRequest(fundsRequestId: String(response.fundsRequestId), completion: { (response, error) in
+                        self.alternativeSDKConfig()
+                        FIOSDK.sharedInstance().rejectFundsRequest(fundsRequestId: String(response.fundsRequestId), maxFee: 0, completion: { (response, error) in
                             XCTAssert(error.kind == .Success, "testRejectFundsRequest couldn't reject request")
                             expectation.fulfill()
                         })
@@ -436,11 +470,13 @@ class FIOSDKTests: XCTestCase {
         let timestamp = NSDate().timeIntervalSince1970
         let fromPubAdd = "from\(Int(timestamp.rounded()))"
         let toPubAdd = "to\(Int(timestamp.rounded()))"
-        FIOSDK.sharedInstance().addPublicAddress(fioAddress: from, chain: "ETH", publicAddress: fromPubAdd) { (error) in
+        self.alternativeSDKConfig()
+        FIOSDK.sharedInstance().addPublicAddress(fioAddress: from, chain: "ETH", publicAddress: fromPubAdd, maxFee: 0) { (error) in
             XCTAssert((error?.kind == FIOError.ErrorKind.Success), "testAddPublicAddress NOT SUCCESSFUL: \(error?.localizedDescription ?? "")")
-            FIOSDK.sharedInstance().addPublicAddress(fioAddress: to, chain: "ETH", publicAddress: toPubAdd) { (error) in
+            self.defaultSDKConfig()
+            FIOSDK.sharedInstance().addPublicAddress(fioAddress: to, chain: "ETH", publicAddress: toPubAdd, maxFee: 0) { (error) in
                 XCTAssert((error?.kind == FIOError.ErrorKind.Success), "testAddPublicAddress NOT SUCCESSFUL: \(error?.localizedDescription ?? "")")
-                FIOSDK.sharedInstance().requestFunds(payer: from, payee: to, payeePublicAddress: toPubAdd, amount: amount, tokenCode: "BTC", metadata: RequestFundsRequest.MetaData(memo: "", hash: nil, offlineUrl: nil)) { (response, error) in
+                FIOSDK.sharedInstance().requestFunds(payer: from, payee: to, payeePublicAddress: toPubAdd, amount: amount, tokenCode: "BTC", metadata: RequestFundsRequest.MetaData(memo: "", hash: nil, offlineUrl: nil), maxFee: 0) { (response, error) in
                     XCTAssert(error?.kind == .Success && response != nil, "testGetSentRequests Couldn't create mock request")
                     expRequestFunds.fulfill()
                     guard let fundsRequestId = response?.fundsRequestId else {
@@ -448,7 +484,7 @@ class FIOSDKTests: XCTestCase {
                         expRejectRequest.fulfill()
                         return
                     }
-                    FIOSDK.sharedInstance().getSentFioRequests(publicAddress: toPubAdd, completion: { (response, error) in
+                    FIOSDK.sharedInstance().getSentFioRequests(publicAddress: FIOSDK.sharedInstance().getPublicKey(), completion: { (response, error) in
                         XCTAssert(error.kind == .Success && response != nil, "testGetSentRequest couldn't retreive request")
                         guard error.kind == .Success, response != nil else {
                             XCTFail("getSentFioRequest Request should have sent fio requests")
@@ -460,7 +496,8 @@ class FIOSDKTests: XCTestCase {
                             return request.fundsRequestId == fundsRequestId
                         }).isEmpty,  "testGetsentRequest couldn't found the request")
                         expGetSentRequest.fulfill()
-                        FIOSDK.sharedInstance().rejectFundsRequest(fundsRequestId: fundsRequestId, completion: { (response, error) in
+                        self.alternativeSDKConfig()
+                        FIOSDK.sharedInstance().rejectFundsRequest(fundsRequestId: fundsRequestId, maxFee: 0, completion: { (response, error) in
                             XCTAssert(error.kind == .Success, "testGetSentRequests couldn't reject test request")
                             expRejectRequest.fulfill()
                         })
@@ -491,7 +528,7 @@ class FIOSDKTests: XCTestCase {
         let fioName = "sha\(Int(timestamp.rounded())).brd"
         let expectation = XCTestExpectation(description: "testRegisterFIONameWithNewValueShouldRegister")
 
-        FIOSDK.sharedInstance().registerFioName(fioName: fioName, publicReceiveAddresses: ["BTC":"1PMycacnJaSqwwJqjawXBErnLsZ7RkXUAs", "ETH":requestorAddress], completion: {error in ()
+        FIOSDK.sharedInstance().registerFIOName(fioName: fioName, publicReceiveAddresses: ["BTC":"1PMycacnJaSqwwJqjawXBErnLsZ7RkXUAs", "ETH":requestorAddress], onCompletion: {error in ()
             XCTAssert((error?.kind == FIOError.ErrorKind.Success), "registerFIOName NOT SUCCESSFUL")
             expectation.fulfill()
         })
@@ -504,9 +541,9 @@ class FIOSDKTests: XCTestCase {
         let fioName = "sha\(Int(timestamp.rounded())).brd"
         let expectation = XCTestExpectation(description: "testRegisterFIONameWithAlreadyRegisteredValueShouldFail")
 
-        FIOSDK.sharedInstance().registerFioName(fioName: fioName, publicReceiveAddresses: [:], completion: {error in ()
+        FIOSDK.sharedInstance().registerFIOName(fioName: fioName, publicReceiveAddresses: [:], onCompletion: {error in ()
             XCTAssert((error?.kind == FIOError.ErrorKind.Success), "registerFIOName NOT SUCCESSFUL")
-            FIOSDK.sharedInstance().registerFioName(fioName: fioName, publicReceiveAddresses: [:], completion: {error in ()
+            FIOSDK.sharedInstance().registerFIOName(fioName: fioName, publicReceiveAddresses: [:], onCompletion: {error in ()
                 XCTAssert((error?.kind == FIOError.ErrorKind.Failure), "registerFIOName NOT SUCCESSFUL")
                 expectation.fulfill()
             })
@@ -520,7 +557,7 @@ class FIOSDKTests: XCTestCase {
         let fioName = "sha\(Int(timestamp.rounded())).brd"
         let expectation = XCTestExpectation(description: "testRegisterFIONameWithAlreadyRegisteredValueShouldFail")
         
-        FIOSDK.sharedInstance().registerFioName(fioName: fioName, publicReceiveAddresses: ["FIO":"ignoreme"], completion: {error in ()
+        FIOSDK.sharedInstance().registerFIOName(fioName: fioName, publicReceiveAddresses: ["FIO":"ignoreme"], onCompletion: {error in ()
             XCTAssert((error?.kind == FIOError.ErrorKind.Success), "registerFIOName NOT SUCCESSFUL")
             FIOSDK.sharedInstance().getFioNames(publicAddress: "ignoreme", completion: { (response, error) in
                 XCTAssert((error?.kind == FIOError.ErrorKind.Failure), "Added the address it shouldn´t be added")
@@ -542,20 +579,23 @@ class FIOSDKTests: XCTestCase {
         let toPubAdd = "to\(Int(timestamp.rounded()))"
         let obtID = "0xf6eaddd3851923f6f9653838d3021c02ab123a4a6e4485e83f5063b3711e000b"
         
-        FIOSDK.sharedInstance().addPublicAddress(fioAddress: from, chain: "VIT", publicAddress: fromPubAdd) { (error) in
+        self.alternativeSDKConfig()
+        FIOSDK.sharedInstance().addPublicAddress(fioAddress: from, chain: "VIT", publicAddress: fromPubAdd, maxFee: 0) { (error) in
             XCTAssert((error?.kind == FIOError.ErrorKind.Success), "testAddPublicAddress NOT SUCCESSFUL: \(error?.localizedDescription ?? "")")
             guard error?.kind == FIOError.ErrorKind.Success else {
                 expectation.fulfill()
                 return
             }
-            FIOSDK.sharedInstance().addPublicAddress(fioAddress: to, chain: "VIT", publicAddress: toPubAdd) { (error) in
+            self.defaultSDKConfig()
+            FIOSDK.sharedInstance().addPublicAddress(fioAddress: to, chain: "VIT", publicAddress: toPubAdd, maxFee: 0) { (error) in
                 XCTAssert((error?.kind == FIOError.ErrorKind.Success), "testAddPublicAddress NOT SUCCESSFUL: \(error?.localizedDescription ?? "")")
                 guard error?.kind == FIOError.ErrorKind.Success else {
                     expectation.fulfill()
                     return
                 }
                 
-                FIOSDK.sharedInstance().recordSend(payerFIOAddress: from, payeeFIOAddress: to, payerPublicAddress: fromPubAdd, payeePublicAddress: toPubAdd, amount: amount, tokenCode: "VIT", obtID: obtID, memo: "Record Send Unit Test") { (response, error) in
+                self.alternativeSDKConfig()
+                FIOSDK.sharedInstance().recordSend(payerFIOAddress: from, payeeFIOAddress: to, payerPublicAddress: fromPubAdd, payeePublicAddress: toPubAdd, amount: amount, tokenCode: "VIT", obtID: obtID, memo: "Record Send Unit Test", maxFee: 0) { (response, error) in
                     XCTAssert((error?.kind == FIOError.ErrorKind.Success), "recordSend NOT SUCCESSFUL")
                     expectation.fulfill()
                 }
@@ -576,20 +616,23 @@ class FIOSDKTests: XCTestCase {
         let toPubAdd = "to\(Int(timestamp.rounded()))"
         let obtID = "0xf6eaddd3851923f6f9653838d3021c02ab123a4a6e4485e83f5063b3711e000b"
 
-        FIOSDK.sharedInstance().addPublicAddress(fioAddress: from, chain: "VIT", publicAddress: fromPubAdd) { (error) in
+        self.alternativeSDKConfig()
+        FIOSDK.sharedInstance().addPublicAddress(fioAddress: from, chain: "VIT", publicAddress: fromPubAdd, maxFee: 0) { (error) in
             XCTAssert((error?.kind == FIOError.ErrorKind.Success), "testAddPublicAddress NOT SUCCESSFUL: \(error?.localizedDescription ?? "")")
             guard error?.kind == FIOError.ErrorKind.Success else {
                 expectation.fulfill()
                 return
             }
-            FIOSDK.sharedInstance().addPublicAddress(fioAddress: to, chain: "VIT", publicAddress: toPubAdd) { (error) in
+            self.defaultSDKConfig()
+            FIOSDK.sharedInstance().addPublicAddress(fioAddress: to, chain: "VIT", publicAddress: toPubAdd, maxFee: 0) { (error) in
                 XCTAssert((error?.kind == FIOError.ErrorKind.Success), "testAddPublicAddress NOT SUCCESSFUL: \(error?.localizedDescription ?? "")")
                 guard error?.kind == FIOError.ErrorKind.Success else {
                     expectation.fulfill()
                     return
                 }
                 
-                FIOSDK.sharedInstance().recordSendAutoResolvingWith(payeeFIOAddress: to, andPayerPublicAddress: fromPubAdd, amountSent: amount, forTokenCode: "VIT", obtID: obtID, memo: "Record send unit test") { (response, error) in
+                self.alternativeSDKConfig()
+                FIOSDK.sharedInstance().recordSendAutoResolvingWith(payeeFIOAddress: to, andPayerPublicAddress: fromPubAdd, amountSent: amount, forTokenCode: "VIT", obtID: obtID, memo: "Record send unit test", maxFee: 0) { (response, error) in
                     XCTAssert((error?.kind == FIOError.ErrorKind.Success), "recordSend NOT SUCCESSFUL")
                     expectation.fulfill()
                 }
@@ -632,61 +675,40 @@ class FIOSDKTests: XCTestCase {
     func testTransferTokensWithGoodAccountsShouldBeSuccessful() {
         let expectation = XCTestExpectation(description: "testTransferTokensWithGoodAccountsShouldBeSuccessful")
         
-        let fioSDK = FIOSDK.sharedInstance(accountName: fioAccount, privateKey: fioPrivateKey, publicKey: fioPublicKey,systemPrivateKey:fioPrivateKey, systemPublicKey:fioPublicKey, url: dev1Server)
-        let payeePublicAddress = "htjonrkf1lgs"
-        let payerPublicAddress = fioAccount
-        let amount: Float = 1.0
+        self.defaultSDKConfig()
+        let payeePublicKey = FIOSDK.sharedInstance().getPublicKey()
+        let fioSDK = FIOSDK.sharedInstance(accountName: fioAccount, privateKey: fioPrivateKey, publicKey: fioPublicKey,systemPrivateKey:fioPrivateKey, systemPublicKey:fioPublicKey, url: defaultServer)
+        let payerPublicKey = fioSDK.getPublicKey()
+        let amount: Double = 1.0
+        let maxFee = 0.25
         
-        fioSDK.transferFIOTokens(payeePublicAddress: payeePublicAddress, amount: amount) { (response, error) in
+        fioSDK.transferFIOTokens(payeePublicKey: payeePublicKey, amount: amount, maxFee: maxFee) { (response, error) in
             XCTAssert((error.kind == FIOError.ErrorKind.Success), "transfer failed: \(error.localizedDescription )")
             //Transfer back
-            FIOSDK.sharedInstance(accountName: self.fioAccountAlternative, privateKey: self.fioPrivateKeyAlternative, publicKey: self.fioPublicKeyAlternative, systemPrivateKey:self.fioPrivateKeyAlternative, systemPublicKey:self.fioPublicKeyAlternative, url: self.dev1Server).transferFIOTokens(payeePublicAddress: payerPublicAddress, amount: amount) { (response, error) in
+            self.defaultSDKConfig()
+            sleep(60)
+            FIOSDK.sharedInstance().transferFIOTokens(payeePublicKey: payerPublicKey, amount: amount, maxFee: maxFee) { (response, error) in
                 XCTAssert((error.kind == FIOError.ErrorKind.Success), "transfer failed: \(error.localizedDescription )")
                 expectation.fulfill()
             }
         }
         
-        wait(for: [expectation], timeout: TIMEOUT)
+        wait(for: [expectation], timeout: TIMEOUT * 1.5)
     }
     
     func testTransferTokensWithInsufficientAmountShouldNotBeSuccessful() {
         let expectation = XCTestExpectation(description: "testTransferTokensWithInsufficientAmountShouldNotBeSuccessful")
-
         
         let fioSDK = FIOSDK.sharedInstance(accountName: fioAccount, privateKey: fioPrivateKey, publicKey: fioPublicKey,systemPrivateKey:fioPrivateKey, systemPublicKey:fioPublicKey, url: dev1Server)
         let payeePublicAddress = "htjonrkf1lgs"
         let payerPublicAddress = fioAccount
-        let amount: Float = 900000000.0
+        let amount: Double = 900000000.0
+        let maxFee = 0.25
         
-        fioSDK.transferFIOTokens(payeePublicAddress: payeePublicAddress, amount: amount) { (response, error) in
+        fioSDK.transferFIOTokens(payeePublicKey: payeePublicAddress, amount: amount, maxFee: maxFee) { (response, error) in
             XCTAssert((error.kind == FIOError.ErrorKind.Failure), "transfer failed: \(error.localizedDescription )")
             expectation.fulfill()
         }
-        
-//        try? FIOSDK.wipePrivPubKeys()
-//        let keys = FIOSDK.privatePubKeyPair(forMnemonic: "hotel royal gasp strike hurdle expect dish surface era observe casual pond")
-//        let fioSDK = FIOSDK.sharedInstance(accountName: defaultAccount, privateKey: keys.privateKey, publicKey: keys.publicKey,systemPrivateKey:keys.privateKey, systemPublicKey:keys.publicKey, url: dev1Server)
-//        let timestamp = NSDate().timeIntervalSince1970
-//        var to = "nope\(Double(timestamp))".replacingOccurrences(of: ".", with: "")
-//        to = "\(to).brd"
-//        let amount: Float = 90.0
-//        fioSDK.registerFioName(fioName: to, publicReceiveAddresses: [:]) { (error) in
-//            guard error?.kind == FIOError.ErrorKind.Success else {
-//                expectation.fulfill()
-//                return
-//            }
-//
-//            fioSDK.getPublicAddress(fioAddress: self.requesteeFioName, tokenCode: "FIO") { (response, error) in
-//                guard error.kind == FIOError.ErrorKind.Success, let publicAddress = response?.publicAddress else {
-//                    expectation.fulfill()
-//                    return
-//                }
-//                fioSDK.transferFIOTokens(payeePublicAddress: publicAddress, amount: amount) { (response, error) in
-//                    XCTAssert((error.kind == FIOError.ErrorKind.Failure), "transfer failed: \(error.localizedDescription )")
-//                    expectation.fulfill()
-//                }
-//            }
-//        }
         
         wait(for: [expectation], timeout: TIMEOUT)
     }
@@ -708,8 +730,8 @@ class FIOSDKTests: XCTestCase {
         let fioName = "test\(Int(timestamp.rounded())).brd"
         let publicKey = "EOS8PRe4WRZJj5mkem6qVGKyvNFgPsNnjNN6kPhh6EaCpzCVin5Jj"
         
-        FIOSDK.sharedInstance().registerFIONameOnBehalfOfUser(fioName: fioName, publicKey: publicKey) { (response, error) in
-            XCTAssert((error?.kind == FIOError.ErrorKind.Success), "FIO Name: \(error?.localizedDescription)")
+        FIOSDK.sharedInstance().registerFIONameOnBehalfOfUser(fioName: fioName, publicKey: publicKey, publicReceiveAddresses: [:]) { (response, error) in
+            XCTAssert(response != nil, "Something went wrong")
             expectation.fulfill()
         }
         

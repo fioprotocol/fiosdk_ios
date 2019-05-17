@@ -13,7 +13,7 @@ internal struct PendingFIORequestsRequest: Codable {
     public let address: String
     
     enum CodingKeys: String, CodingKey{
-        case address = "fio_public_address"
+        case address = "fio_public_key"
     }
     
 }
