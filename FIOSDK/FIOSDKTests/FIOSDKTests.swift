@@ -684,6 +684,7 @@ class FIOSDKTests: XCTestCase {
         
         fioSDK.transferFIOTokens(payeePublicKey: payeePublicKey, amount: amount, maxFee: maxFee) { (response, error) in
             XCTAssert((error.kind == FIOError.ErrorKind.Success), "transfer failed: \(error.localizedDescription )")
+            XCTAssertNotNil(response?.feeCollected)
             //Transfer back
             self.defaultSDKConfig()
             sleep(60)
