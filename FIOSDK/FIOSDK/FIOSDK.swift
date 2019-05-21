@@ -121,32 +121,33 @@ public class FIOSDK: BaseFIOSDK {
      * - Parameter fioName: A string to register as FIO Address
      * - Parameter completion: A callback function that is called when request is finished either with success or failure. Check FIOError.kind to determine if is a success or a failure.
      */
-    private func register(fioName:String, actor: String, completion: @escaping ( _ error:FIOError?) -> ()) {
-        let registerName = RegisterName(fioName: fioName, actor: actor, ownerFIOPublicKey: getPublicKey(), maxFee: SUFUtils.amountToSUF(amount: 30))
+    private func register(fioName:String, actor: String, onCompletion: @escaping (_ response: RegisterNameResponse?,  _ error:FIOError?) -> ()) {
+        let registerName = RegisterNameRequest(fioName: fioName, actor: actor, ownerFIOPublicKey: FIOSDK.sharedInstance().getPublicKey(), maxFee: SUFUtils.amountToSUF(amount: 30.0))
         signedPostRequestTo(privateKey: getPrivateKey(),
                             route: ChainRoutes.registerFIOName,
                             forAction: ChainActions.registerFIOName,
                             withBody: registerName,
                             code: "fio.system",
                             account: actor) { (data, error) in
-            if data != nil {
-                completion(FIOError.success())
+            if let result = data {
+                let handledData: (response: RegisterNameResponse?, error: FIOError) = parseResponseFromTransactionResult(txResult: result)
+                onCompletion(handledData.response, handledData.error)
             } else {
                 if let error = error {
-                    completion(error)
+                    onCompletion(nil, error)
                 }
                 else {
-                    completion(FIOError.failure(localizedDescription: "register_fio_name request failed."))
+                    onCompletion(nil, FIOError.failure(localizedDescription: "register_fio_name request failed."))
                 }
             }
         }
     }
-    
-    public func registerFIOName(fioName:String, publicReceiveAddresses:Dictionary<String,String>, onCompletion: @escaping ( _ error:FIOError?) -> ()) {
+
+    public func registerFIOName(fioName:String, publicReceiveAddresses:Dictionary<String,String>, onCompletion: @escaping (_ response: RegisterNameResponse?, _ error:FIOError?) -> ()) {
         let actor = AccountNameGenerator.run(withPublicKey: getPublicKey())
-        self.register(fioName: fioName, actor: actor, completion: { (error) in
+        self.register(fioName: fioName, actor: actor, onCompletion: { (response, error) in
             guard error == nil || error?.kind == .Success else {
-                onCompletion(error)
+                onCompletion(response, error)
                 return
             }
             var addresses:Dictionary<String,String> = publicReceiveAddresses
@@ -181,7 +182,7 @@ public class FIOSDK: BaseFIOSDK {
             operations.first?.run()
             
             group.notify(queue: .main){
-                onCompletion(FIOError.init(kind: anyFail ? .Failure : .Success, localizedDescription: ""))
+                onCompletion(response, FIOError.init(kind: anyFail ? .Failure : .Success, localizedDescription: ""))
             }
         })
     }

@@ -13,9 +13,11 @@ extension FIOSDK.Responses {
     public struct TransferFIOTokensResponse: Codable {
         
         public let status: String
+        public let feeCollected: Int
         
         enum CodingKeys: String, CodingKey {
             case status = "status"
+            case feeCollected = "fee_collected"
         }
         
     }
