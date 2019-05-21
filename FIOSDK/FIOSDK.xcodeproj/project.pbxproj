@@ -70,6 +70,8 @@
 		283438572245733800E60314 /* PrivateKey+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 283438562245733800E60314 /* PrivateKey+Extensions.swift */; };
 		284853AC2281AEE600B871E9 /* RegisterNameForUserRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 284853AA2281AEE600B871E9 /* RegisterNameForUserRequest.swift */; };
 		284853AD2281AEE600B871E9 /* RegisterNameForUserResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 284853AB2281AEE600B871E9 /* RegisterNameForUserResponse.swift */; };
+		284853B12289C6B900B871E9 /* SUFUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 284853B02289C6B900B871E9 /* SUFUtils.swift */; };
+		284853B32289C73F00B871E9 /* SUFUtilsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 284853B22289C73E00B871E9 /* SUFUtilsTests.swift */; };
 		285649522229C031006E2533 /* AccountNameGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 285649512229C031006E2533 /* AccountNameGenerator.swift */; };
 		285649542229C3AE006E2533 /* FIOHTTPHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 285649532229C3AE006E2533 /* FIOHTTPHelper.swift */; };
 		2856D26F225CC90800BC5D36 /* TokenPublicAddressResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2856D26E225CC90800BC5D36 /* TokenPublicAddressResponse.swift */; };
@@ -205,6 +207,8 @@
 		283438562245733800E60314 /* PrivateKey+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PrivateKey+Extensions.swift"; sourceTree = "<group>"; };
 		284853AA2281AEE600B871E9 /* RegisterNameForUserRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RegisterNameForUserRequest.swift; sourceTree = "<group>"; };
 		284853AB2281AEE600B871E9 /* RegisterNameForUserResponse.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RegisterNameForUserResponse.swift; sourceTree = "<group>"; };
+		284853B02289C6B900B871E9 /* SUFUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SUFUtils.swift; sourceTree = "<group>"; };
+		284853B22289C73E00B871E9 /* SUFUtilsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SUFUtilsTests.swift; sourceTree = "<group>"; };
 		285649512229C031006E2533 /* AccountNameGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountNameGenerator.swift; sourceTree = "<group>"; };
 		285649532229C3AE006E2533 /* FIOHTTPHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FIOHTTPHelper.swift; sourceTree = "<group>"; };
 		2856D26E225CC90800BC5D36 /* TokenPublicAddressResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenPublicAddressResponse.swift; sourceTree = "<group>"; };
@@ -326,6 +330,7 @@
 				28BB8B652257B60E0049A761 /* FIOKeyManagerTests.swift */,
 				28BB8B672257BBAB0049A761 /* KeychainInteractorTests.swift */,
 				28BED285225BD83400F8606E /* FIODateUtilsTests.swift */,
+				284853B22289C73E00B871E9 /* SUFUtilsTests.swift */,
 			);
 			path = FIOSDKTests;
 			sourceTree = "<group>";
@@ -659,6 +664,7 @@
 				0203C54F217A487A0054FA10 /* Crypto.swift */,
 				0203C598217A4EC90054FA10 /* Utilities.swift */,
 				28BED283225BD3D900F8606E /* DateUtils.swift */,
+				284853B02289C6B900B871E9 /* SUFUtils.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -761,7 +767,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 1010;
-				LastUpgradeCheck = 1000;
+				LastUpgradeCheck = 1020;
 				ORGANIZATIONNAME = "Dapix, Inc.";
 				TargetAttributes = {
 					0203C518217A48100054FA10 = {
@@ -914,6 +920,7 @@
 				2818C63A2260B8AB001871C8 /* ChainInfo.swift in Sources */,
 				287F108C22567729001E3B32 /* TxResult.swift in Sources */,
 				2818C63F2260BE36001871C8 /* HTTPMethod.swift in Sources */,
+				284853B12289C6B900B871E9 /* SUFUtils.swift in Sources */,
 				287F10772256597D001E3B32 /* FIONamesResponse.swift in Sources */,
 				283438552245439B00E60314 /* curves.c in Sources */,
 				28BB8B622257909E0049A761 /* FIOKeyManager.swift in Sources */,
@@ -954,6 +961,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				28BB8B662257B60E0049A761 /* FIOKeyManagerTests.swift in Sources */,
+				284853B32289C73F00B871E9 /* SUFUtilsTests.swift in Sources */,
 				0203C528217A48100054FA10 /* FIOSDKTests.swift in Sources */,
 				28BED286225BD83400F8606E /* FIODateUtilsTests.swift in Sources */,
 				28BB8B682257BBAB0049A761 /* KeychainInteractorTests.swift in Sources */,
@@ -1122,7 +1130,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_SCHEME = FIOSDK;
 				DEFINES_MODULE = YES;

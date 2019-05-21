@@ -12,10 +12,12 @@ internal struct RejectFundsRequest: Codable {
     
     var fioReqID: String
     var actor: String
+    let maxFee: Int
     
     enum CodingKeys: String, CodingKey {
         case fioReqID = "fio_request_id"
         case actor
+        case maxFee = "max_fee"
     }
     
 }

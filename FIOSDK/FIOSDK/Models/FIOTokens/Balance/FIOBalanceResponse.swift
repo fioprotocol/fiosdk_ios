@@ -12,7 +12,7 @@ extension FIOSDK.Responses {
 
     public struct FIOBalanceResponse: Codable {
         
-        public let balance: String
+        public var balance: String
         
         enum CodingKeys: String, CodingKey {
             case balance = "balance"

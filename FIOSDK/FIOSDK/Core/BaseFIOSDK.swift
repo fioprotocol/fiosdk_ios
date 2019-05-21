@@ -76,7 +76,7 @@ public class BaseFIOSDK: NSObject {
         return Utilities.sharedInstance().mockURL
     }
     
-    internal func getPublicKey() -> String {
+    public func getPublicKey() -> String {
         return self.publicKey
     }
     

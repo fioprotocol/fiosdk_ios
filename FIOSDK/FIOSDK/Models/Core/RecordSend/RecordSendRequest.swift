@@ -21,6 +21,7 @@ internal struct RecordSendRequest: Codable {
     let obtID: String
     let metadata: String
     let actor: String
+    let maxFee: Int
     
     enum CodingKeys: String, CodingKey {
         case payerFIOAddress = "payer_fio_address"
@@ -34,6 +35,7 @@ internal struct RecordSendRequest: Codable {
         case metadata = "metadata"
         case fioReqID = "fio_request_id"
         case actor
+        case maxFee = "max_fee"
     }
     
     public init(fioReqID: String? = nil,
@@ -46,7 +48,8 @@ internal struct RecordSendRequest: Codable {
                 status: String,
                 obtID: String,
                 memo: String,
-                actor: String) {
+                actor: String,
+                maxFee: Int) {
         self.fioReqID = fioReqID ?? ""
         self.payerFIOAddress = payerFIOAddress
         self.payeeFIOAddress = payeeFIOAddress
@@ -58,6 +61,7 @@ internal struct RecordSendRequest: Codable {
         self.obtID = obtID
         self.metadata = MetaData(memo: memo).toJSONString()
         self.actor = actor
+        self.maxFee = maxFee
     }
     
     public struct MetaData: Codable {
