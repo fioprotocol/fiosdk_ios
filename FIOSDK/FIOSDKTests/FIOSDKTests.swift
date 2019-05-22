@@ -270,7 +270,7 @@ class FIOSDKTests: XCTestCase {
     
     func testGetFioNamesWithUnvalidAddressShouldRespondWithNotFound(){
         let expectation = XCTestExpectation(description: "testgetfionames")
-        FIOSDK.sharedInstance().getFioNames(publicAddress: "NOT VALID ADDRESS") { (data, error) in
+        FIOSDK.sharedInstance().getFIONames(FIOPublicKey: "NOT VALID ADDRESS") { (data, error) in
             XCTAssert(error?.kind == FIOError.ErrorKind.Failure, "Should have failed")
             expectation.fulfill()
         }
@@ -344,7 +344,7 @@ class FIOSDKTests: XCTestCase {
         let tokenPubAdd = "smp\(Int(timestamp.rounded()))"
         let fioName = "fio\(Int(timestamp.rounded())).brd"
         
-        FIOSDK.sharedInstance().registerFIOName(fioName: fioName, publicReceiveAddresses: ["BTC":tokenPubAdd]) { (error) in
+        FIOSDK.sharedInstance().registerFIOName(fioName: fioName, publicReceiveAddresses: ["BTC":tokenPubAdd]) { (response, error) in
             guard error?.kind == .Success else {
                 XCTFail("User not registered")
                 expectation.fulfill()
@@ -528,7 +528,7 @@ class FIOSDKTests: XCTestCase {
         let fioName = "sha\(Int(timestamp.rounded())).brd"
         let expectation = XCTestExpectation(description: "testRegisterFIONameWithNewValueShouldRegister")
 
-        FIOSDK.sharedInstance().registerFIOName(fioName: fioName, publicReceiveAddresses: ["BTC":"1PMycacnJaSqwwJqjawXBErnLsZ7RkXUAs", "ETH":requestorAddress], onCompletion: {error in ()
+        FIOSDK.sharedInstance().registerFIOName(fioName: fioName, publicReceiveAddresses: ["BTC":"1PMycacnJaSqwwJqjawXBErnLsZ7RkXUAs", "ETH":requestorAddress], onCompletion: {response, error in ()
             XCTAssert((error?.kind == FIOError.ErrorKind.Success), "registerFIOName NOT SUCCESSFUL")
             expectation.fulfill()
         })
@@ -541,9 +541,9 @@ class FIOSDKTests: XCTestCase {
         let fioName = "sha\(Int(timestamp.rounded())).brd"
         let expectation = XCTestExpectation(description: "testRegisterFIONameWithAlreadyRegisteredValueShouldFail")
 
-        FIOSDK.sharedInstance().registerFIOName(fioName: fioName, publicReceiveAddresses: [:], onCompletion: {error in ()
+        FIOSDK.sharedInstance().registerFIOName(fioName: fioName, publicReceiveAddresses: [:], onCompletion: { response, error in ()
             XCTAssert((error?.kind == FIOError.ErrorKind.Success), "registerFIOName NOT SUCCESSFUL")
-            FIOSDK.sharedInstance().registerFIOName(fioName: fioName, publicReceiveAddresses: [:], onCompletion: {error in ()
+            FIOSDK.sharedInstance().registerFIOName(fioName: fioName, publicReceiveAddresses: [:], onCompletion: { response, error in ()
                 XCTAssert((error?.kind == FIOError.ErrorKind.Failure), "registerFIOName NOT SUCCESSFUL")
                 expectation.fulfill()
             })
@@ -557,9 +557,9 @@ class FIOSDKTests: XCTestCase {
         let fioName = "sha\(Int(timestamp.rounded())).brd"
         let expectation = XCTestExpectation(description: "testRegisterFIONameWithAlreadyRegisteredValueShouldFail")
         
-        FIOSDK.sharedInstance().registerFIOName(fioName: fioName, publicReceiveAddresses: ["FIO":"ignoreme"], onCompletion: {error in ()
+        FIOSDK.sharedInstance().registerFIOName(fioName: fioName, publicReceiveAddresses: ["FIO":"ignoreme"], onCompletion: { response, error in ()
             XCTAssert((error?.kind == FIOError.ErrorKind.Success), "registerFIOName NOT SUCCESSFUL")
-            FIOSDK.sharedInstance().getFioNames(publicAddress: "ignoreme", completion: { (response, error) in
+            FIOSDK.sharedInstance().getFIONames(FIOPublicKey: "ignoreme", completion: { (response, error) in
                 XCTAssert((error?.kind == FIOError.ErrorKind.Failure), "Added the address it shouldn´t be added")
                 expectation.fulfill()
             })

@@ -349,13 +349,13 @@ public class FIOSDK: BaseFIOSDK {
     
     //MARK: Get FIO Names
     
-    /// Returns FIO Addresses and FIO Domains owned by this public address.
+    /// Returns FIO Addresses and FIO Domains owned by given FIO public key.
     ///
     /// - Parameters:
-    ///   - publicAddress: FIO public address of new owner. Has to match signature
+    ///   - FIOPublicKey: FIO public key from which to recover FIO names, if any.
     ///   - completion: Completion handler
-    public func getFioNames(publicAddress: String, completion: @escaping (_ names: FIOSDK.Responses.FIONamesResponse?, _ error: FIOError?) -> ()){
-        let body = FIONamesRequest(fioPubAddress: publicAddress)
+    public func getFIONames(FIOPublicKey: String, completion: @escaping (_ names: FIOSDK.Responses.FIONamesResponse?, _ error: FIOError?) -> ()){
+        let body = FIONamesRequest(FIOPublicKey: FIOPublicKey)
         let url = ChainRouteBuilder.build(route: ChainRoutes.getFIONames)
         FIOHTTPHelper.postRequestTo(url, withBody: body) { (data, error) in
             if let data = data {
@@ -388,7 +388,7 @@ public class FIOSDK: BaseFIOSDK {
     ///   - fioAddress: FIO Address for which to get details to, e.g. "alice.brd"
     ///   - onCompletion: A FioAddressResponse object containing details.
     public func getFIONameDetails(_ fioAddress: String, onCompletion: @escaping (_ publicAddress: FIOSDK.Responses.FIOAddressResponse?, _ error: FIOError) -> ()) {
-        FIOSDK.sharedInstance().getFioNames(publicAddress: FIOSDK.sharedInstance().getPublicKey(), completion: { (response, error) in
+        FIOSDK.sharedInstance().getFIONames(FIOPublicKey: FIOSDK.sharedInstance().getPublicKey(), completion: { (response, error) in
             guard error?.kind == .Success, let addresses = response?.addresses else {
                 onCompletion(nil, error ?? FIOError.failure(localizedDescription: "FIO details not found"))
                 return
@@ -449,7 +449,7 @@ public class FIOSDK: BaseFIOSDK {
     ///   - withFIOPublicAddress: FIO public Address under which the token was registered.
     ///   - onCompletion: A TokenPublicAddressResponse containing FIO address and public address.
     public func getTokenPublicAddress(forToken token: String, withFIOPublicAddress publicAddress: String, onCompletion: @escaping (_ publicAddress: FIOSDK.Responses.TokenPublicAddressResponse?, _ error: FIOError) -> ()) {
-        FIOSDK.sharedInstance().getFioNames(publicAddress: publicAddress) { (response, error) in
+        FIOSDK.sharedInstance().getFIONames(FIOPublicKey: publicAddress) { (response, error) in
             guard error == nil || error?.kind == .Success, let fioAddress = response?.addresses.first?.address else {
                 onCompletion(nil, error ?? FIOError.failure(localizedDescription: "Failed to retrieve token public address."))
                 return
@@ -585,7 +585,7 @@ public class FIOSDK: BaseFIOSDK {
                                 memo: String,
                                 maxFee: Double,
                                 onCompletion: @escaping (_ response: FIOSDK.Responses.RecordSendResponse?, _ error: FIOError?) -> ()) {
-        FIOSDK.sharedInstance().getFioNames(publicAddress: FIOSDK.sharedInstance().getPublicKey()) { (response, error) in
+        FIOSDK.sharedInstance().getFIONames(FIOPublicKey: FIOSDK.sharedInstance().getPublicKey()) { (response, error) in
             guard error == nil || error?.kind == .Success, let payerFIOAddress = response?.addresses.first?.address else {
                 onCompletion(nil, error ?? FIOError.failure(localizedDescription: "Failed to send record."))
                     return

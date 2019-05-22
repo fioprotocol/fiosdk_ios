@@ -10,10 +10,10 @@ import Foundation
 
 internal struct FIONamesRequest: Codable {
     
-    public let fioPubAddress: String
+    public let FIOPublicKey: String
     
     enum CodingKeys: String, CodingKey {
-        case fioPubAddress = "fio_public_key"
+        case FIOPublicKey = "fio_public_key"
     }
     
 }
