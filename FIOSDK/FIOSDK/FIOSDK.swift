@@ -123,7 +123,7 @@ public class FIOSDK: BaseFIOSDK {
      * - Parameter maxFee: Maximum amount of SUFs the user is willing to pay for fee. Should be preceded by /get_fee for correct value.
      * - Parameter completion: A callback function that is called when request is finished either with success or failure. Check FIOError.kind to determine if is a success or a failure.
      */
-    public func registerFIOAddress(_ FIOAddress: String, publicReceiveAddresses:Dictionary<String,String>, maxFee: Double, onCompletion: @escaping (_ response: RegisterFIOAddressResponse?, _ error:FIOError?) -> ()) {
+    public func registerFIOAddress(_ FIOAddress: String, publicReceiveAddresses:Dictionary<String,String>, maxFee: Double, onCompletion: @escaping (_ response: FIOSDK.Responses.RegisterFIOAddressResponse?, _ error:FIOError?) -> ()) {
         self.registerFIOAddress(FIOAddress, maxFee: maxFee) { (response, error) in
             guard error == nil || error?.kind == .Success else {
                 onCompletion(response, error)
@@ -238,7 +238,7 @@ public class FIOSDK: BaseFIOSDK {
         }
     }
     
-    public func registerFIODomain(_ FIODomain: String, maxFee: Double, onCompletion: @escaping (_ response: RegisterFIODomainResponse? , _ error:FIOError?) -> ()) {
+    public func registerFIODomain(_ FIODomain: String, maxFee: Double, onCompletion: @escaping (_ response: FIOSDK.Responses.RegisterFIODomainResponse? , _ error:FIOError?) -> ()) {
         guard isFIODomainValid(FIODomain) else {
             onCompletion(nil, FIOError.failure(localizedDescription: "Invalid FIO Domain."))
             return
@@ -252,7 +252,7 @@ public class FIOSDK: BaseFIOSDK {
                             code: "fio.system",
                             account: actor) { (data, error) in
                                 if let result = data {
-                                    let handledData: (response: RegisterFIODomainResponse?, error: FIOError) = parseResponseFromTransactionResult(txResult: result)
+                                    let handledData: (response: FIOSDK.Responses.RegisterFIODomainResponse?, error: FIOError) = parseResponseFromTransactionResult(txResult: result)
                                     onCompletion(handledData.response, handledData.error)
                                 } else {
                                     if let error = error {
@@ -271,7 +271,7 @@ public class FIOSDK: BaseFIOSDK {
      * - Parameter maxFee: Maximum amount of SUFs the user is willing to pay for fee. Should be preceded by /get_fee for correct value.
      * - Parameter completion: A callback function that is called when request is finished either with success or failure. Check FIOError.kind to determine if is a success or a failure.
      */
-    internal func registerFIOAddress(_ FIOAddress: String, maxFee: Double, onCompletion: @escaping (_ response: RegisterFIOAddressResponse? , _ error:FIOError?) -> ()) {
+    internal func registerFIOAddress(_ FIOAddress: String, maxFee: Double, onCompletion: @escaping (_ response: FIOSDK.Responses.RegisterFIOAddressResponse? , _ error:FIOError?) -> ()) {
         guard isFIOAddressValid(FIOAddress) else {
             onCompletion(nil, FIOError.failure(localizedDescription: "Invalid FIO Address."))
             return
@@ -285,7 +285,7 @@ public class FIOSDK: BaseFIOSDK {
                             code: "fio.system",
                             account: actor) { (data, error) in
                                 if let result = data {
-                                    let handledData: (response: RegisterFIOAddressResponse?, error: FIOError) = parseResponseFromTransactionResult(txResult: result)
+                                    let handledData: (response: FIOSDK.Responses.RegisterFIOAddressResponse?, error: FIOError) = parseResponseFromTransactionResult(txResult: result)
                                     onCompletion(handledData.response, handledData.error)
                                 } else {
                                     if let error = error {
