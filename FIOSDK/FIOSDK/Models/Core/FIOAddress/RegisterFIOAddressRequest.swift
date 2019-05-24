@@ -10,14 +10,14 @@ import Foundation
 
 internal struct RegisterFIOAddressRequest: Codable {
     
-    let FIOAddress: String
-    let FIOPublicKey: String
+    let fioAddress: String
+    let fioPublicKey: String
     let maxFee: Int
     let actor: String
     
     enum CodingKeys: String, CodingKey {
-        case FIOAddress = "fio_address"
-        case FIOPublicKey = "owner_fio_public_key"
+        case fioAddress = "fio_address"
+        case fioPublicKey = "owner_fio_public_key"
         case maxFee = "max_fee"
         case actor
     }

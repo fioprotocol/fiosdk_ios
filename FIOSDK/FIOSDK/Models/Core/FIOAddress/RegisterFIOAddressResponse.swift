@@ -8,16 +8,20 @@
 
 import Foundation
 
-public struct RegisterFIOAddressResponse: Codable {
+extension FIOSDK.Responses {
     
-    public let status: String
-    public let expiration: Date
-    public let feeCollected: Int
-    
-    enum CodingKeys: String, CodingKey {
-        case status
-        case expiration
-        case feeCollected = "fee_collected"
+    public struct RegisterFIOAddressResponse: Codable {
+        
+        public let status: String
+        public let expiration: Date
+        public let feeCollected: Int
+        
+        enum CodingKeys: String, CodingKey {
+            case status
+            case expiration
+            case feeCollected = "fee_collected"
+        }
+        
     }
     
 }
