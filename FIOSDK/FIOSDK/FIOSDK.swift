@@ -361,10 +361,10 @@ public class FIOSDK: BaseFIOSDK {
     /// Pending requests call polls for any pending requests sent to a receiver. [visit api specs](https://stealth.atlassian.net/wiki/spaces/DEV/pages/53280776/API#API-/get_pending_fio_requests-GetpendingFIORequests)
     ///
     /// - Parameters:
-    ///   - FIOPublicKey: FIO public key to get pending requests for. (requestee)
+    ///   - fioPublicKey: FIO public key to get pending requests for. (requestee)
     ///   - completion: Completion hanlder
-    public func getPendingFIORequests(FIOPublicKey: String, completion: @escaping (_ pendingRequests: FIOSDK.Responses.PendingFIORequestsResponse?, _ error:FIOError?) -> ()) {
-        let body = PendingFIORequestsRequest(FIOPublicKey: FIOPublicKey)
+    public func getPendingFioRequests(fioPublicKey: String, completion: @escaping (_ pendingRequests: FIOSDK.Responses.PendingFIORequestsResponse?, _ error:FIOError?) -> ()) {
+        let body = PendingFIORequestsRequest(fioPublicKey: fioPublicKey)
         let url = ChainRouteBuilder.build(route: ChainRoutes.getPendingFIORequests)
         FIOHTTPHelper.postRequestTo(url, withBody: body) { (data, error) in
             if let data = data {
@@ -393,8 +393,8 @@ public class FIOSDK: BaseFIOSDK {
     /// - Parameters:
     ///   - FIOPublicKey: FIO public key from which to recover FIO names, if any.
     ///   - completion: Completion handler
-    public func getFIONames(FIOPublicKey: String, completion: @escaping (_ names: FIOSDK.Responses.FIONamesResponse?, _ error: FIOError?) -> ()){
-        let body = FIONamesRequest(FIOPublicKey: FIOPublicKey)
+    public func getFioNames(fioPublicKey: String, completion: @escaping (_ names: FIOSDK.Responses.FIONamesResponse?, _ error: FIOError?) -> ()){
+        let body = FIONamesRequest(fioPublicKey: fioPublicKey)
         let url = ChainRouteBuilder.build(route: ChainRoutes.getFIONames)
         FIOHTTPHelper.postRequestTo(url, withBody: body) { (data, error) in
             if let data = data {
@@ -427,7 +427,7 @@ public class FIOSDK: BaseFIOSDK {
     ///   - fioAddress: FIO Address for which to get details to, e.g. "alice.brd"
     ///   - onCompletion: A FioAddressResponse object containing details.
     public func getFIONameDetails(_ fioAddress: String, onCompletion: @escaping (_ publicAddress: FIOSDK.Responses.FIOAddressResponse?, _ error: FIOError) -> ()) {
-        FIOSDK.sharedInstance().getFIONames(FIOPublicKey: FIOSDK.sharedInstance().getPublicKey(), completion: { (response, error) in
+        FIOSDK.sharedInstance().getFioNames(fioPublicKey: FIOSDK.sharedInstance().getPublicKey(), completion: { (response, error) in
             guard error?.kind == .Success, let addresses = response?.addresses else {
                 onCompletion(nil, error ?? FIOError.failure(localizedDescription: "FIO details not found"))
                 return
@@ -488,7 +488,7 @@ public class FIOSDK: BaseFIOSDK {
     ///   - withFIOPublicAddress: FIO public Address under which the token was registered.
     ///   - onCompletion: A TokenPublicAddressResponse containing FIO address and public address.
     public func getTokenPublicAddress(forToken token: String, withFIOPublicAddress publicAddress: String, onCompletion: @escaping (_ publicAddress: FIOSDK.Responses.TokenPublicAddressResponse?, _ error: FIOError) -> ()) {
-        FIOSDK.sharedInstance().getFIONames(FIOPublicKey: publicAddress) { (response, error) in
+        FIOSDK.sharedInstance().getFioNames(fioPublicKey: publicAddress) { (response, error) in
             guard error == nil || error?.kind == .Success, let fioAddress = response?.addresses.first?.address else {
                 onCompletion(nil, error ?? FIOError.failure(localizedDescription: "Failed to retrieve token public address."))
                 return
@@ -576,10 +576,10 @@ public class FIOSDK: BaseFIOSDK {
     /// Get all requests sent by the given FIO public key. Usually made with requestFunds.
     /// To read further infomation about this [visit the API specs](https://stealth.atlassian.net/wiki/spaces/DEV/pages/53280776/API#API-/get_sent_fio_requests-GetFIORequestssentout)
     /// - Parameters:
-    ///   - FIOPublicKey: FIO public key to retrieve sent requests.
+    ///   - fioPublicKey: FIO public key to retrieve sent requests.
     ///   - completion: The completion result
-    public func getSentFIORequests(FIOPublicKey: String, completion: @escaping (_ response: FIOSDK.Responses.SentFIORequestsResponse?, _ error: FIOError) -> ()){
-        let body = SentFIORequestsRequest(FIOPublicKey: FIOPublicKey)
+    public func getSentFioRequests(fioPublicKey: String, completion: @escaping (_ response: FIOSDK.Responses.SentFIORequestsResponse?, _ error: FIOError) -> ()){
+        let body = SentFIORequestsRequest(fioPublicKey: fioPublicKey)
         let url = ChainRouteBuilder.build(route: ChainRoutes.getSentFIORequests)
         FIOHTTPHelper.postRequestTo(url, withBody: body) { (data, error) in
             if let data = data {
@@ -624,7 +624,7 @@ public class FIOSDK: BaseFIOSDK {
                                 memo: String,
                                 maxFee: Double,
                                 onCompletion: @escaping (_ response: FIOSDK.Responses.RecordSendResponse?, _ error: FIOError?) -> ()) {
-        FIOSDK.sharedInstance().getFIONames(FIOPublicKey: FIOSDK.sharedInstance().getPublicKey()) { (response, error) in
+        FIOSDK.sharedInstance().getFioNames(fioPublicKey: FIOSDK.sharedInstance().getPublicKey()) { (response, error) in
             guard error == nil || error?.kind == .Success, let payerFIOAddress = response?.addresses.first?.address else {
                 onCompletion(nil, error ?? FIOError.failure(localizedDescription: "Failed to send record."))
                     return

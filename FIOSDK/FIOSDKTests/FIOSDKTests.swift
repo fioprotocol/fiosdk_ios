@@ -252,7 +252,7 @@ class FIOSDKTests: XCTestCase {
                     if error?.kind == .Success {
                         expectationReqFunds.fulfill()
                         self.alternativeSDKConfig()
-                        FIOSDK.sharedInstance().getPendingFIORequests(FIOPublicKey: FIOSDK.sharedInstance().getPublicKey()) { (data, error) in
+                        FIOSDK.sharedInstance().getPendingFioRequests(fioPublicKey: FIOSDK.sharedInstance().getPublicKey()) { (data, error) in
                             XCTAssert(error?.kind == FIOError.ErrorKind.Success, "testgetpendingfiorequest not successful: \(error?.localizedDescription ?? "unknown")")
                             XCTAssertNotNil(data, "testgetpendingfiorequest result came out nil")
                             expectationPendingReq.fulfill()
@@ -270,7 +270,7 @@ class FIOSDKTests: XCTestCase {
     
     func testGetFioNamesWithUnvalidAddressShouldRespondWithNotFound(){
         let expectation = XCTestExpectation(description: "testgetfionames")
-        FIOSDK.sharedInstance().getFIONames(FIOPublicKey: "NOT VALID ADDRESS") { (data, error) in
+        FIOSDK.sharedInstance().getFioNames(fioPublicKey: "NOT VALID ADDRESS") { (data, error) in
             XCTAssert(error?.kind == FIOError.ErrorKind.Failure, "Should have failed")
             expectation.fulfill()
         }
@@ -497,7 +497,7 @@ class FIOSDKTests: XCTestCase {
                         expRejectRequest.fulfill()
                         return
                     }
-                    FIOSDK.sharedInstance().getSentFIORequests(FIOPublicKey: FIOSDK.sharedInstance().getPublicKey(), completion: { (response, error) in
+                    FIOSDK.sharedInstance().getSentFioRequests(fioPublicKey: FIOSDK.sharedInstance().getPublicKey(), completion: { (response, error) in
                         XCTAssert(error.kind == .Success && response != nil, "testGetSentRequest couldn't retreive request")
                         guard error.kind == .Success, response != nil else {
                             XCTFail("getSentFioRequest Request should have sent fio requests")
@@ -605,7 +605,7 @@ class FIOSDKTests: XCTestCase {
                 sleep(60)
                 FIOSDK.sharedInstance().registerFIOAddress(fioName, publicReceiveAddresses: ["FIO":"ignoreme"], maxFee:2, onCompletion: { response, error in ()
                     XCTAssert((error?.kind == FIOError.ErrorKind.Success), "registerFIOName NOT SUCCESSFUL")
-                    FIOSDK.sharedInstance().getFIONames(FIOPublicKey: "ignoreme", completion: { (response, error) in
+                    FIOSDK.sharedInstance().getFioNames(fioPublicKey: "ignoreme", completion: { (response, error) in
                         XCTAssert((error?.kind == FIOError.ErrorKind.Failure), "Added the address it shouldn´t be added")
                         expectation.fulfill()
                     })
