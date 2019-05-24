@@ -10,10 +10,10 @@ import Foundation
 
 internal struct SentFIORequestsRequest: Codable {
     
-    public let address: String
+    public let fioPublicKey: String
     
     enum CodingKeys: String, CodingKey{
-        case address = "fio_public_key"
+        case fioPublicKey = "fio_public_key"
     }
     
 }

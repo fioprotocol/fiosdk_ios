@@ -322,10 +322,10 @@ public class FIOSDK: BaseFIOSDK {
     /// Pending requests call polls for any pending requests sent to a receiver. [visit api specs](https://stealth.atlassian.net/wiki/spaces/DEV/pages/53280776/API#API-/get_pending_fio_requests-GetpendingFIORequests)
     ///
     /// - Parameters:
-    ///   - fioPublicAddress: FIO public address of new owner. Has to match signature. (requestee)
+    ///   - fioPublicKey: FIO public key to get pending requests for. (requestee)
     ///   - completion: Completion hanlder
-    public func getPendingFioRequests(fioPublicAddress: String, completion: @escaping (_ pendingRequests: FIOSDK.Responses.PendingFIORequestsResponse?, _ error:FIOError?) -> ()) {
-        let body = PendingFIORequestsRequest(address: fioPublicAddress)
+    public func getPendingFioRequests(fioPublicKey: String, completion: @escaping (_ pendingRequests: FIOSDK.Responses.PendingFIORequestsResponse?, _ error:FIOError?) -> ()) {
+        let body = PendingFIORequestsRequest(fioPublicKey: fioPublicKey)
         let url = ChainRouteBuilder.build(route: ChainRoutes.getPendingFIORequests)
         FIOHTTPHelper.postRequestTo(url, withBody: body) { (data, error) in
             if let data = data {
@@ -534,13 +534,13 @@ public class FIOSDK: BaseFIOSDK {
     
     //MARK: Get Sent FIO Requests
     
-    /// Get all requests sent by the given public address. Usually made with requestFunds.
+    /// Get all requests sent by the given FIO public key. Usually made with requestFunds.
     /// To read further infomation about this [visit the API specs](https://stealth.atlassian.net/wiki/spaces/DEV/pages/53280776/API#API-/get_sent_fio_requests-GetFIORequestssentout)
     /// - Parameters:
-    ///   - publicAddress: FIO public address of owner.
+    ///   - fioPublicKey: FIO public key to retrieve sent requests.
     ///   - completion: The completion result
-    public func getSentFioRequests(publicAddress: String, completion: @escaping (_ response: FIOSDK.Responses.SentFIORequestsResponse?, _ error: FIOError) -> ()){
-        let body = SentFIORequestsRequest(address: publicAddress)
+    public func getSentFioRequests(fioPublicKey: String, completion: @escaping (_ response: FIOSDK.Responses.SentFIORequestsResponse?, _ error: FIOError) -> ()){
+        let body = SentFIORequestsRequest(fioPublicKey: fioPublicKey)
         let url = ChainRouteBuilder.build(route: ChainRoutes.getSentFIORequests)
         FIOHTTPHelper.postRequestTo(url, withBody: body) { (data, error) in
             if let data = data {

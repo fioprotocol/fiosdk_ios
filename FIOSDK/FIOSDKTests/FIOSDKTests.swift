@@ -252,7 +252,7 @@ class FIOSDKTests: XCTestCase {
                     if error?.kind == .Success {
                         expectationReqFunds.fulfill()
                         self.alternativeSDKConfig()
-                        FIOSDK.sharedInstance().getPendingFioRequests(fioPublicAddress: FIOSDK.sharedInstance().getPublicKey()) { (data, error) in
+                        FIOSDK.sharedInstance().getPendingFioRequests(fioPublicKey: FIOSDK.sharedInstance().getPublicKey()) { (data, error) in
                             XCTAssert(error?.kind == FIOError.ErrorKind.Success, "testgetpendingfiorequest not successful: \(error?.localizedDescription ?? "unknown")")
                             XCTAssertNotNil(data, "testgetpendingfiorequest result came out nil")
                             expectationPendingReq.fulfill()
@@ -484,7 +484,7 @@ class FIOSDKTests: XCTestCase {
                         expRejectRequest.fulfill()
                         return
                     }
-                    FIOSDK.sharedInstance().getSentFioRequests(publicAddress: FIOSDK.sharedInstance().getPublicKey(), completion: { (response, error) in
+                    FIOSDK.sharedInstance().getSentFioRequests(fioPublicKey: FIOSDK.sharedInstance().getPublicKey(), completion: { (response, error) in
                         XCTAssert(error.kind == .Success && response != nil, "testGetSentRequest couldn't retreive request")
                         guard error.kind == .Success, response != nil else {
                             XCTFail("getSentFioRequest Request should have sent fio requests")
