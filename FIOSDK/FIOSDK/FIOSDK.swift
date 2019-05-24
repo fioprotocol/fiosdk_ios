@@ -118,13 +118,13 @@ public class FIOSDK: BaseFIOSDK {
     
     /**
      * This function should be called to register a new FIO Address.
-     * - Parameter FIOAddress: A string to register as FIO Address
+     * - Parameter fioAddress: A string to register as FIO Address
      * - Parameter publicReceiveAddresses: A list of public addresses to add to the newly registered FIO address.
      * - Parameter maxFee: Maximum amount of SUFs the user is willing to pay for fee. Should be preceded by /get_fee for correct value.
      * - Parameter completion: A callback function that is called when request is finished either with success or failure. Check FIOError.kind to determine if is a success or a failure.
      */
-    public func registerFIOAddress(_ FIOAddress: String, publicReceiveAddresses:Dictionary<String,String>, maxFee: Double, onCompletion: @escaping (_ response: FIOSDK.Responses.RegisterFIOAddressResponse?, _ error:FIOError?) -> ()) {
-        self.registerFIOAddress(FIOAddress, maxFee: maxFee) { (response, error) in
+    public func registerFioAddress(_ fioAddress: String, publicReceiveAddresses:Dictionary<String,String>, maxFee: Double, onCompletion: @escaping (_ response: FIOSDK.Responses.RegisterFIOAddressResponse?, _ error:FIOError?) -> ()) {
+        self.registerFioAddress(fioAddress, maxFee: maxFee) { (response, error) in
             guard error == nil || error?.kind == .Success else {
                 onCompletion(response, error)
                 return
@@ -144,7 +144,7 @@ public class FIOSDK: BaseFIOSDK {
                 if self.pubAddressTokenFilter[chain.lowercased()] != nil { continue }
                 group.enter()
                 let operation = AddPublicAddressOperation(action: { operation in
-                    self.addPublicAddress(fioAddress: FIOAddress, chain: chain, publicAddress: receiveAddress, maxFee: 0, completion: { (error) in
+                    self.addPublicAddress(fioAddress: fioAddress, chain: chain, publicAddress: receiveAddress, maxFee: 0, completion: { (error) in
                         anyFail = error?.kind == .Failure
                         group.leave()
                         operation.next()
@@ -238,13 +238,19 @@ public class FIOSDK: BaseFIOSDK {
         }
     }
     
-    public func registerFIODomain(_ FIODomain: String, maxFee: Double, onCompletion: @escaping (_ response: FIOSDK.Responses.RegisterFIODomainResponse? , _ error:FIOError?) -> ()) {
-        guard isFIODomainValid(FIODomain) else {
+    /**
+     * This function should be called to register a new FIO Domain. [visit api](https://stealth.atlassian.net/wiki/spaces/DEV/pages/53280776/API#API-/register_fio_domain-RegisterFIODomain)
+     * - Parameter fioDomain: A string to register as FIO Domain
+     * - Parameter maxFee: Maximum amount of SUFs the user is willing to pay for fee. Should be preceded by /get_fee for correct value.
+     * - Parameter completion: A callback function that is called when request is finished either with success or failure. Check FIOError.kind to determine if is a success or a failure.
+     */
+    public func registerFioDomain(_ fioDomain: String, maxFee: Double, onCompletion: @escaping (_ response: FIOSDK.Responses.RegisterFIODomainResponse? , _ error:FIOError?) -> ()) {
+        guard isFIODomainValid(fioDomain) else {
             onCompletion(nil, FIOError.failure(localizedDescription: "Invalid FIO Domain."))
             return
         }
         let actor = AccountNameGenerator.run(withPublicKey: getPublicKey())
-        let domain = RegisterFIODomainRequest(FIODomain: FIODomain, FIOPublicKey: FIOSDK.sharedInstance().getPublicKey(), maxFee: SUFUtils.amountToSUF(amount: maxFee), actor: actor)
+        let domain = RegisterFIODomainRequest(fioDomain: fioDomain, fioPublicKey: FIOSDK.sharedInstance().getPublicKey(), maxFee: SUFUtils.amountToSUF(amount: maxFee), actor: actor)
         signedPostRequestTo(privateKey: getPrivateKey(),
                             route: ChainRoutes.registerFIODomain,
                             forAction: ChainActions.registerFIODomain,
@@ -271,13 +277,13 @@ public class FIOSDK: BaseFIOSDK {
      * - Parameter maxFee: Maximum amount of SUFs the user is willing to pay for fee. Should be preceded by /get_fee for correct value.
      * - Parameter completion: A callback function that is called when request is finished either with success or failure. Check FIOError.kind to determine if is a success or a failure.
      */
-    internal func registerFIOAddress(_ FIOAddress: String, maxFee: Double, onCompletion: @escaping (_ response: FIOSDK.Responses.RegisterFIOAddressResponse? , _ error:FIOError?) -> ()) {
-        guard isFIOAddressValid(FIOAddress) else {
+    internal func registerFioAddress(_ fioAddress: String, maxFee: Double, onCompletion: @escaping (_ response: FIOSDK.Responses.RegisterFIOAddressResponse? , _ error:FIOError?) -> ()) {
+        guard isFIOAddressValid(fioAddress) else {
             onCompletion(nil, FIOError.failure(localizedDescription: "Invalid FIO Address."))
             return
         }
         let actor = AccountNameGenerator.run(withPublicKey: getPublicKey())
-        let address = RegisterFIOAddressRequest(FIOAddress: FIOAddress, FIOPublicKey: FIOSDK.sharedInstance().getPublicKey(), maxFee: SUFUtils.amountToSUF(amount: maxFee), actor: actor)
+        let address = RegisterFIOAddressRequest(fioAddress: fioAddress, fioPublicKey: FIOSDK.sharedInstance().getPublicKey(), maxFee: SUFUtils.amountToSUF(amount: maxFee), actor: actor)
         signedPostRequestTo(privateKey: getPrivateKey(),
                             route: ChainRoutes.registerFIOAddress,
                             forAction: ChainActions.registerFIOAddress,

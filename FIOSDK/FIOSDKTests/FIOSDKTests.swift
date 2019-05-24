@@ -351,7 +351,7 @@ class FIOSDKTests: XCTestCase {
         FIOSDK.sharedInstance().requestFunds(payer: "faucet.fio", payee: self.requesteeFioName, payeePublicAddress: FIOSDK.sharedInstance().getPublicKey(), amount: 2, tokenCode: "FIO", metadata: metadata, maxFee: 0) { (response, error) in
             if error?.kind == .Success {
                 sleep(60)
-                FIOSDK.sharedInstance().registerFIOAddress(fioName, publicReceiveAddresses: ["BTC":tokenPubAdd], maxFee: 2) { (response, error) in
+                FIOSDK.sharedInstance().registerFioAddress(fioName, publicReceiveAddresses: ["BTC":tokenPubAdd], maxFee: 2) { (response, error) in
                     guard error?.kind == .Success else {
                         XCTFail("User not registered")
                         expectation.fulfill()
@@ -549,7 +549,7 @@ class FIOSDKTests: XCTestCase {
         FIOSDK.sharedInstance().requestFunds(payer: "faucet.fio", payee: self.requesteeFioName, payeePublicAddress: FIOSDK.sharedInstance().getPublicKey(), amount: 2, tokenCode: "FIO", metadata: metadata, maxFee: 0) { (response, error) in
             if error?.kind == .Success {
                 sleep(60)
-                FIOSDK.sharedInstance().registerFIOAddress(fioName, publicReceiveAddresses: ["BTC":"1PMycacnJaSqwwJqjawXBErnLsZ7RkXUAs", "ETH":self.requestorAddress], maxFee: 2, onCompletion: {response, error in ()
+                FIOSDK.sharedInstance().registerFioAddress(fioName, publicReceiveAddresses: ["BTC":"1PMycacnJaSqwwJqjawXBErnLsZ7RkXUAs", "ETH":self.requestorAddress], maxFee: 2, onCompletion: {response, error in ()
                     XCTAssert((error?.kind == FIOError.ErrorKind.Success), "registerFIOName NOT SUCCESSFUL")
                     expectation.fulfill()
                 })
@@ -575,9 +575,9 @@ class FIOSDKTests: XCTestCase {
         FIOSDK.sharedInstance().requestFunds(payer: "faucet.fio", payee: self.requesteeFioName, payeePublicAddress: FIOSDK.sharedInstance().getPublicKey(), amount: 2, tokenCode: "FIO", metadata: metadata, maxFee: 0) { (response, error) in
             if error?.kind == .Success {
                 sleep(60)
-                FIOSDK.sharedInstance().registerFIOAddress(fioName, publicReceiveAddresses: [:], maxFee: 2, onCompletion: { response, error in ()
+                FIOSDK.sharedInstance().registerFioAddress(fioName, publicReceiveAddresses: [:], maxFee: 2, onCompletion: { response, error in ()
                     XCTAssert((error?.kind == FIOError.ErrorKind.Success), "registerFIOName NOT SUCCESSFUL")
-                    FIOSDK.sharedInstance().registerFIOAddress(fioName, publicReceiveAddresses: [:], maxFee: 2, onCompletion: { response, error in ()
+                    FIOSDK.sharedInstance().registerFioAddress(fioName, publicReceiveAddresses: [:], maxFee: 2, onCompletion: { response, error in ()
                         XCTAssert((error?.kind == FIOError.ErrorKind.Failure), "registerFIOName NOT SUCCESSFUL")
                         expectation.fulfill()
                     })
@@ -603,7 +603,7 @@ class FIOSDKTests: XCTestCase {
         FIOSDK.sharedInstance().requestFunds(payer: "faucet.fio", payee: self.requesteeFioName, payeePublicAddress: FIOSDK.sharedInstance().getPublicKey(), amount: 2, tokenCode: "FIO", metadata: metadata, maxFee: 0) { (response, error) in
             if error?.kind == .Success {
                 sleep(60)
-                FIOSDK.sharedInstance().registerFIOAddress(fioName, publicReceiveAddresses: ["FIO":"ignoreme"], maxFee:2, onCompletion: { response, error in ()
+                FIOSDK.sharedInstance().registerFioAddress(fioName, publicReceiveAddresses: ["FIO":"ignoreme"], maxFee:2, onCompletion: { response, error in ()
                     XCTAssert((error?.kind == FIOError.ErrorKind.Success), "registerFIOName NOT SUCCESSFUL")
                     FIOSDK.sharedInstance().getFioNames(fioPublicKey: "ignoreme", completion: { (response, error) in
                         XCTAssert((error?.kind == FIOError.ErrorKind.Failure), "Added the address it shouldn´t be added")
@@ -630,7 +630,7 @@ class FIOSDKTests: XCTestCase {
         FIOSDK.sharedInstance().requestFunds(payer: "faucet.fio", payee: self.requesteeFioName, payeePublicAddress: FIOSDK.sharedInstance().getPublicKey(), amount: 30, tokenCode: "FIO", metadata: metadata, maxFee: 0) { (response, error) in
             if error?.kind == .Success {
                 sleep(60)
-                FIOSDK.sharedInstance().registerFIODomain(domain, maxFee: 30.0, onCompletion: { (response, error) in
+                FIOSDK.sharedInstance().registerFioDomain(domain, maxFee: 30.0, onCompletion: { (response, error) in
                     XCTAssert((error?.kind == FIOError.ErrorKind.Success), "registerFIODomain NOT SUCCESSFUL")
                     XCTAssertNotNil(response)
                     XCTAssert(response?.status != "")
@@ -650,7 +650,7 @@ class FIOSDKTests: XCTestCase {
         let domain = "#&*("
         let expectation = XCTestExpectation(description: "testRegisterFIODomainWithNewValueShouldRegister")
         
-        FIOSDK.sharedInstance().registerFIODomain(domain, maxFee: 30.0, onCompletion: { (response, error) in
+        FIOSDK.sharedInstance().registerFioDomain(domain, maxFee: 30.0, onCompletion: { (response, error) in
             XCTAssert((error?.kind == FIOError.ErrorKind.Failure), String(format:"registerFIODomain Should not register invalid domains: %@", domain))
             expectation.fulfill()
         })
@@ -668,7 +668,7 @@ class FIOSDKTests: XCTestCase {
         FIOSDK.sharedInstance().requestFunds(payer: "faucet.fio", payee: self.requesteeFioName, payeePublicAddress: FIOSDK.sharedInstance().getPublicKey(), amount: 2, tokenCode: "FIO", metadata: metadata, maxFee: 0) { (response, error) in
             if error?.kind == .Success {
                 sleep(60)
-                FIOSDK.sharedInstance().registerFIODomain(address, maxFee: 2, onCompletion: { (response, error) in
+                FIOSDK.sharedInstance().registerFioDomain(address, maxFee: 2, onCompletion: { (response, error) in
                     XCTAssert((error?.kind == FIOError.ErrorKind.Success), "registerFIODomain NOT SUCCESSFUL")
                     XCTAssertNotNil(response)
                     XCTAssert(response?.status != "")
@@ -688,7 +688,7 @@ class FIOSDKTests: XCTestCase {
         let address = "#&*("
         let expectation = XCTestExpectation(description: "testRegisterFIOAddressWithInvalidValueShouldNotRegister")
         
-        FIOSDK.sharedInstance().registerFIOAddress(address, maxFee: 2, onCompletion: { (response, error) in
+        FIOSDK.sharedInstance().registerFioAddress(address, maxFee: 2, onCompletion: { (response, error) in
             XCTAssert((error?.kind == FIOError.ErrorKind.Failure), String(format:"registerFIODomain Should not register invalid domains: %@", address))
             expectation.fulfill()
         })
