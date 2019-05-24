@@ -10,11 +10,12 @@ import Foundation
 
 internal enum ChainActions: String {
     
-    case registerFIOName    = "regaddress"
-    case newFundsRequest    = "newfundsreq"
-    case rejectFundsRequest = "rejectfndreq"
-    case addPublicAddress   = "addaddress"
-    case recordSend         = "recordsend"
-    case transferTokens     = "trnsfiopubky"
+    case newFundsRequest        = "newfundsreq"
+    case rejectFundsRequest     = "rejectfndreq"
+    case addPublicAddress       = "addaddress"
+    case recordSend             = "recordsend"
+    case transferTokens         = "trnsfiopubky"
+    case registerFIODomain      = "regdomain"
+    case registerFIOAddress     = "regaddress"
     
 }
