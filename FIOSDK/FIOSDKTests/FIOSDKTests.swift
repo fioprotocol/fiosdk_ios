@@ -270,7 +270,7 @@ class FIOSDKTests: XCTestCase {
     
     func testGetFioNamesWithUnvalidAddressShouldRespondWithNotFound(){
         let expectation = XCTestExpectation(description: "testgetfionames")
-        FIOSDK.sharedInstance().getFIONames(FIOPublicKey: "NOT VALID ADDRESS") { (data, error) in
+        FIOSDK.sharedInstance().getFioNames(fioPublicKey: "NOT VALID ADDRESS") { (data, error) in
             XCTAssert(error?.kind == FIOError.ErrorKind.Failure, "Should have failed")
             expectation.fulfill()
         }
@@ -559,7 +559,7 @@ class FIOSDKTests: XCTestCase {
         
         FIOSDK.sharedInstance().registerFIOName(fioName: fioName, publicReceiveAddresses: ["FIO":"ignoreme"], onCompletion: { response, error in ()
             XCTAssert((error?.kind == FIOError.ErrorKind.Success), "registerFIOName NOT SUCCESSFUL")
-            FIOSDK.sharedInstance().getFIONames(FIOPublicKey: "ignoreme", completion: { (response, error) in
+            FIOSDK.sharedInstance().getFioNames(fioPublicKey: "ignoreme", completion: { (response, error) in
                 XCTAssert((error?.kind == FIOError.ErrorKind.Failure), "Added the address it shouldn´t be added")
                 expectation.fulfill()
             })
