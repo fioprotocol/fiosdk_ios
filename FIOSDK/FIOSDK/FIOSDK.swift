@@ -14,6 +14,8 @@ public class FIOSDK: BaseFIOSDK {
     
     //Used as a namespace for response classes. Each model will be added with extension feature in its own file.
     public enum Responses {}
+    //Used as a namespace for function params.
+    public enum Params {}
     
     //MARK: - Initialization
     
@@ -750,6 +752,36 @@ public class FIOSDK: BaseFIOSDK {
                                 }
                                 let handledData: (response: FIOSDK.Responses.TransferFIOTokensResponse?, error: FIOError) = parseResponseFromTransactionResult(txResult: result)
                                 completion(handledData.response, FIOError.success())
+        }
+    }
+    
+    //MARK: Get Fee
+    
+    /// Compute and return fee amount for specific call and specific user. [visit API specs](https://stealth.atlassian.net/wiki/spaces/DEV/pages/53280776/API#API-/get_fee-Computeandreturnfeeamountforspecificcallandspecificuser)
+    /// - Parameters:
+    ///     - endPoint: Name of API call end point, e.g. add_pub_address
+    ///     - fio_address: FIO Address incurring the fee and owned by signer.
+    ///     - completion: A function that is called once request is over with an optional response with results and error containing the status of the call.
+    public func getFee(endPoint: FIOSDK.Params.FeeEndpoint, fioAddress: String = "", onCompletion: @escaping (_ response: FIOSDK.Responses.FeeResponse?, _ error: FIOError) -> ()) {
+        let body = FeeRequest(fioAddress: fioAddress, endPoint: endPoint.rawValue)
+        let url = ChainRouteBuilder.build(route: ChainRoutes.getFee)
+        FIOHTTPHelper.postRequestTo(url, withBody: body) { (data, error) in
+            if let data = data {
+                do {
+                    let result = try JSONDecoder().decode(FIOSDK.Responses.FeeResponse.self, from: data)
+                    onCompletion(result, FIOError.success())
+                }
+                catch {
+                    onCompletion(nil, FIOError.failure(localizedDescription: "Parsing json failed."))
+                }
+            } else {
+                if let error = error {
+                    onCompletion(nil, error)
+                }
+                else {
+                    onCompletion(nil, FIOError.failure(localizedDescription: ChainRoutes.getFee.rawValue + " request failed."))
+                }
+            }
         }
     }
     
