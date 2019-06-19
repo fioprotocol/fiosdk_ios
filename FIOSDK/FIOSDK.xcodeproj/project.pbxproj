@@ -23,6 +23,8 @@
 		0203C5CC217A6A6D0054FA10 /* Settings.plist in Resources */ = {isa = PBXBuildFile; fileRef = 0203C5CA217A6A6D0054FA10 /* Settings.plist */; };
 		0203C5D8217A71330054FA10 /* FIOError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0203C5D7217A71330054FA10 /* FIOError.swift */; };
 		0245A5B12193BF6900C5A870 /* String+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0245A5B02193BF6900C5A870 /* String+Extensions.swift */; };
+		2808B91422BA672800FD8607 /* Cryptography.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2808B91322BA672800FD8607 /* Cryptography.swift */; };
+		2808B91722BA838C00FD8607 /* CryptographyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2808B91622BA838C00FD8607 /* CryptographyTests.swift */; };
 		2818C6382260B891001871C8 /* BlockInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2818C6372260B891001871C8 /* BlockInfo.swift */; };
 		2818C63A2260B8AB001871C8 /* ChainInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2818C6392260B8AB001871C8 /* ChainInfo.swift */; };
 		2818C63C2260BDF9001871C8 /* RPCDecoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2818C63B2260BDF9001871C8 /* RPCDecoder.swift */; };
@@ -165,6 +167,8 @@
 		0203C5CA217A6A6D0054FA10 /* Settings.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Settings.plist; sourceTree = "<group>"; };
 		0203C5D7217A71330054FA10 /* FIOError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FIOError.swift; sourceTree = "<group>"; };
 		0245A5B02193BF6900C5A870 /* String+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Extensions.swift"; sourceTree = "<group>"; };
+		2808B91322BA672800FD8607 /* Cryptography.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Cryptography.swift; sourceTree = "<group>"; };
+		2808B91622BA838C00FD8607 /* CryptographyTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CryptographyTests.swift; sourceTree = "<group>"; };
 		2818C6372260B891001871C8 /* BlockInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlockInfo.swift; sourceTree = "<group>"; };
 		2818C6392260B8AB001871C8 /* ChainInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChainInfo.swift; sourceTree = "<group>"; };
 		2818C63B2260BDF9001871C8 /* RPCDecoder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RPCDecoder.swift; sourceTree = "<group>"; };
@@ -341,6 +345,7 @@
 				28BB8B672257BBAB0049A761 /* KeychainInteractorTests.swift */,
 				28BED285225BD83400F8606E /* FIODateUtilsTests.swift */,
 				284853B22289C73E00B871E9 /* SUFUtilsTests.swift */,
+				2808B91622BA838C00FD8607 /* CryptographyTests.swift */,
 			);
 			path = FIOSDKTests;
 			sourceTree = "<group>";
@@ -451,6 +456,14 @@
 			path = Balance;
 			sourceTree = "<group>";
 		};
+		2808B91222BA670000FD8607 /* Encrytion */ = {
+			isa = PBXGroup;
+			children = (
+				2808B91322BA672800FD8607 /* Cryptography.swift */,
+			);
+			path = Encrytion;
+			sourceTree = "<group>";
+		};
 		2818C632225FBF47001871C8 /* Transaction */ = {
 			isa = PBXGroup;
 			children = (
@@ -503,6 +516,7 @@
 		2856494D2229BB0A006E2533 /* Core */ = {
 			isa = PBXGroup;
 			children = (
+				2808B91222BA670000FD8607 /* Encrytion */,
 				2818C6462260BF9A001871C8 /* Keychain */,
 				0203C536217A487A0054FA10 /* AnyCodable */,
 				2818C632225FBF47001871C8 /* Transaction */,
@@ -931,6 +945,7 @@
 				285C3C3F2297256C007F3C05 /* FeeResponse.swift in Sources */,
 				283438572245733800E60314 /* PrivateKey+Extensions.swift in Sources */,
 				2834384C2245439B00E60314 /* pbkdf2.c in Sources */,
+				2808B91422BA672800FD8607 /* Cryptography.swift in Sources */,
 				287F10512253DAA5001E3B32 /* FIOBalanceRequest.swift in Sources */,
 				285649522229C031006E2533 /* AccountNameGenerator.swift in Sources */,
 				2834384B2245439B00E60314 /* secp256k1.c in Sources */,
@@ -1007,6 +1022,7 @@
 				28BB8B662257B60E0049A761 /* FIOKeyManagerTests.swift in Sources */,
 				284853B32289C73F00B871E9 /* SUFUtilsTests.swift in Sources */,
 				0203C528217A48100054FA10 /* FIOSDKTests.swift in Sources */,
+				2808B91722BA838C00FD8607 /* CryptographyTests.swift in Sources */,
 				28BED286225BD83400F8606E /* FIODateUtilsTests.swift in Sources */,
 				28BB8B682257BBAB0049A761 /* KeychainInteractorTests.swift in Sources */,
 			);
