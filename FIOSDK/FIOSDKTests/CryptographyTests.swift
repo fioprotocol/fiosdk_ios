@@ -19,7 +19,14 @@ class CryptographyTests: XCTestCase {
             XCTFail("Encryption failed")
             return
         }
-        guard let decrypted = Cryptography().decrypt(secret: secret, message: encrypted) else {
+        var possibleDecrypted: Data?
+        do {
+            possibleDecrypted = try Cryptography().decrypt(secret: secret, message: encrypted)
+        }
+        catch {
+            XCTFail("Encryption failed")
+        }
+        guard let decrypted = possibleDecrypted  else {
             XCTFail("Encryption failed")
             return
         }
@@ -33,7 +40,14 @@ class CryptographyTests: XCTestCase {
             XCTFail("Encryption failed")
             return
         }
-        guard let decrypted = Cryptography().decrypt(secret: secret, message: encrypted) else {
+        var possibleDecrypted: Data?
+        do {
+             possibleDecrypted = try Cryptography().decrypt(secret: secret, message: encrypted)
+        }
+        catch {
+            XCTFail("Encryption failed")
+        }
+        guard let decrypted = possibleDecrypted  else {
             XCTFail("Encryption failed")
             return
         }
