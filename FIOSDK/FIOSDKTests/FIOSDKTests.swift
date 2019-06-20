@@ -916,4 +916,17 @@ class FIOSDKTests: XCTestCase {
         wait(for: [expectation], timeout: TIMEOUT)
     }
     
+    /*
+    func testGetAbi() {
+        let expectation = XCTestExpectation(description: "testGetABI")
+        
+        self.defaultSDKConfig()
+        FIOSDK.sharedInstance().getABI(accountName:"fio.reqobt", onCompletion: { (response, error) in
+            XCTAssert(error.kind == .Failure, "Something went wrong")
+            expectation.fulfill()
+        })
+        
+        wait(for: [expectation], timeout: TIMEOUT)
+    }
+ */
 }

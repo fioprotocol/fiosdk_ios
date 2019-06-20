@@ -89,6 +89,8 @@ public class FIOSDK: BaseFIOSDK {
             Utilities.sharedInstance().mockURL = mockUrl
         }
         
+        // populate the abis
+        _sharedInstance.populateABIs()
         
         return _sharedInstance
     }

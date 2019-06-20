@@ -17,6 +17,7 @@ public class BaseFIOSDK: NSObject {
     internal var systemPublicKey:String = ""
     internal static let keyManager = FIOKeyManager()
     internal let pubAddressTokenFilter: [String: UInt8] = ["fio": 1]
+    internal var _abis: [String: String] = ["fio.system":"", "fio.reqobt":"", "fio.token":""]
     
     internal override init() {}
     
@@ -89,6 +90,46 @@ public class BaseFIOSDK: NSObject {
     internal func getBlock(blockNumOrId: AnyObject, completion: @escaping (_ result: BlockInfo?, _ error: Error?) -> ()) {
         let body = ["block_num_or_id": "\(blockNumOrId)"]
         FIOHTTPHelper.rpcPostRequestTo(ChainRouteBuilder.build(route: ChainRoutes.getBlock), withBody: body, onCompletion: completion)
+    }
+    
+    internal func populateABIs() {
+        for accountName in self._abis.keys {
+            self.getABI(accountName: accountName) { (response, error) in
+                
+                if (error.kind == FIOError.ErrorKind.Success){
+                    if (response?.abi != nil){
+                        self._abis.updateValue(response?.abi ?? "", forKey: accountName)
+                    }
+                }
+            }
+        }
+    }
+    
+    /// Retrieves ABI. [visit API specs](https://stealth.atlassian.net/wiki/spaces/DEV/pages/53280776/API#API-/get_raw_abi-GetABIforspecificaccountname)
+    /// - Parameters:
+    ///     - account name: this can be: "fio.system","fio.reqobt","fio.token"
+    ///     - completion: A function that is called once request is over with an optional response that should contain abi results and error containing the status of the call.
+    internal func getABI(accountName: String, onCompletion: @escaping (_ response: FIOSDK.Responses.GetABIResponse?, _ error: FIOError) -> ()){
+        let body = GetABIRequest(accountName: accountName)
+        let url = ChainRouteBuilder.build(route: ChainRoutes.getABI)
+        FIOHTTPHelper.postRequestTo(url, withBody: body) { (data, error) in
+            if let data = data {
+                do {
+                    let result = try JSONDecoder().decode(FIOSDK.Responses.GetABIResponse.self, from: data)
+                    onCompletion(result, FIOError.success())
+                }
+                catch {
+                    onCompletion(nil, FIOError.failure(localizedDescription: "Parsing json failed."))
+                }
+            } else {
+                if let error = error {
+                    onCompletion(nil, error)
+                }
+                else {
+                    onCompletion(nil, FIOError.failure(localizedDescription: ChainRoutes.getABI.rawValue + " request failed."))
+                }
+            }
+        }
     }
     
 }
