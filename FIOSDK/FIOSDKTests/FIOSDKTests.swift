@@ -123,6 +123,33 @@ class FIOSDKTests: XCTestCase {
     }
     
     //MARK: -
+    
+    func testPublicKeyFromStringShouldGeneratePublicKey() {
+        try? FIOSDK.wipePrivPubKeys()
+        let mnemonic = "gallery hero weekend notable inherit chuckle village spread business scrap surprise finger"
+        let keyPair = FIOSDK.privatePubKeyPair(forMnemonic: mnemonic)
+        let privKey = try? PrivateKey(enclave: .Secp256k1, mnemonicString: mnemonic, slip: 235)
+        guard let pk = privKey else {
+            XCTFail()
+            return
+        }
+        guard let pubkey = try? PublicKey(keyString: keyPair.publicKey) else {
+            XCTFail()
+            return
+        }
+        XCTAssert(pubkey!.rawPublicKey() == PublicKey(privateKey: pk!).rawPublicKey())
+    }
+    
+    func testPrivateKeyGetSharedSecretShouldWork() {
+        guard let pk = try? PrivateKey(keyString:"5JoQtsKQuH8hC9MyvfJAqo6qmKLm8ePYNucs7tPu2YxG12trzBt") else {
+            //FIOSDK.sharedInstance().getPrivateKey()) else {
+            XCTFail()
+            return
+        }
+        pk!.getSharedSecret(pubKey: "EOS7zsqi7QUAjTAdyynd6DVe8uv4K8gCTRHnAoMN9w9CA1xLCTDVv")//FIOSDK.sharedInstance().getPublicKey())
+    }
+    
+    //MARK: -
 
     func testValidation(){
         

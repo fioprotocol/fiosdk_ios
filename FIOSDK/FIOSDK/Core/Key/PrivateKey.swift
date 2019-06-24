@@ -46,6 +46,10 @@ internal extension String {
     
 }
 
+enum PrivateKeyError: Error {
+    case runtimeError(String)
+}
+
 internal struct PrivateKey {
     
     static let prefix = "PVT"
@@ -148,6 +152,64 @@ internal struct PrivateKey {
             }
             return true
         }
+    }
+    
+    func getSharedSecret(pubKey: String) -> String? {
+        // USE SwiftyEOS uECC_shared_secret (seems to give different results)
+//        var secret = UnsafeMutablePointer<UInt8>.allocate(capacity: 0)
+        guard let publicKey = try? PublicKey(keyString: pubKey.replacingOccurrences(of: "EOS", with: "")) else { return "" }
+//        var result: Int32 = 0
+//        data.withUnsafeBytes({ (privKeyPointer: UnsafePointer<UInt8>) -> Void in
+//            publicKey.data.withUnsafeBytes({ (pubKeyPointer: UnsafePointer<UInt8>) -> Void in
+//                result = uECC_shared_secret(pubKeyPointer, privKeyPointer, secret, uECC_secp256k1())
+//            })
+//        })
+//
+//        if result == 1 {
+//            let decodedString = Data(bytes: secret, count: 32)
+//            return FIOHash.sha512(decodedString)
+//        }
+//        else {
+//            print("Problem generating shared secret")
+//            return nil
+//        }
+        
+    //OR TRY TO Immitate JS code (not sure how to match that code, its using external libs)
+        var compressed:Array<UInt8> = Array(repeating: UInt8(0), count: 33)
+        var KBPointer = UnsafeMutablePointer<UInt8>.allocate(capacity: 0)
+        publicKey.data.withUnsafeBytes({ (pubKeyPointer: UnsafePointer<UInt8>) -> Void in
+            let buffer = UnsafeBufferPointer(start: pubKeyPointer,
+                                             count: publicKey.data.count)
+            compressed = Array<UInt8>(buffer)
+        })
+        uECC_decompress(compressed, KBPointer, uECC_secp256k1())
+        let buffer = UnsafeBufferPointer(start: KBPointer,
+                                         count: 130)
+        let KB = Array<UInt8>(buffer)
+        let firstSlice = KB[1..<33].map { item in
+            String(item)
+        }.joined()
+        let secondSlice = Array(KB[33..<65]).map { item in
+            String(item)
+            }.joined()
+        // THIS is not going to work as it is cause KB[1..<33] is to big to fit a number, not sure how to do BigInteger.fromBuffer( KB.slice( 1,33 ))
+        let x = CGFloat(Int(firstSlice)!)
+        let y = CGFloat(Int(secondSlice)!)
+        let KBP = CGPoint(x: x, y: y)
+//        point_multiply(<#T##curve: UnsafePointer<ecdsa_curve>!##UnsafePointer<ecdsa_curve>!#>, <#T##k: UnsafePointer<bignum256>!##UnsafePointer<bignum256>!#>, <#T##p: UnsafePointer<curve_point>!##UnsafePointer<curve_point>!#>, <#T##res: UnsafeMutablePointer<curve_point>!##UnsafeMutablePointer<curve_point>!#>)
+//        let KB = uECC_decompress()
+//        let KB = public_key.toUncompressed().toBuffer()
+//        let KBP = Point.fromAffine(
+//        secp256k1,
+//        BigInteger.fromBuffer( KB.slice( 1,33 )), // x
+//        BigInteger.fromBuffer( KB.slice( 33,65 )) // y
+//        )
+//        let r = toBuffer()
+//        let P = KBP.multiply(BigInteger.fromBuffer(r))
+//        let S = P.affineX.toBuffer({size: 32})
+        // SHA512 used in ECIES
+        
+        return nil
     }
     
 }

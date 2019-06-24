@@ -25,6 +25,8 @@
 		0245A5B12193BF6900C5A870 /* String+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0245A5B02193BF6900C5A870 /* String+Extensions.swift */; };
 		2808B91422BA672800FD8607 /* Cryptography.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2808B91322BA672800FD8607 /* Cryptography.swift */; };
 		2808B91722BA838C00FD8607 /* CryptographyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2808B91622BA838C00FD8607 /* CryptographyTests.swift */; };
+		2808B91922BBD14200FD8607 /* FIOHash.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2808B91822BBD14200FD8607 /* FIOHash.swift */; };
+		2808B91B22BBDE5E00FD8607 /* HMACMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2808B91A22BBDE5E00FD8607 /* HMACMode.swift */; };
 		2818C6382260B891001871C8 /* BlockInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2818C6372260B891001871C8 /* BlockInfo.swift */; };
 		2818C63A2260B8AB001871C8 /* ChainInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2818C6392260B8AB001871C8 /* ChainInfo.swift */; };
 		2818C63C2260BDF9001871C8 /* RPCDecoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2818C63B2260BDF9001871C8 /* RPCDecoder.swift */; };
@@ -169,6 +171,8 @@
 		0245A5B02193BF6900C5A870 /* String+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Extensions.swift"; sourceTree = "<group>"; };
 		2808B91322BA672800FD8607 /* Cryptography.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Cryptography.swift; sourceTree = "<group>"; };
 		2808B91622BA838C00FD8607 /* CryptographyTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CryptographyTests.swift; sourceTree = "<group>"; };
+		2808B91822BBD14200FD8607 /* FIOHash.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FIOHash.swift; sourceTree = "<group>"; };
+		2808B91A22BBDE5E00FD8607 /* HMACMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HMACMode.swift; sourceTree = "<group>"; };
 		2818C6372260B891001871C8 /* BlockInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlockInfo.swift; sourceTree = "<group>"; };
 		2818C6392260B8AB001871C8 /* ChainInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChainInfo.swift; sourceTree = "<group>"; };
 		2818C63B2260BDF9001871C8 /* RPCDecoder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RPCDecoder.swift; sourceTree = "<group>"; };
@@ -460,6 +464,8 @@
 			isa = PBXGroup;
 			children = (
 				2808B91322BA672800FD8607 /* Cryptography.swift */,
+				2808B91822BBD14200FD8607 /* FIOHash.swift */,
+				2808B91A22BBDE5E00FD8607 /* HMACMode.swift */,
 			);
 			path = Encrytion;
 			sourceTree = "<group>";
@@ -981,6 +987,7 @@
 				287F10772256597D001E3B32 /* FIONamesResponse.swift in Sources */,
 				283438552245439B00E60314 /* curves.c in Sources */,
 				28BB8B622257909E0049A761 /* FIOKeyManager.swift in Sources */,
+				2808B91B22BBDE5E00FD8607 /* HMACMode.swift in Sources */,
 				283438542245439B00E60314 /* sha3.c in Sources */,
 				283438262245439100E60314 /* curve-specific.inc in Sources */,
 				0203C580217A487A0054FA10 /* Crypto.swift in Sources */,
@@ -1009,6 +1016,7 @@
 				0203C590217A487A0054FA10 /* Error.swift in Sources */,
 				287F107F2256654B001E3B32 /* AvailCheckResponse.swift in Sources */,
 				28FA83862267C9630053EA67 /* SignedRequestHelper.swift in Sources */,
+				2808B91922BBD14200FD8607 /* FIOHash.swift in Sources */,
 				285649542229C3AE006E2533 /* FIOHTTPHelper.swift in Sources */,
 				0203C571217A487A0054FA10 /* AnyCodable.swift in Sources */,
 				287F10572253ED05001E3B32 /* ChainRouteBuilder.swift in Sources */,

@@ -28,10 +28,26 @@ internal extension Data {
     
 }
 
+internal extension String {
+    
+    func publicKeyParseWif() -> Data? {
+        guard let base58 = Data.decode(base58: self) else { return nil }
+        let bytes = [UInt8](base58)
+        var data: Array<UInt8> = Array(repeating: UInt8(0), count: base58.count-4)
+        for i in 0..<base58.count-4 {
+            data[i] = bytes[i]
+        }
+        return Data(bytes: data, count: base58.count-4)
+    }
+    
+}
+
 internal struct PublicKey {
     
     var data: Data
     var enclave: SecureEnclave
+    static let delimiter = "_"
+    static let prefix = "PUB"
     
     init(privateKey: PrivateKey) {
         var publicBytes: Array<UInt8> = Array(repeating: UInt8(0), count: 64)
@@ -51,6 +67,31 @@ internal struct PublicKey {
         data = Data(bytes: compressedPublicBytes, count: 33)
         enclave = privateKey.enclave
     }
+    
+    init?(keyString: String) throws {
+        var nonEOSKey = keyString
+        if nonEOSKey.range(of: "EOS") != nil {
+            nonEOSKey = nonEOSKey.replacingOccurrences(of: "EOS", with: "")
+        }
+        if nonEOSKey.range(of: PublicKey.delimiter) == nil {
+            enclave = .Secp256k1
+            data = try nonEOSKey.publicKeyParseWif()!
+        } else {
+            let dataParts = nonEOSKey.components(separatedBy: PublicKey.delimiter)
+            guard dataParts[0] == PublicKey.prefix else {
+                throw NSError(domain: "com.swiftyeos.error", code: 0, userInfo: [NSLocalizedDescriptionKey: "Private Key \(nonEOSKey) has invalid prefix: \(PrivateKey.delimiter)"])
+            }
+            
+            guard dataParts.count != 2 else {
+                throw NSError(domain: "com.swiftyeos.error", code: 0, userInfo: [NSLocalizedDescriptionKey: "Private Key has data format is not right: \(nonEOSKey)"])
+            }
+            
+            enclave = SecureEnclave(rawValue: dataParts[1])!
+            let dataString = dataParts[2]
+            data = try dataString.publicKeyParseWif()!
+        }
+    }
+    
     
     func wif() -> String {
         return self.data.publicKeyEncodeString(enclave: enclave)
