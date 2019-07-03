@@ -28,6 +28,10 @@ internal func signedPostRequestTo<T: Codable>(privateKey: String, route: ChainRo
     }
     serializeJsonToData(body, forAction: action) { (result, error) in
         if let result = result {
+            
+       //sarney     right now, we take the body and serialize it.
+       //     then we pack and sign it.
+            
             PackedTransactionUtil.packAndSignTransaction(code: code, action: action.rawValue, data: result.json, account: account, privateKey: privateKey, completion: { (signedTx, error) in
                 if let error = translateErrorToFIOError(error: error) {
                     onCompletion(nil, error)

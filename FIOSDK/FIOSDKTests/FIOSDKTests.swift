@@ -25,6 +25,8 @@ class FIOSDKTests: XCTestCase {
     private let defaultAccount  = "fioname11111"
     private let defaultServer   = "http://54.245.52.195:8889/v1"
     private let defaultMnemonic = "valley alien library bread worry brother bundle hammer loyal barely dune brave"
+    private let expectedDefaultPrivateKey = "5Kbb37EAqQgZ9vWUHoPiC2uXYhyGSFNbL6oiDp24Ea1ADxV1qnu"
+    private let expectedDefaultPublicKey = "EOS5kJKNHwctcfUM5XZyiWSqSTM5HTzznJP9F3ZdbhaQAHEVq575o"
     private let mockUrl = "http://mock.dapix.io/mockd/DEV2/register_fio_name"
     
     private let alternativeServerA = "http://54.202.124.82:8889/v1"
@@ -778,6 +780,10 @@ class FIOSDKTests: XCTestCase {
         let keyPair = FIOSDK.privatePubKeyPair(forMnemonic: defaultMnemonic)
         let fioPublicAddress = FIOSDK.sharedInstance(accountName: defaultAccount, privateKey: keyPair.privateKey, publicKey: keyPair.publicKey,systemPrivateKey:keyPair.privateKey, systemPublicKey:keyPair.publicKey, url: defaultServer).getFIOPublicAddress()
         let expected = "ltwagbt4qpuk"
+        let privateKeyExpected = keyPair.privateKey
+        let publicKeyExpected = keyPair.publicKey
+        XCTAssertEqual(expectedDefaultPrivateKey, privateKeyExpected)
+        XCTAssertEqual(expectedDefaultPublicKey, publicKeyExpected)
         XCTAssertEqual(fioPublicAddress, expected)
     }
     
@@ -916,17 +922,18 @@ class FIOSDKTests: XCTestCase {
         wait(for: [expectation], timeout: TIMEOUT)
     }
     
-    /*
+
     func testGetAbi() {
         let expectation = XCTestExpectation(description: "testGetABI")
         
         self.defaultSDKConfig()
-        FIOSDK.sharedInstance().getABI(accountName:"fio.reqobt", onCompletion: { (response, error) in
+        FIOSDK.sharedInstance().getABI(accountName:"fio.system", onCompletion: { (response, error) in
+            print("**")
+            print (response)
             XCTAssert(error.kind == .Failure, "Something went wrong")
             expectation.fulfill()
         })
         
         wait(for: [expectation], timeout: TIMEOUT)
     }
- */
 }
