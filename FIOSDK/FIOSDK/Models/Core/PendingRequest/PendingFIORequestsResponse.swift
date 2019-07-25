@@ -84,10 +84,14 @@ extension FIOSDK.Responses {
                     timeStamp = TimeInterval(timeStampDouble)
                 }
                 var metadata = PendingFIORequestResponse.MetaData(memo: "")
-                let metadataString = try container.decodeIfPresent(String.self, forKey: .metadata)
-                if let metadataData = metadataString?.data(using: .utf8) {
-                    metadata = try JSONDecoder().decode(PendingFIORequestResponse.MetaData.self, from: metadataData)
+                let metadataString = try container.decodeIfPresent(String.self, forKey: .metadata)?.replacingOccurrences(of: "[object Object]", with: "")
+                
+                if (metadataString != nil && metadataString!.count > 3){
+                    if let metadataData = metadataString?.data(using: .utf8) {
+                        metadata = try JSONDecoder().decode(PendingFIORequestResponse.MetaData.self, from: metadataData)
+                    }
                 }
+
                 
                 self.init(fioreqid: fioreqid,
                           payerFIOAddress: payerFIOAddress,
