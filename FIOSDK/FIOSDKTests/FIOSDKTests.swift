@@ -930,7 +930,7 @@ class FIOSDKTests: XCTestCase {
         FIOSDK.sharedInstance().getABI(accountName:"fio.system", onCompletion: { (response, error) in
             print("**")
             print (response)
-            XCTAssert(error.kind == .Failure, "Something went wrong")
+            XCTAssert(error.kind == .Success, "Something went wrong")
             expectation.fulfill()
         })
         
