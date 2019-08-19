@@ -90,7 +90,10 @@ public class FIOSDK: BaseFIOSDK {
         }
         
         // populate the abis
-        _sharedInstance.populateABIs()
+        let abi = _sharedInstance.getCachedABI(accountName: "fio.system")
+        if (abi == nil || abi.count < 2){
+            _sharedInstance.populateABIs()
+        }
         
         return _sharedInstance
     }
@@ -347,6 +350,10 @@ public class FIOSDK: BaseFIOSDK {
     }
     
     //MARK: FIO Name Availability
+    
+    internal func getCachedABI(accountName: String) -> String{
+        return (self._abis[accountName] ?? "")
+    }
     
     public func isAvailable(fioAddress:String, completion: @escaping (_ isAvailable: Bool, _ error:FIOError?) -> ()) {
         let request = AvailCheckRequest(fio_name: fioAddress)

@@ -15,7 +15,7 @@ extension FIOSDK.Responses {
         public let accountName: String
         public let codeHash: String
         public let abiHash: String
-        public let abi: String
+        public var abi: String
         
         enum CodingKeys: String, CodingKey {
             case accountName = "account_name"

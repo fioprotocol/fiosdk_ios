@@ -18,14 +18,9 @@ internal struct SerializeJsonRequest<T: Codable>: Codable {
     }
 }
 
-internal struct SerializeJsonResponse: Codable {
-    let json: String
-    
-    enum CodingKeys: String, CodingKey {
-        case json = "serialized_json"
-    }
+internal struct SerializeJsonResponse {
+    var json: String
 }
-
 
 /**
  * Call serialize_json (POST) in order to serialize the given json object for an API action (ChainAction).
@@ -34,25 +29,41 @@ internal struct SerializeJsonResponse: Codable {
  *      - forAction: The API action (ChainActions) that will use the serialized json
  *      - onCompletion: A callback with either SerializeJsonResponse or FIOError as serialization result.
  */
-internal func serializeJsonToData<T: Codable>(_ json: T, forAction action: ChainActions, onCompletion: @escaping (SerializeJsonResponse?, FIOError?) -> Void) {
-    let toSerialize = SerializeJsonRequest(action: action.rawValue, json: json)
-    let url = ChainRouteBuilder.build(route: ChainRoutes.serializeJSON)
-    FIOHTTPHelper.postRequestTo(url, withBody: toSerialize) { (data, error) in
-        if let data = data {
-            do {
-                let result = try JSONDecoder().decode(SerializeJsonResponse.self, from: data)
-                onCompletion(result, nil)
-            }
-            catch {
-                onCompletion(nil, FIOError(kind:.Failure, localizedDescription: "Parsing json serialize_json failed."))
-            }
-        } else {
-            if let error = error {
-                onCompletion(nil, error)
+internal func serializeJsonToData<T: Codable>(_ json: T, forCode code:String, forAction action: ChainActions, onCompletion: @escaping (SerializeJsonResponse?, FIOError?) -> Void) {
+    let jsonString = String(decoding: FIOHTTPHelper.bodyFromJson(json)!, as: UTF8.self)
+    let myAbi = FIOSDK.sharedInstance().getCachedABI(accountName: code)
+    
+    if (myAbi.count > 3){
+        let serializer = abiSerializer()
+        let serializedResult = try? serializer.serialize(contract: code, name:action.rawValue, json: jsonString, abi: myAbi)
+        
+        if (serializedResult != nil) {
+            onCompletion(SerializeJsonResponse(json:serializedResult!), nil)
+        }
+        else {
+            onCompletion(SerializeJsonResponse(json:""), FIOError.failure(localizedDescription: "unable to serialize json"))
+        }
+    }
+    else{
+        
+        FIOSDK.sharedInstance().getABI(accountName: code) { (response
+            , error
+            ) in
+            if (error.kind == FIOError.ErrorKind.Success){
+                let serializer = abiSerializer()
+                let serializedResult = try? serializer.serialize(contract: code, name:action.rawValue, json: jsonString, abi: response?.abi ?? "")
+                
+                if (serializedResult != nil) {
+                    onCompletion(SerializeJsonResponse(json:serializedResult!), nil)
+                }
+                else {
+                    onCompletion(SerializeJsonResponse(json:""), FIOError.failure(localizedDescription: "unable to serialize json"))
+                }
             }
             else {
-                onCompletion(nil, FIOError(kind:.Failure, localizedDescription: "serialize_json request failed."))
+                onCompletion(nil, error)
             }
         }
     }
+
 }

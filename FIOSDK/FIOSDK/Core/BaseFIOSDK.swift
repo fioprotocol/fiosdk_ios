@@ -115,8 +115,25 @@ public class BaseFIOSDK: NSObject {
         FIOHTTPHelper.postRequestTo(url, withBody: body) { (data, error) in
             if let data = data {
                 do {
-                    let result = try JSONDecoder().decode(FIOSDK.Responses.GetABIResponse.self, from: data)
-                    onCompletion(result, FIOError.success())
+                    var result = try JSONDecoder().decode(FIOSDK.Responses.GetABIResponse.self, from: data)
+                    
+                    let serializer:abiSerializer = abiSerializer()
+                    var abi:String = result.abi
+                    
+                    abi = abi.padding(toLength: ((abi.count+3)/4)*4,
+                                      withPad: "=",
+                                      startingAt: 0)
+                    let abiData = Data(base64Encoded: abi)
+                    if (abiData != nil){
+                        let abiHexData = abiData!.hexEncodedString()
+                        let binaryToJsonTransaction = try? serializer.deserializeAbi(hex: String(abiHexData.dropLast(2)))
+                        result.abi = binaryToJsonTransaction!
+                        
+                        onCompletion(result, FIOError.success())
+                    }
+                    else{
+                        onCompletion(nil, FIOError.failure(localizedDescription: "Parsing abi data failed."))
+                    }
                 }
                 catch {
                     onCompletion(nil, FIOError.failure(localizedDescription: "Parsing json failed."))
