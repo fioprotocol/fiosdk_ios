@@ -83,6 +83,23 @@ internal extension Data {
         return map { String(format: "%02hhx", $0) }.joined()
     }
     
+    
+    private static let hexAlphabet = "0123456789abcdef".unicodeScalars.map { $0 }
+    
+    /// Get a hex-encoded string representation of the data.
+    ///
+    /// - Returns: Base16 encoded string representation of the data.
+    func hexEncodedStringBase16() -> String {
+        return String(self.reduce(into: "".unicodeScalars, { (result, value) in
+            result.append(Data.hexAlphabet[Int(value/16)])
+            result.append(Data.hexAlphabet[Int(value%16)])
+        }))
+    }
+    
+    /// Return the data as a hex encoded string
+    var hex: String {
+        return self.hexEncodedStringBase16()
+    }
 }
 
 internal struct Authorization: Codable {

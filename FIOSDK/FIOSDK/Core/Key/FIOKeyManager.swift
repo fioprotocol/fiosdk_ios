@@ -26,7 +26,7 @@ internal class FIOKeyManager {
     }
     
     func publicKey() -> String? {
-        let pubKey: String? = try? keychain.keychainItem(key: KeychainKeys.fioPubKey)
+        let pubKey: String? = try! keychain.keychainItem(key: KeychainKeys.fioPubKey)
         return pubKey
     }
     

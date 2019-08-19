@@ -23,6 +23,64 @@
 		0203C5CC217A6A6D0054FA10 /* Settings.plist in Resources */ = {isa = PBXBuildFile; fileRef = 0203C5CA217A6A6D0054FA10 /* Settings.plist */; };
 		0203C5D8217A71330054FA10 /* FIOError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0203C5D7217A71330054FA10 /* FIOError.swift */; };
 		0245A5B12193BF6900C5A870 /* String+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0245A5B02193BF6900C5A870 /* String+Extensions.swift */; };
+		02A3AA4922FE28EE007B5586 /* abieos.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 02A3AA0E22FE28ED007B5586 /* abieos.cpp */; };
+		02A3AA4A22FE28EE007B5586 /* transaction.abi.json in Resources */ = {isa = PBXBuildFile; fileRef = 02A3AA0F22FE28ED007B5586 /* transaction.abi.json */; };
+		02A3AA4B22FE28EE007B5586 /* abi.abi.json in Resources */ = {isa = PBXBuildFile; fileRef = 02A3AA1022FE28ED007B5586 /* abi.abi.json */; };
+		02A3AA4C22FE28EE007B5586 /* abieos_ripemd160.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 02A3AA1122FE28EE007B5586 /* abieos_ripemd160.hpp */; };
+		02A3AA4D22FE28EE007B5586 /* tz_private.h in Headers */ = {isa = PBXBuildFile; fileRef = 02A3AA1322FE28EE007B5586 /* tz_private.h */; };
+		02A3AA4E22FE28EE007B5586 /* ios.h in Headers */ = {isa = PBXBuildFile; fileRef = 02A3AA1422FE28EE007B5586 /* ios.h */; };
+		02A3AA4F22FE28EE007B5586 /* ptz.h in Headers */ = {isa = PBXBuildFile; fileRef = 02A3AA1522FE28EE007B5586 /* ptz.h */; };
+		02A3AA5022FE28EE007B5586 /* date.h in Headers */ = {isa = PBXBuildFile; fileRef = 02A3AA1622FE28EE007B5586 /* date.h */; };
+		02A3AA5122FE28EE007B5586 /* julian.h in Headers */ = {isa = PBXBuildFile; fileRef = 02A3AA1722FE28EE007B5586 /* julian.h */; };
+		02A3AA5222FE28EE007B5586 /* chrono_io.h in Headers */ = {isa = PBXBuildFile; fileRef = 02A3AA1822FE28EE007B5586 /* chrono_io.h */; };
+		02A3AA5322FE28EE007B5586 /* iso_week.h in Headers */ = {isa = PBXBuildFile; fileRef = 02A3AA1922FE28EE007B5586 /* iso_week.h */; };
+		02A3AA5422FE28EE007B5586 /* tz.h in Headers */ = {isa = PBXBuildFile; fileRef = 02A3AA1A22FE28EE007B5586 /* tz.h */; };
+		02A3AA5522FE28EE007B5586 /* islamic.h in Headers */ = {isa = PBXBuildFile; fileRef = 02A3AA1B22FE28EE007B5586 /* islamic.h */; };
+		02A3AA5622FE28EE007B5586 /* abieos.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 02A3AA1C22FE28EE007B5586 /* abieos.hpp */; };
+		02A3AA5722FE28EE007B5586 /* abieos.h in Headers */ = {isa = PBXBuildFile; fileRef = 02A3AA1D22FE28EE007B5586 /* abieos.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		02A3AA5822FE28EE007B5586 /* fwd.h in Headers */ = {isa = PBXBuildFile; fileRef = 02A3AA1F22FE28EE007B5586 /* fwd.h */; };
+		02A3AA5922FE28EE007B5586 /* memorystream.h in Headers */ = {isa = PBXBuildFile; fileRef = 02A3AA2022FE28EE007B5586 /* memorystream.h */; };
+		02A3AA5A22FE28EE007B5586 /* reader.h in Headers */ = {isa = PBXBuildFile; fileRef = 02A3AA2122FE28EE007B5586 /* reader.h */; };
+		02A3AA5B22FE28EE007B5586 /* prettywriter.h in Headers */ = {isa = PBXBuildFile; fileRef = 02A3AA2222FE28EE007B5586 /* prettywriter.h */; };
+		02A3AA5C22FE28EE007B5586 /* ostreamwrapper.h in Headers */ = {isa = PBXBuildFile; fileRef = 02A3AA2322FE28EE007B5586 /* ostreamwrapper.h */; };
+		02A3AA5D22FE28EE007B5586 /* encodedstream.h in Headers */ = {isa = PBXBuildFile; fileRef = 02A3AA2422FE28EE007B5586 /* encodedstream.h */; };
+		02A3AA5E22FE28EE007B5586 /* filereadstream.h in Headers */ = {isa = PBXBuildFile; fileRef = 02A3AA2522FE28EE007B5586 /* filereadstream.h */; };
+		02A3AA5F22FE28EE007B5586 /* cursorstreamwrapper.h in Headers */ = {isa = PBXBuildFile; fileRef = 02A3AA2622FE28EE007B5586 /* cursorstreamwrapper.h */; };
+		02A3AA6022FE28EE007B5586 /* istreamwrapper.h in Headers */ = {isa = PBXBuildFile; fileRef = 02A3AA2722FE28EE007B5586 /* istreamwrapper.h */; };
+		02A3AA6122FE28EE007B5586 /* stringbuffer.h in Headers */ = {isa = PBXBuildFile; fileRef = 02A3AA2822FE28EE007B5586 /* stringbuffer.h */; };
+		02A3AA6222FE28EE007B5586 /* ieee754.h in Headers */ = {isa = PBXBuildFile; fileRef = 02A3AA2A22FE28EE007B5586 /* ieee754.h */; };
+		02A3AA6322FE28EE007B5586 /* strtod.h in Headers */ = {isa = PBXBuildFile; fileRef = 02A3AA2B22FE28EE007B5586 /* strtod.h */; };
+		02A3AA6422FE28EE007B5586 /* swap.h in Headers */ = {isa = PBXBuildFile; fileRef = 02A3AA2C22FE28EE007B5586 /* swap.h */; };
+		02A3AA6522FE28EE007B5586 /* regex.h in Headers */ = {isa = PBXBuildFile; fileRef = 02A3AA2D22FE28EE007B5586 /* regex.h */; };
+		02A3AA6622FE28EE007B5586 /* diyfp.h in Headers */ = {isa = PBXBuildFile; fileRef = 02A3AA2E22FE28EE007B5586 /* diyfp.h */; };
+		02A3AA6722FE28EE007B5586 /* biginteger.h in Headers */ = {isa = PBXBuildFile; fileRef = 02A3AA2F22FE28EE007B5586 /* biginteger.h */; };
+		02A3AA6822FE28EE007B5586 /* strfunc.h in Headers */ = {isa = PBXBuildFile; fileRef = 02A3AA3022FE28EE007B5586 /* strfunc.h */; };
+		02A3AA6922FE28EE007B5586 /* itoa.h in Headers */ = {isa = PBXBuildFile; fileRef = 02A3AA3122FE28EE007B5586 /* itoa.h */; };
+		02A3AA6A22FE28EE007B5586 /* stack.h in Headers */ = {isa = PBXBuildFile; fileRef = 02A3AA3222FE28EE007B5586 /* stack.h */; };
+		02A3AA6B22FE28EE007B5586 /* dtoa.h in Headers */ = {isa = PBXBuildFile; fileRef = 02A3AA3322FE28EE007B5586 /* dtoa.h */; };
+		02A3AA6C22FE28EE007B5586 /* meta.h in Headers */ = {isa = PBXBuildFile; fileRef = 02A3AA3422FE28EE007B5586 /* meta.h */; };
+		02A3AA6D22FE28EE007B5586 /* pow10.h in Headers */ = {isa = PBXBuildFile; fileRef = 02A3AA3522FE28EE007B5586 /* pow10.h */; };
+		02A3AA6E22FE28EE007B5586 /* encodings.h in Headers */ = {isa = PBXBuildFile; fileRef = 02A3AA3622FE28EE007B5586 /* encodings.h */; };
+		02A3AA6F22FE28EE007B5586 /* schema.h in Headers */ = {isa = PBXBuildFile; fileRef = 02A3AA3722FE28EE007B5586 /* schema.h */; };
+		02A3AA7022FE28EE007B5586 /* stream.h in Headers */ = {isa = PBXBuildFile; fileRef = 02A3AA3822FE28EE007B5586 /* stream.h */; };
+		02A3AA7122FE28EE007B5586 /* filewritestream.h in Headers */ = {isa = PBXBuildFile; fileRef = 02A3AA3922FE28EE007B5586 /* filewritestream.h */; };
+		02A3AA7222FE28EE007B5586 /* rapidjson.h in Headers */ = {isa = PBXBuildFile; fileRef = 02A3AA3A22FE28EE007B5586 /* rapidjson.h */; };
+		02A3AA7322FE28EE007B5586 /* document.h in Headers */ = {isa = PBXBuildFile; fileRef = 02A3AA3B22FE28EE007B5586 /* document.h */; };
+		02A3AA7422FE28EE007B5586 /* allocators.h in Headers */ = {isa = PBXBuildFile; fileRef = 02A3AA3C22FE28EE007B5586 /* allocators.h */; };
+		02A3AA7522FE28EE007B5586 /* writer.h in Headers */ = {isa = PBXBuildFile; fileRef = 02A3AA3D22FE28EE007B5586 /* writer.h */; };
+		02A3AA7622FE28EE007B5586 /* error.h in Headers */ = {isa = PBXBuildFile; fileRef = 02A3AA3F22FE28EE007B5586 /* error.h */; };
+		02A3AA7722FE28EE007B5586 /* en.h in Headers */ = {isa = PBXBuildFile; fileRef = 02A3AA4022FE28EE007B5586 /* en.h */; };
+		02A3AA7822FE28EE007B5586 /* memorybuffer.h in Headers */ = {isa = PBXBuildFile; fileRef = 02A3AA4122FE28EE007B5586 /* memorybuffer.h */; };
+		02A3AA7922FE28EE007B5586 /* pointer.h in Headers */ = {isa = PBXBuildFile; fileRef = 02A3AA4222FE28EE007B5586 /* pointer.h */; };
+		02A3AA7A22FE28EE007B5586 /* fuzzer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 02A3AA4322FE28EE007B5586 /* fuzzer.cpp */; };
+		02A3AA7B22FE28EE007B5586 /* EosioSwiftAbieosSerializationProvider.h in Headers */ = {isa = PBXBuildFile; fileRef = 02A3AA4422FE28EE007B5586 /* EosioSwiftAbieosSerializationProvider.h */; };
+		02A3AA7C22FE28EE007B5586 /* abieos_numeric.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 02A3AA4522FE28EE007B5586 /* abieos_numeric.hpp */; };
+		02A3AA7D22FE28EE007B5586 /* abieos_exception.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 02A3AA4622FE28EE007B5586 /* abieos_exception.hpp */; };
+		02A3AA7E22FE28EE007B5586 /* eosio.assert.abi.json in Resources */ = {isa = PBXBuildFile; fileRef = 02A3AA4722FE28EE007B5586 /* eosio.assert.abi.json */; };
+		02A3AA7F22FE28EF007B5586 /* fuzzer.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 02A3AA4822FE28EE007B5586 /* fuzzer.hpp */; };
+		02A9E6E3230218C500D402DD /* abiSerializer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02A9E6E2230218C500D402DD /* abiSerializer.swift */; };
+		02B1FD7E22BC22EE00671B8C /* GetABIRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02B1FD7D22BC22EE00671B8C /* GetABIRequest.swift */; };
+		02B1FD8022BC22FE00671B8C /* GetABIResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02B1FD7F22BC22FE00671B8C /* GetABIResponse.swift */; };
 		2808B91422BA672800FD8607 /* Cryptography.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2808B91322BA672800FD8607 /* Cryptography.swift */; };
 		2808B91722BA838C00FD8607 /* CryptographyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2808B91622BA838C00FD8607 /* CryptographyTests.swift */; };
 		2818C6382260B891001871C8 /* BlockInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2818C6372260B891001871C8 /* BlockInfo.swift */; };
@@ -167,6 +225,64 @@
 		0203C5CA217A6A6D0054FA10 /* Settings.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Settings.plist; sourceTree = "<group>"; };
 		0203C5D7217A71330054FA10 /* FIOError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FIOError.swift; sourceTree = "<group>"; };
 		0245A5B02193BF6900C5A870 /* String+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Extensions.swift"; sourceTree = "<group>"; };
+		02A3AA0E22FE28ED007B5586 /* abieos.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = abieos.cpp; sourceTree = "<group>"; };
+		02A3AA0F22FE28ED007B5586 /* transaction.abi.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = transaction.abi.json; sourceTree = "<group>"; };
+		02A3AA1022FE28ED007B5586 /* abi.abi.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = abi.abi.json; sourceTree = "<group>"; };
+		02A3AA1122FE28EE007B5586 /* abieos_ripemd160.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = abieos_ripemd160.hpp; sourceTree = "<group>"; };
+		02A3AA1322FE28EE007B5586 /* tz_private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = tz_private.h; sourceTree = "<group>"; };
+		02A3AA1422FE28EE007B5586 /* ios.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ios.h; sourceTree = "<group>"; };
+		02A3AA1522FE28EE007B5586 /* ptz.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ptz.h; sourceTree = "<group>"; };
+		02A3AA1622FE28EE007B5586 /* date.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = date.h; sourceTree = "<group>"; };
+		02A3AA1722FE28EE007B5586 /* julian.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = julian.h; sourceTree = "<group>"; };
+		02A3AA1822FE28EE007B5586 /* chrono_io.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = chrono_io.h; sourceTree = "<group>"; };
+		02A3AA1922FE28EE007B5586 /* iso_week.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = iso_week.h; sourceTree = "<group>"; };
+		02A3AA1A22FE28EE007B5586 /* tz.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = tz.h; sourceTree = "<group>"; };
+		02A3AA1B22FE28EE007B5586 /* islamic.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = islamic.h; sourceTree = "<group>"; };
+		02A3AA1C22FE28EE007B5586 /* abieos.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = abieos.hpp; sourceTree = "<group>"; };
+		02A3AA1D22FE28EE007B5586 /* abieos.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = abieos.h; sourceTree = "<group>"; };
+		02A3AA1F22FE28EE007B5586 /* fwd.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = fwd.h; sourceTree = "<group>"; };
+		02A3AA2022FE28EE007B5586 /* memorystream.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = memorystream.h; sourceTree = "<group>"; };
+		02A3AA2122FE28EE007B5586 /* reader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = reader.h; sourceTree = "<group>"; };
+		02A3AA2222FE28EE007B5586 /* prettywriter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = prettywriter.h; sourceTree = "<group>"; };
+		02A3AA2322FE28EE007B5586 /* ostreamwrapper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ostreamwrapper.h; sourceTree = "<group>"; };
+		02A3AA2422FE28EE007B5586 /* encodedstream.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = encodedstream.h; sourceTree = "<group>"; };
+		02A3AA2522FE28EE007B5586 /* filereadstream.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = filereadstream.h; sourceTree = "<group>"; };
+		02A3AA2622FE28EE007B5586 /* cursorstreamwrapper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cursorstreamwrapper.h; sourceTree = "<group>"; };
+		02A3AA2722FE28EE007B5586 /* istreamwrapper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = istreamwrapper.h; sourceTree = "<group>"; };
+		02A3AA2822FE28EE007B5586 /* stringbuffer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = stringbuffer.h; sourceTree = "<group>"; };
+		02A3AA2A22FE28EE007B5586 /* ieee754.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ieee754.h; sourceTree = "<group>"; };
+		02A3AA2B22FE28EE007B5586 /* strtod.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = strtod.h; sourceTree = "<group>"; };
+		02A3AA2C22FE28EE007B5586 /* swap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = swap.h; sourceTree = "<group>"; };
+		02A3AA2D22FE28EE007B5586 /* regex.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = regex.h; sourceTree = "<group>"; };
+		02A3AA2E22FE28EE007B5586 /* diyfp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = diyfp.h; sourceTree = "<group>"; };
+		02A3AA2F22FE28EE007B5586 /* biginteger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = biginteger.h; sourceTree = "<group>"; };
+		02A3AA3022FE28EE007B5586 /* strfunc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = strfunc.h; sourceTree = "<group>"; };
+		02A3AA3122FE28EE007B5586 /* itoa.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = itoa.h; sourceTree = "<group>"; };
+		02A3AA3222FE28EE007B5586 /* stack.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = stack.h; sourceTree = "<group>"; };
+		02A3AA3322FE28EE007B5586 /* dtoa.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = dtoa.h; sourceTree = "<group>"; };
+		02A3AA3422FE28EE007B5586 /* meta.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = meta.h; sourceTree = "<group>"; };
+		02A3AA3522FE28EE007B5586 /* pow10.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = pow10.h; sourceTree = "<group>"; };
+		02A3AA3622FE28EE007B5586 /* encodings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = encodings.h; sourceTree = "<group>"; };
+		02A3AA3722FE28EE007B5586 /* schema.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = schema.h; sourceTree = "<group>"; };
+		02A3AA3822FE28EE007B5586 /* stream.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = stream.h; sourceTree = "<group>"; };
+		02A3AA3922FE28EE007B5586 /* filewritestream.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = filewritestream.h; sourceTree = "<group>"; };
+		02A3AA3A22FE28EE007B5586 /* rapidjson.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = rapidjson.h; sourceTree = "<group>"; };
+		02A3AA3B22FE28EE007B5586 /* document.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = document.h; sourceTree = "<group>"; };
+		02A3AA3C22FE28EE007B5586 /* allocators.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = allocators.h; sourceTree = "<group>"; };
+		02A3AA3D22FE28EE007B5586 /* writer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = writer.h; sourceTree = "<group>"; };
+		02A3AA3F22FE28EE007B5586 /* error.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = error.h; sourceTree = "<group>"; };
+		02A3AA4022FE28EE007B5586 /* en.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = en.h; sourceTree = "<group>"; };
+		02A3AA4122FE28EE007B5586 /* memorybuffer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = memorybuffer.h; sourceTree = "<group>"; };
+		02A3AA4222FE28EE007B5586 /* pointer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = pointer.h; sourceTree = "<group>"; };
+		02A3AA4322FE28EE007B5586 /* fuzzer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = fuzzer.cpp; sourceTree = "<group>"; };
+		02A3AA4422FE28EE007B5586 /* EosioSwiftAbieosSerializationProvider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EosioSwiftAbieosSerializationProvider.h; sourceTree = "<group>"; };
+		02A3AA4522FE28EE007B5586 /* abieos_numeric.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = abieos_numeric.hpp; sourceTree = "<group>"; };
+		02A3AA4622FE28EE007B5586 /* abieos_exception.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = abieos_exception.hpp; sourceTree = "<group>"; };
+		02A3AA4722FE28EE007B5586 /* eosio.assert.abi.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = eosio.assert.abi.json; sourceTree = "<group>"; };
+		02A3AA4822FE28EE007B5586 /* fuzzer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = fuzzer.hpp; sourceTree = "<group>"; };
+		02A9E6E2230218C500D402DD /* abiSerializer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = abiSerializer.swift; sourceTree = "<group>"; };
+		02B1FD7D22BC22EE00671B8C /* GetABIRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetABIRequest.swift; sourceTree = "<group>"; };
+		02B1FD7F22BC22FE00671B8C /* GetABIResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetABIResponse.swift; sourceTree = "<group>"; };
 		2808B91322BA672800FD8607 /* Cryptography.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Cryptography.swift; sourceTree = "<group>"; };
 		2808B91622BA838C00FD8607 /* CryptographyTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CryptographyTests.swift; sourceTree = "<group>"; };
 		2818C6372260B891001871C8 /* BlockInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlockInfo.swift; sourceTree = "<group>"; };
@@ -363,6 +479,7 @@
 		0203C53C217A487A0054FA10 /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
+				02A3AA0D22FE28D1007B5586 /* AbiSerialization */,
 				0203C53D217A487A0054FA10 /* include */,
 				0203C547217A487A0054FA10 /* src */,
 			);
@@ -454,6 +571,110 @@
 				287F10522253DAC0001E3B32 /* FIOBalanceResponse.swift */,
 			);
 			path = Balance;
+			sourceTree = "<group>";
+		};
+		02A3AA0D22FE28D1007B5586 /* AbiSerialization */ = {
+			isa = PBXGroup;
+			children = (
+				02A3AA1022FE28ED007B5586 /* abi.abi.json */,
+				02A3AA4622FE28EE007B5586 /* abieos_exception.hpp */,
+				02A3AA4522FE28EE007B5586 /* abieos_numeric.hpp */,
+				02A3AA1122FE28EE007B5586 /* abieos_ripemd160.hpp */,
+				02A3AA0E22FE28ED007B5586 /* abieos.cpp */,
+				02A3AA1D22FE28EE007B5586 /* abieos.h */,
+				02A3AA1C22FE28EE007B5586 /* abieos.hpp */,
+				02A3AA1222FE28EE007B5586 /* date */,
+				02A3AA4722FE28EE007B5586 /* eosio.assert.abi.json */,
+				02A3AA4422FE28EE007B5586 /* EosioSwiftAbieosSerializationProvider.h */,
+				02A3AA4322FE28EE007B5586 /* fuzzer.cpp */,
+				02A3AA4822FE28EE007B5586 /* fuzzer.hpp */,
+				02A3AA1E22FE28EE007B5586 /* rapidjson */,
+				02A3AA0F22FE28ED007B5586 /* transaction.abi.json */,
+				02A9E6E2230218C500D402DD /* abiSerializer.swift */,
+			);
+			path = AbiSerialization;
+			sourceTree = "<group>";
+		};
+		02A3AA1222FE28EE007B5586 /* date */ = {
+			isa = PBXGroup;
+			children = (
+				02A3AA1322FE28EE007B5586 /* tz_private.h */,
+				02A3AA1422FE28EE007B5586 /* ios.h */,
+				02A3AA1522FE28EE007B5586 /* ptz.h */,
+				02A3AA1622FE28EE007B5586 /* date.h */,
+				02A3AA1722FE28EE007B5586 /* julian.h */,
+				02A3AA1822FE28EE007B5586 /* chrono_io.h */,
+				02A3AA1922FE28EE007B5586 /* iso_week.h */,
+				02A3AA1A22FE28EE007B5586 /* tz.h */,
+				02A3AA1B22FE28EE007B5586 /* islamic.h */,
+			);
+			path = date;
+			sourceTree = "<group>";
+		};
+		02A3AA1E22FE28EE007B5586 /* rapidjson */ = {
+			isa = PBXGroup;
+			children = (
+				02A3AA1F22FE28EE007B5586 /* fwd.h */,
+				02A3AA2022FE28EE007B5586 /* memorystream.h */,
+				02A3AA2122FE28EE007B5586 /* reader.h */,
+				02A3AA2222FE28EE007B5586 /* prettywriter.h */,
+				02A3AA2322FE28EE007B5586 /* ostreamwrapper.h */,
+				02A3AA2422FE28EE007B5586 /* encodedstream.h */,
+				02A3AA2522FE28EE007B5586 /* filereadstream.h */,
+				02A3AA2622FE28EE007B5586 /* cursorstreamwrapper.h */,
+				02A3AA2722FE28EE007B5586 /* istreamwrapper.h */,
+				02A3AA2822FE28EE007B5586 /* stringbuffer.h */,
+				02A3AA2922FE28EE007B5586 /* internal */,
+				02A3AA3622FE28EE007B5586 /* encodings.h */,
+				02A3AA3722FE28EE007B5586 /* schema.h */,
+				02A3AA3822FE28EE007B5586 /* stream.h */,
+				02A3AA3922FE28EE007B5586 /* filewritestream.h */,
+				02A3AA3A22FE28EE007B5586 /* rapidjson.h */,
+				02A3AA3B22FE28EE007B5586 /* document.h */,
+				02A3AA3C22FE28EE007B5586 /* allocators.h */,
+				02A3AA3D22FE28EE007B5586 /* writer.h */,
+				02A3AA3E22FE28EE007B5586 /* error */,
+				02A3AA4122FE28EE007B5586 /* memorybuffer.h */,
+				02A3AA4222FE28EE007B5586 /* pointer.h */,
+			);
+			path = rapidjson;
+			sourceTree = "<group>";
+		};
+		02A3AA2922FE28EE007B5586 /* internal */ = {
+			isa = PBXGroup;
+			children = (
+				02A3AA2A22FE28EE007B5586 /* ieee754.h */,
+				02A3AA2B22FE28EE007B5586 /* strtod.h */,
+				02A3AA2C22FE28EE007B5586 /* swap.h */,
+				02A3AA2D22FE28EE007B5586 /* regex.h */,
+				02A3AA2E22FE28EE007B5586 /* diyfp.h */,
+				02A3AA2F22FE28EE007B5586 /* biginteger.h */,
+				02A3AA3022FE28EE007B5586 /* strfunc.h */,
+				02A3AA3122FE28EE007B5586 /* itoa.h */,
+				02A3AA3222FE28EE007B5586 /* stack.h */,
+				02A3AA3322FE28EE007B5586 /* dtoa.h */,
+				02A3AA3422FE28EE007B5586 /* meta.h */,
+				02A3AA3522FE28EE007B5586 /* pow10.h */,
+			);
+			path = internal;
+			sourceTree = "<group>";
+		};
+		02A3AA3E22FE28EE007B5586 /* error */ = {
+			isa = PBXGroup;
+			children = (
+				02A3AA3F22FE28EE007B5586 /* error.h */,
+				02A3AA4022FE28EE007B5586 /* en.h */,
+			);
+			path = error;
+			sourceTree = "<group>";
+		};
+		02B1FD7C22BC22CC00671B8C /* GetABI */ = {
+			isa = PBXGroup;
+			children = (
+				02B1FD7D22BC22EE00671B8C /* GetABIRequest.swift */,
+				02B1FD7F22BC22FE00671B8C /* GetABIResponse.swift */,
+			);
+			path = GetABI;
 			sourceTree = "<group>";
 		};
 		2808B91222BA670000FD8607 /* Encrytion */ = {
@@ -590,6 +811,7 @@
 		287F105F225524C0001E3B32 /* Core */ = {
 			isa = PBXGroup;
 			children = (
+				02B1FD7C22BC22CC00671B8C /* GetABI */,
 				285C3C3B229723B4007F3C05 /* GetFee */,
 				285C3C362296EE46007F3C05 /* FIOAddress */,
 				285C3C312296DC2C007F3C05 /* FIODomain */,
@@ -729,28 +951,78 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				02A3AA6B22FE28EE007B5586 /* dtoa.h in Headers */,
 				283438302245439100E60314 /* bip39.h in Headers */,
+				02A3AA5522FE28EE007B5586 /* islamic.h in Headers */,
+				02A3AA6022FE28EE007B5586 /* istreamwrapper.h in Headers */,
+				02A3AA4C22FE28EE007B5586 /* abieos_ripemd160.hpp in Headers */,
+				02A3AA6422FE28EE007B5586 /* swap.h in Headers */,
+				02A3AA7122FE28EE007B5586 /* filewritestream.h in Headers */,
+				02A3AA4D22FE28EE007B5586 /* tz_private.h in Headers */,
 				283438272245439100E60314 /* types.h in Headers */,
+				02A3AA5422FE28EE007B5586 /* tz.h in Headers */,
+				02A3AA6222FE28EE007B5586 /* ieee754.h in Headers */,
 				2834382D2245439100E60314 /* uECC_vli.h in Headers */,
 				2834382F2245439100E60314 /* secp256k1.h in Headers */,
 				283438252245439100E60314 /* hmac.h in Headers */,
+				02A3AA6922FE28EE007B5586 /* itoa.h in Headers */,
 				283438392245439100E60314 /* asm_arm.inc.h in Headers */,
+				02A3AA6A22FE28EE007B5586 /* stack.h in Headers */,
+				02A3AA6622FE28EE007B5586 /* diyfp.h in Headers */,
+				02A3AA5D22FE28EE007B5586 /* encodedstream.h in Headers */,
 				283438322245439100E60314 /* bip39_english.h in Headers */,
+				02A3AA5722FE28EE007B5586 /* abieos.h in Headers */,
+				02A3AA7D22FE28EE007B5586 /* abieos_exception.hpp in Headers */,
+				02A3AA5122FE28EE007B5586 /* julian.h in Headers */,
+				02A3AA7B22FE28EE007B5586 /* EosioSwiftAbieosSerializationProvider.h in Headers */,
 				283438332245439100E60314 /* libbase58.h in Headers */,
+				02A3AA6822FE28EE007B5586 /* strfunc.h in Headers */,
+				02A3AA7622FE28EE007B5586 /* error.h in Headers */,
+				02A3AA5E22FE28EE007B5586 /* filereadstream.h in Headers */,
+				02A3AA5222FE28EE007B5586 /* chrono_io.h in Headers */,
+				02A3AA5322FE28EE007B5586 /* iso_week.h in Headers */,
+				02A3AA7F22FE28EF007B5586 /* fuzzer.hpp in Headers */,
 				0203C597217A4DD70054FA10 /* FIOSDK.h in Headers */,
+				02A3AA4F22FE28EE007B5586 /* ptz.h in Headers */,
 				283438292245439100E60314 /* Bridging-Header.h in Headers */,
+				02A3AA6F22FE28EE007B5586 /* schema.h in Headers */,
+				02A3AA7C22FE28EE007B5586 /* abieos_numeric.hpp in Headers */,
+				02A3AA7822FE28EE007B5586 /* memorybuffer.h in Headers */,
+				02A3AA6522FE28EE007B5586 /* regex.h in Headers */,
+				02A3AA4E22FE28EE007B5586 /* ios.h in Headers */,
+				02A3AA7322FE28EE007B5586 /* document.h in Headers */,
+				02A3AA5F22FE28EE007B5586 /* cursorstreamwrapper.h in Headers */,
 				283438342245439100E60314 /* bip32.h in Headers */,
+				02A3AA7222FE28EE007B5586 /* rapidjson.h in Headers */,
+				02A3AA5C22FE28EE007B5586 /* ostreamwrapper.h in Headers */,
+				02A3AA5A22FE28EE007B5586 /* reader.h in Headers */,
 				283438362245439100E60314 /* sha2.h in Headers */,
+				02A3AA7722FE28EE007B5586 /* en.h in Headers */,
+				02A3AA6D22FE28EE007B5586 /* pow10.h in Headers */,
 				283438352245439100E60314 /* ripemd160.h in Headers */,
 				283438282245439100E60314 /* ecdsa.h in Headers */,
 				283438222245439100E60314 /* sha3.h in Headers */,
+				02A3AA5922FE28EE007B5586 /* memorystream.h in Headers */,
 				283438242245439100E60314 /* curves.h in Headers */,
+				02A3AA6122FE28EE007B5586 /* stringbuffer.h in Headers */,
+				02A3AA5022FE28EE007B5586 /* date.h in Headers */,
+				02A3AA6E22FE28EE007B5586 /* encodings.h in Headers */,
 				2834382E2245439100E60314 /* uECC.h in Headers */,
 				283438312245439100E60314 /* macros.h in Headers */,
+				02A3AA6C22FE28EE007B5586 /* meta.h in Headers */,
+				02A3AA6322FE28EE007B5586 /* strtod.h in Headers */,
+				02A3AA7422FE28EE007B5586 /* allocators.h in Headers */,
 				2834382B2245439100E60314 /* pbkdf2.h in Headers */,
+				02A3AA5822FE28EE007B5586 /* fwd.h in Headers */,
 				2834382A2245439100E60314 /* options.h in Headers */,
 				283438232245439100E60314 /* rand.h in Headers */,
+				02A3AA5B22FE28EE007B5586 /* prettywriter.h in Headers */,
+				02A3AA7522FE28EE007B5586 /* writer.h in Headers */,
 				283438372245439100E60314 /* bignum.h in Headers */,
+				02A3AA7922FE28EE007B5586 /* pointer.h in Headers */,
+				02A3AA7022FE28EE007B5586 /* stream.h in Headers */,
+				02A3AA6722FE28EE007B5586 /* biginteger.h in Headers */,
+				02A3AA5622FE28EE007B5586 /* abieos.hpp in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -861,7 +1133,10 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				02A3AA4A22FE28EE007B5586 /* transaction.abi.json in Resources */,
 				283438382245439100E60314 /* secp256k1.table in Resources */,
+				02A3AA4B22FE28EE007B5586 /* abi.abi.json in Resources */,
+				02A3AA7E22FE28EE007B5586 /* eosio.assert.abi.json in Resources */,
 				0203C5CC217A6A6D0054FA10 /* Settings.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -961,6 +1236,7 @@
 				287F107922565999001E3B32 /* FIONamesRequest.swift in Sources */,
 				28BB8B642257938A0049A761 /* KeychainKeys.swift in Sources */,
 				283438492245439B00E60314 /* uECC.c in Sources */,
+				02A9E6E3230218C500D402DD /* abiSerializer.swift in Sources */,
 				284853AD2281AEE600B871E9 /* RegisterNameForUserResponse.swift in Sources */,
 				0203C58D217A487A0054FA10 /* PublicKey.swift in Sources */,
 				287F105C22552414001E3B32 /* TransferFIOTokensRequest.swift in Sources */,
@@ -986,9 +1262,12 @@
 				0203C580217A487A0054FA10 /* Crypto.swift in Sources */,
 				2818C6382260B891001871C8 /* BlockInfo.swift in Sources */,
 				287F10552253ECE5001E3B32 /* ChainActions.swift in Sources */,
+				02A3AA4922FE28EE007B5586 /* abieos.cpp in Sources */,
 				287F109222567A07001E3B32 /* TxResultReceipt.swift in Sources */,
 				287F10592253ED21001E3B32 /* ChainRoutes.swift in Sources */,
+				02B1FD7E22BC22EE00671B8C /* GetABIRequest.swift in Sources */,
 				0245A5B12193BF6900C5A870 /* String+Extensions.swift in Sources */,
+				02A3AA7A22FE28EE007B5586 /* fuzzer.cpp in Sources */,
 				287F107B22566465001E3B32 /* PendingFIORequestsResponse.swift in Sources */,
 				285C3C3D22972558007F3C05 /* FeeRequest.swift in Sources */,
 				2834384D2245439B00E60314 /* sha2.c in Sources */,
@@ -999,6 +1278,7 @@
 				0203C5CB217A6A6D0054FA10 /* FIOSDK.swift in Sources */,
 				0203C5D8217A71330054FA10 /* FIOError.swift in Sources */,
 				285C3C3A2296EFC6007F3C05 /* RegisterFIOAddressResponse.swift in Sources */,
+				02B1FD8022BC22FE00671B8C /* GetABIResponse.swift in Sources */,
 				2834384A2245439B00E60314 /* rand.c in Sources */,
 				287F1090225679CE001E3B32 /* TxResultActionTrace.swift in Sources */,
 				284853AC2281AEE600B871E9 /* RegisterNameForUserRequest.swift in Sources */,
@@ -1070,7 +1350,7 @@
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LANGUAGE_STANDARD = "c++17";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
@@ -1134,7 +1414,7 @@
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LANGUAGE_STANDARD = "c++17";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
@@ -1206,6 +1486,7 @@
 				HEADER_SEARCH_PATHS = "FIOSDK/External/Libraries/include/**";
 				INFOPLIST_FILE = FIOSDK/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1238,6 +1519,7 @@
 				HEADER_SEARCH_PATHS = "FIOSDK/External/Libraries/include/**";
 				INFOPLIST_FILE = FIOSDK/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

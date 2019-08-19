@@ -10,7 +10,7 @@ import Foundation
 
 internal struct FIOHTTPHelper {
 
-    private static func bodyFromJson<J: Encodable>(_ json: J?) -> Data? {
+    static func bodyFromJson<J: Encodable>(_ json: J?) -> Data? {
         guard let json = json else { return nil }
         
         var jsonData: Data? = nil

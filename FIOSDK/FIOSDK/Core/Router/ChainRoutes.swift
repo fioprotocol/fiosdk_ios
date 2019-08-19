@@ -27,5 +27,5 @@ internal enum ChainRoutes: String {
     case registerFIODomain        = "/chain/register_fio_domain"
     case registerFIOAddress       = "/chain/register_fio_address"
     case getFee                   = "/chain/get_fee"
-    
+    case getABI                   = "/chain/get_raw_abi"
 }

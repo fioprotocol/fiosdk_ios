@@ -31,4 +31,4 @@ FOUNDATION_EXPORT const unsigned char FIOSDKVersionString[];
 #import "macros.h"
 #import "hmac.h"
 #import "sha2.h"
-
+#import "abieos.h"

@@ -26,8 +26,14 @@ internal func signedPostRequestTo<T: Codable>(privateKey: String, route: ChainRo
         onCompletion(nil, FIOError(kind: .FailedToUsePrivKey, localizedDescription: "Failed to retrieve private key."))
         return
     }
-    serializeJsonToData(body, forAction: action) { (result, error) in
+    
+    serializeJsonToData(body, forCode: code, forAction: action) { (result, error) in
         if let result = result {
+            
+       //sarney     right now, we take the body and serialize it.
+       //     then we pack and sign it.
+            
+            // this result.json is the hex encoding.
             PackedTransactionUtil.packAndSignTransaction(code: code, action: action.rawValue, data: result.json, account: account, privateKey: privateKey, completion: { (signedTx, error) in
                 if let error = translateErrorToFIOError(error: error) {
                     onCompletion(nil, error)
