@@ -54,4 +54,21 @@ class CryptographyTests: XCTestCase {
         XCTAssert(message == String(data: decrypted, encoding: .utf8), "Should be the same")
     }
     
+    func testValidateEncryptionShouldSucceed(){
+        let message = "secret message"
+        let secret = "02332627b9325cb70510a70f0f6be4bcb008fbbc7893ca51dedf5bf46aa740c0fc9d3fbd737d09a3c4046d221f4f1a323f515332c3fef46e7f075db561b1a2c9"
+        let IV = "f300888ca4f512cebdc0020ff0f7224c".toHexData()
+        
+        let encryptedExpectedResult = "f300888ca4f512cebdc0020ff0f7224c7f896315e90e172bed65d005138f224da7301d5563614e3955750e4480aabf7753f44b4975308aeb8e23c31e114962ab"
+        
+        guard let encrypted = Cryptography().encrypt(secret: secret, message: message, iv: IV) else {
+            XCTFail("Encryption failed")
+            return
+        }
+        
+        print (encrypted.hexEncodedString())
+        
+        XCTAssert(encrypted.hexEncodedString() == encryptedExpectedResult, "Should be the same")
+    }
+    
 }
