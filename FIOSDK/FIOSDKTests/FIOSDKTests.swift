@@ -140,49 +140,16 @@ class FIOSDKTests: XCTestCase {
         XCTAssert(pubkey!.rawPublicKey() == PublicKey(privateKey: pk!).rawPublicKey())
     }
     
-    func testPrivateKeyGetSharedSecretShouldWork() {
-        guard let pk = try? PrivateKey(keyString:"5KF3j9ioHSKVavdBD1rsZGjAARQszFrVmo8DwYb2Kfx8QXNMPFu") else {
-            //FIOSDK.sharedInstance().getPrivateKey()) else {
-            XCTFail()
-            return
-        }
-       let v = pk!.getSharedSecret(pubKey: "EOS6LPpixYR2td9WHFJXHALoZh5MhrU5ky8zeFynvzNacPBuP6jU6")//FIOSDK.sharedInstance().getPublicKey())
-    
-        print (v)
-    }
-    
-    
-    func testPrivateKeyGetSharedSecretShouldWork_shawnarney() {
-        guard let pk = try? PrivateKey(keyString:"5KF3j9ioHSKVavdBD1rsZGjAARQszFrVmo8DwYb2Kfx8QXNMPFu") else {
-            //FIOSDK.sharedInstance().getPrivateKey()) else {
-            XCTFail()
-            return
-        }
-        let v = pk!.getSharedSecret2(pubKey: "EOS6LPpixYR2td9WHFJXHALoZh5MhrU5ky8zeFynvzNacPBuP6jU6")//FIOSDK.sharedInstance().getPublicKey())
-        print(v)
-    }
-    
-    func testPrivateKeyGetSharedSecretShouldWork_ok_shawnarney() {
-        guard let pk = try? PrivateKey(keyString:"5KF3j9ioHSKVavdBD1rsZGjAARQszFrVmo8DwYb2Kfx8QXNMPFu") else {
-            //FIOSDK.sharedInstance().getPrivateKey()) else {
-            XCTFail()
-            return
-        }
-        let v = pk!.getSharedSecret3(pubKey: "EOS6LPpixYR2td9WHFJXHALoZh5MhrU5ky8zeFynvzNacPBuP6jU6")//FIOSDK.sharedInstance().getPublicKey())
-        print(v)
-    }
-    
-    
-    func testPrivateKeyGetSharedSecretShouldWork_FINAL_shawnarney() {
+    func testPrivateKeyGetSharedSecret() {
         guard let pk = try? PrivateKey(keyString:"5JSV3LwQNDLYi4yGc1My2bYggDBTSEJNf9TrGYxX4JMnZp4E8AQ") else {
-            //FIOSDK.sharedInstance().getPrivateKey()) else {
             XCTFail()
             return
         }
-        let v = pk!.getSharedSecretFinal(pubKey: "7sfDWLaHU8RqxD4jXHiCxmH9RUR62CsadFKAhwSPk5j5aGFoda")//FIOSDK.sharedInstance().getPublicKey())
-        print(v)
-    }
+        let shared_secret_result = pk!.getSharedSecret(publicKey: "FIO7sfDWLaHU8RqxD4jXHiCxmH9RUR62CsadFKAhwSPk5j5aGFoda")//FIOSDK.sharedInstance().getPublicKey())
+        let shared_secret_expected = "5AC4A2297F941BD14727FD8F7463DA138EDF46983EB4AEAE088BE0F7009794555FBB3D8EE9C6D30CF936AA50CA9CB8E68FF675D8C806216262D27AF68288B0A4"
     
+        XCTAssert(shared_secret_result == shared_secret_expected, "Shared Secret not Correct")
+    }
     
     //MARK: -
 

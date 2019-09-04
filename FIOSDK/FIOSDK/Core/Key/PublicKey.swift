@@ -45,7 +45,6 @@ internal extension String {
 internal struct PublicKey {
     
     var data: Data
-    var uncompressed: Data
     var enclave: SecureEnclave
     static let delimiter = "_"
     static let prefix = "PUB"
@@ -66,19 +65,20 @@ internal struct PublicKey {
         uECC_compress(&publicBytes, &compressedPublicBytes, curve)
         
         data = Data(bytes: compressedPublicBytes, count: 33)
-        uncompressed = Data(bytes:publicBytes, count:64)
         enclave = privateKey.enclave
     }
     
     init?(keyString: String) throws {
         var nonEOSKey = keyString
         if nonEOSKey.range(of: "EOS") != nil {
-            nonEOSKey = nonEOSKey.replacingOccurrences(of: "EOS", with: "")
+            nonEOSKey = nonEOSKey.replacingOccurrences(of: "EOS", with: "").replacingOccurrences(of: "FIO", with: "")
+        }
+        if nonEOSKey.range(of: "FIO") != nil {
+            nonEOSKey = nonEOSKey.replacingOccurrences(of: "FIO", with: "")
         }
         if nonEOSKey.range(of: PublicKey.delimiter) == nil {
             enclave = .Secp256k1
             data = try nonEOSKey.publicKeyParseWif()!
-            uncompressed = data
         } else {
             let dataParts = nonEOSKey.components(separatedBy: PublicKey.delimiter)
             guard dataParts[0] == PublicKey.prefix else {
@@ -92,7 +92,6 @@ internal struct PublicKey {
             enclave = SecureEnclave(rawValue: dataParts[1])!
             let dataString = dataParts[2]
             data = try dataString.publicKeyParseWif()!
-            uncompressed = data
         }
     }
     
