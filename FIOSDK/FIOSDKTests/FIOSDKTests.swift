@@ -141,13 +141,48 @@ class FIOSDKTests: XCTestCase {
     }
     
     func testPrivateKeyGetSharedSecretShouldWork() {
-        guard let pk = try? PrivateKey(keyString:"5JoQtsKQuH8hC9MyvfJAqo6qmKLm8ePYNucs7tPu2YxG12trzBt") else {
+        guard let pk = try? PrivateKey(keyString:"5KF3j9ioHSKVavdBD1rsZGjAARQszFrVmo8DwYb2Kfx8QXNMPFu") else {
             //FIOSDK.sharedInstance().getPrivateKey()) else {
             XCTFail()
             return
         }
-        pk!.getSharedSecret(pubKey: "EOS7zsqi7QUAjTAdyynd6DVe8uv4K8gCTRHnAoMN9w9CA1xLCTDVv")//FIOSDK.sharedInstance().getPublicKey())
+       let v = pk!.getSharedSecret(pubKey: "EOS6LPpixYR2td9WHFJXHALoZh5MhrU5ky8zeFynvzNacPBuP6jU6")//FIOSDK.sharedInstance().getPublicKey())
+    
+        print (v)
     }
+    
+    
+    func testPrivateKeyGetSharedSecretShouldWork_shawnarney() {
+        guard let pk = try? PrivateKey(keyString:"5KF3j9ioHSKVavdBD1rsZGjAARQszFrVmo8DwYb2Kfx8QXNMPFu") else {
+            //FIOSDK.sharedInstance().getPrivateKey()) else {
+            XCTFail()
+            return
+        }
+        let v = pk!.getSharedSecret2(pubKey: "EOS6LPpixYR2td9WHFJXHALoZh5MhrU5ky8zeFynvzNacPBuP6jU6")//FIOSDK.sharedInstance().getPublicKey())
+        print(v)
+    }
+    
+    func testPrivateKeyGetSharedSecretShouldWork_ok_shawnarney() {
+        guard let pk = try? PrivateKey(keyString:"5KF3j9ioHSKVavdBD1rsZGjAARQszFrVmo8DwYb2Kfx8QXNMPFu") else {
+            //FIOSDK.sharedInstance().getPrivateKey()) else {
+            XCTFail()
+            return
+        }
+        let v = pk!.getSharedSecret3(pubKey: "EOS6LPpixYR2td9WHFJXHALoZh5MhrU5ky8zeFynvzNacPBuP6jU6")//FIOSDK.sharedInstance().getPublicKey())
+        print(v)
+    }
+    
+    
+    func testPrivateKeyGetSharedSecretShouldWork_FINAL_shawnarney() {
+        guard let pk = try? PrivateKey(keyString:"5JSV3LwQNDLYi4yGc1My2bYggDBTSEJNf9TrGYxX4JMnZp4E8AQ") else {
+            //FIOSDK.sharedInstance().getPrivateKey()) else {
+            XCTFail()
+            return
+        }
+        let v = pk!.getSharedSecretFinal(pubKey: "7sfDWLaHU8RqxD4jXHiCxmH9RUR62CsadFKAhwSPk5j5aGFoda")//FIOSDK.sharedInstance().getPublicKey())
+        print(v)
+    }
+    
     
     //MARK: -
 
