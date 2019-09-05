@@ -794,4 +794,8 @@ public class FIOSDK: BaseFIOSDK {
         }
     }
     
+    func getSharedSecret(otherPublicKey: String) {
+        
+    }
+    
 }

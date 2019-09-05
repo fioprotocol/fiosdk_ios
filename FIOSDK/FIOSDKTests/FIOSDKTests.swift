@@ -125,6 +125,35 @@ class FIOSDKTests: XCTestCase {
     }
     
     //MARK: -
+    
+    func testPublicKeyFromStringShouldGeneratePublicKey() {
+        try? FIOSDK.wipePrivPubKeys()
+        let mnemonic = "gallery hero weekend notable inherit chuckle village spread business scrap surprise finger"
+        let keyPair = FIOSDK.privatePubKeyPair(forMnemonic: mnemonic)
+        let privKey = try? PrivateKey(enclave: .Secp256k1, mnemonicString: mnemonic, slip: 235)
+        guard let pk = privKey else {
+            XCTFail()
+            return
+        }
+        guard let pubkey = try? PublicKey(keyString: keyPair.publicKey) else {
+            XCTFail()
+            return
+        }
+        XCTAssert(pubkey!.rawPublicKey() == PublicKey(privateKey: pk!).rawPublicKey())
+    }
+    
+    func testPrivateKeyGetSharedSecret() {
+        guard let pk = try? PrivateKey(keyString:"5JSV3LwQNDLYi4yGc1My2bYggDBTSEJNf9TrGYxX4JMnZp4E8AQ") else {
+            XCTFail()
+            return
+        }
+        let shared_secret_result = pk!.getSharedSecret(publicKey: "FIO7sfDWLaHU8RqxD4jXHiCxmH9RUR62CsadFKAhwSPk5j5aGFoda")//FIOSDK.sharedInstance().getPublicKey())
+        let shared_secret_expected = "5AC4A2297F941BD14727FD8F7463DA138EDF46983EB4AEAE088BE0F7009794555FBB3D8EE9C6D30CF936AA50CA9CB8E68FF675D8C806216262D27AF68288B0A4"
+    
+        XCTAssert(shared_secret_result == shared_secret_expected, "Shared Secret not Correct")
+    }
+    
+    //MARK: -
 
     func testValidation(){
         

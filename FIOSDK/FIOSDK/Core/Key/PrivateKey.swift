@@ -46,6 +46,10 @@ internal extension String {
     
 }
 
+enum PrivateKeyError: Error {
+    case runtimeError(String)
+}
+
 internal struct PrivateKey {
     
     static let prefix = "PVT"
@@ -148,6 +152,38 @@ internal struct PrivateKey {
             }
             return true
         }
+    }
+    
+    private func getUncompressedPublicKeyData(publicKey: String) -> Data {
+        let pub = try? PublicKey(keyString: publicKey)
+        
+        var publicBytes: Array<UInt8> = Array(repeating: UInt8(0), count: 64)
+        
+        uECC_decompress([UInt8](pub!.data), &publicBytes, uECC_secp256k1())
+        
+        let pubkey_data = Data(bytes: publicBytes, count: 64)
+        
+        return pubkey_data
+    }
+    
+    func getSharedSecret(publicKey: String) -> String? {
+        
+        if (publicKey.count < 4) { return "" }
+ 
+        let secret = UnsafeMutablePointer<UInt8>.allocate(capacity: 32)
+        var result: Int32 = 0
+        result = uECC_shared_secret([UInt8](self.getUncompressedPublicKeyData(publicKey: publicKey)), [UInt8](self.data), secret, uECC_secp256k1())
+        
+        if result == 1 {
+            let decodedString = Data(bytes: secret, count: 32)
+            return FIOHash.sha512(decodedString).uppercased()
+        }
+        else {
+            print("Problem generating shared secret")
+            return nil
+        }
+        
+        return ""
     }
     
 }

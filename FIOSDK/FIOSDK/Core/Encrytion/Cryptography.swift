@@ -13,17 +13,6 @@ enum CryptographyError: Error {
     case runtimeError(String)
 }
 
-enum HMACMode: String {
-    
-    case sha1 = "SHA1"
-    case md5 = "MD5"
-    case sha224 = "SHA224"
-    case sha256 = "SHA256"
-    case sha384 = "SHA384"
-    case sha512 = "SHA512"
-    
-}
-
 struct Cryptography {
     
     /// Generate random bytes Data object according to the given size.
@@ -38,32 +27,6 @@ struct Cryptography {
         let subData = data.subdata(in: (index..<length))
         // Return the new copy of data
         return subData
-    }
-    
-    /// Generate SHA512 digest in hex format with given hex string.
-    /// - Parameters:
-    ///     - string: The string to be hashed with SHA512.
-    /// - Return: Digest from given string as String with hex value.
-    private func sha512Hex(string: String) -> String {
-        return sha512Hex(string.toHexData())
-    }
-    
-    /// Generate SHA512 digest in hex format with given Data.
-    /// - Parameters:
-    ///     - data: The Data to be hashed with SHA512.
-    /// - Return: Digest from given string as String with hex value.
-    private func sha512Hex(_ data: Data) -> String {
-        var digest = [UInt8](repeating: 0, count: Int(CC_SHA512_DIGEST_LENGTH))
-        data.withUnsafeBytes { bytes in
-            CC_SHA512(bytes, CC_LONG(data.count), &digest)
-        }
-        
-        var digestHex = ""
-        for index in 0..<Int(CC_SHA512_DIGEST_LENGTH) {
-            digestHex += String(format: "%02x", digest[index])
-        }
-        
-        return digestHex
     }
     
     /// Generate random bytes Data object according to the given size.
@@ -154,35 +117,6 @@ struct Cryptography {
         return Data(outputBytes)
     }
     
-    /// Apply hmac hashing with especified mode to the given message and key.
-    /// - Parameters:
-    ///     - mode: The type of hmac algorithm.
-    ///     - message: The message to be hashed.
-    ///     - key: key to be used during hashing.
-    /// - Return: Hashed message as Data.
-    private func hmac(mode:HMACMode, message:Data, key:Data) -> Data? {
-        let algos = [HMACMode.sha1:   (kCCHmacAlgSHA1,   CC_SHA1_DIGEST_LENGTH),
-                     HMACMode.md5:    (kCCHmacAlgMD5,    CC_MD5_DIGEST_LENGTH),
-                     HMACMode.sha224: (kCCHmacAlgSHA224, CC_SHA224_DIGEST_LENGTH),
-                     HMACMode.sha256: (kCCHmacAlgSHA256, CC_SHA256_DIGEST_LENGTH),
-                     HMACMode.sha384: (kCCHmacAlgSHA384, CC_SHA384_DIGEST_LENGTH),
-                     HMACMode.sha512: (kCCHmacAlgSHA512, CC_SHA512_DIGEST_LENGTH)]
-        guard let (hashAlgorithm, length) = algos[mode]  else { return nil }
-        var macData = Data(count: Int(length))
-        
-        macData.withUnsafeMutableBytes {macBytes in
-            message.withUnsafeBytes {messageBytes in
-                key.withUnsafeBytes {keyBytes in
-                    CCHmac(CCHmacAlgorithm(hashAlgorithm),
-                           keyBytes,     key.count,
-                           messageBytes, message.count,
-                           macBytes)
-                }
-            }
-        }
-        return macData
-    }
-    
     /// Encrypt message with given secret and initialization vector. If IV is not provided, a random one will be generated.
     /// - Parameters:
     ///     - secret: The secret to be used to encrypt message.
@@ -190,7 +124,7 @@ struct Cryptography {
     ///     - iv: Optional Data object representing the initialization vector.
     /// - Return: Encrypted message as Data or nil if something wrong happened.
     func encrypt(secret: String, message: String, iv: Data?) -> Data? {
-        let privateKeyHash = sha512Hex(string: secret)
+        let privateKeyHash = FIOHash.sha512(string: secret)
         let tempSha512Arr = Array(privateKeyHash)
         var sha512Arr: [String] = []
         for i in stride(from: 0, to: tempSha512Arr.count, by: 2) {
@@ -200,7 +134,7 @@ struct Cryptography {
         let hmacKey = sha512Arr[32..<sha512Arr.count].joined()
         guard let ivData = (iv != nil) ? iv! : generateRandomBytes(size: 16) else { return nil }
         guard let cypherIV = try? encryptAES256CBC(data: message.data(using: String.Encoding.utf8)!, key: encryptionKey.toHexData(), iv: ivData) else { return nil }
-        let hmacValue = hmac(mode: HMACMode.sha256, message: cypherIV, key: hmacKey.toHexData())
+        let hmacValue = FIOHash.hmac(mode: HMACMode.sha256, message: cypherIV, key: hmacKey.toHexData())
         return (hmacValue != nil) ? cypherIV + hmacValue! : nil
     }
     
@@ -210,7 +144,7 @@ struct Cryptography {
     ///     - message: The message to be encrypted.
     /// - Return: Decrypted message as Data or nil if something wrong happened.
     func decrypt(secret: String, message: Data) throws -> Data? {
-        let privateKeyHash = sha512Hex(string: secret)
+        let privateKeyHash = FIOHash.sha512(string: secret)
         let tempSha512Arr = Array(privateKeyHash)
         var sha512Arr: [String] = []
         for i in stride(from: 0, to: tempSha512Arr.count, by: 2) {
@@ -222,7 +156,7 @@ struct Cryptography {
         guard let cipher = extract(from: message, index: 16, length: 32) else { return nil }
         let hmacContent = extract(from: message, index: 32, length: message.count)
         
-        guard let hmacVerifier = hmac(mode: HMACMode.sha256, message: IV + cipher, key: hmacKey.toHexData()) else { return nil }
+        guard let hmacVerifier = FIOHash.hmac(mode: HMACMode.sha256, message: IV + cipher, key: hmacKey.toHexData()) else { return nil }
         
         guard hmacContent == hmacVerifier else {
             throw CryptographyError.runtimeError("Decrypt failed")
