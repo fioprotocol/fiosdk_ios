@@ -130,8 +130,8 @@ public class FIOSDK: BaseFIOSDK {
      * - Parameter maxFee: Maximum amount of SUFs the user is willing to pay for fee. Should be preceded by /get_fee for correct value.
      * - Parameter completion: A callback function that is called when request is finished either with success or failure. Check FIOError.kind to determine if is a success or a failure.
      */
-    public func registerFioAddress(_ fioAddress: String, publicReceiveAddresses:Dictionary<String,String>, maxFee: Double, onCompletion: @escaping (_ response: FIOSDK.Responses.RegisterFIOAddressResponse?, _ error:FIOError?) -> ()) {
-        self.registerFioAddress(fioAddress, maxFee: maxFee) { (response, error) in
+    public func registerFioAddress(_ fioAddress: String, publicReceiveAddresses:Dictionary<String,String>, maxFee: Double,walletFioAddress:String, onCompletion: @escaping (_ response: FIOSDK.Responses.RegisterFIOAddressResponse?, _ error:FIOError?) -> ()) {
+        self.registerFioAddress(fioAddress, maxFee: maxFee , walletFioAddress:walletFioAddress) { (response, error) in
             guard error == nil || error?.kind == .Success else {
                 onCompletion(response, error)
                 return
@@ -284,13 +284,13 @@ public class FIOSDK: BaseFIOSDK {
      * - Parameter maxFee: Maximum amount of SUFs the user is willing to pay for fee. Should be preceded by /get_fee for correct value.
      * - Parameter completion: A callback function that is called when request is finished either with success or failure. Check FIOError.kind to determine if is a success or a failure.
      */
-    internal func registerFioAddress(_ fioAddress: String, maxFee: Double, onCompletion: @escaping (_ response: FIOSDK.Responses.RegisterFIOAddressResponse? , _ error:FIOError?) -> ()) {
+    internal func registerFioAddress(_ fioAddress: String, maxFee: Double, walletFioAddress:String, onCompletion: @escaping (_ response: FIOSDK.Responses.RegisterFIOAddressResponse? , _ error:FIOError?) -> ()) {
         guard isFIOAddressValid(fioAddress) else {
             onCompletion(nil, FIOError.failure(localizedDescription: "Invalid FIO Address."))
             return
         }
         let actor = AccountNameGenerator.run(withPublicKey: getPublicKey())
-        let address = RegisterFIOAddressRequest(fioAddress: fioAddress, fioPublicKey: FIOSDK.sharedInstance().getPublicKey(), maxFee: SUFUtils.amountToSUF(amount: maxFee), actor: actor)
+        let address = RegisterFIOAddressRequest(fioAddress: fioAddress, fioPublicKey: FIOSDK.sharedInstance().getPublicKey(), maxFee: SUFUtils.amountToSUF(amount: maxFee), tpid: walletFioAddress, actor: actor)
         signedPostRequestTo(privateKey: getPrivateKey(),
                             route: ChainRoutes.registerFIOAddress,
                             forAction: ChainActions.registerFIOAddress,

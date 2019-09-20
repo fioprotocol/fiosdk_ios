@@ -36,6 +36,7 @@ class FIOSDKTests: XCTestCase {
     private let adamSandbox = "http://35.161.240.168:8889/v1"
     private let dev1Server = "http://34.220.57.45:8889/v1"
     private let dev2Server = "http://54.245.52.195:8889/v1"
+    private let dev4Server = "http://54.184.39.43:8889"
     
     private let fioAccount    = "r41zuwovtn44"
     private let fioPrivateKey = "5JLxoeRoMDGBbkLdXJjxuh3zHsSS7Lg6Ak9Ft8v8sSdYPkFuABF"
@@ -67,7 +68,7 @@ class FIOSDKTests: XCTestCase {
             _ = FIOSDK.sharedInstance(accountName: accountName,  privateKey: privateKey, publicKey: publicKey, systemPrivateKey: "", systemPublicKey: "", url: url)
         }
 
-        registerDefaultUsers()
+       // registerDefaultUsers()
     }
     
     override func tearDown() {
@@ -77,7 +78,7 @@ class FIOSDKTests: XCTestCase {
     private func defaultSDKConfig() {
         try? FIOSDK.wipePrivPubKeys()
         let keyPair = FIOSDK.privatePubKeyPair(forMnemonic: defaultMnemonic)
-        _ = FIOSDK.sharedInstance(accountName: defaultAccount, privateKey: keyPair.privateKey, publicKey: keyPair.publicKey,systemPrivateKey:keyPair.privateKey, systemPublicKey:keyPair.publicKey, url: defaultServer, mockUrl: mockUrl)
+        _ = FIOSDK.sharedInstance(accountName: defaultAccount, privateKey: keyPair.privateKey, publicKey: keyPair.publicKey,systemPrivateKey:keyPair.privateKey, systemPublicKey:keyPair.publicKey, url: dev4Server, mockUrl: mockUrl)
     }
     
     private func alternativeSDKConfig() {
