@@ -13,7 +13,7 @@ internal struct FIOBalanceRequest: Codable {
     let fioPubAddress: String
     
     enum CodingKeys: String, CodingKey {
-        case fioPubAddress = "fio_public_address"
+        case fioPubAddress = "fio_public_key"
     }
     
 }

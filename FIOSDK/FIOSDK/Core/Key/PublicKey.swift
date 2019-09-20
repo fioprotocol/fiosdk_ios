@@ -103,7 +103,7 @@ internal struct PublicKey {
     func rawPublicKey() -> String {
         let withoutDelimiter = self.wif().components(separatedBy: "_").last
         guard withoutDelimiter!.hasPrefix("EOS") else {
-            return "EOS\(withoutDelimiter!)"
+            return "FIO\(withoutDelimiter!)"
         }
         return withoutDelimiter!
     }

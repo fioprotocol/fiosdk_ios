@@ -719,7 +719,7 @@ public class FIOSDK: BaseFIOSDK {
             if let data = data {
                 do {
                     var result = try JSONDecoder().decode(FIOSDK.Responses.FIOBalanceResponse.self, from: data)
-                    result.balance = SUFUtils.amountToSUFString(amount: Double(result.balance) as! Double)
+                   // result.balance =   SUFUtils.amountToSUFString(amount: Double(result.balance) as! Double)
 //                     po (amount.tokenValue * 10000) / 1000000000.0
                     completion(result, FIOError.success())
                 }
