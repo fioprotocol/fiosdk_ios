@@ -78,7 +78,7 @@ public class BaseFIOSDK: NSObject {
     }
     
     public func getPublicKey() -> String {
-        return self.publicKey
+        return self.publicKey.replacingOccurrences(of: "EOS", with: "FIO")
     }
     
     //MARK: - Chain Info

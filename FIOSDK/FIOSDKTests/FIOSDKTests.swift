@@ -9,38 +9,41 @@
 import XCTest
 @testable import FIOSDK
 
-class FIOSDKTests: XCTestCase {
+private let useDev2 = false
+private let useDev4 = true
+private let useDefaultServer = false //want a custom server, set to true and then set the DEFAULT_SERVER to your ip/url
 
+private let SERVER_DEV2 = "http://dev2.fio.dev:8889/v1"
+private let MOCK_SERVER_DEV2 = "http://mock.dapix.io/mockd/DEV2/register_fio_name"
+
+private let SERVER_DEV4 = "http://dev4.fio.dev:8889/v1"
+private let MOCK_SERVER_DEV4 = "http://mock.dapix.io/mockd/DEV4/register_fio_name"
+
+private let DEFAULT_SERVER = "http://dev4.fio.dev:8889/v1"
+private let MOCK_DEFAULT_SERVER = "http://mock.dapix.io/mockd/DEV4/register_fio_name"
+
+class FIOSDKTests: XCTestCase {
+    
     private let accountName:String = "exchange1111"
     private let accountNameForRequestFunds:String = "exchange2222"
     private let privateKey:String = "5KDQzVMaD1iUdYDrA2PNK3qEP7zNbUf8D41ZVKqGzZ117PdM5Ap"
     private let publicKey:String = "EOS6D6gSipBmP1KW9SMB5r4ELjooaogFt77gEs25V9TU9FrxKVeFb"
-    private let url:String = "http://52.14.221.174:8889/v1"
     
+
     // stage 1 server: 18.223.14.244
     private let TIMEOUT:Double = 240.0
-    private let useStaging = true
     
     //MARK: Constants
     private let defaultAccount  = "fioname11111"
-    private let defaultServer   = "http://54.245.52.195:8889/v1"
+    private let defaultServer   = (useDev2 ? SERVER_DEV2 : (useDev4 ? SERVER_DEV4 : DEFAULT_SERVER))
     private let defaultMnemonic = "valley alien library bread worry brother bundle hammer loyal barely dune brave"
     private let expectedDefaultPrivateKey = "5Kbb37EAqQgZ9vWUHoPiC2uXYhyGSFNbL6oiDp24Ea1ADxV1qnu"
     private let expectedDefaultPublicKey = "EOS5kJKNHwctcfUM5XZyiWSqSTM5HTzznJP9F3ZdbhaQAHEVq575o"
-    private let mockUrl = "http://mock.dapix.io/mockd/DEV2/register_fio_name"
-    
-    private let alternativeServerA = "http://54.202.124.82:8889/v1"
-    private let alternativeServerB = "http://54.218.97.18:8889/v1"
-    private let alternativeServerC = "http://34.213.160.31:8889/v1"
-    private let alternativeServerD = "http://34.214.170.140:8889/v1"
-    private let adamSandbox = "http://35.161.240.168:8889/v1"
-    private let dev1Server = "http://34.220.57.45:8889/v1"
-    private let dev2Server = "http://54.245.52.195:8889/v1"
+    private let mockUrl = (useDev2 ? MOCK_SERVER_DEV2 : (useDev4 ? MOCK_SERVER_DEV4 : MOCK_DEFAULT_SERVER))
     
     private let fioAccount    = "r41zuwovtn44"
     private let fioPrivateKey = "5JLxoeRoMDGBbkLdXJjxuh3zHsSS7Lg6Ak9Ft8v8sSdYPkFuABF"
     private let fioPublicKey  = "EOS5oBUYbtGTxMS66pPkjC2p8pbA3zCtc8XD4dq9fMut867GRdh82"
-    private let fioServer     = "http://18.236.248.110:8889/v1" //DEV3
     
     private let fioAccountAlternative    = "htjonrkf1lgs"
     private let fioPrivateKeyAlternative = "5JCpqkvsrCzrAC3YWhx7pnLodr3Wr9dNMULYU8yoUrPRzu269Xz"
@@ -56,16 +59,8 @@ class FIOSDKTests: XCTestCase {
     
     override func setUp() {
         // Put setup code here. This method is called before the invocation of each test method in the class.
-        
-        
-        
-        if (useStaging){
-            defaultSDKConfig()
-        }
 
-        else{
-            _ = FIOSDK.sharedInstance(accountName: accountName,  privateKey: privateKey, publicKey: publicKey, systemPrivateKey: "", systemPublicKey: "", url: url)
-        }
+        defaultSDKConfig()
 
         registerDefaultUsers()
     }
@@ -88,17 +83,19 @@ class FIOSDKTests: XCTestCase {
     
     func registerDefaultUsers() {
         let timestamp = NSDate().timeIntervalSince1970
-        requesteeFioName = "sha\(Int(timestamp.rounded())).brd"
-        requestorFioName = "bar\(Int(timestamp.rounded())).brd"
+        requesteeFioName = "sha\(Int(timestamp.rounded())):brd"
+        requestorFioName = "bar\(Int(timestamp.rounded())):brd"
         
         let expectation = XCTestExpectation(description: "testRegisterFIOName")
         
-        FIOSDK.sharedInstance().registerFIONameOnBehalfOfUser(fioName: requesteeFioName, publicKey: FIOSDK.sharedInstance().getPublicKey(), publicReceiveAddresses: [:], onCompletion: { response, error in ()
+        print (FIOSDK.sharedInstance().getPublicKey())
+        FIOSDK.sharedInstance().registerFIONameOnBehalfOfUser(fioName: requesteeFioName, publicKey: FIOSDK.sharedInstance().getPublicKey(), onCompletion: { response, error in ()
             XCTAssert((error?.kind == FIOError.ErrorKind.Success), "registerFIOName NOT SUCCESSFUL")
             print (self.requesteeFioName)
             
             self.alternativeSDKConfig()
-            FIOSDK.sharedInstance().registerFIONameOnBehalfOfUser(fioName: self.requestorFioName, publicKey: FIOSDK.sharedInstance().getPublicKey(), publicReceiveAddresses: [:], onCompletion: { response, error in ()
+            print (FIOSDK.sharedInstance().getPublicKey())
+            FIOSDK.sharedInstance().registerFIONameOnBehalfOfUser(fioName: self.requestorFioName, publicKey: FIOSDK.sharedInstance().getPublicKey(), onCompletion: { response, error in ()
                 XCTAssert((error?.kind == FIOError.ErrorKind.Success), "registerFIOName NOT SUCCESSFUL" + (error?.localizedDescription ?? "") )
                 print(error)
                 print(self.requestorFioName)
@@ -157,15 +154,15 @@ class FIOSDKTests: XCTestCase {
 
     func testValidation(){
         
-        XCTAssert(FIOSDK.sharedInstance().isFioNameValid(fioName: "test.brd"), "should be valid")
+        XCTAssert(FIOSDK.sharedInstance().isFioNameValid(fioName: "test:brd"), "should be valid")
         
-        XCTAssert (FIOSDK.sharedInstance().isFioNameValid(fioName: "test1234567890123456.brd"), "should be valid")
+        XCTAssert (FIOSDK.sharedInstance().isFioNameValid(fioName: "test1234567890123456:brd"), "should be valid")
         
-        XCTAssert (!FIOSDK.sharedInstance().isFioNameValid(fioName: "test.brd.brd"), "should be invalid")
+        XCTAssert (!FIOSDK.sharedInstance().isFioNameValid(fioName: "test:brd:brd"), "should be invalid")
         
-        XCTAssert (!FIOSDK.sharedInstance().isFioNameValid(fioName: "test#!.brd"), "should be invalid")
+        XCTAssert (!FIOSDK.sharedInstance().isFioNameValid(fioName: "test#!:brd"), "should be invalid")
         
-        XCTAssert (!FIOSDK.sharedInstance().isFioNameValid(fioName: "12.brd"), "should be invalid")
+        XCTAssert (!FIOSDK.sharedInstance().isFioNameValid(fioName: "12:brd"), "should be invalid")
         
         XCTAssert (FIOSDK.sharedInstance().isFioNameValid(fioName: "brd"), "should be valid")
         
@@ -204,7 +201,7 @@ class FIOSDKTests: XCTestCase {
     func testIsAvailableWithNewNameShouldBeAvailable(){
         let expectation = XCTestExpectation(description: "testIsAvailable")
         let timestamp = NSDate().timeIntervalSince1970
-        let fioAddress = "fioaddress\(Int(timestamp.rounded())).brd"
+        let fioAddress = "fioaddress\(Int(timestamp.rounded())):brd"
         FIOSDK.sharedInstance().isAvailable(fioAddress:fioAddress) { (isAvailable, error) in
             XCTAssert((error?.kind == FIOError.ErrorKind.Success), "testIsAvailable NOT SUCCESSFUL")
             
@@ -373,7 +370,7 @@ class FIOSDKTests: XCTestCase {
         
         let timestamp = NSDate().timeIntervalSince1970
         let tokenPubAdd = "smp\(Int(timestamp.rounded()))"
-        let fioName = "fio\(Int(timestamp.rounded())).brd"
+        let fioName = "fio\(Int(timestamp.rounded())):brd"
         
         
         let metadata = RequestFundsRequest.MetaData(memo: "", hash: nil, offlineUrl: nil)
@@ -571,7 +568,7 @@ class FIOSDKTests: XCTestCase {
     
     func testRegisterFIONameWithNewValueShouldRegister() {
         let timestamp = NSDate().timeIntervalSince1970
-        let fioName = "sha\(Int(timestamp.rounded())).brd"
+        let fioName = "sha\(Int(timestamp.rounded())):brd"
         let expectation = XCTestExpectation(description: "testRegisterFIONameWithNewValueShouldRegister")
 
         let metadata = RequestFundsRequest.MetaData(memo: "", hash: nil, offlineUrl: nil)
@@ -596,7 +593,7 @@ class FIOSDKTests: XCTestCase {
     
     func testRegisterFIONameWithAlreadyRegisteredValueShouldFail() {
         let timestamp = NSDate().timeIntervalSince1970
-        let fioName = "sha\(Int(timestamp.rounded())).brd"
+        let fioName = "sha\(Int(timestamp.rounded())):brd"
         let expectation = XCTestExpectation(description: "testRegisterFIONameWithAlreadyRegisteredValueShouldFail")
 
         
@@ -625,7 +622,7 @@ class FIOSDKTests: XCTestCase {
     
     func testRegisterFIONameWithFIOTokenAddressShouldNotAddAddress() {
         let timestamp = NSDate().timeIntervalSince1970
-        let fioName = "sha\(Int(timestamp.rounded())).brd"
+        let fioName = "sha\(Int(timestamp.rounded())):brd"
         let expectation = XCTestExpectation(description: "testRegisterFIONameWithAlreadyRegisteredValueShouldFail")
         
         let metadata = RequestFundsRequest.MetaData(memo: "", hash: nil, offlineUrl: nil)
@@ -691,7 +688,7 @@ class FIOSDKTests: XCTestCase {
     
     func testRegisterFIOAddressWithNewValueShouldRegister() {
         let timestamp = NSDate().timeIntervalSince1970
-        let address = "test\(Int(timestamp.rounded())).brd"
+        let address = "test\(Int(timestamp.rounded())):brd"
         let expectation = XCTestExpectation(description: "testRegisterFIOAddressWithNewValueShouldRegister")
         let metadata = RequestFundsRequest.MetaData(memo: "", hash: nil, offlineUrl: nil)
         
@@ -821,7 +818,7 @@ class FIOSDKTests: XCTestCase {
         let expected = ""
         XCTAssertEqual(fioPublicAddress, expected)
     }
-    
+    /*
     func testGetFIOBalanceWithProperSetupShouldReturnValue() {
         let expectation = XCTestExpectation(description: "testGetFIOBalanceWithProperSetupShouldReturnValue")
 
@@ -836,6 +833,7 @@ class FIOSDKTests: XCTestCase {
         
         wait(for: [expectation], timeout: TIMEOUT)
     }
+ */
     
     func testTransferTokensWithGoodAccountsShouldBeSuccessful() {
         let expectation = XCTestExpectation(description: "testTransferTokensWithGoodAccountsShouldBeSuccessful")
@@ -862,6 +860,7 @@ class FIOSDKTests: XCTestCase {
         wait(for: [expectation], timeout: TIMEOUT * 1.5)
     }
     
+    /*
     func testTransferTokensWithInsufficientAmountShouldNotBeSuccessful() {
         let expectation = XCTestExpectation(description: "testTransferTokensWithInsufficientAmountShouldNotBeSuccessful")
         
@@ -878,6 +877,7 @@ class FIOSDKTests: XCTestCase {
         
         wait(for: [expectation], timeout: TIMEOUT)
     }
+ */
     
     func testPrivatePubKeyPairMultipleGenerateShouldWork() {
         try? FIOSDK.wipePrivPubKeys()
@@ -893,10 +893,10 @@ class FIOSDKTests: XCTestCase {
         let expectation = XCTestExpectation(description: "registerFIONameOnBehalfOfUserShouldReturnSucess")
         
         let timestamp = NSDate().timeIntervalSince1970
-        let fioName = "test\(Int(timestamp.rounded())).brd"
+        let fioName = "test\(Int(timestamp.rounded())):brd"
         let publicKey = "EOS8PRe4WRZJj5mkem6qVGKyvNFgPsNnjNN6kPhh6EaCpzCVin5Jj"
         
-        FIOSDK.sharedInstance().registerFIONameOnBehalfOfUser(fioName: fioName, publicKey: publicKey, publicReceiveAddresses: [:]) { (response, error) in
+        FIOSDK.sharedInstance().registerFIONameOnBehalfOfUser(fioName: fioName, publicKey: publicKey) { (response, error) in
             XCTAssert(response != nil, "Something went wrong")
             expectation.fulfill()
         }
@@ -965,4 +965,66 @@ class FIOSDKTests: XCTestCase {
         
         wait(for: [expectation], timeout: TIMEOUT)
     }
+    
+    
+    func testRegisterFioAddress() {
+        let expectation = XCTestExpectation(description: "testGetTokenPublicAddressWithValidPubAddressShouldSucceed")
+        
+        let timestamp = NSDate().timeIntervalSince1970
+        let tokenPubAdd = "smp\(Int(timestamp.rounded()))"
+        let fioName = "fio\(Int(timestamp.rounded())):brd"
+        
+        
+        let metadata = RequestFundsRequest.MetaData(memo: "", hash: nil, offlineUrl: nil)
+        
+        self.defaultSDKConfig()
+        FIOSDK.sharedInstance().requestFunds(payer: "faucet:fio", payee: self.requesteeFioName, payeePublicAddress: FIOSDK.sharedInstance().getPublicKey(), amount: 2, tokenCode: "FIO", metadata: metadata, maxFee: 0) { (response, error) in
+            if error?.kind == .Success {
+                sleep(60)
+                FIOSDK.sharedInstance().registerFioAddress(fioName, publicReceiveAddresses: ["BTC":tokenPubAdd], maxFee: 2) { (response, error) in
+                    guard error?.kind == .Success else {
+                        XCTFail("User not registered")
+                        expectation.fulfill()
+                        return
+                    }
+                    FIOSDK.sharedInstance().getPublicAddress(fioAddress: fioName, tokenCode: "FIO") { (response, error) in
+                        guard error.kind == .Success, let fioPubAddress = response?.publicAddress else {
+                            XCTFail("Public address not found")
+                            expectation.fulfill()
+                            return
+                        }
+                        FIOSDK.sharedInstance().getTokenPublicAddress(forToken: "BTC", withFIOPublicAddress: fioPubAddress) { (response, error) in
+                            XCTAssert(error.kind == .Success, "getTokenPublicAddress failed")
+                            XCTAssertNotNil(response)
+                            expectation.fulfill()
+                        }
+                    }
+                }
+            }
+            else {
+                XCTFail("Failed to call requestFunds prior to registering domain requests")
+                expectation.fulfill()
+            }
+        }
+        
+        wait(for: [expectation], timeout: TIMEOUT)
+    }
+    
+    /*
+    func testRegisterFIONameOnBehalfOfUserShouldReturnSucess() {
+        let expectation = XCTestExpectation(description: "registerFIONameOnBehalfOfUserShouldReturnSucess")
+        
+        let timestamp = NSDate().timeIntervalSince1970
+        let fioName = "test\(Int(timestamp.rounded())):brd"
+        let publicKey = "EOS8PRe4WRZJj5mkem6qVGKyvNFgPsNnjNN6kPhh6EaCpzCVin5Jj"
+        
+        FIOSDK.sharedInstance().registerFIONameOnBehalfOfUser(fioName: fioName, publicKey: publicKey, publicReceiveAddresses: [:]) { (response, error) in
+            XCTAssert(response != nil, "Something went wrong")
+            expectation.fulfill()
+        }
+        
+        wait(for: [expectation], timeout: TIMEOUT)
+    }
+    */
+    
 }

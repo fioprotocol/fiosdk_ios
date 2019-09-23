@@ -173,55 +173,6 @@ public class FIOSDK: BaseFIOSDK {
         }
     }
     
-    /**
-     * Register a fioName for someone else using that user's public key. CURRENTLY A MOCK!!!!
-     * - Parameter fioName: A string to register as FIO Address
-     * - Parameter publicKey: User's public key to register FIO name for.
-     * - Parameter publicReceiveAddresses: Public addresses for tokens. This is used to register pre-existing wallets to new user, i.e. BTC - 0xFF0CFB, ETH - 0x801CFB, etc.
-     * - Parameter completion: A callback function that is called when request is finished either with success or failure. Check FIOError.kind to determine if is a success or a failure.
-     */
-    public func registerFIONameOnBehalfOfUser(fioName:String, publicKey: String, publicReceiveAddresses:Dictionary<String,String>, onCompletion: @escaping (_ registeredName: RegisterNameForUserResponse?, _ error:FIOError?) -> ()) {
-        self.registerFIONameOnBehalfOfUser(fioName: fioName, publicKey: publicKey) { (response, error) in
-            guard error == nil || error?.kind == .Success else {
-                onCompletion(nil, error)
-                return
-            }
-            var addresses:Dictionary<String,String> = publicReceiveAddresses
-            
-            //TODO: THIS SHOULD BE REMOVED ONCE WE DEFINE HOW WE ARE GOING TO PROPERLY STORE/RETRIEVE PUBLIC KEY
-            addresses["pubkey"] = FIOSDK.sharedInstance().getPublicKey()
-            //
-            
-            var anyFail = false
-            
-            let group = DispatchGroup()
-            var operations: [AddPublicAddressOperation] = []
-            var index = 0
-            for (chain, receiveAddress) in addresses {
-                if self.pubAddressTokenFilter[chain.lowercased()] != nil { continue }
-                group.enter()
-                let operation = AddPublicAddressOperation(action: { operation in
-                    self.addPublicAddress(fioAddress: fioName, chain: chain, publicAddress: receiveAddress, maxFee: 0, completion: { (error) in
-                        anyFail = error?.kind == .Failure
-                        group.leave()
-                        operation.next()
-                    })
-                }, index: index)
-                index+=1
-                operations.append(operation)
-            }
-            
-            for operation in operations {
-                operation.operations = operations
-            }
-            
-            operations.first?.run()
-            
-            group.notify(queue: .main){
-                onCompletion(response, FIOError.init(kind: anyFail ? .Failure : .Success, localizedDescription: ""))
-            }
-        }
-    }
     
     /**
      * Register a fioName for someone else using that user's public key. CURRENTLY A MOCK!!!!
@@ -229,7 +180,7 @@ public class FIOSDK: BaseFIOSDK {
      * - Parameter publicKey: User's public key to register FIO name for.
      * - Parameter completion: A callback function that is called when request is finished either with success or failure. Check FIOError.kind to determine if is a success or a failure.
      */
-    private func registerFIONameOnBehalfOfUser(fioName: String, publicKey: String, onCompletion: @escaping (_ registeredName: RegisterNameForUserResponse? , _ error:FIOError?) -> ()) {
+    public func registerFIONameOnBehalfOfUser(fioName: String, publicKey: String, onCompletion: @escaping (_ registeredName: RegisterNameForUserResponse? , _ error:FIOError?) -> ()) {
         let registerName = RegisterNameForUserRequest(fioName: fioName, publicKey: publicKey)
         FIOHTTPHelper.postRequestTo(getMockURI() ?? "http://mock.dapix.io/mockd/DEV1/register_fio_name", withBody: registerName) { (result, error) in
             guard let result = result else {
@@ -537,7 +488,7 @@ public class FIOSDK: BaseFIOSDK {
     ///   - completion: The completion handler containing the result
     public func requestFunds(payer payerFIOAddress:String, payee payeeFIOAddress: String, payeePublicAddress: String, amount: Float, tokenCode: String, metadata: RequestFundsRequest.MetaData, maxFee: Double, completion: @escaping ( _ response: RequestFundsResponse?, _ error:FIOError? ) -> ()) {
         let actor = AccountNameGenerator.run(withPublicKey: getSystemPublicKey())
-        let data = RequestFundsRequest(payerFIOAddress: payerFIOAddress, payeeFIOAddress: payeeFIOAddress, payeePublicAddress: payeePublicAddress, amount: String(amount), tokenCode: tokenCode, metadata: metadata.toJSONString(), actor: actor, maxFee: SUFUtils.amountToSUF(amount: maxFee))
+        let data = RequestFundsRequest(payerFIOAddress: payerFIOAddress, payeeFIOAddress: payeeFIOAddress, content:"", amount: String(amount), tokenCode: tokenCode, actor: actor, maxFee: SUFUtils.amountToSUF(amount: maxFee), tpid:"")
         
         signedPostRequestTo(privateKey: getPrivateKey(),
                             route: ChainRoutes.newFundsRequest,
