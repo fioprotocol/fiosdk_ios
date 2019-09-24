@@ -22,7 +22,7 @@ public class BaseFIOSDK: NSObject {
     internal override init() {}
     
     internal func isFIOAddressValid(_ address: String) -> Bool {
-        let fullNameArr = address.components(separatedBy: ".")
+        let fullNameArr = address.components(separatedBy: ":")
         
         if (fullNameArr.count != 2) {
             return false
