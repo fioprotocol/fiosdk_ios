@@ -11,13 +11,20 @@ import Foundation
 extension FIOSDK.Responses {
 
     public struct FIOBalanceResponse: Codable {
-        
+        private let multiplier = 1000000000
         public var balance: Int
         
         enum CodingKeys: String, CodingKey {
             case balance = "balance"
         }
         
+        public func displayBalance() -> Double {
+            return Double(balance/getMultiplier())
+        }
+        
+        func getMultiplier() -> Int{
+            return multiplier
+        }
     }
-
+    
 }

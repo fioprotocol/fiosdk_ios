@@ -671,9 +671,7 @@ public class FIOSDK: BaseFIOSDK {
         FIOHTTPHelper.postRequestTo(url, withBody: body) { (data, error) in
             if let data = data {
                 do {
-                    var result = try JSONDecoder().decode(FIOSDK.Responses.FIOBalanceResponse.self, from: data)
-                   // result.balance =   SUFUtils.amountToSUFString(amount: Double(result.balance) as! Double)
-//                     po (amount.tokenValue * 10000) / 1000000000.0
+                    let result = try JSONDecoder().decode(FIOSDK.Responses.FIOBalanceResponse.self, from: data)
                     completion(result, FIOError.success())
                 }
                 catch {
@@ -689,6 +687,8 @@ public class FIOSDK: BaseFIOSDK {
             }
         }
     }
+    
+    
     
     //MARK: Transfer Tokens
     
