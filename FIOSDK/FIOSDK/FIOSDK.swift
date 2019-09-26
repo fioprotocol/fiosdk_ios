@@ -124,57 +124,6 @@ public class FIOSDK: BaseFIOSDK {
     //MARK: - Register FIO Name request
     
     /**
-     * This function should be called to register a new FIO Address.
-     * - Parameter fioAddress: A string to register as FIO Address
-     * - Parameter publicReceiveAddresses: A list of public addresses to add to the newly registered FIO address.
-     * - Parameter maxFee: Maximum amount of SUFs the user is willing to pay for fee. Should be preceded by /get_fee for correct value.
-     * - Parameter completion: A callback function that is called when request is finished either with success or failure. Check FIOError.kind to determine if is a success or a failure.
-     */
-    public func registerFioAddress(_ fioAddress: String, publicReceiveAddresses:Dictionary<String,String>, maxFee: Double,walletFioAddress:String, onCompletion: @escaping (_ response: FIOSDK.Responses.RegisterFIOAddressResponse?, _ error:FIOError?) -> ()) {
-        self.registerFioAddress(fioAddress, maxFee: maxFee , walletFioAddress:walletFioAddress) { (response, error) in
-            guard error == nil || error?.kind == .Success else {
-                onCompletion(response, error)
-                return
-            }
-            var addresses:Dictionary<String,String> = publicReceiveAddresses
-            
-            //TODO: THIS SHOULD BE REMOVED ONCE WE DEFINE HOW WE ARE GOING TO PROPERLY STORE/RETRIEVE PUBLIC KEY
-            addresses["pubkey"] = FIOSDK.sharedInstance().getPublicKey()
-            //
-        
-            var anyFail = false
-        
-            let group = DispatchGroup()
-            var operations: [AddPublicAddressOperation] = []
-            var index = 0
-            for (chain, receiveAddress) in addresses {
-                if self.pubAddressTokenFilter[chain.lowercased()] != nil { continue }
-                group.enter()
-                let operation = AddPublicAddressOperation(action: { operation in
-                    self.addPublicAddress(fioAddress: fioAddress, chain: chain, publicAddress: receiveAddress, maxFee: 0, completion: { (error) in
-                        anyFail = error?.kind == .Failure
-                        group.leave()
-                        operation.next()
-                    })
-                }, index: index)
-                index+=1
-                operations.append(operation)
-            }
-            
-            for operation in operations {
-                operation.operations = operations
-            }
-            
-            operations.first?.run()
-            
-            group.notify(queue: .main){
-                onCompletion(response, FIOError.init(kind: anyFail ? .Failure : .Success, localizedDescription: ""))
-            }
-        }
-    }
-    
-    
-    /**
      * Register a fioName for someone else using that user's public key. CURRENTLY A MOCK!!!!
      * - Parameter fioName: A string to register as FIO Address
      * - Parameter publicKey: User's public key to register FIO name for.
@@ -229,25 +178,34 @@ public class FIOSDK: BaseFIOSDK {
         }
     }
     
+    
+    /**
+        * This function should be called to register a new FIO Address. [visit api](https://stealth.atlassian.net/wiki/spaces/DEV/pages/53280776/API#API-/register_fio_address-RegisterFIOAddress)
+        * - Parameter FIOAddress: A string to register as FIO Address
+        * - Parameter maxFee: Maximum amount of SUFs the user is willing to pay for fee. Should be preceded by /get_fee for correct value.
+        * - Parameter completion: A callback function that is called when request is finished either with success or failure. Check FIOError.kind to determine if is a success or a failure.
+        */
+       public func registerFioAddress(_ fioAddress: String, maxFee: Double,  onCompletion: @escaping (_ response: FIOSDK.Responses.RegisterFIOAddressResponse? , _ error:FIOError?) -> ()) {
+        self.registerFioAddress(fioAddress, maxFee: maxFee,walletFioAddress: "", onCompletion: onCompletion)
+    }
     /**
      * This function should be called to register a new FIO Address. [visit api](https://stealth.atlassian.net/wiki/spaces/DEV/pages/53280776/API#API-/register_fio_address-RegisterFIOAddress)
      * - Parameter FIOAddress: A string to register as FIO Address
      * - Parameter maxFee: Maximum amount of SUFs the user is willing to pay for fee. Should be preceded by /get_fee for correct value.
      * - Parameter completion: A callback function that is called when request is finished either with success or failure. Check FIOError.kind to determine if is a success or a failure.
      */
-    internal func registerFioAddress(_ fioAddress: String, maxFee: Double, walletFioAddress:String, onCompletion: @escaping (_ response: FIOSDK.Responses.RegisterFIOAddressResponse? , _ error:FIOError?) -> ()) {
+    public func registerFioAddress(_ fioAddress: String, maxFee: Double, walletFioAddress:String, onCompletion: @escaping (_ response: FIOSDK.Responses.RegisterFIOAddressResponse? , _ error:FIOError?) -> ()) {
         guard isFIOAddressValid(fioAddress) else {
             onCompletion(nil, FIOError.failure(localizedDescription: "Invalid FIO Address."))
             return
         }
         let actor = AccountNameGenerator.run(withPublicKey: getPublicKey())
-        let address = RegisterFIOAddressRequest(fioAddress: fioAddress, fioPublicKey: "", maxFee: SUFUtils.amountToSUF(amount: maxFee), tpid: walletFioAddress, actor: actor)
-        
-        print (address)
+        let body = RegisterFIOAddressRequest(fioAddress: fioAddress, fioPublicKey: "", maxFee: SUFUtils.amountToSUF(amount: maxFee), tpid: walletFioAddress, actor: actor)
+         
         signedPostRequestTo(privateKey: getPrivateKey(),
                             route: ChainRoutes.registerFIOAddress,
                             forAction: ChainActions.registerFIOAddress,
-                            withBody: address,
+                            withBody: body,
                             code: "fio.system",
                             account: actor) { (data, error) in
                                 if let result = data {
