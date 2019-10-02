@@ -670,7 +670,7 @@ class FIOSDKTests: XCTestCase {
         FIOSDK.sharedInstance().requestFunds(payer: "faucet:fio", payee: self.requesteeFioName, payeePublicAddress: FIOSDK.sharedInstance().getPublicKey(), amount: 30, tokenCode: "FIO", metadata: metadata, maxFee: 0) { (response, error) in
             if error?.kind == .Success {
                 sleep(60)
-                FIOSDK.sharedInstance().registerFioDomain(domain, maxFee: 30.0, onCompletion: { (response, error) in
+                FIOSDK.sharedInstance().registerFioDomain(domain, maxFee: 30.0, walletFioAddress:"", onCompletion: { (response, error) in
                     XCTAssert((error?.kind == FIOError.ErrorKind.Success), "registerFIODomain NOT SUCCESSFUL")
                     XCTAssertNotNil(response)
                     XCTAssert(response?.status != "")
@@ -690,7 +690,7 @@ class FIOSDKTests: XCTestCase {
         let domain = "#&*("
         let expectation = XCTestExpectation(description: "testRegisterFIODomainWithNewValueShouldRegister")
         
-        FIOSDK.sharedInstance().registerFioDomain(domain, maxFee: 30.0, onCompletion: { (response, error) in
+        FIOSDK.sharedInstance().registerFioDomain(domain, maxFee: 30.0, walletFioAddress:"", onCompletion: { (response, error) in
             XCTAssert((error?.kind == FIOError.ErrorKind.Failure), String(format:"registerFIODomain Should not register invalid domains: %@", domain))
             expectation.fulfill()
         })
@@ -708,7 +708,7 @@ class FIOSDKTests: XCTestCase {
         FIOSDK.sharedInstance().requestFunds(payer: "faucet:fio", payee: self.requesteeFioName, payeePublicAddress: FIOSDK.sharedInstance().getPublicKey(), amount: 2, tokenCode: "FIO", metadata: metadata, maxFee: 0) { (response, error) in
             if error?.kind == .Success {
                 sleep(60)
-                FIOSDK.sharedInstance().registerFioDomain(address, maxFee: 2, onCompletion: { (response, error) in
+                FIOSDK.sharedInstance().registerFioDomain(address, maxFee: 2, walletFioAddress:"", onCompletion: { (response, error) in
                     XCTAssert((error?.kind == FIOError.ErrorKind.Success), "registerFIODomain NOT SUCCESSFUL")
                     XCTAssertNotNil(response)
                     XCTAssert(response?.status != "")
