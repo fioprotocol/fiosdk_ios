@@ -22,6 +22,7 @@
 		0203C5CB217A6A6D0054FA10 /* FIOSDK.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0203C5C9217A6A6D0054FA10 /* FIOSDK.swift */; };
 		0203C5CC217A6A6D0054FA10 /* Settings.plist in Resources */ = {isa = PBXBuildFile; fileRef = 0203C5CA217A6A6D0054FA10 /* Settings.plist */; };
 		0203C5D8217A71330054FA10 /* FIOError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0203C5D7217A71330054FA10 /* FIOError.swift */; };
+		02253FBA2342BA1300FDD95A /* fio.abi.json in Resources */ = {isa = PBXBuildFile; fileRef = 02253FB92342BA1300FDD95A /* fio.abi.json */; };
 		0245A5B12193BF6900C5A870 /* String+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0245A5B02193BF6900C5A870 /* String+Extensions.swift */; };
 		02A3AA4922FE28EE007B5586 /* abieos.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 02A3AA0E22FE28ED007B5586 /* abieos.cpp */; };
 		02A3AA4A22FE28EE007B5586 /* transaction.abi.json in Resources */ = {isa = PBXBuildFile; fileRef = 02A3AA0F22FE28ED007B5586 /* transaction.abi.json */; };
@@ -226,6 +227,7 @@
 		0203C5C9217A6A6D0054FA10 /* FIOSDK.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FIOSDK.swift; sourceTree = "<group>"; };
 		0203C5CA217A6A6D0054FA10 /* Settings.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Settings.plist; sourceTree = "<group>"; };
 		0203C5D7217A71330054FA10 /* FIOError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FIOError.swift; sourceTree = "<group>"; };
+		02253FB92342BA1300FDD95A /* fio.abi.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = fio.abi.json; sourceTree = "<group>"; };
 		0245A5B02193BF6900C5A870 /* String+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Extensions.swift"; sourceTree = "<group>"; };
 		02A3AA0E22FE28ED007B5586 /* abieos.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = abieos.cpp; sourceTree = "<group>"; };
 		02A3AA0F22FE28ED007B5586 /* transaction.abi.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = transaction.abi.json; sourceTree = "<group>"; };
@@ -542,6 +544,14 @@
 			path = src;
 			sourceTree = "<group>";
 		};
+		02253FBB2342BDFE00FDD95A /* AbiSerialization */ = {
+			isa = PBXGroup;
+			children = (
+				02253FB92342BA1300FDD95A /* fio.abi.json */,
+			);
+			path = AbiSerialization;
+			sourceTree = "<group>";
+		};
 		025859F02255053100622144 /* Router */ = {
 			isa = PBXGroup;
 			children = (
@@ -817,6 +827,7 @@
 		287F105F225524C0001E3B32 /* Core */ = {
 			isa = PBXGroup;
 			children = (
+				02253FBB2342BDFE00FDD95A /* AbiSerialization */,
 				02B1FD7C22BC22CC00671B8C /* GetABI */,
 				285C3C3B229723B4007F3C05 /* GetFee */,
 				285C3C362296EE46007F3C05 /* FIOAddress */,
@@ -1140,6 +1151,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				02A3AA4A22FE28EE007B5586 /* transaction.abi.json in Resources */,
+				02253FBA2342BA1300FDD95A /* fio.abi.json in Resources */,
 				283438382245439100E60314 /* secp256k1.table in Resources */,
 				02A3AA4B22FE28EE007B5586 /* abi.abi.json in Resources */,
 				02A3AA7E22FE28EE007B5586 /* eosio.assert.abi.json in Resources */,

@@ -492,6 +492,32 @@ public class FIOSDK: BaseFIOSDK {
         let actor = AccountNameGenerator.run(withPublicKey: getSystemPublicKey())
         let data = RequestFundsRequest(payerFIOAddress: payerFIOAddress, payeeFIOAddress: payeeFIOAddress, content:"", amount: String(amount), tokenCode: tokenCode, actor: actor, maxFee: SUFUtils.amountToSUF(amount: maxFee), tpid:"")
         
+        
+        // content -
+        // encrypt -
+        //
+        
+        /*
+ 
+         the content needs to be encrypted.
+         
+         These are the steps:
+         1. With the private key and the payee public key (fio public address), create the sharedSecret
+         2. With the content field, map each field to it's json value.
+         3. With the content json, pass it to the ABI packer.
+         4. Encrypt the resultant ABI packer data.  Using the sharedSecret
+         
+         payee_public_address,
+         amount,
+         token_code,
+         memo,
+         hash,
+         offline_url
+ 
+ */
+        
+        
+        
         signedPostRequestTo(privateKey: getPrivateKey(),
                             route: ChainRoutes.newFundsRequest,
                             forAction: ChainActions.newFundsRequest,

@@ -1,0 +1,77 @@
+{
+    "version": "eosio::abi/1.0",
+    "structs": [
+        {
+            "name": "new_funds_content",
+            "base": "",
+            "fields": [
+                {
+                    "name": "payee_public_address",
+                    "type": "string"
+                },
+                {
+                    "name": "amount",
+                    "type": "string"
+                },
+                {
+                    "name": "token_code",
+                    "type": "string"
+                },
+                {
+                    "name": "memo",
+                    "type": "string"
+                },
+                {
+                    "name": "hash",
+                    "type": "string"
+                },
+                {
+                    "name": "offline_url",
+                    "type": "string"
+                }
+            ]
+        },
+        {
+            "name": "record_send_content",
+            "base": "",
+            "fields": [
+                {
+                    "name": "payer_public_address",
+                    "type": "string"
+                },
+                {
+                    "name": "payee_public_address",
+                    "type": "string"
+                },
+                {
+                    "name": "amount",
+                    "type": "string"
+                },
+                {
+                    "name": "token_code",
+                    "type": "string"
+                },
+                {
+                    "name": "status",
+                    "type": "string"
+                },
+                {
+                    "name": "obt_id",
+                    "type": "string"
+                },
+                {
+                    "name": "memo",
+                    "type": "string"
+                },
+                {
+                    "name": "hash",
+                    "type": "string"
+                },
+                {
+                    "name": "offline_url",
+                    "type": "string"
+                }
+            ]
+        }
+    ]
+}

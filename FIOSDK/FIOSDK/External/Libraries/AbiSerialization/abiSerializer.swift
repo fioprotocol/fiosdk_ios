@@ -107,7 +107,7 @@ class abiSerializer {
     ///   - abi: A String representation of the ABI to use for conversion.
     /// - Returns: A String of binary serialized data.
     /// - Throws: If the data cannot be serialized for any reason.
-    public func serialize(contract: String?, name: String = "", type: String? = nil, json: String, abi: String) throws -> String {
+so, i could pass in the string of the abi here    public func serialize(contract: String?, name: String = "", type: String? = nil, json: String, abi: String) throws -> String {
         
         refreshContext()
         
