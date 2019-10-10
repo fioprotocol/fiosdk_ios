@@ -178,18 +178,13 @@ public class FIOSDK: BaseFIOSDK {
         }
     }
     
-    
     /**
-        * This function should be called to register a new FIO Address. [visit api](https://stealth.atlassian.net/wiki/spaces/DEV/pages/53280776/API#API-/register_fio_address-RegisterFIOAddress)
-        * - Parameter FIOAddress: A string to register as FIO Address
-        * - Parameter walletFioAddress: FIO Address of the wallet which generates this transaction.
-        *                                                                 This FIO Address will be paid 10% of the fee.
-        *                                                                 See FIO Protocol#TPIDs for details.
-        *                                                                 Set to empty if not known.
-        * - Parameter maxFee: Maximum amount of SUFs the user is willing to pay for fee. Should be preceded by /get_fee for correct value.
-        * - Parameter completion: A callback function that is called when request is finished either with success or failure. Check FIOError.kind to determine if is a success or a failure.
-        */
-       public func registerFioAddress(_ fioAddress: String, maxFee: Double,  onCompletion: @escaping (_ response: FIOSDK.Responses.RegisterFIOAddressResponse? , _ error:FIOError?) -> ()) {
+     * This function should be called to register a new FIO Address. [visit api](https://stealth.atlassian.net/wiki/spaces/DEV/pages/53280776/API#API-/register_fio_address-RegisterFIOAddress)
+     * - Parameter FIOAddress: A string to register as FIO Address
+     * - Parameter maxFee: Maximum amount of SUFs the user is willing to pay for fee. Should be preceded by /get_fee for correct value.
+     * - Parameter completion: A callback function that is called when request is finished either with success or failure. Check FIOError.kind to determine if is a success or a failure.
+     */
+    public func registerFioAddress(_ fioAddress: String, maxFee: Double,  onCompletion: @escaping (_ response: FIOSDK.Responses.RegisterFIOAddressResponse? , _ error:FIOError?) -> ()) {
         self.registerFioAddress(fioAddress, maxFee: maxFee, walletFioAddress: "", onCompletion: onCompletion)
     }
     /**
@@ -209,7 +204,6 @@ public class FIOSDK: BaseFIOSDK {
         }
         let actor = AccountNameGenerator.run(withPublicKey: getPublicKey())
         let body = RegisterFIOAddressRequest(fioAddress: fioAddress, fioPublicKey: "", maxFee: SUFUtils.amountToSUF(amount: maxFee), tpid: walletFioAddress, actor: actor)
-         
         signedPostRequestTo(privateKey: getPrivateKey(),
                             route: ChainRoutes.registerFIOAddress,
                             forAction: ChainActions.registerFIOAddress,
