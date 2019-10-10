@@ -661,82 +661,80 @@ class FIOSDKTests: XCTestCase {
     }
     
     func testRenewFIODomainWithNewValueShouldRenewNoWallet() {
-           let timestamp = NSDate().timeIntervalSince1970
-           let domain = "test\(Int(timestamp.rounded()))"
-           let expectation = XCTestExpectation(description: "testRegisterFIODomainWithNewValueShouldRegister")
-           let metadata = RequestFundsRequest.MetaData(memo: "", hash: nil, offlineUrl: nil)
-           
-           self.defaultSDKConfig()
-           FIOSDK.sharedInstance().requestFunds(payer: "faucet:fio", payee: self.requesteeFioName, payeePublicAddress: FIOSDK.sharedInstance().getPublicKey(), amount: 30, tokenCode: "FIO", metadata: metadata, maxFee: 0) { (response, error) in
-               if error?.kind == .Success {
-                   sleep(60)
-                   FIOSDK.sharedInstance().renewFioDomain(domain, maxFee: 30.0, onCompletion: { (response, error) in
-                       XCTAssert((error?.kind == FIOError.ErrorKind.Success), "renewFIODomain NOT SUCCESSFUL")
-                       XCTAssertNotNil(response)
-                       XCTAssert(response?.status != "")
-                       expectation.fulfill()
-                   })
-               }
-               else {
-                   XCTFail("Failed to call requestFunds prior to renew domain requests")
-                   expectation.fulfill()
-               }
-           }
-           
-           wait(for: [expectation], timeout: TIMEOUT * 1.5)
-       }
-       
-       func testRenewFIODomainWithInvalidValueShouldNotRenewNoWallet() {
-            let domain = "#&*("
-            let expectation = XCTestExpectation(description: "testRenewFIODomainWithNewValueShouldRenew")
-            
-           FIOSDK.sharedInstance().renewFioDomain(domain, maxFee: 30.0, onCompletion: { (response, error) in
-                XCTAssert((error?.kind == FIOError.ErrorKind.Failure), String(format:"renewFIODomain Should not renew invalid domains: %@", domain))
+        let timestamp = NSDate().timeIntervalSince1970
+        let domain = "test\(Int(timestamp.rounded()))"
+        let expectation = XCTestExpectation(description: "testRegisterFIODomainWithNewValueShouldRegister")
+        let metadata = RequestFundsRequest.MetaData(memo: "", hash: nil, offlineUrl: nil)
+        
+        self.defaultSDKConfig()
+        FIOSDK.sharedInstance().requestFunds(payer: "faucet:fio", payee: self.requesteeFioName, payeePublicAddress: FIOSDK.sharedInstance().getPublicKey(), amount: 30, tokenCode: "FIO", metadata: metadata, maxFee: 0) { (response, error) in
+            if error?.kind == .Success {
+                sleep(60)
+                FIOSDK.sharedInstance().renewFioDomain(domain, maxFee: 30.0, onCompletion: { (response, error) in
+                    XCTAssert((error?.kind == FIOError.ErrorKind.Success), "renewFIODomain NOT SUCCESSFUL")
+                    XCTAssertNotNil(response)
+                    XCTAssert(response?.status != "")
+                    expectation.fulfill()
+                })
+            }
+            else {
+                XCTFail("Failed to call requestFunds prior to renew domain requests")
                 expectation.fulfill()
-            })
-            
-            wait(for: [expectation], timeout: TIMEOUT * 1.5)
+            }
         }
+        
+        wait(for: [expectation], timeout: TIMEOUT * 1.5)
+    }
+    
+    func testRenewFIODomainWithInvalidValueShouldNotRenewNoWallet() {
+        let domain = "#&*("
+        let expectation = XCTestExpectation(description: "testRenewFIODomainWithNewValueShouldRenew")
+        
+        FIOSDK.sharedInstance().renewFioDomain(domain, maxFee: 30.0, onCompletion: { (response, error) in
+            XCTAssert((error?.kind == FIOError.ErrorKind.Failure), String(format:"renewFIODomain Should not renew invalid domains: %@", domain))
+            expectation.fulfill()
+        })
+        
+        wait(for: [expectation], timeout: TIMEOUT * 1.5)
+    }
     
     func testRenewFIODomainWithNewValueShouldRenew() {
-           let timestamp = NSDate().timeIntervalSince1970
-           let domain = "test\(Int(timestamp.rounded()))"
-           let expectation = XCTestExpectation(description: "testRegisterFIODomainWithNewValueShouldRegister")
-           let metadata = RequestFundsRequest.MetaData(memo: "", hash: nil, offlineUrl: nil)
-           
-           self.defaultSDKConfig()
-           FIOSDK.sharedInstance().requestFunds(payer: "faucet:fio", payee: self.requesteeFioName, payeePublicAddress: FIOSDK.sharedInstance().getPublicKey(), amount: 30, tokenCode: "FIO", metadata: metadata, maxFee: 0) { (response, error) in
-               if error?.kind == .Success {
-                   sleep(60)
-                   FIOSDK.sharedInstance().renewFioDomain(domain, maxFee: 30.0,walletFioAddress: "", onCompletion: { (response, error) in
-                       XCTAssert((error?.kind == FIOError.ErrorKind.Success), "renewFIODomain NOT SUCCESSFUL")
-                       XCTAssertNotNil(response)
-                       XCTAssert(response?.status != "")
-                       expectation.fulfill()
-                   })
-               }
-               else {
-                   XCTFail("Failed to call requestFunds prior to renew domain requests")
-                   expectation.fulfill()
-               }
-           }
-           
-           wait(for: [expectation], timeout: TIMEOUT * 1.5)
-       }
-       
-       func testRenewFIODomainWithInvalidValueShouldNotRenew() {
-            let domain = "#&*("
-            let expectation = XCTestExpectation(description: "testRenewFIODomainWithNewValueShouldRenew")
-            
-           FIOSDK.sharedInstance().renewFioDomain(domain, maxFee: 30.0,walletFioAddress: "", onCompletion: { (response, error) in
-                XCTAssert((error?.kind == FIOError.ErrorKind.Failure), String(format:"renewFIODomain Should not renew invalid domains: %@", domain))
+        let timestamp = NSDate().timeIntervalSince1970
+        let domain = "test\(Int(timestamp.rounded()))"
+        let expectation = XCTestExpectation(description: "testRegisterFIODomainWithNewValueShouldRegister")
+        let metadata = RequestFundsRequest.MetaData(memo: "", hash: nil, offlineUrl: nil)
+        
+        self.defaultSDKConfig()
+        FIOSDK.sharedInstance().requestFunds(payer: "faucet:fio", payee: self.requesteeFioName, payeePublicAddress: FIOSDK.sharedInstance().getPublicKey(), amount: 30, tokenCode: "FIO", metadata: metadata, maxFee: 0) { (response, error) in
+            if error?.kind == .Success {
+                sleep(60)
+                FIOSDK.sharedInstance().renewFioDomain(domain, maxFee: 30.0,walletFioAddress: "", onCompletion: { (response, error) in
+                    XCTAssert((error?.kind == FIOError.ErrorKind.Success), "renewFIODomain NOT SUCCESSFUL")
+                    XCTAssertNotNil(response)
+                    XCTAssert(response?.status != "")
+                    expectation.fulfill()
+                })
+            }
+            else {
+                XCTFail("Failed to call requestFunds prior to renew domain requests")
                 expectation.fulfill()
-            })
-            
-            wait(for: [expectation], timeout: TIMEOUT * 1.5)
+            }
         }
+        
+        wait(for: [expectation], timeout: TIMEOUT * 1.5)
+    }
     
-    
+    func testRenewFIODomainWithInvalidValueShouldNotRenew() {
+        let domain = "#&*("
+        let expectation = XCTestExpectation(description: "testRenewFIODomainWithNewValueShouldRenew")
+        
+        FIOSDK.sharedInstance().renewFioDomain(domain, maxFee: 30.0,walletFioAddress: "", onCompletion: { (response, error) in
+            XCTAssert((error?.kind == FIOError.ErrorKind.Failure), String(format:"renewFIODomain Should not renew invalid domains: %@", domain))
+            expectation.fulfill()
+        })
+        
+        wait(for: [expectation], timeout: TIMEOUT * 1.5)
+    }
     
     func testRegisterFIODomainWithNewValueShouldRegister() {
         let timestamp = NSDate().timeIntervalSince1970
