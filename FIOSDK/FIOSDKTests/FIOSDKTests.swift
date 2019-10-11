@@ -814,6 +814,44 @@ class FIOSDKTests: XCTestCase {
         wait(for: [expectation], timeout: TIMEOUT * 1.5)
     }
     
+    func testRenewFIOAddressWithNewValueShouldRegister() {
+        let timestamp = NSDate().timeIntervalSince1970
+        let address = "test\(Int(timestamp.rounded())):brd"
+        let expectation = XCTestExpectation(description: "testRenewFIOAddressWithNewValueShouldRenew")
+        let metadata = RequestFundsRequest.MetaData(memo: "", hash: nil, offlineUrl: nil)
+        
+        self.defaultSDKConfig()
+        FIOSDK.sharedInstance().requestFunds(payer: "faucet:fio", payee: self.requesteeFioName, payeePublicAddress: FIOSDK.sharedInstance().getPublicKey(), amount: 2, tokenCode: "FIO", metadata: metadata, maxFee: 0) { (response, error) in
+            if error?.kind == .Success {
+                sleep(60)
+                FIOSDK.sharedInstance().renewFioAddress(address, maxFee: 2, onCompletion: { (response, error) in
+                    XCTAssert((error?.kind == FIOError.ErrorKind.Success), "renewFIOAddress NOT SUCCESSFUL")
+                    XCTAssertNotNil(response)
+                    XCTAssert(response?.status != "")
+                    expectation.fulfill()
+                })
+            }
+            else {
+                XCTFail("Failed to call requestFunds prior to renew address requests")
+                expectation.fulfill()
+            }
+        }
+        
+        wait(for: [expectation], timeout: TIMEOUT * 1.5)
+    }
+    
+    func testRenewFIOAddressWithInvalidValueShouldNotRegister() {
+        let address = "#&*("
+        let expectation = XCTestExpectation(description: "testRenewFIOAddressWithInvalidValueShouldNotRegister")
+        
+        FIOSDK.sharedInstance().renewFioAddress(address, maxFee: 2, walletFioAddress:"", onCompletion: { (response, error) in
+            XCTAssert((error?.kind == FIOError.ErrorKind.Failure), String(format:"registerFIODomain Should not register invalid domains: %@", address))
+            expectation.fulfill()
+        })
+        
+        wait(for: [expectation], timeout: TIMEOUT * 1.5)
+    }
+    
     func testRegisterFIOAddressWithNewValueShouldRegister() {
         let timestamp = NSDate().timeIntervalSince1970
         let address = "test\(Int(timestamp.rounded())):brd"

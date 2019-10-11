@@ -188,8 +188,8 @@
 		28BED286225BD83400F8606E /* FIODateUtilsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28BED285225BD83400F8606E /* FIODateUtilsTests.swift */; };
 		28FA83862267C9630053EA67 /* SignedRequestHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28FA83852267C9630053EA67 /* SignedRequestHelper.swift */; };
 		28FA838822689A220053EA67 /* BaseFIOSDK.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28FA838722689A220053EA67 /* BaseFIOSDK.swift */; };
-		3D2119622344F6FE0014CC11 /* RenewFIODomainRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D2119602344F6FD0014CC11 /* RenewFIODomainRequest.swift */; };
-		3D2119632344F6FE0014CC11 /* RenewFIODomainResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D2119612344F6FE0014CC11 /* RenewFIODomainResponse.swift */; };
+		3D1DC6E12350CADA000625E5 /* RenewFIOAddressResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D1DC6DF2350CADA000625E5 /* RenewFIOAddressResponse.swift */; };
+		3D1DC6E22350CADA000625E5 /* RenewFIOAddressRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D1DC6E02350CADA000625E5 /* RenewFIOAddressRequest.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -396,8 +396,8 @@
 		28BED285225BD83400F8606E /* FIODateUtilsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FIODateUtilsTests.swift; sourceTree = "<group>"; };
 		28FA83852267C9630053EA67 /* SignedRequestHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignedRequestHelper.swift; sourceTree = "<group>"; };
 		28FA838722689A220053EA67 /* BaseFIOSDK.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseFIOSDK.swift; sourceTree = "<group>"; };
-		3D2119602344F6FD0014CC11 /* RenewFIODomainRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RenewFIODomainRequest.swift; sourceTree = "<group>"; };
-		3D2119612344F6FE0014CC11 /* RenewFIODomainResponse.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RenewFIODomainResponse.swift; sourceTree = "<group>"; };
+		3D1DC6DF2350CADA000625E5 /* RenewFIOAddressResponse.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RenewFIOAddressResponse.swift; sourceTree = "<group>"; };
+		3D1DC6E02350CADA000625E5 /* RenewFIOAddressRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RenewFIOAddressRequest.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -775,8 +775,6 @@
 		285C3C312296DC2C007F3C05 /* FIODomain */ = {
 			isa = PBXGroup;
 			children = (
-				3D2119602344F6FD0014CC11 /* RenewFIODomainRequest.swift */,
-				3D2119612344F6FE0014CC11 /* RenewFIODomainResponse.swift */,
 				285C3C322296DC3B007F3C05 /* RegisterFIODomainRequest.swift */,
 				285C3C342296DEDD007F3C05 /* RegisterFIODomainResponse.swift */,
 			);
@@ -786,6 +784,8 @@
 		285C3C362296EE46007F3C05 /* FIOAddress */ = {
 			isa = PBXGroup;
 			children = (
+				3D1DC6E02350CADA000625E5 /* RenewFIOAddressRequest.swift */,
+				3D1DC6DF2350CADA000625E5 /* RenewFIOAddressResponse.swift */,
 				285C3C372296EE8A007F3C05 /* RegisterFIOAddressRequest.swift */,
 				285C3C392296EFC6007F3C05 /* RegisterFIOAddressResponse.swift */,
 			);
@@ -1220,7 +1220,6 @@
 				287F108322566813001E3B32 /* AddPublicAddress.swift in Sources */,
 				287F10752256591C001E3B32 /* PublicAddressRequest.swift in Sources */,
 				28BB8B6022578F6B0049A761 /* KeychainInteractor.swift in Sources */,
-				3D2119632344F6FE0014CC11 /* RenewFIODomainResponse.swift in Sources */,
 				2834384E2245439B00E60314 /* hmac.c in Sources */,
 				0203C582217A487A0054FA10 /* PackedTransaction.swift in Sources */,
 				0203C599217A4EC90054FA10 /* Utilities.swift in Sources */,
@@ -1254,10 +1253,12 @@
 				0203C58D217A487A0054FA10 /* PublicKey.swift in Sources */,
 				287F105C22552414001E3B32 /* TransferFIOTokensRequest.swift in Sources */,
 				287F1089225676B1001E3B32 /* JSONSerialization.swift in Sources */,
+				3D1DC6E12350CADA000625E5 /* RenewFIOAddressResponse.swift in Sources */,
 				283438522245439B00E60314 /* ecdsa.c in Sources */,
 				2834382C2245439100E60314 /* platform-specific.inc in Sources */,
 				283438532245439B00E60314 /* bignum.c in Sources */,
 				283438502245439B00E60314 /* ripemd160.c in Sources */,
+				3D1DC6E22350CADA000625E5 /* RenewFIOAddressRequest.swift in Sources */,
 				0203C58E217A487A0054FA10 /* PrivateKey.swift in Sources */,
 				28B998F122689AAC00B444A3 /* Constants.swift in Sources */,
 				28BED284225BD3D900F8606E /* DateUtils.swift in Sources */,
@@ -1278,7 +1279,6 @@
 				287F10552253ECE5001E3B32 /* ChainActions.swift in Sources */,
 				02A3AA4922FE28EE007B5586 /* abieos.cpp in Sources */,
 				287F109222567A07001E3B32 /* TxResultReceipt.swift in Sources */,
-				3D2119622344F6FE0014CC11 /* RenewFIODomainRequest.swift in Sources */,
 				287F10592253ED21001E3B32 /* ChainRoutes.swift in Sources */,
 				02B1FD7E22BC22EE00671B8C /* GetABIRequest.swift in Sources */,
 				0245A5B12193BF6900C5A870 /* String+Extensions.swift in Sources */,
