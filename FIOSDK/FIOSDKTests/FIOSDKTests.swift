@@ -918,24 +918,25 @@ class FIOSDKTests: XCTestCase {
     
     //MARK: Get Fee tests
     
-    func testGetFeeWtihEmptyAddressShouldReturnFee() {
-        let expectation = XCTestExpectation(description: "testGetFeeWtihEmptyAddressShouldReturnFee")
+    func testGetFeeWithEmptyAddressShouldReturnFee() {
+        let expectation = XCTestExpectation(description: "testGetFeeWithEmptyAddressShouldReturnFee")
         
         FIOSDK.sharedInstance().getFee(endPoint: FIOSDK.Params.FeeEndpoint.transferTokensPubKey, onCompletion: { (response, error) in
+            XCTAssert((error.kind == FIOError.ErrorKind.Success), "getFee failed: \(error.localizedDescription )")
             guard let fee = response?.fee else {
                 XCTFail("Fee not returned")
                 expectation.fulfill()
                 return
             }
-            XCTAssert(fee >= 0, "Something went wrong")
+            XCTAssert(fee > 0, "Something went wrong")
             expectation.fulfill()
         })
         
         wait(for: [expectation], timeout: TIMEOUT)
     }
     
-    func testGetFeeWtihNonEmptyAddressShouldReturnFee() {
-        let expectation = XCTestExpectation(description: "testGetFeeWtihNonEmptyAddressShouldReturnFee")
+    func testGetFeeWithNonEmptyAddressShouldReturnFee() {
+        let expectation = XCTestExpectation(description: "testGetFeeWithNonEmptyAddressShouldReturnFee")
         
         self.defaultSDKConfig()
         FIOSDK.sharedInstance().getFee(endPoint: FIOSDK.Params.FeeEndpoint.addPubAddress, fioAddress: self.requesteeFioName, onCompletion: { (response, error) in
@@ -951,8 +952,8 @@ class FIOSDKTests: XCTestCase {
         wait(for: [expectation], timeout: TIMEOUT)
     }
     
-    func testGetFeeWtihNonEmptyWrongAddressShouldNotReturnFee() {
-        let expectation = XCTestExpectation(description: "testGetFeeWtihNonEmptyAddressShouldReturnFee")
+    func testGetFeeWithNonEmptyWrongAddressShouldNotReturnFee() {
+        let expectation = XCTestExpectation(description: "testGetFeeWithNonEmptyWrongAddressShouldNotReturnFee")
         
         self.defaultSDKConfig()
         FIOSDK.sharedInstance().getFee(endPoint: FIOSDK.Params.FeeEndpoint.addPubAddress, fioAddress: "NOTVALID", onCompletion: { (response, error) in
@@ -963,7 +964,6 @@ class FIOSDKTests: XCTestCase {
         wait(for: [expectation], timeout: TIMEOUT)
     }
     
-
     func testGetAbi() {
         let expectation = XCTestExpectation(description: "testGetABI")
         
