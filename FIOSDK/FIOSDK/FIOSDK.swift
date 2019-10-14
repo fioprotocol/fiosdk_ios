@@ -661,34 +661,32 @@ public class FIOSDK: BaseFIOSDK {
     
     //MARK: Get FIO Balance
     
-    /// Retrieves balance of FIO tokens. [visit API specs](https://stealth.atlassian.net/wiki/spaces/DEV/pages/53280776/API#API-/get_fio_balance-GetFIObalance)
+    /// Retrieves balance of FIO tokens. [visit API specs](https://stealth.atlassian.net/wiki/spaces/DEV/pages/265977939/API+v0.3#APIv0.3-/get_fio_balance-GetFIObalance)
     /// - Parameters:
     ///     - fioPublicAddress: The FIO public address to get FIO tokens balance for.
-    ///     - completion: A function that is called once request is over with an optional response that should contain balance and error containing the status of the call.
-    public func getFIOBalance(fioPublicAddress: String, completion: @escaping (_ response: FIOSDK.Responses.FIOBalanceResponse?, _ error: FIOError) -> ()){
+    ///     - onCompletion: A function that is called once request is over with an optional response that should contain balance and error containing the status of the call.
+    public func getFIOBalance(fioPublicAddress: String, onCompletion: @escaping (_ response: FIOSDK.Responses.FIOBalanceResponse?, _ error: FIOError) -> ()){
         let body = FIOBalanceRequest(fioPubAddress: fioPublicAddress)
         let url = ChainRouteBuilder.build(route: ChainRoutes.getFIOBalance)
         FIOHTTPHelper.postRequestTo(url, withBody: body) { (data, error) in
             if let data = data {
                 do {
                     let result = try JSONDecoder().decode(FIOSDK.Responses.FIOBalanceResponse.self, from: data)
-                    completion(result, FIOError.success())
+                    onCompletion(result, FIOError.success())
                 }
                 catch {
-                    completion(nil, FIOError.failure(localizedDescription: "Parsing json failed."))
+                    onCompletion(nil, FIOError.failure(localizedDescription: "Parsing json failed."))
                 }
             } else {
                 if let error = error {
-                    completion(nil, error)
+                    onCompletion(nil, error)
                 }
                 else {
-                    completion(nil, FIOError.failure(localizedDescription: ChainRoutes.getFIOBalance.rawValue + " request failed."))
+                    onCompletion(nil, FIOError.failure(localizedDescription: ChainRoutes.getFIOBalance.rawValue + " request failed."))
                 }
             }
         }
     }
-    
-    
     
     //MARK: Transfer Tokens
     

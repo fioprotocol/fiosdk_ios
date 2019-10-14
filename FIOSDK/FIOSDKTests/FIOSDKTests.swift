@@ -844,7 +844,6 @@ class FIOSDKTests: XCTestCase {
         wait(for: [expectation], timeout: TIMEOUT)
     }
     
-    
     func testTransferTokensWithGoodAccountsShouldBeSuccessful() {
         let expectation = XCTestExpectation(description: "testTransferTokensWithGoodAccountsShouldBeSuccessful")
         
