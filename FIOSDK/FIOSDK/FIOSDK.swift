@@ -197,26 +197,17 @@ public class FIOSDK: BaseFIOSDK {
     }
     
     /**
-     * This function should be called to register a new FIO Domain. [visit api](https://stealth.atlassian.net/wiki/spaces/DEV/pages/53280776/API#API-/register_fio_domain-RegisterFIODomain)
+     * This function should be called to register a new FIO Domain. [visit api](https://stealth.atlassian.net/wiki/spaces/DEV/pages/265977939/API+v0.3#APIv0.3-/register_fio_domain-RegisterFIODomain)
      * - Parameter fioDomain: A string to register as FIO Domain
      * - Parameter maxFee: Maximum amount of SUFs the user is willing to pay for fee. Should be preceded by /get_fee for correct value.
-     * - Parameter completion: A callback function that is called when request is finished either with success or failure. Check FIOError.kind to determine if is a success or a failure.
+     * - Parameter walletFioAddress:
+     + FIO Address of the wallet which generates this transaction.
+     + This FIO Address will be paid 10% of the fee.
+     + See FIO Protocol#TPIDs for details.
+     + Set to empty if not known.
+     * - Parameter onCompletion: A callback function that is called when request is finished either with success or failure. Check FIOError.kind to determine if is a success or a failure.
      */
-    public func registerFioDomain(_ fioDomain: String, maxFee: Double, onCompletion: @escaping (_ response: FIOSDK.Responses.RegisterFIODomainResponse? , _ error:FIOError?) -> ()) {
-        registerFioDomain(fioDomain, maxFee: maxFee, walletFioAddress: "", onCompletion: onCompletion)
-    }
-    
-    /**
-     * This function should be called to register a new FIO Domain. [visit api](https://stealth.atlassian.net/wiki/spaces/DEV/pages/53280776/API#API-/register_fio_domain-RegisterFIODomain)
-     * - Parameter fioDomain: A string to register as FIO Domain
-     * - Parameter maxFee: Maximum amount of SUFs the user is willing to pay for fee. Should be preceded by /get_fee for correct value.
-     * - Parameter tpid:  * FIO Address of the wallet which generates this transaction.
-     *                      This FIO Address will be paid 10% of the fee.
-     *                      See FIO Protocol#TPIDs for details.
-     *                      Set to empty if not known.
-     * - Parameter completion: A callback function that is called when request is finished either with success or failure. Check FIOError.kind to determine if is a success or a failure.
-     */
-    public func registerFioDomain(_ fioDomain: String, maxFee: Double, walletFioAddress: String, onCompletion: @escaping (_ response: FIOSDK.Responses.RegisterFIODomainResponse? , _ error:FIOError?) -> ()) {
+    public func registerFioDomain(_ fioDomain: String, maxFee: Double, walletFioAddress: String = "", onCompletion: @escaping (_ response: FIOSDK.Responses.RegisterFIODomainResponse? , _ error:FIOError?) -> ()) {
         guard isFIODomainValid(fioDomain) else {
             onCompletion(nil, FIOError.failure(localizedDescription: "Invalid FIO Domain."))
             return
