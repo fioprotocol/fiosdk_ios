@@ -180,7 +180,7 @@ public class FIOSDK: BaseFIOSDK {
     
     /**
      * This function should be called to register a new FIO Address. [visit api](https://stealth.atlassian.net/wiki/spaces/DEV/pages/53280776/API#API-/register_fio_address-RegisterFIOAddress)
-     * - Parameter FIOAddress: A string to register as FIO Address
+     * - Parameter fioAddress: A string to register as FIO Address
      * - Parameter maxFee: Maximum amount of SUFs the user is willing to pay for fee. Should be preceded by /get_fee for correct value.
      * - Parameter walletFioAddress:
      + FIO Address of the wallet which generates this transaction.
