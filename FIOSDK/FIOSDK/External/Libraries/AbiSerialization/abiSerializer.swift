@@ -97,6 +97,16 @@ class abiSerializer {
         return try serialize(contract: nil, name: "error_message", type: "abi_def", json: json, abi: abiJson)
     }
     
+    /// Convert JSON ABI data representation to ABIEOS binary of data.
+    ///
+    /// - Parameter json: The JSON data String to serialize.
+    /// - Returns: A String of binary data.
+    /// - Throws: If the data cannot be serialized for any reason.
+    public func serializeContent(contentType: FIOAbiContentType, json: String) throws -> String {
+        let abiJson = try getAbiJsonFile(fileName: "fio.abi.json")
+        return try serialize(contract: nil, name: "", type: contentType.rawValue, json: json, abi: abiJson)
+    }
+    
     /// Calls ABIEOS to carry out JSON to binary conversion using ABIs.
     ///
     /// - Parameters:

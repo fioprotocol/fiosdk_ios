@@ -473,21 +473,8 @@ public class FIOSDK: BaseFIOSDK {
         }
     }
     
-    
-    internal func mapJsonToAbiContent(abiName: String, contentJson: String) -> String {
-        return ""
-        
-  // erialize(contract: String?, name: String = "", type: String? = nil, json: String, abi: String)
-        let serializer = abiSerializer()
-        let serializedResult = try? serializer.serialize(contract: code, name:action.rawValue, json: jsonString, abi: response?.abi ?? "")
-
-        if (serializedResult != nil) {
-           onCompletion(SerializeJsonResponse(json:serializedResult!), nil)
-        }
-    }
-    
-    internal func encrypt(privateKey: String, publicKey: String, abiName: String, contentJson: String) -> String{
-        guard let privateKey = try! PrivateKey(keyString: privateKey) else {
+    internal func encrypt(publicKey: String, contentType: FIOAbiContentType, contentJson: String) -> String{
+        guard let privateKey = try! PrivateKey(keyString: self.privateKey) else {
             return ""
         }
         
@@ -495,13 +482,14 @@ public class FIOSDK: BaseFIOSDK {
         let sharedSecret = privateKey.getSharedSecret(publicKey: publicKey)
         
         //  2. With the content field, map each field to it's json value.
-        let abiContent = mapJsonToAbiContent(abiName: abiName, contentJson: contentJson)
+        //    --> this is the json coming into this.
         
         // 3. With the content json, pass it to the ABI packer.
-        let packed = abiContent
+        let serializer = abiSerializer()
+        let packed = try? serializer.serializeContent(contentType: contentType, json: contentJson)
         
         // 4. Encrypt the resultant ABI packer data.  Using the sharedSecret
-        guard let encrypted = Cryptography().encrypt(secret: sharedSecret ?? "", message: packed, iv: nil) else {
+        guard let encrypted = Cryptography().encrypt(secret: sharedSecret ?? "", message: packed ?? "", iv: nil) else {
             return ""
         }
         
@@ -519,6 +507,7 @@ public class FIOSDK: BaseFIOSDK {
                 3. With the content json, pass it to the ABI packer.
                 4. Encrypt the resultant ABI packer data.  Using the sharedSecret
                 
+         ok, somehow do the json mapping now.
                 payee_public_address,
                 amount,
                 token_code,
@@ -549,51 +538,36 @@ public class FIOSDK: BaseFIOSDK {
     ///   - metadata: Contains the: memo or hash or offlineUrl (they are mutually excludent, fill only one)
     ///   - maxFee: Maximum amount of SUFs the user is willing to pay for fee. Should be preceded by /get_fee for correct value.
     ///   - completion: The completion handler containing the result
-    public func requestFunds(payer payerFIOAddress:String, payee payeeFIOAddress: String, payeePublicAddress: String, amount: Float, tokenCode: String, metadata: RequestFundsRequest.MetaData, maxFee: Double, completion: @escaping ( _ response: RequestFundsResponse?, _ error:FIOError? ) -> ()) {
-        let actor = AccountNameGenerator.run(withPublicKey: getSystemPublicKey())
-        let data = RequestFundsRequest(payerFIOAddress: payerFIOAddress, payeeFIOAddress: payeeFIOAddress, content:"", amount: String(amount), tokenCode: tokenCode, actor: actor, maxFee: SUFUtils.amountToSUF(amount: maxFee), tpid:"")
-        
-        
-        // content -
-        // encrypt -
-        //
-        
-        /*
- 
-         the content needs to be encrypted.
-         
-         These are the steps:
-         1. With the private key and the payee public key (fio public address), create the sharedSecret
-         
-         
-         2. With the content field, map each field to it's json value.
-         3. With the content json, pass it to the ABI packer.
-         4. Encrypt the resultant ABI packer data.  Using the sharedSecret
-         
-         payee_public_address,
-         amount,
-         token_code,
-         memo,
-         hash,
-         offline_url
- 
- */
-        
-        
-        
-        signedPostRequestTo(privateKey: getPrivateKey(),
-                            route: ChainRoutes.newFundsRequest,
-                            forAction: ChainActions.newFundsRequest,
-                            withBody: data,
-                            code: "fio.reqobt",
-                            account: actor) { (result, error) in
-                                guard let result = result else {
-                                    completion(nil, error)
-                                    return
-                                }
-                                let handledData: (response: RequestFundsResponse?, error: FIOError) = parseResponseFromTransactionResult(txResult: result)
-                                completion(handledData.response, handledData.error)
+    public func requestFunds(payer payerFIOAddress:String, payee payeeFIOAddress: String, payeePublicAddress: String, amount: Float, tokenCode: String, metadata: RequestFundsRequest.MetaData, maxFee: Int, completion: @escaping ( _ response: RequestFundsResponse?, _ error:FIOError? ) -> ()) {
+       
+        self.getPublicAddress(fioAddress: payerFIOAddress, tokenCode: "FIO") { (response, error) in
+            if (error.kind == FIOError.ErrorKind.Success) {
+                
+                let contentJson = RequestFundsContent(payeePublicAddress: payeePublicAddress, amount: String(amount), tokenCode: tokenCode, memo:metadata.memo ?? "", hash: metadata.hash ?? "", offlineUrl: metadata.offlineUrl ?? "")
+                
+                let encryptedContent = self.encrypt(publicKey: response?.publicAddress ?? "", contentType: FIOAbiContentType.newFundsContent, contentJson: contentJson.toJSONString())
+                let actor = AccountNameGenerator.run(withPublicKey: self.getSystemPublicKey())
+                let data = RequestFundsRequest(payerFIOAddress: payerFIOAddress, payeeFIOAddress: payeeFIOAddress, content:encryptedContent, tokenCode: tokenCode, maxFee: maxFee, tpid:"", actor: actor)
+                
+                signedPostRequestTo(privateKey: self.getPrivateKey(),
+                                           route: ChainRoutes.newFundsRequest,
+                                           forAction: ChainActions.newFundsRequest,
+                                           withBody: data,
+                                           code: "fio.reqobt",
+                                           account: actor) { (result, error) in
+                                               guard let result = result else {
+                                                   completion(nil, error)
+                                                   return
+                                               }
+                                               let handledData: (response: RequestFundsResponse?, error: FIOError) = parseResponseFromTransactionResult(txResult: result)
+                                               completion(handledData.response, handledData.error)
+                       }
+            }
+            else {
+                completion(nil, FIOError.init(kind: .Failure, localizedDescription: "Payer FIO Public Address not found"))
+            }
         }
+
     }
     
     //MARK: - Reject Funds
@@ -744,6 +718,7 @@ public class FIOSDK: BaseFIOSDK {
     //MARK: FIO Public Address
     /// Call this to get the FIO pub address.
     /// - Return: the FIO public address String value.
+    #warning("this needs to be removed OR changed... invalid now")
     public func getFIOPublicAddress() -> String {
         return AccountNameGenerator.run(withPublicKey: getSystemPublicKey())
     }

@@ -24,6 +24,8 @@
 		0203C5D8217A71330054FA10 /* FIOError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0203C5D7217A71330054FA10 /* FIOError.swift */; };
 		02253FBA2342BA1300FDD95A /* fio.abi.json in Resources */ = {isa = PBXBuildFile; fileRef = 02253FB92342BA1300FDD95A /* fio.abi.json */; };
 		0245A5B12193BF6900C5A870 /* String+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0245A5B02193BF6900C5A870 /* String+Extensions.swift */; };
+		028DBA032356609100D4C70E /* FIOAbiContentType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 028DBA022356609100D4C70E /* FIOAbiContentType.swift */; };
+		028DBA05235669BA00D4C70E /* RequestFundsContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 028DBA04235669BA00D4C70E /* RequestFundsContent.swift */; };
 		02A3AA4922FE28EE007B5586 /* abieos.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 02A3AA0E22FE28ED007B5586 /* abieos.cpp */; };
 		02A3AA4A22FE28EE007B5586 /* transaction.abi.json in Resources */ = {isa = PBXBuildFile; fileRef = 02A3AA0F22FE28ED007B5586 /* transaction.abi.json */; };
 		02A3AA4B22FE28EE007B5586 /* abi.abi.json in Resources */ = {isa = PBXBuildFile; fileRef = 02A3AA1022FE28ED007B5586 /* abi.abi.json */; };
@@ -229,6 +231,8 @@
 		0203C5D7217A71330054FA10 /* FIOError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FIOError.swift; sourceTree = "<group>"; };
 		02253FB92342BA1300FDD95A /* fio.abi.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = fio.abi.json; sourceTree = "<group>"; };
 		0245A5B02193BF6900C5A870 /* String+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Extensions.swift"; sourceTree = "<group>"; };
+		028DBA022356609100D4C70E /* FIOAbiContentType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FIOAbiContentType.swift; sourceTree = "<group>"; };
+		028DBA04235669BA00D4C70E /* RequestFundsContent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestFundsContent.swift; sourceTree = "<group>"; };
 		02A3AA0E22FE28ED007B5586 /* abieos.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = abieos.cpp; sourceTree = "<group>"; };
 		02A3AA0F22FE28ED007B5586 /* transaction.abi.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = transaction.abi.json; sourceTree = "<group>"; };
 		02A3AA1022FE28ED007B5586 /* abi.abi.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = abi.abi.json; sourceTree = "<group>"; };
@@ -547,6 +551,7 @@
 		02253FBB2342BDFE00FDD95A /* AbiSerialization */ = {
 			isa = PBXGroup;
 			children = (
+				028DBA022356609100D4C70E /* FIOAbiContentType.swift */,
 				02253FB92342BA1300FDD95A /* fio.abi.json */,
 			);
 			path = AbiSerialization;
@@ -887,6 +892,7 @@
 			children = (
 				287F106E22565603001E3B32 /* RequestFundsResponse.swift */,
 				287F1070225656D6001E3B32 /* RequestFundsRequest.swift */,
+				028DBA04235669BA00D4C70E /* RequestFundsContent.swift */,
 			);
 			path = RequestFunds;
 			sourceTree = "<group>";
@@ -1234,6 +1240,7 @@
 				287F107322565902001E3B32 /* PublicAddressResponse.swift in Sources */,
 				285C3C352296DEDD007F3C05 /* RegisterFIODomainResponse.swift in Sources */,
 				2856D26F225CC90800BC5D36 /* TokenPublicAddressResponse.swift in Sources */,
+				028DBA032356609100D4C70E /* FIOAbiContentType.swift in Sources */,
 				287F1071225656D6001E3B32 /* RequestFundsRequest.swift in Sources */,
 				285C3C3F2297256C007F3C05 /* FeeResponse.swift in Sources */,
 				283438572245733800E60314 /* PrivateKey+Extensions.swift in Sources */,
@@ -1270,6 +1277,7 @@
 				2818C63A2260B8AB001871C8 /* ChainInfo.swift in Sources */,
 				285C3C332296DC3C007F3C05 /* RegisterFIODomainRequest.swift in Sources */,
 				287F108C22567729001E3B32 /* TxResult.swift in Sources */,
+				028DBA05235669BA00D4C70E /* RequestFundsContent.swift in Sources */,
 				2818C63F2260BE36001871C8 /* HTTPMethod.swift in Sources */,
 				284853B12289C6B900B871E9 /* SUFUtils.swift in Sources */,
 				287F10772256597D001E3B32 /* FIONamesResponse.swift in Sources */,

@@ -13,21 +13,19 @@ public struct RequestFundsRequest: Codable {
     public let payerFIOAddress: String
     public let payeeFIOAddress: String
     public let content: String
-    public let amount: String
     public let tokenCode: String
-    public let actor: String
     public let maxFee: Int
     public let tpid: String
+    public let actor: String
     
     enum CodingKeys: String, CodingKey{
         case payerFIOAddress = "payer_fio_address"
         case payeeFIOAddress = "payee_fio_address"
         case content
-        case amount
         case tokenCode = "token_code"
-        case actor
         case maxFee = "max_fee"
         case tpid
+        case actor
     }
     
     public struct MetaData: Codable{
