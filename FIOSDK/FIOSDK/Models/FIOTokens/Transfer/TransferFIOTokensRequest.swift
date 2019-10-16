@@ -14,12 +14,14 @@ internal struct TransferFIOTokensRequest: Codable {
     let actor: String
     let payeePublicKey: String
     let maxFee: Int
+    let walletFioAddress: String
     
     enum CodingKeys: String, CodingKey {
         case amount = "amount"
         case actor = "actor"
         case payeePublicKey = "payee_public_key"
         case maxFee = "max_fee"
+        case walletFioAddress = "tpid"
     }
     
 }
