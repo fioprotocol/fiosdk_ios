@@ -692,16 +692,22 @@ public class FIOSDK: BaseFIOSDK {
     
     //MARK: Transfer Tokens
     
-    /// Transfers FIO tokens. [visit API specs](https://stealth.atlassian.net/wiki/spaces/DEV/pages/53280776/API#API-/transfer_tokens-TransferFIOtokens)
-    /// - Parameters:
-    ///     - payeePublicKey: The receiver public key.
-    ///     - amount: The value that will be transfered from the calling account to the especified account.
-    ///     - maxFee: Maximum amount of SUFs the user is willing to pay for fee. Should be preceded by /get_fee for correct value.
-    ///     - completion: A function that is called once request is over with an optional response with results and error containing the status of the call.
-    public func transferFIOTokens(payeePublicKey: String, amount: Double, maxFee: Double, completion: @escaping (_ response: FIOSDK.Responses.TransferFIOTokensResponse?, _ error: FIOError) -> ()){
+    /**
+     * Transfers FIO tokens. [visit API specs](https://stealth.atlassian.net/wiki/spaces/DEV/pages/265977939/API+v0.3#APIv0.3-/transfer_tokens_pub_key-TransferFIOtokens)
+     * - Parameter payeePublicKey: The receiver public key.
+     * - Parameter amount: The value that will be transfered from the calling account to the especified account.
+     * - Parameter maxFee: Maximum amount of SUFs the user is willing to pay for fee. Should be preceded by /get_fee for correct value.
+     * - Parameter walletFioAddress:
+     + FIO Address of the wallet which generates this transaction.
+     + This FIO Address will be paid 10% of the fee.
+     + See FIO Protocol#TPIDs for details.
+     + Set to empty if not known.
+     * - Parameter onCompletion: A function that is called once request is over with an optional response with results and error containing the status of the call.
+ */
+    public func transferFIOTokens(payeePublicKey: String, amount: Double, maxFee: Double, walletFioAddress: String = "" , onCompletion: @escaping (_ response: FIOSDK.Responses.TransferFIOTokensResponse?, _ error: FIOError) -> ()){
         let actor = AccountNameGenerator.run(withPublicKey: getSystemPublicKey())
         let transferAmount = SUFUtils.amountToSUFString(amount: amount)
-        let transfer = TransferFIOTokensRequest(amount: transferAmount, actor: actor, payeePublicKey: payeePublicKey, maxFee: SUFUtils.amountToSUF(amount: maxFee))
+        let transfer = TransferFIOTokensRequest(amount: transferAmount, actor: actor, payeePublicKey: payeePublicKey, maxFee: SUFUtils.amountToSUF(amount: maxFee) , walletFioAddress: walletFioAddress)
         signedPostRequestTo(privateKey: getPrivateKey(),
                             route: ChainRoutes.transferTokens,
                             forAction: ChainActions.transferTokens,
@@ -709,11 +715,11 @@ public class FIOSDK: BaseFIOSDK {
                             code: "fio.token",
                             account: actor) { (result, error) in
                                 guard let result = result else {
-                                    completion(nil, error ?? FIOError.failure(localizedDescription: "\(ChainActions.transferTokens.rawValue) call failed."))
+                                    onCompletion(nil, error ?? FIOError.failure(localizedDescription: "\(ChainActions.transferTokens.rawValue) call failed."))
                                     return
                                 }
                                 let handledData: (response: FIOSDK.Responses.TransferFIOTokensResponse?, error: FIOError) = parseResponseFromTransactionResult(txResult: result)
-                                completion(handledData.response, FIOError.success())
+                                onCompletion(handledData.response, FIOError.success())
         }
     }
     

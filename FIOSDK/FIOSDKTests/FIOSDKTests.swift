@@ -856,6 +856,32 @@ class FIOSDKTests: XCTestCase {
         let payerPublicKey = fioSDK.getPublicKey()
         let amount: Double = 1.0
         let maxFee = 0.25
+        let walletFioAddress = "test:edge"
+        
+        fioSDK.transferFIOTokens(payeePublicKey: payeePublicKey, amount: amount, maxFee: maxFee , walletFioAddress: walletFioAddress) { (response, error) in
+            XCTAssert((error.kind == FIOError.ErrorKind.Success), "transfer failed: \(error.localizedDescription )")
+            XCTAssertNotNil(response?.feeCollected)
+            //Transfer back
+            self.defaultSDKConfig()
+            sleep(60)
+            FIOSDK.sharedInstance().transferFIOTokens(payeePublicKey: payerPublicKey, amount: amount, maxFee: maxFee ,walletFioAddress: walletFioAddress) { (response, error) in
+                XCTAssert((error.kind == FIOError.ErrorKind.Success), "transfer failed: \(error.localizedDescription )")
+                expectation.fulfill()
+            }
+        }
+        
+        wait(for: [expectation], timeout: TIMEOUT * 1.5)
+    }
+    
+    func testTransferTokensWithGoodAccountsShouldBeSuccessfulNoWallet() {
+        let expectation = XCTestExpectation(description: "testTransferTokensWithGoodAccountsShouldBeSuccessfulNoWallet")
+        
+        self.defaultSDKConfig()
+        let payeePublicKey = FIOSDK.sharedInstance().getPublicKey()
+        let fioSDK = FIOSDK.sharedInstance(accountName: fioAccount, privateKey: fioPrivateKey, publicKey: fioPublicKey,systemPrivateKey:fioPrivateKey, systemPublicKey:fioPublicKey, url: defaultServer)
+        let payerPublicKey = fioSDK.getPublicKey()
+        let amount: Double = 1.0
+        let maxFee = 0.25
         
         fioSDK.transferFIOTokens(payeePublicKey: payeePublicKey, amount: amount, maxFee: maxFee) { (response, error) in
             XCTAssert((error.kind == FIOError.ErrorKind.Success), "transfer failed: \(error.localizedDescription )")
@@ -871,6 +897,7 @@ class FIOSDKTests: XCTestCase {
         
         wait(for: [expectation], timeout: TIMEOUT * 1.5)
     }
+    
     
     /*
     func testTransferTokensWithInsufficientAmountShouldNotBeSuccessful() {
