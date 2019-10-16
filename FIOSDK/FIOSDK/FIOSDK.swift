@@ -680,11 +680,11 @@ public class FIOSDK: BaseFIOSDK {
     
     //MARK: Get Fee
     
-    /// Compute and return fee amount for specific call and specific user. [visit API specs](https://stealth.atlassian.net/wiki/spaces/DEV/pages/53280776/API#API-/get_fee-Computeandreturnfeeamountforspecificcallandspecificuser)
+    /// Compute and return fee amount for specific call and specific user. [visit API specs](https://stealth.atlassian.net/wiki/spaces/DEV/pages/265977939/API+v0.3#APIv0.3-/get_fee-Computeandreturnfeeamountforspecificcallandspecificuser)
     /// - Parameters:
     ///     - endPoint: Name of API call end point, e.g. add_pub_address
-    ///     - fio_address: FIO Address incurring the fee and owned by signer.
-    ///     - completion: A function that is called once request is over with an optional response with results and error containing the status of the call.
+    ///     - fioAddress: FIO Address incurring the fee and owned by signer.
+    ///     - onCompletion: A function that is called once request is over with an optional response with results and error containing the status of the call.
     public func getFee(endPoint: FIOSDK.Params.FeeEndpoint, fioAddress: String = "", onCompletion: @escaping (_ response: FIOSDK.Responses.FeeResponse?, _ error: FIOError) -> ()) {
         let body = FeeRequest(fioAddress: fioAddress, endPoint: endPoint.rawValue)
         let url = ChainRouteBuilder.build(route: ChainRoutes.getFee)
