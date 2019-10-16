@@ -670,44 +670,6 @@ class FIOSDKTests: XCTestCase {
         FIOSDK.sharedInstance().requestFunds(payer: "faucet:fio", payee: self.requesteeFioName, payeePublicAddress: FIOSDK.sharedInstance().getPublicKey(), amount: 30, tokenCode: "FIO", metadata: metadata, maxFee: 0) { (response, error) in
             if error?.kind == .Success {
                 sleep(60)
-                FIOSDK.sharedInstance().registerFioDomain(domain, maxFee: 30.0, walletFioAddress:"", onCompletion: { (response, error) in
-                    XCTAssert((error?.kind == FIOError.ErrorKind.Success), "registerFIODomain NOT SUCCESSFUL")
-                    XCTAssertNotNil(response)
-                    XCTAssert(response?.status != "")
-                    expectation.fulfill()
-                })
-            }
-            else {
-                XCTFail("Failed to call requestFunds prior to registering domain requests")
-                expectation.fulfill()
-            }
-        }
-        
-        wait(for: [expectation], timeout: TIMEOUT * 1.5)
-    }
-    
-    func testRegisterFIODomainWithInvalidValueShouldNotRegister() {
-        let domain = "#&*("
-        let expectation = XCTestExpectation(description: "testRegisterFIODomainWithNewValueShouldRegister")
-        
-        FIOSDK.sharedInstance().registerFioDomain(domain, maxFee: 30.0, walletFioAddress:"", onCompletion: { (response, error) in
-            XCTAssert((error?.kind == FIOError.ErrorKind.Failure), String(format:"registerFIODomain Should not register invalid domains: %@", domain))
-            expectation.fulfill()
-        })
-        
-        wait(for: [expectation], timeout: TIMEOUT * 1.5)
-    }
-    
-    func testRegisterFIODomainWithNewValueShouldRegisterNoWallet() {
-        let timestamp = NSDate().timeIntervalSince1970
-        let domain = "test\(Int(timestamp.rounded()))"
-        let expectation = XCTestExpectation(description: "testRegisterFIODomainWithNewValueShouldRegister")
-        let metadata = RequestFundsRequest.MetaData(memo: "", hash: nil, offlineUrl: nil)
-        
-        self.defaultSDKConfig()
-        FIOSDK.sharedInstance().requestFunds(payer: "faucet:fio", payee: self.requesteeFioName, payeePublicAddress: FIOSDK.sharedInstance().getPublicKey(), amount: 30, tokenCode: "FIO", metadata: metadata, maxFee: 0) { (response, error) in
-            if error?.kind == .Success {
-                sleep(60)
                 FIOSDK.sharedInstance().registerFioDomain(domain, maxFee: 30.0, onCompletion: { (response, error) in
                     XCTAssert((error?.kind == FIOError.ErrorKind.Success), "registerFIODomain NOT SUCCESSFUL")
                     XCTAssertNotNil(response)
@@ -724,7 +686,7 @@ class FIOSDKTests: XCTestCase {
         wait(for: [expectation], timeout: TIMEOUT * 1.5)
     }
     
-    func testRegisterFIODomainWithInvalidValueShouldNotRegisterNoWallet() {
+    func testRegisterFIODomainWithInvalidValueShouldNotRegister() {
         let domain = "#&*("
         let expectation = XCTestExpectation(description: "testRegisterFIODomainWithNewValueShouldRegister")
         

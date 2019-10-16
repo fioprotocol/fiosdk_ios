@@ -747,8 +747,13 @@ class FIOSDKTests: XCTestCase {
         FIOSDK.sharedInstance().requestFunds(payer: "faucet:fio", payee: self.requesteeFioName, payeePublicAddress: FIOSDK.sharedInstance().getPublicKey(), amount: 2, tokenCode: "FIO", metadata: metadata, maxFee: 0) { (response, error) in
             if error?.kind == .Success {
                 sleep(60)
+<<<<<<< HEAD
                 FIOSDK.sharedInstance().registerFioAddress(address, maxFee: 2, walletFioAddress: walletFioAddress, onCompletion: { (response, error) in
                     XCTAssert((error?.kind == FIOError.ErrorKind.Success), "registerFIOAddress NOT SUCCESSFUL")
+=======
+                FIOSDK.sharedInstance().registerFioDomain(address, maxFee: 2, walletFioAddress:"", onCompletion: { (response, error) in
+                    XCTAssert((error?.kind == FIOError.ErrorKind.Success), "registerFIODomain NOT SUCCESSFUL")
+>>>>>>> origin/feature/MAS-533-MAS-597-register_fio_domain
                     XCTAssertNotNil(response)
                     XCTAssert(response?.status != "")
                     expectation.fulfill()
