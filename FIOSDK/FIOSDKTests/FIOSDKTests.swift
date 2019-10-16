@@ -907,22 +907,19 @@ class FIOSDKTests: XCTestCase {
         let expected = ""
         XCTAssertEqual(fioPublicAddress, expected)
     }
-    /*
+   
     func testGetFIOBalanceWithProperSetupShouldReturnValue() {
-        let expectation = XCTestExpectation(description: "testGetFIOBalanceWithProperSetupShouldReturnValue")
-
-        let fioSDK = FIOSDK.sharedInstance(accountName: fioAccount, privateKey: fioPrivateKey, publicKey: fioPublicKey,systemPrivateKey:fioPrivateKey, systemPublicKey:fioPublicKey, url: dev1Server)
-        let fioPubAddress = fioSDK.getFIOPublicAddress()
-        
-        fioSDK.getFIOBalance(fioPublicAddress: fioPubAddress) { (response, error) in
+        let expectation = XCTestExpectation(description: "testGetFIOBalanceWithProperSetupShouldReturnValue") 
+        let fioSDK = FIOSDK.sharedInstance(accountName: fioAccount, privateKey: fioPrivateKey, publicKey: fioPublicKey,systemPrivateKey:fioPrivateKey, systemPublicKey:fioPublicKey, url: SERVER_DEV4)
+        let publicKey = "FIO5kJKNHwctcfUM5XZyiWSqSTM5HTzznJP9F3ZdbhaQAHEVq575o"
+        fioSDK.getFIOBalance(fioPublicAddress: publicKey) { (response, error) in
             XCTAssert((error.kind == FIOError.ErrorKind.Success), "Get FIO Balance NOT SUCCESSFUL: \(error.localizedDescription )")
-            XCTAssert((response?.balance != nil && !response!.balance.isEmpty), "Balance is empty:")
+            XCTAssert((response?.displayBalance() != nil ), "Get FIO Balance NOT SUCCESSFUL: \(error.localizedDescription )")
             expectation.fulfill()
         }
         
         wait(for: [expectation], timeout: TIMEOUT)
     }
- */
     
     func testTransferTokensWithGoodAccountsShouldBeSuccessful() {
         let expectation = XCTestExpectation(description: "testTransferTokensWithGoodAccountsShouldBeSuccessful")

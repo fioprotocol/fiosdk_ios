@@ -11,13 +11,15 @@ import Foundation
 extension FIOSDK.Responses {
 
     public struct FIOBalanceResponse: Codable {
-        
         public var balance: Int
         
         enum CodingKeys: String, CodingKey {
             case balance = "balance"
         }
         
+        public func displayBalance() -> Double {
+            return Double(balance)/SUFUtils.SUFUnit
+        }
     }
-
+    
 }
