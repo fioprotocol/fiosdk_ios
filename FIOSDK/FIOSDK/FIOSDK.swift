@@ -493,7 +493,10 @@ public class FIOSDK: BaseFIOSDK {
             return ""
         }
         
-        return String(data: encrypted, encoding: .utf8) ?? ""
+        print ("****")
+        print (encrypted.hexEncodedString())
+        
+        return encrypted.hexEncodedString() ?? ""
         
                /*
         
