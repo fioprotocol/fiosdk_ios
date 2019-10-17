@@ -652,14 +652,10 @@ public class FIOSDK: BaseFIOSDK {
      * - Parameter payeePublicKey: The receiver public key.
      * - Parameter amount: The value that will be transfered from the calling account to the especified account.
      * - Parameter maxFee: Maximum amount of SUFs the user is willing to pay for fee. Should be preceded by /get_fee for correct value.
-     * - Parameter walletFioAddress:
-     + FIO Address of the wallet which generates this transaction.
-     + This FIO Address will be paid 10% of the fee.
-     + See FIO Protocol#TPIDs for details.
-     + Set to empty if not known.
+     * - Parameter walletFioAddress: FIO Address of the wallet which generates this transaction.
      * - Parameter onCompletion: A function that is called once request is over with an optional response with results and error containing the status of the call.
- */
-    public func transferFIOTokens(payeePublicKey: String, amount: Double, maxFee: Double, walletFioAddress: String = "" , onCompletion: @escaping (_ response: FIOSDK.Responses.TransferFIOTokensResponse?, _ error: FIOError) -> ()){
+     */
+    public func transferFIOTokens(payeePublicKey: String, amount: Double, maxFee: Double, walletFioAddress: String = "", onCompletion: @escaping (_ response: FIOSDK.Responses.TransferFIOTokensResponse?, _ error: FIOError) -> ()){
         let actor = AccountNameGenerator.run(withPublicKey: getSystemPublicKey())
         let transferAmount = SUFUtils.amountToSUFString(amount: amount)
         let transfer = TransferFIOTokensRequest(amount: transferAmount, actor: actor, payeePublicKey: payeePublicKey, maxFee: SUFUtils.amountToSUF(amount: maxFee) , walletFioAddress: walletFioAddress)
