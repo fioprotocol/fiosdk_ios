@@ -170,6 +170,17 @@ class abiSerializer {
         return try deserialize(contract: nil, name: "", type: "abi_def", hex: hex, abi: abiJson)
     }
     
+    
+    /// Converts a binary string of ABIEOS data to JSON string data.
+    ///
+    /// - Parameter hex: The binary data String to deserialize.
+    /// - Returns: A String of JSON data.
+    /// - Throws: If the data cannot be deserialized for any reason.
+    public func deserializeContent(contentType: FIOAbiContentType, hexString: String) throws -> String {
+        let abiJson = try getAbiJsonFile(fileName: "fio.abi.json")
+        return try deserialize(contract: nil, name: "", type: contentType.rawValue, hex: hexString, abi: abiJson)
+    }
+    
     /// Calls ABIEOS to carry out binary to JSON conversion using ABIs.
     ///
     /// - Parameters:

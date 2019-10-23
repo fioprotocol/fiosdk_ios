@@ -478,7 +478,9 @@ public class FIOSDK: BaseFIOSDK {
             return ""
         }
         
-        //  1. With the private key and the payee public key (fio public address), create the sharedSecret
+        print(contentJson)
+        
+        //  1. With the payee private key and the payer public key (fio public address), create the sharedSecret
         let sharedSecret = privateKey.getSharedSecret(publicKey: publicKey)
         
         //  2. With the content field, map each field to it's json value.
@@ -487,16 +489,25 @@ public class FIOSDK: BaseFIOSDK {
         // 3. With the content json, pass it to the ABI packer.
         let serializer = abiSerializer()
         let packed = try? serializer.serializeContent(contentType: contentType, json: contentJson)
-        
+        print(packed)
         // 4. Encrypt the resultant ABI packer data.  Using the sharedSecret
         guard let encrypted = Cryptography().encrypt(secret: sharedSecret ?? "", message: packed ?? "", iv: nil) else {
             return ""
         }
         
+return encrypted.hexEncodedString()
+        
         print ("****")
         print (encrypted.hexEncodedString())
         
-        return encrypted.hexEncodedString() ?? ""
+        print ("**DECRYPTED*****")
+      //  let decrypted = decrypt(publicKey: publicKey, contentType: contentType, encryptedContent: encrypted.hexEncodedString())
+        
+        guard let result = String(data: encrypted, encoding: .utf8) else {
+            return ""
+        }
+        
+        return result
         
                /*
         
@@ -521,10 +532,50 @@ public class FIOSDK: BaseFIOSDK {
         */
     }
     
-    internal func decrypt() {
+    internal func decrypt(publicKey: String, contentType: FIOAbiContentType, encryptedContent: String) -> String{
+        guard let privateKey = try! PrivateKey(keyString: self.privateKey) else {
+            return ""
+        }
         
+        //  1. With the payee private key and the payer public key (fio public address), create the sharedSecret
+        let sharedSecret = privateKey.getSharedSecret(publicKey: publicKey)
+        
+        // 4. decrypt it.
+        guard let decrypted = try! Cryptography().decrypt(secret: sharedSecret ?? "", message: encryptedContent.data(using: String.Encoding.utf8)!) else {
+            return ""
+        }
+        
+        //  2. With the content field, map each field to it's json value.
+        //    --> this is the json coming into this.
+        
+        // 3. With the content json, pass it to the ABI packer.
+        let serializer = abiSerializer()
+        let contentJSON = try? serializer.deserializeContent(contentType: contentType, hexString: String(data: decrypted, encoding: .utf8) ?? "")
+        
+        return contentJSON ?? ""
+        
+               /*
+        
+                the content needs to be encrypted.
+                
+                These are the steps:
+                1. With the private key and the payee public key (fio public address), create the sharedSecret
+                
+                
+                2. With the content field, map each field to it's json value.
+                3. With the content json, pass it to the ABI packer.
+                4. Encrypt the resultant ABI packer data.  Using the sharedSecret
+                
+         ok, somehow do the json mapping now.
+                payee_public_address,
+                amount,
+                token_code,
+                memo,
+                hash,
+                offline_url
+        
+        */
     }
-    
     
     //MARK: - Request Funds
     

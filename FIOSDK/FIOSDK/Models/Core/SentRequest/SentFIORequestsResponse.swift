@@ -18,56 +18,49 @@ extension FIOSDK.Responses {
             case requests
         }
         
-        /// PendingFioRequestsResponse.request DTO
         public struct SentFIORequestResponse: Codable {
             
-            public var fundsRequestId: String {
-                return String(fioreqid)
-            }
-            private let fioreqid: Int
+            public let fioRequestId: String
             public let payerFIOAddress: String
             public let payeeFIOAddress: String
-            public let payeePublicAddress: String
-            public let amount: String
-            public let tokenCode: String
-            public let metadata: MetaData
+            public let payerFIOPublicKey: String
+            public let payeeFIOPublicKey: String
+           // public let amount: String
+           // public let tokenCode: String
+           // public let metadata: MetaData
+            public let content:String
             public let timeStamp: TimeInterval
             public let status: String
             
             enum CodingKeys: String, CodingKey {
-                case fioreqid = "fio_request_id"
+                case fioRequestId = "fio_request_id"
                 case payerFIOAddress = "payer_fio_address"
                 case payeeFIOAddress = "payee_fio_address"
-                case payeePublicAddress = "payee_public_address"
-                case amount
-                case tokenCode = "token_code"
-                case metadata
+                case payerFIOPublicKey = "payer_fio_public_key"
+                case payeeFIOPublicKey = "payee_fio_public_key"
+                case content
                 case timeStamp = "time_stamp"
                 case status
             }
             
             public struct MetaData: Codable {
-                
                 public let memo: String
-                
             }
             
-            init(fioreqid: Int,
+            init(fioRequestId: String,
                  payerFIOAddress: String,
                  payeeFIOAddress: String,
-                 payeePublicAddress: String,
-                 amount: String,
-                 tokenCode: String,
-                 metadata: MetaData,
+                 payerFIOPublicKey: String,
+                 payeeFIOPublicKey: String,
+                 content: String,
                  timeStamp: TimeInterval,
                  status: String) {
-                self.fioreqid = fioreqid
+                self.fioRequestId = fioRequestId
                 self.payerFIOAddress = payerFIOAddress
                 self.payeeFIOAddress = payeeFIOAddress
-                self.payeePublicAddress = payeePublicAddress
-                self.amount = amount
-                self.tokenCode = tokenCode
-                self.metadata = metadata
+                self.payerFIOPublicKey = payerFIOPublicKey
+                self.payeeFIOPublicKey = payeeFIOPublicKey
+                self.content = content
                 self.timeStamp = timeStamp
                 self.status = status
             }
@@ -75,30 +68,54 @@ extension FIOSDK.Responses {
             public init(from decoder: Decoder) throws {
                 let container = try decoder.container(keyedBy: CodingKeys.self)
                 
-                let fioreqid = try container.decodeIfPresent(Int.self, forKey: .fioreqid) ?? 0
+                let fioreqid = try container.decodeIfPresent(String.self, forKey: .fioRequestId) ?? ""
                 let payerFIOAddress = try container.decodeIfPresent(String.self, forKey: .payerFIOAddress) ?? ""
                 let payeeFIOAddress = try container.decodeIfPresent(String.self, forKey: .payeeFIOAddress) ?? ""
-                let payeePublicAddress = try container.decodeIfPresent(String.self, forKey: .payeePublicAddress) ?? ""
-                let amount = try container.decodeIfPresent(String.self, forKey: .amount) ?? ""
-                let tokenCode = try container.decodeIfPresent(String.self, forKey: .tokenCode) ?? ""
+                let payerFIOPublicKey = try container.decodeIfPresent(String.self, forKey: .payerFIOPublicKey) ?? ""
+                let payeeFIOPublicKey = try container.decodeIfPresent(String.self, forKey: .payeeFIOPublicKey) ?? ""
+                let content = try container.decodeIfPresent(String.self, forKey: .content) ?? ""
                 let timeStamp = try container.decodeIfPresent(TimeInterval.self, forKey: .timeStamp) ?? Date().timeIntervalSince1970
-                var metadata = SentFIORequestResponse.MetaData(memo: "")
-                let metadataString = try container.decodeIfPresent(String.self, forKey: .metadata)
-                if let metadataData = metadataString?.data(using: .utf8) {
-                    metadata = try JSONDecoder().decode(SentFIORequestResponse.MetaData.self, from: metadataData)
-                }
+               // var metadata = SentFIORequestResponse.MetaData(memo: "")
+                //let metadataString = try container.decodeIfPresent(String.self, forKey: .metadata)
+                //if let metadataData = metadataString?.data(using: .utf8) {
+                //    metadata = try JSONDecoder().decode(SentFIORequestResponse.MetaData.self, from: metadataData)
+               // }
                 let status = try container.decodeIfPresent(String.self, forKey: .status) ?? ""
                 
-                self.init(fioreqid: fioreqid,
-                          payerFIOAddress: payerFIOAddress,
-                          payeeFIOAddress: payeeFIOAddress,
-                          payeePublicAddress: payeePublicAddress,
-                          amount: amount,
-                          tokenCode: tokenCode,
-                          metadata: metadata,
-                          timeStamp: timeStamp,
-                          status: status)
+                let json = FIOSDK.sharedInstance().decrypt(publicKey: payerFIOPublicKey, contentType: FIOAbiContentType.newFundsContent, encryptedContent: content)
+                print (json)
+                
+                self.init(fioRequestId: fioreqid,
+                    payerFIOAddress: payerFIOAddress,
+                    payeeFIOAddress: payeeFIOAddress,
+                    payerFIOPublicKey: payerFIOPublicKey,
+                    payeeFIOPublicKey: payeeFIOPublicKey,
+                    content: content,
+                    timeStamp: timeStamp,
+                    status: status)
             }
+            
+            /*
+             
+             1. With the payee private key and the payer public key (fio public address), create the sharedSecret
+             
+             
+             2. With the content field, map each field to it's json value.
+             3. With the content json, pass it to the ABI packer.
+             
+             1. decrypt the resultant ABI packer data.  Using the sharedSecret
+             2. with the payee private key and the payer public key, create the sharedsecret
+             
+             
+             */
+            
+            private func decryptContent(payerPublicKey: String, content: String){
+            
+                let json = FIOSDK.sharedInstance().decrypt(publicKey: payerPublicKey, contentType: FIOAbiContentType.newFundsContent, encryptedContent: content)
+                print (json)
+            }
+            
+            
             
         }
         

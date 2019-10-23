@@ -8,7 +8,7 @@
 
 import Foundation
 
-internal enum FIOAbiContentType: String {
+public enum FIOAbiContentType: String {
     case newFundsContent    = "new_funds_content"
     case recordSendContent  = "record_send_content"
 }

@@ -267,6 +267,30 @@ class FIOSDKTests: XCTestCase {
         wait(for: [expectation], timeout: TIMEOUT)
     }
     
+    func testRequestFunds() {
+        let expectationReqFunds = XCTestExpectation(description: "testRequestFunds")
+        
+        let metadata = RequestFundsRequest.MetaData(memo: "Invoice1234", hash: nil, offlineUrl: nil)
+        let timestamp = NSDate().timeIntervalSince1970
+        let payee = self.requesteeFioName
+        let payer = "shawn:edge"//self.requesteeFioName
+        let fromPubAdd = "from\(Int(timestamp.rounded()))"
+        let toPubAdd = "to\(Int(timestamp.rounded()))"
+        
+        FIOSDK.sharedInstance().requestFunds(payer: payer, payee: payee, payeePublicAddress: toPubAdd, amount: 1.0, tokenCode: "BTC", metadata: metadata, maxFee: 3000000000) { (response, error) in
+                if error?.kind == .Success {
+                    expectationReqFunds.fulfill()
+                }
+                else {
+                    XCTFail("Failed to call requestFunds")
+                    expectationReqFunds.fulfill()
+                }
+        }
+        
+        wait(for: [expectationReqFunds], timeout: TIMEOUT*2)
+    }
+    
+    
     /// Tests the getPendingFioRequests method on FIOSDK using constant values ->
     /// publicAddress = self.requesteeAddress
     func testGetPendingFioRequests(){
@@ -277,7 +301,7 @@ class FIOSDKTests: XCTestCase {
         let metadata = RequestFundsRequest.MetaData(memo: "Invoice1234", hash: nil, offlineUrl: nil)
         let timestamp = NSDate().timeIntervalSince1970
         let from = self.requestorFioName
-        let to = self.requesteeFioName
+        let to = "shawn:edge"//self.requesteeFioName
         let fromPubAdd = "from\(Int(timestamp.rounded()))"
         let toPubAdd = "to\(Int(timestamp.rounded()))"
         self.alternativeSDKConfig()
@@ -546,7 +570,7 @@ class FIOSDKTests: XCTestCase {
                             return
                         }
                         XCTAssertFalse(response!.requests.filter({ (request) -> Bool in
-                            return request.fundsRequestId == fundsRequestId
+                            return request.fioRequestId == fundsRequestId
                         }).isEmpty,  "testGetsentRequest couldn't found the request")
                         expGetSentRequest.fulfill()
                         self.alternativeSDKConfig()
@@ -968,7 +992,7 @@ class FIOSDKTests: XCTestCase {
         let expectation = XCTestExpectation(description: "testGetABI")
         
         self.defaultSDKConfig()
-        FIOSDK.sharedInstance().getABI(accountName:"fio.system", onCompletion: { (response, error) in
+        FIOSDK.sharedInstance().getABI(accountName:"fio.address", onCompletion: { (response, error) in
             print("**")
             print (response)
             XCTAssert(error.kind == .Success, "Something went wrong")
