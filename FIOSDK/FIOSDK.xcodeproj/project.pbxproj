@@ -190,6 +190,8 @@
 		28FA838822689A220053EA67 /* BaseFIOSDK.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28FA838722689A220053EA67 /* BaseFIOSDK.swift */; };
 		3D1DC6E12350CADA000625E5 /* RenewFIOAddressResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D1DC6DF2350CADA000625E5 /* RenewFIOAddressResponse.swift */; };
 		3D1DC6E22350CADA000625E5 /* RenewFIOAddressRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D1DC6E02350CADA000625E5 /* RenewFIOAddressRequest.swift */; };
+		3DDF79D6236367750054BE1E /* RenewFIODomainRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DDF79D4236367750054BE1E /* RenewFIODomainRequest.swift */; };
+		3DDF79D7236367750054BE1E /* RenewFIODomainResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DDF79D5236367750054BE1E /* RenewFIODomainResponse.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -398,6 +400,8 @@
 		28FA838722689A220053EA67 /* BaseFIOSDK.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseFIOSDK.swift; sourceTree = "<group>"; };
 		3D1DC6DF2350CADA000625E5 /* RenewFIOAddressResponse.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RenewFIOAddressResponse.swift; sourceTree = "<group>"; };
 		3D1DC6E02350CADA000625E5 /* RenewFIOAddressRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RenewFIOAddressRequest.swift; sourceTree = "<group>"; };
+		3DDF79D4236367750054BE1E /* RenewFIODomainRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RenewFIODomainRequest.swift; sourceTree = "<group>"; };
+		3DDF79D5236367750054BE1E /* RenewFIODomainResponse.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RenewFIODomainResponse.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -775,6 +779,8 @@
 		285C3C312296DC2C007F3C05 /* FIODomain */ = {
 			isa = PBXGroup;
 			children = (
+				3DDF79D4236367750054BE1E /* RenewFIODomainRequest.swift */,
+				3DDF79D5236367750054BE1E /* RenewFIODomainResponse.swift */,
 				285C3C322296DC3B007F3C05 /* RegisterFIODomainRequest.swift */,
 				285C3C342296DEDD007F3C05 /* RegisterFIODomainResponse.swift */,
 			);
@@ -1235,6 +1241,7 @@
 				2808B91422BA672800FD8607 /* Cryptography.swift in Sources */,
 				287F10512253DAA5001E3B32 /* FIOBalanceRequest.swift in Sources */,
 				285649522229C031006E2533 /* AccountNameGenerator.swift in Sources */,
+				3DDF79D6236367750054BE1E /* RenewFIODomainRequest.swift in Sources */,
 				2834384B2245439B00E60314 /* secp256k1.c in Sources */,
 				287F106F22565603001E3B32 /* RequestFundsResponse.swift in Sources */,
 				287F106722552809001E3B32 /* SentFIORequestsResponse.swift in Sources */,
@@ -1262,6 +1269,7 @@
 				0203C58E217A487A0054FA10 /* PrivateKey.swift in Sources */,
 				28B998F122689AAC00B444A3 /* Constants.swift in Sources */,
 				28BED284225BD3D900F8606E /* DateUtils.swift in Sources */,
+				3DDF79D7236367750054BE1E /* RenewFIODomainResponse.swift in Sources */,
 				2818C63C2260BDF9001871C8 /* RPCDecoder.swift in Sources */,
 				2818C63A2260B8AB001871C8 /* ChainInfo.swift in Sources */,
 				285C3C332296DC3C007F3C05 /* RegisterFIODomainRequest.swift in Sources */,
