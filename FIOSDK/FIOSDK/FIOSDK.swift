@@ -161,8 +161,8 @@ public class FIOSDK: BaseFIOSDK {
         let actor = AccountNameGenerator.run(withPublicKey: getPublicKey())
         let domain = RenewFIODomainRequest(fioDomain: fioDomain, fioPublicKey: FIOSDK.sharedInstance().getPublicKey(), maxFee: SUFUtils.amountToSUF(amount: maxFee),walletFioAddress:walletFioAddress,  actor: actor)
         signedPostRequestTo(privateKey: getPrivateKey(),
-                            route: ChainRoutes.registerFIODomain,
-                            forAction: ChainActions.registerFIODomain,
+                            route: ChainRoutes.renewFIODomain,
+                            forAction: ChainActions.renewFIODomain,
                             withBody: domain,
                             code: "fio.system",
                             account: actor) { (data, error) in
