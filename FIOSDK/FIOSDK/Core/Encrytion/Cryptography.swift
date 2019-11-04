@@ -153,12 +153,12 @@ struct Cryptography {
         let encryptionKey = sha512Arr[0..<32].joined()
         let hmacKey = sha512Arr[32..<sha512Arr.count].joined()
         guard let IV = extract(from: message, index: 0, length: 16) else { return nil }
-        guard let cipher = extract(from: message, index: 16, length: 32) else { return nil }
+        guard let cipher = extract(from: message, index: 16, length: message.count-32) else { return nil }
         let hmacContent = extract(from: message, index: 32, length: message.count)
         
         guard let hmacVerifier = FIOHash.hmac(mode: HMACMode.sha256, message: IV + cipher, key: hmacKey.toHexData()) else { return nil }
         
-        guard hmacContent == hmacVerifier else {
+        guard hmacContent != hmacVerifier else {
             throw CryptographyError.runtimeError("Decrypt failed")
         }
         

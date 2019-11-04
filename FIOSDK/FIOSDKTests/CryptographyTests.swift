@@ -45,6 +45,82 @@ class CryptographyTests: XCTestCase {
      
      */
     
+    
+    func testDecryptFixedValueForAndroid() {
+        
+        let privateKey = "5JbcPK6qTpYxMXtfpGXagYbo3KFE3qqxv2tLXLMPR8dTWWeYCp9"
+        let publicKey = "FIO8LKt4DBzXKzDGjFcZo5x82Nv5ahmbZ8AUNXBv2vMfm6smiHst3"
+        let encrypted = "[B@79bdac7"
+        
+        guard let myKey = try! PrivateKey(keyString: privateKey) else {
+            return
+        }
+        let sharedSecret = myKey.getSharedSecret(publicKey: publicKey)
+        
+        
+        // encrypted.data(using: .utf8) ?? "".data(using: .utf8)!
+        var possibleDecrypted: Data?
+        do {
+           // possibleDecrypted = try Cryptography().decrypt(secret: sharedSecret!, message: encrypted.toHexData())
+            possibleDecrypted = try Cryptography().decrypt(secret: sharedSecret!, message: encrypted.data(using: .utf8) ?? "".data(using: .utf8)!)
+        }
+        catch {
+           XCTFail("Encryption failed")
+        }
+        guard let decrypted = possibleDecrypted  else {
+           XCTFail("Encryption failed")
+           return
+        }
+        print(String(data: decrypted, encoding: .utf8))
+        XCTAssert("message" == String(data: decrypted, encoding: .utf8), "Should be the same")
+    }
+    
+    
+    
+    
+    // GOOD encrypted: 09758E9C48AAAEE4B7F389C993CC354A48AE6A5B7A6B585C048D4E5C644B360BA9CDD15CAD8C066CE0B8380DB4B74A0EBF27C2084AD2FEB1EC2573BACDBCB2AF5B388D7CB240E168CE9B20AA066F5CA0174F66304C3DF359EF1F6BEB70E531C7
+    func testEncryptDecryptForServerAndroid() {
+        
+        let privateKey = "5JbcPK6qTpYxMXtfpGXagYbo3KFE3qqxv2tLXLMPR8dTWWeYCp9"
+        let publicKey = "FIO8LKt4DBzXKzDGjFcZo5x82Nv5ahmbZ8AUNXBv2vMfm6smiHst3"
+        
+        guard let myKey = try! PrivateKey(keyString: privateKey) else {
+            return
+        }
+        let sharedSecret = myKey.getSharedSecret(publicKey: publicKey)
+        
+        
+        let message = "3546494F356B4A4B4E487763746366554D35585A796957537153544D3548547A7A6E4A503946335A646268615141484556713537356F03392E300346494F000000"
+     //   let secret = "02332627b9325cb70510a70f0f6be4bcb008fbbc7893ca51dedf5bf46aa740c0fc9d3fbd737d09a3c4046d221f4f1a323f515332c3fef46e7f075db561b1a2c9"
+        let IV = "f300888ca4f512cebdc0020ff0f7224c".toHexData()
+        guard let encrypted = Cryptography().encrypt(secret: sharedSecret!, message: message, iv: IV) else {
+           XCTFail("Encryption failed")
+           return
+        }
+           
+        let asciEncrypted = String(data: encrypted, encoding: .ascii)
+        print (String(data: encrypted, encoding: .ascii))
+       // print (encrypted.hexEncodedString())
+        let myEncrypted = encrypted.hexEncodedString()
+        
+        let dEncrypted = asciEncrypted?.data(using:.ascii, allowLossyConversion: true)
+        
+        var possibleDecrypted: Data?
+        do {
+            possibleDecrypted = try Cryptography().decrypt(secret: sharedSecret!, message: dEncrypted!)
+        }
+        catch {
+           XCTFail("Encryption failed")
+        }
+        guard let decrypted = possibleDecrypted  else {
+           XCTFail("Encryption failed")
+           return
+        }
+        print( String(data: decrypted, encoding: .utf8))
+        XCTAssert(message == String(data: decrypted, encoding: .utf8), "Should be the same")
+    }
+    
+    
     func testEncryptDecryptForServer(){
         let message = "3546494F356B4A4B4E487763746366554D35585A796957537153544D3548547A7A6E4A503946335A646268615141484556713537356F03392E300346494F000000"
         let secret = "02332627b9325cb70510a70f0f6be4bcb008fbbc7893ca51dedf5bf46aa740c0fc9d3fbd737d09a3c4046d221f4f1a323f515332c3fef46e7f075db561b1a2c9"
@@ -75,7 +151,7 @@ class CryptographyTests: XCTestCase {
     
     
     func testEncryptDecryptWithFixedIVShouldSucceed(){
-        let message = "secret message"
+        let message = "secret messagesecret messagesecret messagesecret messagesecret messagesecret messagesecret message"
         let secret = "02332627b9325cb70510a70f0f6be4bcb008fbbc7893ca51dedf5bf46aa740c0fc9d3fbd737d09a3c4046d221f4f1a323f515332c3fef46e7f075db561b1a2c9"
         let IV = "f300888ca4f512cebdc0020ff0f7224c".toHexData()
         guard let encrypted = Cryptography().encrypt(secret: secret, message: message, iv: IV) else {
