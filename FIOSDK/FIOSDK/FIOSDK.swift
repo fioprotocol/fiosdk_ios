@@ -137,7 +137,9 @@ public class FIOSDK: BaseFIOSDK {
                 return
             }
             do {
-                let response = try JSONDecoder().decode(RegisterNameForUserResponse.self, from: result)
+                let decoder = JSONDecoder()
+                decoder.dateDecodingStrategy = .formatted(Formatter.iso8601)
+                let response = try decoder.decode(RegisterNameForUserResponse.self, from: result)
                 onCompletion(response, FIOError.success())
             }catch let error {
                 onCompletion(nil, FIOError.failure(localizedDescription: error.localizedDescription))
@@ -745,3 +747,15 @@ public class FIOSDK: BaseFIOSDK {
     }
     
 }
+
+extension Formatter {
+    static let iso8601: DateFormatter = {
+        let formatter = DateFormatter()
+        formatter.calendar = Calendar(identifier: .iso8601)
+        formatter.locale = Locale(identifier: "en_US_POSIX")
+        formatter.timeZone = TimeZone(secondsFromGMT: 0)
+        formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss"
+        return formatter
+    }()
+}
+

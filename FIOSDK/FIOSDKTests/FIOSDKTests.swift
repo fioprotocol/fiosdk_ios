@@ -8,10 +8,11 @@
 
 import XCTest
 @testable import FIOSDK
-
+ 
 private let useDev2 = false
-private let useDev4 = true
-private let useDefaultServer = false //want a custom server, set to true and then set the DEFAULT_SERVER to your ip/url
+private let useDev4 = false
+private let useDefaultServer = true //want a custom server, set to true and then set the DEFAULT_SERVER to your ip/url
+ 
 
 private let SERVER_DEV2 = "http://dev2.fio.dev:8889/v1"
 private let MOCK_SERVER_DEV2 = "http://mock.dapix.io/mockd/DEV2/register_fio_name"
@@ -19,8 +20,8 @@ private let MOCK_SERVER_DEV2 = "http://mock.dapix.io/mockd/DEV2/register_fio_nam
 private let SERVER_DEV4 = "http://dev4.fio.dev:8889/v1"
 private let MOCK_SERVER_DEV4 = "http://mock.dapix.io/mockd/DEV4/register_fio_name"
 
-private let DEFAULT_SERVER = "http://dev4.fio.dev:8889/v1"
-private let MOCK_DEFAULT_SERVER = "http://mock.dapix.io/mockd/DEV4/register_fio_name"
+private let DEFAULT_SERVER = "http://dev1.fio.dev:8889/v1"
+private let MOCK_DEFAULT_SERVER = "http://mock.dapix.io/mockd/DEV1/register_fio_name"
 
 class FIOSDKTests: XCTestCase {
     
@@ -35,7 +36,7 @@ class FIOSDKTests: XCTestCase {
     
     //MARK: Constants
     private let defaultAccount  = "fioname11111"
-    private let defaultServer   = (useDev2 ? SERVER_DEV2 : (useDev4 ? SERVER_DEV4 : DEFAULT_SERVER))
+    private let defaultServer   = ( useDev2 ? SERVER_DEV2 : (useDev4 ? SERVER_DEV4 : DEFAULT_SERVER))
     private let defaultMnemonic = "valley alien library bread worry brother bundle hammer loyal barely dune brave"
     private let expectedDefaultPrivateKey = "5Kbb37EAqQgZ9vWUHoPiC2uXYhyGSFNbL6oiDp24Ea1ADxV1qnu"
     private let expectedDefaultPublicKey = "EOS5kJKNHwctcfUM5XZyiWSqSTM5HTzznJP9F3ZdbhaQAHEVq575o"
@@ -94,16 +95,15 @@ class FIOSDKTests: XCTestCase {
             print (self.requesteeFioName)
             let metadata = RequestFundsRequest.MetaData(memo: "", hash: nil, offlineUrl: nil)
             FIOSDK.sharedInstance().requestFunds(payer: "faucet:fio", payee: self.requesteeFioName, payeePublicAddress: FIOSDK.sharedInstance().getPublicKey(), amount: 9, tokenCode: "FIO", metadata: metadata, maxFee: 0) { (response, error) in
-                if error?.kind == .Success {
-                    sleep(60)
-                    
+                XCTAssert((error?.kind == FIOError.ErrorKind.Success), "requestFunds NOT SUCCESSFUL in registerDefaultUsers")
+                if error?.kind == .Success { 
                     self.alternativeSDKConfig()
                     print (FIOSDK.sharedInstance().getPublicKey())
-                    FIOSDK.sharedInstance().registerFIONameOnBehalfOfUser(fioName: self.requestorFioName, publicKey: FIOSDK.sharedInstance().getPublicKey(), onCompletion: { response, error in ()
+                    FIOSDK.sharedInstance().registerFIONameOnBehalfOfUser(fioName: self.requestorFioName, publicKey: FIOSDK.sharedInstance().getPublicKey(), onCompletion: { response2, error2 in ()
                         XCTAssert((error?.kind == FIOError.ErrorKind.Success), "registerFIOName NOT SUCCESSFUL" + (error?.localizedDescription ?? "") )
                         print(error)
                         print(self.requestorFioName)
-                        
+                        sleep(60)
                         FIOSDK.sharedInstance().requestFunds(payer: "faucet:fio", payee: self.requestorFioName, payeePublicAddress: FIOSDK.sharedInstance().getPublicKey(), amount: 9, tokenCode: "FIO", metadata: metadata, maxFee: 0) { (response, error) in
                             if error?.kind == .Success {
                                 sleep(60)
@@ -474,42 +474,28 @@ class FIOSDKTests: XCTestCase {
         wait(for: [expectation], timeout: TIMEOUT)
     }
     
+    /// Test for reject_funds_request
     func testRejectFundsRequest(){
         let expectation = XCTestExpectation(description: "testRejectFundsRequest")
-        let amount = Float.random(in: 1111.0...4444)
-        let from = self.requestorFioName
-        let to = self.requesteeFioName
-        let timestamp = NSDate().timeIntervalSince1970
-        let fromPubAdd = "from\(Int(timestamp.rounded()))"
-        let toPubAdd = "to\(Int(timestamp.rounded()))"
+        let metadata = RequestFundsRequest.MetaData(memo: "", hash: nil, offlineUrl: nil)
         self.alternativeSDKConfig()
-        FIOSDK.sharedInstance().addPublicAddress(fioAddress: from, chain: "BTC", publicAddress: fromPubAdd, maxFee: 0) { (error) in
-            XCTAssert((error?.kind == FIOError.ErrorKind.Success), "testAddPublicAddress NOT SUCCESSFUL: \(error?.localizedDescription ?? "")")
-            self.defaultSDKConfig()
-            FIOSDK.sharedInstance().addPublicAddress(fioAddress: to, chain: "BTC", publicAddress: toPubAdd, maxFee: 0) { (error) in
-                XCTAssert((error?.kind == FIOError.ErrorKind.Success), "testAddPublicAddress NOT SUCCESSFUL: \(error?.localizedDescription ?? "")")
-                
-                //requestor is sender, requestee is receiver
-                FIOSDK.sharedInstance().requestFunds(payer: from, payee: to, payeePublicAddress: toPubAdd, amount: amount, tokenCode: "BTC", metadata: RequestFundsRequest.MetaData(memo: "", hash: nil, offlineUrl: nil), maxFee: 0) { (response, error) in
-                    XCTAssert(error?.kind == .Success && response != nil, "testRejectFundsRequest Couldn't create mock request")
-                    
-                    if let response = response {
-                        self.alternativeSDKConfig()
-                        FIOSDK.sharedInstance().rejectFundsRequest(fioRequestId: String(response.fundsRequestId), maxFee: 0, completion: { (response, error) in
-                            XCTAssert(error.kind == .Success, "testRejectFundsRequest couldn't reject request")
-                            expectation.fulfill()
-                        })
-                    }
-                    else {
-                        expectation.fulfill()
-                    }
-                }
+        //requestor is sender, requestee is receiver
+        FIOSDK.sharedInstance().requestFunds(payer: self.requesteeFioName, payee: self.requestorFioName, payeePublicAddress: FIOSDK.sharedInstance().getPublicKey(), amount: 9, tokenCode: "FIO", metadata: metadata, maxFee: 0) { (response, error) in
+            XCTAssert(error?.kind == .Success && response != nil, "testRejectFundsRequest Couldn't create mock request")
+            if let response = response {
+                self.defaultSDKConfig()
+                FIOSDK.sharedInstance().rejectFundsRequest(fioRequestId: String(response.fundsRequestId), maxFee: 0, completion: { (response, error) in
+                    XCTAssert(error.kind == .Success, "testRejectFundsRequest couldn't reject request")
+                    expectation.fulfill()
+                })
+            }
+            else {
+                expectation.fulfill()
             }
         }
         
-        wait(for: [expectation], timeout: TIMEOUT)
+        wait(for: [expectation], timeout: TIMEOUT * 3)
     }
-    
     
     /// Test for get_sent_fio_requests
     func testGetSentRequest(){
