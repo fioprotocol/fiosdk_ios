@@ -495,7 +495,7 @@ class FIOSDKTests: XCTestCase {
                     
                     if let response = response {
                         self.alternativeSDKConfig()
-                        FIOSDK.sharedInstance().rejectFundsRequest(fundsRequestId: String(response.fundsRequestId), maxFee: 0, completion: { (response, error) in
+                        FIOSDK.sharedInstance().rejectFundsRequest(fioRequestId: String(response.fundsRequestId), maxFee: 0, completion: { (response, error) in
                             XCTAssert(error.kind == .Success, "testRejectFundsRequest couldn't reject request")
                             expectation.fulfill()
                         })
@@ -550,7 +550,7 @@ class FIOSDKTests: XCTestCase {
                         }).isEmpty,  "testGetsentRequest couldn't found the request")
                         expGetSentRequest.fulfill()
                         self.alternativeSDKConfig()
-                        FIOSDK.sharedInstance().rejectFundsRequest(fundsRequestId: fundsRequestId, maxFee: 0, completion: { (response, error) in
+                        FIOSDK.sharedInstance().rejectFundsRequest(fioRequestId: fundsRequestId, maxFee: 0, completion: { (response, error) in
                             XCTAssert(error.kind == .Success, "testGetSentRequests couldn't reject test request")
                             expRejectRequest.fulfill()
                         })
