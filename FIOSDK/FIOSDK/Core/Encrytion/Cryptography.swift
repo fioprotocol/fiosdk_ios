@@ -133,7 +133,13 @@ struct Cryptography {
         let encryptionKey = sha512Arr[0..<32].joined()
         let hmacKey = sha512Arr[32..<sha512Arr.count].joined()
         guard let ivData = (iv != nil) ? iv! : generateRandomBytes(size: 16) else { return nil }
-        guard let cypherIV = try? encryptAES256CBC(data: message.data(using: String.Encoding.utf8)!, key: encryptionKey.toHexData(), iv: ivData) else { return nil }
+        guard let cypherIV = try? encryptAES256CBC(data: message.toHexData(), key: encryptionKey.toHexData(), iv: ivData) else { return nil }
+        
+        print ("------")
+        
+        print (cypherIV.hexEncodedString())
+        
+        print ("-------")
         let hmacValue = FIOHash.hmac(mode: HMACMode.sha256, message: cypherIV, key: hmacKey.toHexData())
         return (hmacValue != nil) ? cypherIV + hmacValue! : nil
     }

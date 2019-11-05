@@ -44,13 +44,42 @@ class CryptographyTests: XCTestCase {
      
      
      */
+    // shawn arney - this has correct encryption.
+    func testEncryptFixedValueForAndroidShawnM() {
+        
+           let privateKey = "5JbcPK6qTpYxMXtfpGXagYbo3KFE3qqxv2tLXLMPR8dTWWeYCp9"
+           let publicKey = "FIO8LKt4DBzXKzDGjFcZo5x82Nv5ahmbZ8AUNXBv2vMfm6smiHst3"
+           
+           guard let myKey = try! PrivateKey(keyString: privateKey) else {
+               return
+           }
+           let sharedSecret = myKey.getSharedSecret(publicKey: publicKey)
+          //  let sharedSecret = "88F10119B11958F6CA389372AA168330DDDABCE58F4BEE68B9B52381FC662E288E965E451F4F43C2463660C0E7C06529149D6018AB583E9EBF6D97DA9F2DA904"
+           
+           
+           let message = "3546494F356B4A4B4E487763746366554D35585A796957537153544D3548547A7A6E4A503946335A646268615141484556713537356F03392E300346494F000000"
+        let IV = "a55627b9e12ac16fb82fff1d514eb40b".toHexData()
+        guard let encrypted = Cryptography().encrypt(secret: sharedSecret!, message: message, iv: IV) else {
+              XCTFail("Encryption failed")
+              return
+           }
+              
+           let asciEncrypted = String(data: encrypted, encoding: .ascii)
+           print (String(data: encrypted, encoding: .ascii))
+          // print (encrypted.hexEncodedString())
+        let myEncrypted = encrypted.hexEncodedString().uppercased()
+            print ("***")
+            print (myEncrypted)
+            print ("***")
+    }
     
     
-    func testDecryptFixedValueForAndroid() {
+    func testDecryptFixedValueForAndroidShawnM() {
         
         let privateKey = "5JbcPK6qTpYxMXtfpGXagYbo3KFE3qqxv2tLXLMPR8dTWWeYCp9"
         let publicKey = "FIO8LKt4DBzXKzDGjFcZo5x82Nv5ahmbZ8AUNXBv2vMfm6smiHst3"
         let encrypted = "[B@79bdac7"
+        
         
         guard let myKey = try! PrivateKey(keyString: privateKey) else {
             return
