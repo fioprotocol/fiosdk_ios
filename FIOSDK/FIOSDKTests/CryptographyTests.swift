@@ -73,13 +73,14 @@ class CryptographyTests: XCTestCase {
             print ("***")
     }
     
-    
+    /* the results of a decryption, should be the hexencoded string, uppercased.  For use by the ABI process */
     func testDecryptFixedValueForAndroidShawnM() {
         
         let privateKey = "5JbcPK6qTpYxMXtfpGXagYbo3KFE3qqxv2tLXLMPR8dTWWeYCp9"
         let publicKey = "FIO8LKt4DBzXKzDGjFcZo5x82Nv5ahmbZ8AUNXBv2vMfm6smiHst3"
-        let encrypted = "[B@79bdac7"
+        let encrypted = "A55627B9E12AC16FB82FFF1D514EB40B62F418BCB863357086B0C79D623FA62B99BCF97D83611FDF814842D46FBD118A4C0571521F4A1BE5E442A1E7457D2C7A00DE2AA4553743AEA58C0E5759F5CF5583172815F914824BE10F8CD408D4B0B073D003F647616F6A6E0F040DD219A266E60D39742681974FDCE9EC2A57779442"
         
+        let decryptedAnswer = "3546494F356B4A4B4E487763746366554D35585A796957537153544D3548547A7A6E4A503946335A646268615141484556713537356F03392E300346494F000000"
         
         guard let myKey = try! PrivateKey(keyString: privateKey) else {
             return
@@ -90,8 +91,9 @@ class CryptographyTests: XCTestCase {
         // encrypted.data(using: .utf8) ?? "".data(using: .utf8)!
         var possibleDecrypted: Data?
         do {
-           // possibleDecrypted = try Cryptography().decrypt(secret: sharedSecret!, message: encrypted.toHexData())
-            possibleDecrypted = try Cryptography().decrypt(secret: sharedSecret!, message: encrypted.data(using: .utf8) ?? "".data(using: .utf8)!)
+            possibleDecrypted = try Cryptography().decrypt(secret: sharedSecret!, message: encrypted.toHexData())
+            //possibleDecrypted = try Cryptography().decrypt(secret: sharedSecret!, message:
+           // possibleDecrypted = try Cryptography().decrypt(secret: sharedSecret!, message: encrypted.data(using: .utf8) ?? "".data(using: .utf8)!)
         }
         catch {
            XCTFail("Encryption failed")
@@ -100,8 +102,11 @@ class CryptographyTests: XCTestCase {
            XCTFail("Encryption failed")
            return
         }
+        print ("--decrypted--")
         print(String(data: decrypted, encoding: .utf8))
-        XCTAssert("message" == String(data: decrypted, encoding: .utf8), "Should be the same")
+        print ("--hex value--")
+        print ( decrypted.hexEncodedString().uppercased())
+        XCTAssert(decryptedAnswer == decrypted.hexEncodedString().uppercased(), "Should be the same")
     }
     
     
