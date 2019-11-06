@@ -45,10 +45,12 @@ class CryptographyTests: XCTestCase {
      
      */
     // shawn arney - this has correct encryption.
+    //answer A55627B9E12AC16FB82FFF1D514EB40B62F418BCB863357086B0C79D623FA62B99BCF97D83611FDF814842D46FBD118A4C0571521F4A1BE5E442A1E7457D2C7A00DE2AA4553743AEA58C0E5759F5CF5583172815F914824BE10F8CD408D4B0B073D003F647616F6A6E0F040DD219A266E60D39742681974FDCE9EC2A57779442
     func testEncryptFixedValueForAndroidShawnM() {
         
            let privateKey = "5JbcPK6qTpYxMXtfpGXagYbo3KFE3qqxv2tLXLMPR8dTWWeYCp9"
            let publicKey = "FIO8LKt4DBzXKzDGjFcZo5x82Nv5ahmbZ8AUNXBv2vMfm6smiHst3"
+        
            
            guard let myKey = try! PrivateKey(keyString: privateKey) else {
                return
@@ -109,7 +111,70 @@ class CryptographyTests: XCTestCase {
         XCTAssert(decryptedAnswer == decrypted.hexEncodedString().uppercased(), "Should be the same")
     }
     
+     func testEncryptFixedValueForAndroidShawnMsecondone() {
+        
+           let privateKey = "5JbcPK6qTpYxMXtfpGXagYbo3KFE3qqxv2tLXLMPR8dTWWeYCp9"
+           let publicKey = "FIO8LKt4DBzXKzDGjFcZo5x82Nv5ahmbZ8AUNXBv2vMfm6smiHst3"
+           let encryptedAnswer = "5E4EB97B11B96E1728FAAE903B17DABB4C7BC299770631BF79719EDD75586DD0EADA781DE3FB12A58D604F3BF2C01EF77F76C4A32FE626FF507A303C476FFDE2372860987C0232D92B53AAECA1B59B58"
+           guard let myKey = try! PrivateKey(keyString: privateKey) else {
+               return
+           }
+           let sharedSecret = myKey.getSharedSecret(publicKey: publicKey)
+          //  let sharedSecret = "88F10119B11958F6CA389372AA168330DDDABCE58F4BEE68B9B52381FC662E288E965E451F4F43C2463660C0E7C06529149D6018AB583E9EBF6D97DA9F2DA904"
+           
+           
+           let message = "5468697320697320612074657374206D657373616765"
+        let IV = "5E4EB97B11B96E1728FAAE903B17DABB".toHexData()
+        guard let encrypted = Cryptography().encrypt(secret: sharedSecret!, message: message, iv: IV) else {
+              XCTFail("Encryption failed")
+              return
+           }
+              
+           let asciEncrypted = String(data: encrypted, encoding: .ascii)
+           print (String(data: encrypted, encoding: .ascii))
+          // print (encrypted.hexEncodedString())
+        let myEncrypted = encrypted.hexEncodedString().uppercased()
+            print ("***")
+            print (myEncrypted)
+            print ("***")
+        
+        XCTAssert(encryptedAnswer == myEncrypted, "Should be the same")
+    }
     
+    func testDecryptFixedValueForAndroidShawnMsecondone() {
+        
+        let privateKey = "5JbcPK6qTpYxMXtfpGXagYbo3KFE3qqxv2tLXLMPR8dTWWeYCp9"
+        let publicKey = "FIO8LKt4DBzXKzDGjFcZo5x82Nv5ahmbZ8AUNXBv2vMfm6smiHst3"
+        let encrypted = "5E4EB97B11B96E1728FAAE903B17DABB4C7BC299770631BF79719EDD75586DD0EADA781DE3FB12A58D604F3BF2C01EF77F76C4A32FE626FF507A303C476FFDE2372860987C0232D92B53AAECA1B59B58"
+        
+        let decryptedAnswer = "5468697320697320612074657374206D657373616765"
+        
+        guard let myKey = try! PrivateKey(keyString: privateKey) else {
+            return
+        }
+        let sharedSecret = myKey.getSharedSecret(publicKey: publicKey)
+        
+        
+        // encrypted.data(using: .utf8) ?? "".data(using: .utf8)!
+        var possibleDecrypted: Data?
+        do {
+            possibleDecrypted = try Cryptography().decrypt(secret: sharedSecret!, message: encrypted.toHexData())
+            //possibleDecrypted = try Cryptography().decrypt(secret: sharedSecret!, message:
+           // possibleDecrypted = try Cryptography().decrypt(secret: sharedSecret!, message: encrypted.data(using: .utf8) ?? "".data(using: .utf8)!)
+        }
+        catch {
+           XCTFail("Encryption failed")
+        }
+        guard let decrypted = possibleDecrypted  else {
+           XCTFail("Encryption failed")
+           return
+        }
+        print ("--decrypted--")
+        print(String(data: decrypted, encoding: .utf8))
+        print ("--hex value--")
+        print ( decrypted.hexEncodedString().uppercased())
+        XCTAssert(decryptedAnswer == decrypted.hexEncodedString().uppercased(), "Should be the same")
+    }
     
     
     // GOOD encrypted: 09758E9C48AAAEE4B7F389C993CC354A48AE6A5B7A6B585C048D4E5C644B360BA9CDD15CAD8C066CE0B8380DB4B74A0EBF27C2084AD2FEB1EC2573BACDBCB2AF5B388D7CB240E168CE9B20AA066F5CA0174F66304C3DF359EF1F6BEB70E531C7
