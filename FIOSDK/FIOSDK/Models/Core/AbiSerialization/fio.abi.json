@@ -19,15 +19,15 @@
                 },
                 {
                     "name": "memo",
-                    "type": "string"
+                    "type": "string?"
                 },
                 {
                     "name": "hash",
-                    "type": "string"
+                    "type": "string?"
                 },
                 {
                     "name": "offline_url",
-                    "type": "string"
+                    "type": "string?"
                 }
             ]
         },
@@ -61,15 +61,15 @@
                 },
                 {
                     "name": "memo",
-                    "type": "string"
+                    "type": "string?"
                 },
                 {
                     "name": "hash",
-                    "type": "string"
+                    "type": "string?"
                 },
                 {
                     "name": "offline_url",
-                    "type": "string"
+                    "type": "string?"
                 }
             ]
         }

@@ -47,20 +47,21 @@ class CryptographyTests: XCTestCase {
     
     
     func testAbiNewFundsContentEncryption (){
-        let privateKey = "5JbcPK6qTpYxMXtfpGXagYbo3KFE3qqxv2tLXLMPR8dTWWeYCp9"
-        let publicKey = "FIO8LKt4DBzXKzDGjFcZo5x82Nv5ahmbZ8AUNXBv2vMfm6smiHst3"
+        let alicefioPrivateKey = "5JLxoeRoMDGBbkLdXJjxuh3zHsSS7Lg6Ak9Ft8v8sSdYPkFuABF"
+        let bobfioPublicKeyAlternative  = "FIO7uRvrLVrZCbCM2DtCgUMospqUMnP3JUC1sKHA8zNoF835kJBvN"
+    let bobfioPrivateKeyAlternative = "5JCpqkvsrCzrAC3YWhx7pnLodr3Wr9dNMULYU8yoUrPRzu269Xz"
+    let alicefioPublicKey  = "FIO5oBUYbtGTxMS66pPkjC2p8pbA3zCtc8XD4dq9fMut867GRdh82"
+        
         let payeePublicAddress = "0xc39b2845E3CFAdE5f5b2864fe73f5960B8dB483B"
         let amount = 3.58
         let tokenCode = "ETH"
-        let metadata = RequestFundsRequest.MetaData(memo: "testing this", hash: "", offlineUrl: "")
+        let metadata = RequestFundsRequest.MetaData(memo: "testing this for eth", hash: "", offlineUrl: "")
         
-        let packedAnswer = "2A30786333396232383435453343464164453566356232383634666537336635393630423864423438334204332E3538034554480C74657374696E6720746869730000"
-        let encryptedAnswer = "189EB032C20E35E001AF9A030B7D40B3E882441D2476ED3101A2E614F18A6974D06C4CC0913EFE52143D3207123794A0A1DF88501774BD2CAD4968EB8DC757080B0922B7F1CC29875662753B1D3874B4565C646CE7CF722B5E3F26B3481A5F7BC8C7430F8177BC42C08DF0E9D3F677F1AE56FBA03D3220E7E5B4980D8B65A6EC"
 
         let contentJson = RequestFundsContent(payeePublicAddress: payeePublicAddress, amount: String(amount), tokenCode: tokenCode, memo:metadata.memo ?? "", hash: metadata.hash ?? "", offlineUrl: metadata.offlineUrl ?? "")
         
         print (contentJson.toJSONString())
-        let encryptedContent = self.encrypt(privateKey: privateKey, publicKey: publicKey, contentType: FIOAbiContentType.newFundsContent, contentJson: contentJson.toJSONString())
+        let encryptedContent = self.encrypt(privateKey: alicefioPrivateKey, publicKey: bobfioPublicKeyAlternative, contentType: FIOAbiContentType.newFundsContent, contentJson: contentJson.toJSONString())
         
         print ("--encrypted--")
         print (encryptedContent)
@@ -469,7 +470,7 @@ class CryptographyTests: XCTestCase {
     func testEncryptFixedValueForAndroidShawnMDiffKeys() {
            
         let alicefioPrivateKey = "5JLxoeRoMDGBbkLdXJjxuh3zHsSS7Lg6Ak9Ft8v8sSdYPkFuABF"
-        let bobfioPublicKeyAlternative  = "EOS7uRvrLVrZCbCM2DtCgUMospqUMnP3JUC1sKHA8zNoF835kJBvN"
+        let bobfioPublicKeyAlternative  = "FIO7uRvrLVrZCbCM2DtCgUMospqUMnP3JUC1sKHA8zNoF835kJBvN"
 
         guard let myKey = try! PrivateKey(keyString: alicefioPrivateKey) else {
           return
@@ -498,7 +499,7 @@ class CryptographyTests: XCTestCase {
     //
    func testDecryptFixedValueForAndroidShawnMDiffKeys() {
        
-          let alicefioPublicKey  = "EOS5oBUYbtGTxMS66pPkjC2p8pbA3zCtc8XD4dq9fMut867GRdh82"
+          let alicefioPublicKey  = "FIO5oBUYbtGTxMS66pPkjC2p8pbA3zCtc8XD4dq9fMut867GRdh82"
           let bobfioPrivateKeyAlternative = "5JCpqkvsrCzrAC3YWhx7pnLodr3Wr9dNMULYU8yoUrPRzu269Xz"
     
     
@@ -532,5 +533,22 @@ class CryptographyTests: XCTestCase {
        print ( decrypted.hexEncodedString().uppercased())
        XCTAssert(decryptedAnswer == decrypted.hexEncodedString().uppercased(), "Should be the same")
    }
+    
+    
+    /* the results of an android decryption, should be the hexencoded string, uppercased.  For use by the ABI process */
+     // this is the android request_funds... does it decrypt correctly?
+    func testDecryptFixedValueForAndroidShawnMDiffKeys_fromAndroid() {
+        let bobfioPrivateKeyAlternative = "5JCpqkvsrCzrAC3YWhx7pnLodr3Wr9dNMULYU8yoUrPRzu269Xz"
+        let alicefioPublicKey  = "FIO5oBUYbtGTxMS66pPkjC2p8pbA3zCtc8XD4dq9fMut867GRdh82"
+           
+        let encrypted = "A754EB5349FB8DABC25DCE3E477FE244F319E0EAB8549CA9BF5B8F445B99FCBC068BBCD06CA9498A1E7DD9824E75ADB26A6C99DCB6F51B6BE1BA2CB1BD430DFB4D1CA2280C5F17485FC8F2F7C77E9E32"
+        
+        
+        let decryptedContent = self.decrypt(privateKey: bobfioPrivateKeyAlternative, publicKey: alicefioPublicKey, contentType: FIOAbiContentType.newFundsContent, encrypted: encrypted)
+               
+       print ("--decrypted--")
+       print (decryptedContent)
+        
+    }
     
 }
