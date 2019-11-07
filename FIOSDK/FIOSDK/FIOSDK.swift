@@ -478,58 +478,16 @@ public class FIOSDK: BaseFIOSDK {
             return ""
         }
         
-        print(contentJson)
-        
-        //  1. With the payee private key and the payer public key (fio public address), create the sharedSecret
         let sharedSecret = privateKey.getSharedSecret(publicKey: publicKey)
-        
-        //  2. With the content field, map each field to it's json value.
-        //    --> this is the json coming into this.
-        
-        // 3. With the content json, pass it to the ABI packer.
+               
         let serializer = abiSerializer()
         let packed = try? serializer.serializeContent(contentType: contentType, json: contentJson)
-        print(packed)
-        // 4. Encrypt the resultant ABI packer data.  Using the sharedSecret
+
         guard let encrypted = Cryptography().encrypt(secret: sharedSecret ?? "", message: packed ?? "", iv: nil) else {
-            return ""
+           return ""
         }
-        
-return encrypted.hexEncodedString()
-        
-        print ("****")
-        print (encrypted.hexEncodedString())
-        
-        print ("**DECRYPTED*****")
-      //  let decrypted = decrypt(publicKey: publicKey, contentType: contentType, encryptedContent: encrypted.hexEncodedString())
-        
-        guard let result = String(data: encrypted, encoding: .utf8) else {
-            return ""
-        }
-        
-        return result
-        
-               /*
-        
-                the content needs to be encrypted.
-                
-                These are the steps:
-                1. With the private key and the payee public key (fio public address), create the sharedSecret
-                
-                
-                2. With the content field, map each field to it's json value.
-                3. With the content json, pass it to the ABI packer.
-                4. Encrypt the resultant ABI packer data.  Using the sharedSecret
-                
-         ok, somehow do the json mapping now.
-                payee_public_address,
-                amount,
-                token_code,
-                memo,
-                hash,
-                offline_url
-        
-        */
+               
+        return encrypted.hexEncodedString().uppercased()
     }
     
     internal func decrypt(publicKey: String, contentType: FIOAbiContentType, encryptedContent: String) -> String{
@@ -592,7 +550,7 @@ return encrypted.hexEncodedString()
     ///   - metadata: Contains the: memo or hash or offlineUrl (they are mutually excludent, fill only one)
     ///   - maxFee: Maximum amount of SUFs the user is willing to pay for fee. Should be preceded by /get_fee for correct value.
     ///   - completion: The completion handler containing the result
-    public func requestFunds(payer payerFIOAddress:String, payee payeeFIOAddress: String, payeePublicAddress: String, amount: Float, tokenCode: String, metadata: RequestFundsRequest.MetaData, maxFee: Int, walletFioAddress:String, completion: @escaping ( _ response: RequestFundsResponse?, _ error:FIOError? ) -> ()) {
+    public func requestFunds(payer payerFIOAddress:String, payee payeeFIOAddress: String, payeePublicAddress: String, amount: Float, tokenCode: String, metadata: RequestFundsRequest.MetaData, maxFee: Int, walletFioAddress:String = "", completion: @escaping ( _ response: RequestFundsResponse?, _ error:FIOError? ) -> ()) {
        
         self.getPublicAddress(fioAddress: payerFIOAddress, tokenCode: "FIO") { (response, error) in
             if (error.kind == FIOError.ErrorKind.Success) {
@@ -600,6 +558,7 @@ return encrypted.hexEncodedString()
                 let contentJson = RequestFundsContent(payeePublicAddress: payeePublicAddress, amount: String(amount), tokenCode: tokenCode, memo:metadata.memo ?? "", hash: metadata.hash ?? "", offlineUrl: metadata.offlineUrl ?? "")
                 
                 let encryptedContent = self.encrypt(publicKey: response?.publicAddress ?? "", contentType: FIOAbiContentType.newFundsContent, contentJson: contentJson.toJSONString())
+                
                 let actor = AccountNameGenerator.run(withPublicKey: self.getSystemPublicKey())
                 let data = RequestFundsRequest(payerFIOAddress: payerFIOAddress, payeeFIOAddress: payeeFIOAddress, content:encryptedContent, maxFee: maxFee, tpid: walletFioAddress, actor: actor)
                 

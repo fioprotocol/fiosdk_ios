@@ -10,8 +10,8 @@ import XCTest
 @testable import FIOSDK
 
 private let useDev2 = false
-private let useDev4 = true
-private let useDefaultServer = false //want a custom server, set to true and then set the DEFAULT_SERVER to your ip/url
+private let useDev4 = false
+private let useDefaultServer = true //want a custom server, set to true and then set the DEFAULT_SERVER to your ip/url
 
 private let SERVER_DEV2 = "http://dev2.fio.dev:8889/v1"
 private let MOCK_SERVER_DEV2 = "http://mock.dapix.io/mockd/DEV2/register_fio_name"
@@ -19,8 +19,8 @@ private let MOCK_SERVER_DEV2 = "http://mock.dapix.io/mockd/DEV2/register_fio_nam
 private let SERVER_DEV4 = "http://dev4.fio.dev:8889/v1"
 private let MOCK_SERVER_DEV4 = "http://mock.dapix.io/mockd/DEV4/register_fio_name"
 
-private let DEFAULT_SERVER = "http://dev4.fio.dev:8889/v1"
-private let MOCK_DEFAULT_SERVER = "http://mock.dapix.io/mockd/DEV4/register_fio_name"
+private let DEFAULT_SERVER = "http://dev3.fio.dev:8889/v1"
+private let MOCK_DEFAULT_SERVER = "http://mock.dapix.io/mockd/DEV3/register_fio_name"
 
 class FIOSDKTests: XCTestCase {
     
@@ -267,17 +267,19 @@ class FIOSDKTests: XCTestCase {
         wait(for: [expectation], timeout: TIMEOUT)
     }
     
+    /// shawn - this call works for new request funds flow
     func testRequestFunds() {
         let expectationReqFunds = XCTestExpectation(description: "testRequestFunds")
         
+        self.defaultSDKConfig()
         let metadata = RequestFundsRequest.MetaData(memo: "Invoice1234", hash: nil, offlineUrl: nil)
         let timestamp = NSDate().timeIntervalSince1970
         let payee = self.requesteeFioName
-        let payer = "shawn:edge"//self.requesteeFioName
+        let payer = self.requestorFioName
         let fromPubAdd = "from\(Int(timestamp.rounded()))"
         let toPubAdd = "to\(Int(timestamp.rounded()))"
         
-        FIOSDK.sharedInstance().requestFunds(payer: payer, payee: payee, payeePublicAddress: toPubAdd, amount: 1.0, tokenCode: "BTC", metadata: metadata, maxFee: 3000000000) { (response, error) in
+        FIOSDK.sharedInstance().requestFunds(payer: payer, payee: payee, payeePublicAddress: toPubAdd, amount: 1.0, tokenCode: "BTC", metadata: metadata, maxFee: 3000000000, walletFioAddress: "") { (response, error) in
                 if error?.kind == .Success {
                     expectationReqFunds.fulfill()
                 }
