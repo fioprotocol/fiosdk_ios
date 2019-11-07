@@ -13,7 +13,6 @@ public struct RequestFundsRequest: Codable {
     public let payerFIOAddress: String
     public let payeeFIOAddress: String
     public let content: String
-    public let tokenCode: String
     public let maxFee: Int
     public let tpid: String
     public let actor: String
@@ -22,7 +21,6 @@ public struct RequestFundsRequest: Codable {
         case payerFIOAddress = "payer_fio_address"
         case payeeFIOAddress = "payee_fio_address"
         case content
-        case tokenCode = "token_code"
         case maxFee = "max_fee"
         case tpid
         case actor

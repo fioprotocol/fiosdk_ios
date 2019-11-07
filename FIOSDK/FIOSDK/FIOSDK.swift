@@ -592,7 +592,7 @@ return encrypted.hexEncodedString()
     ///   - metadata: Contains the: memo or hash or offlineUrl (they are mutually excludent, fill only one)
     ///   - maxFee: Maximum amount of SUFs the user is willing to pay for fee. Should be preceded by /get_fee for correct value.
     ///   - completion: The completion handler containing the result
-    public func requestFunds(payer payerFIOAddress:String, payee payeeFIOAddress: String, payeePublicAddress: String, amount: Float, tokenCode: String, metadata: RequestFundsRequest.MetaData, maxFee: Int, completion: @escaping ( _ response: RequestFundsResponse?, _ error:FIOError? ) -> ()) {
+    public func requestFunds(payer payerFIOAddress:String, payee payeeFIOAddress: String, payeePublicAddress: String, amount: Float, tokenCode: String, metadata: RequestFundsRequest.MetaData, maxFee: Int, walletFioAddress:String, completion: @escaping ( _ response: RequestFundsResponse?, _ error:FIOError? ) -> ()) {
        
         self.getPublicAddress(fioAddress: payerFIOAddress, tokenCode: "FIO") { (response, error) in
             if (error.kind == FIOError.ErrorKind.Success) {
@@ -601,7 +601,7 @@ return encrypted.hexEncodedString()
                 
                 let encryptedContent = self.encrypt(publicKey: response?.publicAddress ?? "", contentType: FIOAbiContentType.newFundsContent, contentJson: contentJson.toJSONString())
                 let actor = AccountNameGenerator.run(withPublicKey: self.getSystemPublicKey())
-                let data = RequestFundsRequest(payerFIOAddress: payerFIOAddress, payeeFIOAddress: payeeFIOAddress, content:encryptedContent, tokenCode: tokenCode, maxFee: maxFee, tpid:"", actor: actor)
+                let data = RequestFundsRequest(payerFIOAddress: payerFIOAddress, payeeFIOAddress: payeeFIOAddress, content:encryptedContent, maxFee: maxFee, tpid: walletFioAddress, actor: actor)
                 
                 signedPostRequestTo(privateKey: self.getPrivateKey(),
                                            route: ChainRoutes.newFundsRequest,
