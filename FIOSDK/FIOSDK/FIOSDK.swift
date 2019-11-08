@@ -491,48 +491,26 @@ public class FIOSDK: BaseFIOSDK {
     }
     
     internal func decrypt(publicKey: String, contentType: FIOAbiContentType, encryptedContent: String) -> String{
-        guard let privateKey = try! PrivateKey(keyString: self.privateKey) else {
+        guard let myKey = try! PrivateKey(keyString: self.privateKey) else {
+           return ""
+        }
+        let sharedSecret = myKey.getSharedSecret(publicKey: publicKey)
+
+        var possibleDecrypted: Data?
+        do {
+            possibleDecrypted = try Cryptography().decrypt(secret: sharedSecret!, message: encryptedContent.toHexData())
+        }
+        catch {
             return ""
         }
-        
-        //  1. With the payee private key and the payer public key (fio public address), create the sharedSecret
-        let sharedSecret = privateKey.getSharedSecret(publicKey: publicKey)
-        
-        // 4. decrypt it.
-        guard let decrypted = try! Cryptography().decrypt(secret: sharedSecret ?? "", message: encryptedContent.data(using: String.Encoding.utf8)!) else {
+        guard let decrypted = possibleDecrypted  else {
             return ""
         }
-        
-        //  2. With the content field, map each field to it's json value.
-        //    --> this is the json coming into this.
-        
-        // 3. With the content json, pass it to the ABI packer.
+
         let serializer = abiSerializer()
-        let contentJSON = try? serializer.deserializeContent(contentType: contentType, hexString: String(data: decrypted, encoding: .utf8) ?? "")
-        
+        let contentJSON = try? serializer.deserializeContent(contentType: contentType, hexString: decrypted.hexEncodedString().uppercased() ?? "")
+
         return contentJSON ?? ""
-        
-               /*
-        
-                the content needs to be encrypted.
-                
-                These are the steps:
-                1. With the private key and the payee public key (fio public address), create the sharedSecret
-                
-                
-                2. With the content field, map each field to it's json value.
-                3. With the content json, pass it to the ABI packer.
-                4. Encrypt the resultant ABI packer data.  Using the sharedSecret
-                
-         ok, somehow do the json mapping now.
-                payee_public_address,
-                amount,
-                token_code,
-                memo,
-                hash,
-                offline_url
-        
-        */
     }
     
     //MARK: - Request Funds
@@ -624,13 +602,15 @@ public class FIOSDK: BaseFIOSDK {
     /// - Parameters:
     ///   - fioPublicKey: FIO public key to retrieve sent requests.
     ///   - completion: The completion result
-    public func getSentFioRequests(fioPublicKey: String, completion: @escaping (_ response: FIOSDK.Responses.SentFIORequestsResponse?, _ error: FIOError) -> ()){
-        let body = SentFIORequestsRequest(fioPublicKey: fioPublicKey)
+    public func getSentFioRequests(limit:Int?=nil, offset:Int?=0, completion: @escaping (_ response: FIOSDK.Responses.SentFIORequestsResponse?, _ error: FIOError) -> ()){
+        let body = SentFIORequestsRequest(fioPublicKey: self.publicKey, limit: limit, offset: offset ?? 0)
         let url = ChainRouteBuilder.build(route: ChainRoutes.getSentFIORequests)
         FIOHTTPHelper.postRequestTo(url, withBody: body) { (data, error) in
             if let data = data {
                 do {
-                    let result = try JSONDecoder().decode(FIOSDK.Responses.SentFIORequestsResponse.self, from: data)
+                    let decoder =  JSONDecoder()
+                    decoder.dateDecodingStrategy = .iso8601
+                    let result = try decoder.decode(FIOSDK.Responses.SentFIORequestsResponse.self, from: data)
                     completion(result, FIOError.success())
                 }
                 catch {

@@ -9,26 +9,16 @@
 import Foundation
 
 public struct RequestFundsResponse: Codable {
-    
-    public var fundsRequestId: String {
-        return String(fioreqid)
-    }
-    public let fioreqid: Int //TODO: Change it back to String if Ed confirm it should be String
+
+    #warning("what should fiorequestId be?  A string or Int?")
+    public let fioRequestId: Int
+    public let status: String
+    public let feeCollected: Int
     
     enum CodingKeys: String, CodingKey {
-        case fioreqid = "fio_request_id"
-    }
-    
-    init(fioreqid: Int) {
-        self.fioreqid = fioreqid
-    }
-    
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        
-        let fioreqid: Int = try container.decodeIfPresent(Int.self, forKey: .fioreqid) ?? 0
-        
-        self.init(fioreqid: fioreqid)
+        case fioRequestId = "fio_request_id"
+        case status
+        case feeCollected = "fee_collected"
     }
     
 }
