@@ -27,10 +27,9 @@ extension FIOSDK.Responses {
             public let payeeFIOAddress: String
             public let payerFIOPublicKey: String
             public let payeeFIOPublicKey: String
-            public let content:String
+            public let content:MetaData
             public let timeStamp: Date
             public let status: String
-            public let contentMetaData: MetaData
             
             enum CodingKeys: String, CodingKey {
                 case fioRequestId = "fio_request_id"
@@ -38,10 +37,9 @@ extension FIOSDK.Responses {
                 case payeeFIOAddress = "payee_fio_address"
                 case payerFIOPublicKey = "payer_fio_public_key"
                 case payeeFIOPublicKey = "payee_fio_public_key"
-                case content
                 case timeStamp = "time_stamp"
                 case status
-                case contentMetaData
+                case content
             }
             
             public struct MetaData: Codable {
@@ -67,19 +65,17 @@ extension FIOSDK.Responses {
                  payeeFIOAddress: String,
                  payerFIOPublicKey: String,
                  payeeFIOPublicKey: String,
-                 content: String,
                  timeStamp: Date,
                  status: String,
-                 contentMetaData:MetaData) {
+                 content:MetaData) {
                 self.fioRequestId = fioRequestId
                 self.payerFIOAddress = payerFIOAddress
                 self.payeeFIOAddress = payeeFIOAddress
                 self.payerFIOPublicKey = payerFIOPublicKey
                 self.payeeFIOPublicKey = payeeFIOPublicKey
-                self.content = content
                 self.timeStamp = timeStamp
                 self.status = status
-                self.contentMetaData = contentMetaData
+                self.content = content
             }
             
             public init(from decoder: Decoder) throws {
@@ -112,16 +108,9 @@ extension FIOSDK.Responses {
                     payeeFIOAddress: payeeFIOAddress,
                     payerFIOPublicKey: payerFIOPublicKey,
                     payeeFIOPublicKey: payeeFIOPublicKey,
-                    content: content,
                     timeStamp: timeStamp!,
                     status: status,
-                    contentMetaData: metadata)
-            }
-            
-            private func decryptContent(payerPublicKey: String, content: String){
-            
-                let json = FIOSDK.sharedInstance().decrypt(publicKey: payerPublicKey, contentType: FIOAbiContentType.newFundsContent, encryptedContent: content)
-                print (json)
+                    content: metadata)
             }
             
         }

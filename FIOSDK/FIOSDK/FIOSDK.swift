@@ -608,9 +608,7 @@ public class FIOSDK: BaseFIOSDK {
         FIOHTTPHelper.postRequestTo(url, withBody: body) { (data, error) in
             if let data = data {
                 do {
-                    let decoder =  JSONDecoder()
-                    decoder.dateDecodingStrategy = .iso8601
-                    let result = try decoder.decode(FIOSDK.Responses.SentFIORequestsResponse.self, from: data)
+                    let result = try JSONDecoder().decode(FIOSDK.Responses.SentFIORequestsResponse.self, from: data)
                     completion(result, FIOError.success())
                 }
                 catch {
