@@ -340,7 +340,11 @@ public class FIOSDK: BaseFIOSDK {
         FIOHTTPHelper.postRequestTo(url, withBody: body) { (data, error) in
             if let data = data {
                 do {
-                    let result = try JSONDecoder().decode(FIOSDK.Responses.PendingFIORequestsResponse.self, from: data)
+                    var result = try JSONDecoder().decode(FIOSDK.Responses.PendingFIORequestsResponse.self, from: data)
+                    
+                    // filter the dead records
+                    result.requests = result.requests.filter { $0.fioRequestId >= 0 }
+                    
                     completion(result, FIOError.success())
                 }
                 catch {
@@ -609,7 +613,11 @@ public class FIOSDK: BaseFIOSDK {
         FIOHTTPHelper.postRequestTo(url, withBody: body) { (data, error) in
             if let data = data {
                 do {
-                    let result = try JSONDecoder().decode(FIOSDK.Responses.SentFIORequestsResponse.self, from: data)
+                    var result = try JSONDecoder().decode(FIOSDK.Responses.SentFIORequestsResponse.self, from: data)
+                    
+                    // filter the dead records
+                    result.requests = result.requests.filter { $0.fioRequestId >= 0 }
+                    
                     completion(result, FIOError.success())
                 }
                 catch {

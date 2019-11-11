@@ -13,7 +13,7 @@ extension FIOSDK.Responses {
     
     public struct PendingFIORequestsResponse: Codable {
         
-        private let requests: [PendingFIORequestResponse]
+        public var requests: [PendingFIORequestResponse]
         public let more: Int
         
         enum CodingKeys: String, CodingKey {
@@ -31,7 +31,6 @@ extension FIOSDK.Responses {
             public let content:MetaData
             public let timeStamp: Date
             public let status: String
-            private let deadRecord: Bool
             
             enum CodingKeys: String, CodingKey {
                 case fioRequestId = "fio_request_id"
@@ -42,7 +41,6 @@ extension FIOSDK.Responses {
                 case timeStamp = "time_stamp"
                 case status
                 case content
-                case deadRecord
             }
             
             public struct MetaData: Codable {
@@ -70,7 +68,7 @@ extension FIOSDK.Responses {
                  payeeFIOPublicKey: String,
                  timeStamp: Date,
                  status: String,
-                 content:MetaData, deadRecord: Bool) {
+                 content:MetaData) {
                 self.fioRequestId = fioRequestId
                 self.payerFIOAddress = payerFIOAddress
                 self.payeeFIOAddress = payeeFIOAddress
@@ -79,17 +77,17 @@ extension FIOSDK.Responses {
                 self.timeStamp = timeStamp
                 self.status = status
                 self.content = content
-                self.deadRecord = deadRecord
             }
             
             public init(from decoder: Decoder) throws {
                 
                 let container = try decoder.container(keyedBy: CodingKeys.self)
+
                 let payerFIOAddress = try container.decodeIfPresent(String.self, forKey: .payerFIOAddress) ?? ""
                 let payeeFIOAddress = try container.decodeIfPresent(String.self, forKey: .payeeFIOAddress) ?? ""
                 let payerFIOPublicKey = try container.decodeIfPresent(String.self, forKey: .payerFIOPublicKey) ?? ""
                 let payeeFIOPublicKey = try container.decodeIfPresent(String.self, forKey: .payeeFIOPublicKey) ?? ""
-                let fioreqid = try container.decodeIfPresent(Int.self, forKey: .fioRequestId) ?? 0
+                let fioreqid = try container.decodeIfPresent(Int.self, forKey: .fioRequestId) ?? -1
                 let content = try container.decodeIfPresent(String.self, forKey: .content) ?? ""
                 
                 let timeStampString = try (container.decodeIfPresent(String.self, forKey: .timeStamp) ?? "1970-01-01T12:00:00")
@@ -109,23 +107,20 @@ extension FIOSDK.Responses {
                         metadata = try JSONDecoder().decode(PendingFIORequestResponse.MetaData.self, from: metadataData)
                     }
                     catch {
-                        // dead record
-                        #warning("pending dead records, should just be removed")
-                        // https://forums.swift.org/t/pitch-unkeyeddecodingcontainer-movenext-to-skip-items-in-deserialization/22151
-                        deadRecord = true
+                         deadRecord = true
                     }
                 }
                 
                 if (deadRecord){
-                    self.init(fioRequestId: 0,
+                    self.init(fioRequestId: -1,
                         payerFIOAddress: "",
                         payeeFIOAddress: "",
                         payerFIOPublicKey: "",
                         payeeFIOPublicKey: "",
                         timeStamp: Date(timeIntervalSince1970: 1),
                         status: "",
-                        content: metadata,
-                        deadRecord: deadRecord)
+                        content: metadata)
+                    
                 }
                 else {
                     self.init(fioRequestId: fioreqid,
@@ -135,8 +130,7 @@ extension FIOSDK.Responses {
                         payeeFIOPublicKey: payeeFIOPublicKey,
                         timeStamp: timeStamp ?? Date(timeIntervalSince1970: 1),
                         status: status,
-                        content: metadata,
-                        deadRecord: deadRecord)
+                        content: metadata)
                 }
 
             }

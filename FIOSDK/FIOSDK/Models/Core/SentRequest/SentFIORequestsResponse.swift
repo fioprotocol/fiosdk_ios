@@ -13,7 +13,7 @@ extension FIOSDK.Responses {
     
     public struct SentFIORequestsResponse: Codable {
         
-        public let requests: [SentFIORequestResponse]
+        public var requests: [SentFIORequestResponse]
         public let more: Int
         
         enum CodingKeys: String, CodingKey {
@@ -86,7 +86,7 @@ extension FIOSDK.Responses {
                 let payeeFIOAddress = try container.decodeIfPresent(String.self, forKey: .payeeFIOAddress) ?? ""
                 let payerFIOPublicKey = try container.decodeIfPresent(String.self, forKey: .payerFIOPublicKey) ?? ""
                 let payeeFIOPublicKey = try container.decodeIfPresent(String.self, forKey: .payeeFIOPublicKey) ?? ""
-                let fioreqid = try container.decodeIfPresent(Int.self, forKey: .fioRequestId) ?? 0
+                let fioreqid = try container.decodeIfPresent(Int.self, forKey: .fioRequestId) ?? -1
                 let content = try container.decodeIfPresent(String.self, forKey: .content) ?? ""
                 
                 let timeStampString = try (container.decodeIfPresent(String.self, forKey: .timeStamp) ?? "1970-01-01T12:00:00")
@@ -99,19 +99,38 @@ extension FIOSDK.Responses {
                 
                 let metadataString = FIOSDK.sharedInstance().decrypt(publicKey: payerFIOPublicKey, contentType: FIOAbiContentType.newFundsContent, encryptedContent: content)
                 
+                var deadRecord = false
                 var metadata = SentFIORequestResponse.MetaData(payeePublicAddress: "", amount: "", tokenCode: "", memo: "", hash: "", offlineUrl: "")
                 if let metadataData = metadataString.data(using: .utf8) {
-                    metadata = try JSONDecoder().decode(SentFIORequestResponse.MetaData.self, from: metadataData)
+                    do {
+                        metadata = try JSONDecoder().decode(SentFIORequestResponse.MetaData.self, from: metadataData)
+                    }
+                    catch {
+                         deadRecord = true
+                    }
                 }
                 
-                self.init(fioRequestId: fioreqid,
-                    payerFIOAddress: payerFIOAddress,
-                    payeeFIOAddress: payeeFIOAddress,
-                    payerFIOPublicKey: payerFIOPublicKey,
-                    payeeFIOPublicKey: payeeFIOPublicKey,
-                    timeStamp: timeStamp ?? Date(timeIntervalSince1970: 1),
-                    status: status,
-                    content: metadata)
+                if (deadRecord){
+                    self.init(fioRequestId: -1,
+                        payerFIOAddress: "",
+                        payeeFIOAddress: "",
+                        payerFIOPublicKey: "",
+                        payeeFIOPublicKey: "",
+                        timeStamp: Date(timeIntervalSince1970: 1),
+                        status: "",
+                        content: metadata)
+                    
+                }
+                else {
+                    self.init(fioRequestId: fioreqid,
+                        payerFIOAddress: payerFIOAddress,
+                        payeeFIOAddress: payeeFIOAddress,
+                        payerFIOPublicKey: payerFIOPublicKey,
+                        payeeFIOPublicKey: payeeFIOPublicKey,
+                        timeStamp: timeStamp ?? Date(timeIntervalSince1970: 1),
+                        status: status,
+                        content: metadata)
+                }
             }
             
         }
