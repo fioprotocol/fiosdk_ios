@@ -296,49 +296,6 @@ class FIOSDKTests: XCTestCase {
     }
     
     
-    /// Tests the getPendingFioRequests method on FIOSDK using constant values ->
-    /// publicAddress = self.requesteeAddress
-    func testGetPendingFioRequests(){
-        
-        self.defaultSDKConfig()
-        let expectationAddPubAddA = XCTestExpectation(description: "testgetpendingfiorequest")
-        let expectationAddPubAddB = XCTestExpectation(description: "testgetpendingfiorequest")
-        let expectationReqFunds = XCTestExpectation(description: "testgetpendingfiorequest")
-        let expectationPendingReq = XCTestExpectation(description: "testgetpendingfiorequest")
-        let metadata = RequestFundsRequest.MetaData(memo: "Invoice1234", hash: nil, offlineUrl: nil)
-        let timestamp = NSDate().timeIntervalSince1970
-        let from = self.requestorFioName
-        let to = "shawn:edge"//self.requesteeFioName
-        let fromPubAdd = "from\(Int(timestamp.rounded()))"
-        let toPubAdd = "to\(Int(timestamp.rounded()))"
-        self.alternativeSDKConfig()
-        FIOSDK.sharedInstance().addPublicAddress(fioAddress: from, chain: "BTC", publicAddress: fromPubAdd, maxFee: 0) { (error) in
-            XCTAssert((error?.kind == FIOError.ErrorKind.Success), "testAddPublicAddress NOT SUCCESSFUL: \(error?.localizedDescription ?? "")")
-            expectationAddPubAddA.fulfill()
-            self.defaultSDKConfig()
-            FIOSDK.sharedInstance().addPublicAddress(fioAddress: to, chain: "BTC", publicAddress: toPubAdd, maxFee: 0) { (error) in
-                XCTAssert((error?.kind == FIOError.ErrorKind.Success), "testAddPublicAddress NOT SUCCESSFUL: \(error?.localizedDescription ?? "")")
-                expectationAddPubAddB.fulfill()
-                FIOSDK.sharedInstance().requestFunds(payer: from, payee: to, payeePublicAddress: toPubAdd, amount: 1.0, tokenCode: "BTC", metadata: metadata, maxFee: 0) { (response, error) in
-                    if error?.kind == .Success {
-                        expectationReqFunds.fulfill()
-                        self.alternativeSDKConfig()
-                        FIOSDK.sharedInstance().getPendingFioRequests(fioPublicKey: FIOSDK.sharedInstance().getPublicKey()) { (data, error) in
-                            XCTAssert(error?.kind == FIOError.ErrorKind.Success, "testgetpendingfiorequest not successful: \(error?.localizedDescription ?? "unknown")")
-                            XCTAssertNotNil(data, "testgetpendingfiorequest result came out nil")
-                            expectationPendingReq.fulfill()
-                        }
-                    }
-                    else {
-                        XCTFail("Failed to call requestFunds prior to getting pending requests")
-                        expectationReqFunds.fulfill()
-                    }
-                }
-            }
-        }
-        wait(for: [expectationAddPubAddA,expectationAddPubAddB, expectationReqFunds, expectationPendingReq], timeout: TIMEOUT)
-    }
-    
     func testGetFioNamesWithUnvalidAddressShouldRespondWithNotFound(){
         let expectation = XCTestExpectation(description: "testgetfionames")
         FIOSDK.sharedInstance().getFioNames(fioPublicKey: "NOT VALID ADDRESS") { (data, error) in
@@ -543,9 +500,10 @@ class FIOSDKTests: XCTestCase {
     
     
     /// Test for get_sent_fio_requests
-    func testGetSentRequest(){
+    func testGetSentAndPendingRequests(){
         let expRequestFunds = XCTestExpectation(description: "test getSentRequests request funds")
         let expGetSentRequest = XCTestExpectation(description: "test getSentRequests get")
+        let expGetPendingRequest = XCTestExpectation(description: "test getPendingRequests get")
         
         self.defaultSDKConfig()
         let metadata = RequestFundsRequest.MetaData(memo: "Invoice1234", hash: nil, offlineUrl: nil)
@@ -559,16 +517,29 @@ class FIOSDKTests: XCTestCase {
                 if error?.kind == .Success {
                     expRequestFunds.fulfill()
                     
-                    FIOSDK.sharedInstance().getSentFioRequests() { (sentRecords, error) in
+                    FIOSDK.sharedInstance().getSentFioRequests() { (sentRecords, sentError) in
                         
-                        XCTAssert(error.kind == .Success && response != nil, "testGetSentRequest couldn't retreive request")
-                        guard error.kind == .Success, response != nil else {
-                           XCTFail("getSentFioRequest Request should have sent fio requests")
+                        XCTAssert(sentError.kind == .Success && sentRecords != nil, "Sent Request couldn't retreive request")
+                        guard sentError.kind == .Success, sentRecords != nil else {
+                           XCTFail("testGetSentAndPendingRequests Request should have sent fio requests")
                            expGetSentRequest.fulfill()
                            return
                         }
 
                         expGetSentRequest.fulfill()
+                        
+                        self.alternativeSDKConfig()
+                        FIOSDK.sharedInstance().getPendingFioRequests { (pendRecords, pendError) in
+                            
+                            XCTAssert(pendError.kind == .Success && pendRecords != nil, "Pending Request couldn't retreive request")
+                            guard pendError.kind == .Success, pendRecords != nil else {
+                              XCTFail("testGetSentAndPendingRequests Request should have pending fio requests")
+                              expGetPendingRequest.fulfill()
+                              return
+                            }
+                            
+                            expGetPendingRequest.fulfill()
+                        }
                     }
                     
                 }
@@ -579,7 +550,7 @@ class FIOSDKTests: XCTestCase {
                 }
         }
 
-        wait(for: [expRequestFunds, expGetSentRequest], timeout: TIMEOUT*5)
+        wait(for: [expRequestFunds, expGetSentRequest,expGetPendingRequest], timeout: TIMEOUT*5)
     }
     
     func testGenerateAccountNameGeneratorWithProperValuesOutputCorrectResult() {

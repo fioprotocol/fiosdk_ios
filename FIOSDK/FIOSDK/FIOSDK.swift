@@ -333,8 +333,9 @@ public class FIOSDK: BaseFIOSDK {
     /// - Parameters:
     ///   - fioPublicKey: FIO public key to get pending requests for. (requestee)
     ///   - completion: Completion hanlder
-    public func getPendingFioRequests(fioPublicKey: String, completion: @escaping (_ pendingRequests: FIOSDK.Responses.PendingFIORequestsResponse?, _ error:FIOError?) -> ()) {
-        let body = PendingFIORequestsRequest(fioPublicKey: fioPublicKey)
+    
+    public func getPendingFioRequests(limit:Int?=nil, offset:Int?=0, completion: @escaping (_ pendingRequests: FIOSDK.Responses.PendingFIORequestsResponse?, _ error:FIOError) -> ()) {
+        let body = PendingFIORequestsRequest(fioPublicKey: self.publicKey, limit: limit, offset: offset ?? 0)
         let url = ChainRouteBuilder.build(route: ChainRoutes.getPendingFIORequests)
         FIOHTTPHelper.postRequestTo(url, withBody: body) { (data, error) in
             if let data = data {
@@ -619,7 +620,7 @@ public class FIOSDK: BaseFIOSDK {
                     completion(nil, error)
                 }
                 else {
-                    completion(nil, FIOError.failure(localizedDescription: ChainRoutes.getPendingFIORequests.rawValue + " request failed."))
+                    completion(nil, FIOError.failure(localizedDescription: ChainRoutes.getSentFIORequests.rawValue + " request failed."))
                 }
             }
         }
