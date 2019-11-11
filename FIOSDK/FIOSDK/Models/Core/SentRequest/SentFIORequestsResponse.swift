@@ -3,6 +3,7 @@
 //  FIOSDK
 //
 //  Created by Vitor Navarro on 2019-04-03.
+//  Modified by Shawn Arney on 2019-11-04. Adding encryption/decryption
 //  Copyright © 2019 Dapix, Inc. All rights reserved.
 //
 
@@ -88,15 +89,15 @@ extension FIOSDK.Responses {
                 let fioreqid = try container.decodeIfPresent(Int.self, forKey: .fioRequestId) ?? 0
                 let content = try container.decodeIfPresent(String.self, forKey: .content) ?? ""
                 
-                let timeStampString = try container.decodeIfPresent(String.self, forKey: .timeStamp) ?? "1970-01-01T12:00:00"
-                let formatter = DateFormatter()
-                formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss"
-                let timeStamp = formatter.date(from: timeStampString)
+                let timeStampString = try (container.decodeIfPresent(String.self, forKey: .timeStamp) ?? "1970-01-01T12:00:00")
+                                            .replacingOccurrences(of: "Z", with: "") + "Z"
 
+                let formatter = ISO8601DateFormatter()
+                let timeStamp = formatter.date(from: timeStampString)
+                
                 let status = try container.decodeIfPresent(String.self, forKey: .status) ?? ""
                 
                 let metadataString = FIOSDK.sharedInstance().decrypt(publicKey: payerFIOPublicKey, contentType: FIOAbiContentType.newFundsContent, encryptedContent: content)
-                print (metadataString)
                 
                 var metadata = SentFIORequestResponse.MetaData(payeePublicAddress: "", amount: "", tokenCode: "", memo: "", hash: "", offlineUrl: "")
                 if let metadataData = metadataString.data(using: .utf8) {
@@ -108,7 +109,7 @@ extension FIOSDK.Responses {
                     payeeFIOAddress: payeeFIOAddress,
                     payerFIOPublicKey: payerFIOPublicKey,
                     payeeFIOPublicKey: payeeFIOPublicKey,
-                    timeStamp: timeStamp!,
+                    timeStamp: timeStamp ?? Date(timeIntervalSince1970: 1),
                     status: status,
                     content: metadata)
             }
