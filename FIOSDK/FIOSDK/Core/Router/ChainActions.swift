@@ -18,5 +18,6 @@ internal enum ChainActions: String {
     case registerFIODomain      = "regdomain"
     case registerFIOAddress     = "regaddress"
     case renewFIODomain         = "renewdomain"
+    case renewFIOAddress        = "renewaddress"
     
 }

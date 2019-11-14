@@ -121,6 +121,52 @@ public class FIOSDK: BaseFIOSDK {
         try keyManager.wipeKeys()
     }
     
+    
+    //MARK: - Renew FIO address request
+    /**
+     * This function should be called to renew a FIO Address. [visit api](https://stealth.atlassian.net/wiki/spaces/DEV/pages/265977939/API+v0.3#APIv0.3-/renew_fio_address-RenewFIOAddress)
+     * - Parameter fioAddress: A string to register as FIO Domain
+     * - Parameter maxFee: Maximum amount of SUFs the user is willing to pay for fee. Should be preceded by /get_fee for correct value.
+     * - Parameter onCompletion: A callback function that is called when request is finished either with success or failure. Check FIOError.kind to determine if is a success or a failure.
+     */
+    public func renewFioAddress(_ fioAddress: String, maxFee: Double, onCompletion: @escaping (_ response: FIOSDK.Responses.RenewFIOAddressResponse? , _ error:FIOError?) -> ()) {
+        renewFioAddress(fioAddress, maxFee: maxFee, walletFioAddress: "", onCompletion: onCompletion)
+    }
+    
+    /**
+     * This function should be called to renew a FIO Address. [visit api](https://stealth.atlassian.net/wiki/spaces/DEV/pages/265977939/API+v0.3#APIv0.3-/renew_fio_address-RenewFIOAddress)
+     * - Parameter fioAddress: A string to register as FIO Domain
+     * - Parameter maxFee: Maximum amount of SUFs the user is willing to pay for fee. Should be preceded by /get_fee for correct value.
+     * - Parameter walletFioAddress: FIO Address of the wallet which generates this transaction. 
+     * - Parameter onCompletion: A callback function that is called when request is finished either with success or failure. Check FIOError.kind to determine if is a success or a failure.
+     */
+    public func renewFioAddress(_ fioAddress: String, maxFee: Double, walletFioAddress: String, onCompletion: @escaping (_ response: FIOSDK.Responses.RenewFIOAddressResponse? , _ error:FIOError?) -> ()) {
+        guard isFIOAddressValid(fioAddress) else {
+            onCompletion(nil, FIOError.failure(localizedDescription: "Invalid FIO Address."))
+            return
+        }
+        let actor = AccountNameGenerator.run(withPublicKey: getPublicKey())
+        let domain = RenewFIOAddressRequest(fioAddress: fioAddress, maxFee: SUFUtils.amountToSUF(amount: maxFee), walletFioAddress: walletFioAddress, actor: actor)
+        signedPostRequestTo(privateKey: getPrivateKey(),
+                            route: ChainRoutes.renewFIOAddress,
+                            forAction: ChainActions.renewFIOAddress,
+                            withBody: domain,
+                            code: "fio.system",
+                            account: actor) { (data, error) in
+                                if let result = data {
+                                    let handledData: (response: FIOSDK.Responses.RenewFIOAddressResponse?, error: FIOError) = parseResponseFromTransactionResult(txResult: result)
+                                    onCompletion(handledData.response, handledData.error)
+                                } else {
+                                    if let error = error {
+                                        onCompletion(nil, error)
+                                    }
+                                    else {
+                                        onCompletion(nil, FIOError.failure(localizedDescription: "renew_fio_address request failed."))
+                                    }
+                                }
+        }
+    }
+    
     //MARK: - Register FIO Name request
     
     /**

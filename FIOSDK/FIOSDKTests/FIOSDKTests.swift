@@ -820,6 +820,82 @@ class FIOSDKTests: XCTestCase {
         wait(for: [expectation], timeout: TIMEOUT * 1.5)
     }
     
+    func testRenewFIOAddressWithNewValueShouldRenew() {
+        let timestamp = NSDate().timeIntervalSince1970
+        let address = "test\(Int(timestamp.rounded())):brd"
+        let expectation = XCTestExpectation(description: "testRenewFIOAddressWithNewValueShouldRenew")
+        let walletFioAddress = "test:edge"
+        
+        self.defaultSDKConfig()
+        FIOSDK.sharedInstance().registerFioAddress(address, maxFee: 2, walletFioAddress: walletFioAddress, onCompletion: { (response, error) in
+            if error?.kind == .Success {
+                sleep(60)
+                FIOSDK.sharedInstance().renewFioAddress(address, maxFee: 2, walletFioAddress: walletFioAddress, onCompletion: { (response, error) in
+                    XCTAssert((error?.kind == FIOError.ErrorKind.Success), "renewFIOAddress NOT SUCCESSFUL")
+                    XCTAssertNotNil(response)
+                    XCTAssert(response?.status != "")
+                    expectation.fulfill()
+                })
+            }
+            else {
+                XCTFail("Failed to call registerFioAddress prior to renew address requests")
+                expectation.fulfill()
+            }
+        })
+        
+        wait(for: [expectation], timeout: TIMEOUT * 1.5)
+    }
+    
+    func testRenewFIOAddressWithInvalidValueShouldNotRenew() {
+        let address = "#&*("
+        let expectation = XCTestExpectation(description: "testRenewFIOAddressWithInvalidValueShouldNotRenew")
+        let walletFioAddress = "test:edge"
+        
+        FIOSDK.sharedInstance().renewFioAddress(address, maxFee: 2, walletFioAddress: walletFioAddress, onCompletion: { (response, error) in
+            XCTAssert((error?.kind == FIOError.ErrorKind.Failure), String(format:"renewFIODomain Should not renew invalid address: %@", address))
+            expectation.fulfill()
+        })
+        
+        wait(for: [expectation], timeout: TIMEOUT * 1.5)
+    }
+    
+    func testRenewFIOAddressWithNewValueShouldRegisterNoWallet() {
+        let timestamp = NSDate().timeIntervalSince1970
+        let address = "test\(Int(timestamp.rounded())):brd"
+        let expectation = XCTestExpectation(description: "testRenewFIOAddressWithNewValueShouldRegister")
+        
+        self.defaultSDKConfig()
+        FIOSDK.sharedInstance().registerFioAddress(address, maxFee: 2, onCompletion: { (response, error) in
+            if error?.kind == .Success {
+                sleep(60)
+                FIOSDK.sharedInstance().renewFioAddress(address, maxFee: 2, onCompletion: { (response, error) in
+                    XCTAssert((error?.kind == FIOError.ErrorKind.Success), "renewFIOAddress NOT SUCCESSFUL")
+                    XCTAssertNotNil(response)
+                    XCTAssert(response?.status != "")
+                    expectation.fulfill()
+                })
+            }
+            else {
+                XCTFail("Failed to call registerFioAddress prior to renew address requests")
+                expectation.fulfill()
+            }
+        })
+        
+        wait(for: [expectation], timeout: TIMEOUT * 1.5)
+    }
+    
+    func testRenewFIOAddressWithInvalidValueShouldNotRegisterNoWallet() {
+        let address = "#&*("
+        let expectation = XCTestExpectation(description: "testRenewFIOAddressWithInvalidValueShouldNotRegisterNoWallet")
+        
+        FIOSDK.sharedInstance().renewFioAddress(address, maxFee: 2, onCompletion: { (response, error) in
+            XCTAssert((error?.kind == FIOError.ErrorKind.Failure), String(format:"renewFIODomain Should not renew invalid address: %@", address))
+            expectation.fulfill()
+        })
+        
+        wait(for: [expectation], timeout: TIMEOUT * 1.5)
+    }
+    
     func testRegisterFIOAddressWithNewValueShouldRegister() {
         let timestamp = NSDate().timeIntervalSince1970
         let address = "test\(Int(timestamp.rounded())):brd"
