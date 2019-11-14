@@ -137,7 +137,9 @@ public class FIOSDK: BaseFIOSDK {
                 return
             }
             do {
-                let response = try JSONDecoder().decode(RegisterNameForUserResponse.self, from: result)
+                let decoder = JSONDecoder()
+                decoder.dateDecodingStrategy = .formatted(Formatter.iso8601)
+                let response = try decoder.decode(RegisterNameForUserResponse.self, from: result)
                 onCompletion(response, FIOError.success())
             }catch let error {
                 onCompletion(nil, FIOError.failure(localizedDescription: error.localizedDescription))
@@ -716,8 +718,37 @@ public class FIOSDK: BaseFIOSDK {
     ///     - endPoint: Name of API call end point, e.g. add_pub_address
     ///     - fioAddress: FIO Address incurring the fee and owned by signer.
     ///     - onCompletion: A function that is called once request is over with an optional response with results and error containing the status of the call.
-    public func getFee(endPoint: FIOSDK.Params.FeeEndpoint, fioAddress: String = "", onCompletion: @escaping (_ response: FIOSDK.Responses.FeeResponse?, _ error: FIOError) -> ()) {
+    internal func getFee(endPoint: FIOSDK.Params.FeeEndpoint, fioAddress: String = "", onCompletion: @escaping (_ response: FIOSDK.Responses.FeeResponse?, _ error: FIOError) -> ()) {
         let body = FeeRequest(fioAddress: fioAddress, endPoint: endPoint.rawValue)
+        let url = ChainRouteBuilder.build(route: ChainRoutes.getFee)
+        FIOHTTPHelper.postRequestTo(url, withBody: body) { (data, error) in
+            if let data = data {
+                do {
+                    let result = try JSONDecoder().decode(FIOSDK.Responses.FeeResponse.self, from: data)
+                    onCompletion(result, FIOError.success())
+                }
+                catch {
+                    onCompletion(nil, FIOError.failure(localizedDescription: "Parsing json failed."))
+                }
+            } else {
+                if let error = error {
+                    onCompletion(nil, error)
+                }
+                else {
+                    onCompletion(nil, FIOError.failure(localizedDescription: ChainRoutes.getFee.rawValue + " request failed."))
+                }
+            }
+        }
+    }
+    
+    //MARK: getFeeForAddPublicAddress
+    
+    /// Compute and return fee amount for specific call and specific user. [visit API specs](https://stealth.atlassian.net/wiki/spaces/DEV/pages/265977939/API+v0.3#APIv0.3-/get_fee-Computeandreturnfeeamountforspecificcallandspecificuser)
+    /// - Parameters:
+    ///     - fioAddress: FIO Address incurring the fee and owned by signer.
+    ///     - onCompletion: A function that is called once request is over with an optional response with results and error containing the status of the call.
+    public func getFeeForAddPublicAddress(fioAddress: String, onCompletion: @escaping (_ response: FIOSDK.Responses.FeeResponse?, _ error: FIOError) -> ()) {
+        let body = FeeRequest(fioAddress: fioAddress, endPoint: "add_pub_address")
         let url = ChainRouteBuilder.build(route: ChainRoutes.getFee)
         FIOHTTPHelper.postRequestTo(url, withBody: body) { (data, error) in
             if let data = data {
@@ -743,4 +774,15 @@ public class FIOSDK: BaseFIOSDK {
         
     }
     
+}
+
+extension Formatter {
+    static let iso8601: DateFormatter = {
+        let formatter = DateFormatter()
+        formatter.calendar = Calendar(identifier: .iso8601)
+        formatter.locale = Locale(identifier: "en_US_POSIX")
+        formatter.timeZone = TimeZone(secondsFromGMT: 0)
+        formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss"
+        return formatter
+    }()
 }

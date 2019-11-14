@@ -10,8 +10,8 @@ import XCTest
 @testable import FIOSDK
 
 private let useDev2 = false
-private let useDev4 = true
-private let useDefaultServer = false //want a custom server, set to true and then set the DEFAULT_SERVER to your ip/url
+private let useDev4 = false
+private let useDefaultServer = true //want a custom server, set to true and then set the DEFAULT_SERVER to your ip/url
 
 private let SERVER_DEV2 = "http://dev2.fio.dev:8889/v1"
 private let MOCK_SERVER_DEV2 = "http://mock.dapix.io/mockd/DEV2/register_fio_name"
@@ -19,8 +19,8 @@ private let MOCK_SERVER_DEV2 = "http://mock.dapix.io/mockd/DEV2/register_fio_nam
 private let SERVER_DEV4 = "http://dev4.fio.dev:8889/v1"
 private let MOCK_SERVER_DEV4 = "http://mock.dapix.io/mockd/DEV4/register_fio_name"
 
-private let DEFAULT_SERVER = "http://dev4.fio.dev:8889/v1"
-private let MOCK_DEFAULT_SERVER = "http://mock.dapix.io/mockd/DEV4/register_fio_name"
+private let DEFAULT_SERVER = "http://dev3.fio.dev:8889/v1"
+private let MOCK_DEFAULT_SERVER = "http://mock.dapix.io/mockd/DEV3/register_fio_name"
 
 class FIOSDKTests: XCTestCase {
     
@@ -1100,6 +1100,7 @@ class FIOSDKTests: XCTestCase {
     func testGetFeeWithEmptyAddressShouldReturnFee() {
         let expectation = XCTestExpectation(description: "testGetFeeWithEmptyAddressShouldReturnFee")
         
+        self.defaultSDKConfig()
         FIOSDK.sharedInstance().getFee(endPoint: FIOSDK.Params.FeeEndpoint.transferTokensPubKey, onCompletion: { (response, error) in
             XCTAssert((error.kind == FIOError.ErrorKind.Success), "getFee failed: \(error.localizedDescription )")
             guard let fee = response?.fee else {
@@ -1111,7 +1112,7 @@ class FIOSDKTests: XCTestCase {
             expectation.fulfill()
         })
         
-        wait(for: [expectation], timeout: TIMEOUT)
+        wait(for: [expectation], timeout: TIMEOUT * 3)
     }
     
     func testGetFeeWithNonEmptyAddressShouldReturnFee() {
@@ -1128,7 +1129,7 @@ class FIOSDKTests: XCTestCase {
             expectation.fulfill()
         })
         
-        wait(for: [expectation], timeout: TIMEOUT)
+        wait(for: [expectation], timeout: TIMEOUT * 3)
     }
     
     func testGetFeeWithNonEmptyWrongAddressShouldNotReturnFee() {
@@ -1140,7 +1141,24 @@ class FIOSDKTests: XCTestCase {
             expectation.fulfill()
         })
         
-        wait(for: [expectation], timeout: TIMEOUT)
+        wait(for: [expectation], timeout: TIMEOUT * 3)
+    }
+    
+    func testGetFeeForAddPublicAddressShouldReturnFee() {
+        let expectation = XCTestExpectation(description: "testGetFeeWithEmptyAddressShouldReturnFee")
+        let walletFioAddress = "test:edge"
+        FIOSDK.sharedInstance().getFeeForAddPublicAddress(fioAddress: walletFioAddress, onCompletion: { (response, error) in
+            XCTAssert((error.kind == FIOError.ErrorKind.Success), "getFee failed: \(error.localizedDescription )")
+            guard let fee = response?.fee else {
+                XCTFail("Fee not returned")
+                expectation.fulfill()
+                return
+            }
+            XCTAssert(fee > 0, "Something went wrong")
+            expectation.fulfill()
+        })
+        
+        wait(for: [expectation], timeout: TIMEOUT * 3)
     }
     
     func testGetAbi() {
