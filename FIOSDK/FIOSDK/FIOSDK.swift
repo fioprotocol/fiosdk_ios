@@ -183,7 +183,9 @@ public class FIOSDK: BaseFIOSDK {
                 return
             }
             do {
-                let response = try JSONDecoder().decode(RegisterNameForUserResponse.self, from: result)
+                let decoder = JSONDecoder()
+                decoder.dateDecodingStrategy = .formatted(Formatter.iso8601)
+                let response = try decoder.decode(RegisterNameForUserResponse.self, from: result)
                 onCompletion(response, FIOError.success())
             }catch let error {
                 onCompletion(nil, FIOError.failure(localizedDescription: error.localizedDescription))
@@ -549,15 +551,16 @@ public class FIOSDK: BaseFIOSDK {
     /// Reject funds request.
     /// To read further infomation about this [visit the API specs] [1]
     ///
-    ///    [1]: https://stealth.atlassian.net/wiki/spaces/DEV/pages/53280776/API#API-/reject_funds_request-Rejectfundsrequest        "api specs"
+    ///    [1]: https://stealth.atlassian.net/wiki/spaces/DEV/pages/265977939/API+v0.3#APIv0.3-/reject_funds_request-Rejectfundsrequest "api specs"
     ///
     /// - Parameters:
-    ///   - fundsRequestId: ID of that fund request.
+    ///   - fioRequestId: ID of that fund request.
     ///   - maxFee: Maximum amount of SUFs the user is willing to pay for fee. Should be preceded by /get_fee for correct value.
+    ///   - walletFioAddress: FIO Address of the wallet which generates this transaction.
     ///   - completion: The completion handler containing the result or error.
-    public func rejectFundsRequest(fundsRequestId: String, maxFee: Double, completion: @escaping(_ response: FIOSDK.Responses.RejectFundsRequestResponse?,_ :FIOError) -> ()){
+    public func rejectFundsRequest(fioRequestId: String, maxFee: Double, walletFioAddress: String = "", completion: @escaping(_ response: FIOSDK.Responses.RejectFundsRequestResponse?,_ :FIOError) -> ()){
         let actor = AccountNameGenerator.run(withPublicKey: getSystemPublicKey())
-        let data = RejectFundsRequest(fioReqID: fundsRequestId, actor: actor, maxFee: SUFUtils.amountToSUF(amount: maxFee))
+        let data = RejectFundsRequest(fioReqID: fioRequestId, actor: actor, maxFee: SUFUtils.amountToSUF(amount: maxFee), walletFioAddress: walletFioAddress)
         
         signedPostRequestTo(privateKey: getPrivateKey(),
                             route: ChainRoutes.rejectFundsRequest,
@@ -789,3 +792,15 @@ public class FIOSDK: BaseFIOSDK {
     }
     
 }
+
+extension Formatter {
+    static let iso8601: DateFormatter = {
+        let formatter = DateFormatter()
+        formatter.calendar = Calendar(identifier: .iso8601)
+        formatter.locale = Locale(identifier: "en_US_POSIX")
+        formatter.timeZone = TimeZone(secondsFromGMT: 0)
+        formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss"
+        return formatter
+    }()
+}
+

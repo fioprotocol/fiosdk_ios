@@ -482,42 +482,28 @@ class FIOSDKTests: XCTestCase {
         wait(for: [expectation], timeout: TIMEOUT)
     }
     
+    /// Test for reject_funds_request
     func testRejectFundsRequest(){
         let expectation = XCTestExpectation(description: "testRejectFundsRequest")
-        let amount = Float.random(in: 1111.0...4444)
-        let from = self.requestorFioName
-        let to = self.requesteeFioName
-        let timestamp = NSDate().timeIntervalSince1970
-        let fromPubAdd = "from\(Int(timestamp.rounded()))"
-        let toPubAdd = "to\(Int(timestamp.rounded()))"
+        let metadata = RequestFundsRequest.MetaData(memo: "", hash: nil, offlineUrl: nil)
         self.alternativeSDKConfig()
-        FIOSDK.sharedInstance().addPublicAddress(fioAddress: from, chain: "BTC", publicAddress: fromPubAdd, maxFee: 0) { (error) in
-            XCTAssert((error?.kind == FIOError.ErrorKind.Success), "testAddPublicAddress NOT SUCCESSFUL: \(error?.localizedDescription ?? "")")
-            self.defaultSDKConfig()
-            FIOSDK.sharedInstance().addPublicAddress(fioAddress: to, chain: "BTC", publicAddress: toPubAdd, maxFee: 0) { (error) in
-                XCTAssert((error?.kind == FIOError.ErrorKind.Success), "testAddPublicAddress NOT SUCCESSFUL: \(error?.localizedDescription ?? "")")
-                
-                //requestor is sender, requestee is receiver
-                FIOSDK.sharedInstance().requestFunds(payer: from, payee: to, payeePublicAddress: toPubAdd, amount: amount, tokenCode: "BTC", metadata: RequestFundsRequest.MetaData(memo: "", hash: nil, offlineUrl: nil), maxFee: 0) { (response, error) in
-                    XCTAssert(error?.kind == .Success && response != nil, "testRejectFundsRequest Couldn't create mock request")
-                    
-                    if let response = response {
-                        self.alternativeSDKConfig()
-                        FIOSDK.sharedInstance().rejectFundsRequest(fundsRequestId: String(response.fundsRequestId), maxFee: 0, completion: { (response, error) in
-                            XCTAssert(error.kind == .Success, "testRejectFundsRequest couldn't reject request")
-                            expectation.fulfill()
-                        })
-                    }
-                    else {
-                        expectation.fulfill()
-                    }
-                }
+        //requestor is sender, requestee is receiver
+        FIOSDK.sharedInstance().requestFunds(payer: self.requesteeFioName, payee: self.requestorFioName, payeePublicAddress: FIOSDK.sharedInstance().getPublicKey(), amount: 9, tokenCode: "FIO", metadata: metadata, maxFee: 0) { (response, error) in
+            XCTAssert(error?.kind == .Success && response != nil, "testRejectFundsRequest Couldn't create mock request")
+            if let response = response {
+                self.defaultSDKConfig()
+                FIOSDK.sharedInstance().rejectFundsRequest(fioRequestId: String(response.fundsRequestId), maxFee: 0, completion: { (response, error) in
+                    XCTAssert(error.kind == .Success, "testRejectFundsRequest couldn't reject request")
+                    expectation.fulfill()
+                })
+            }
+            else {
+                expectation.fulfill()
             }
         }
         
-        wait(for: [expectation], timeout: TIMEOUT)
+        wait(for: [expectation], timeout: TIMEOUT * 3)
     }
-    
     
     /// Test for get_sent_fio_requests
     func testGetSentRequest(){
