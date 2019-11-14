@@ -10,8 +10,8 @@ import XCTest
 @testable import FIOSDK
 
 private let useDev2 = false
-private let useDev4 = true
-private let useDefaultServer = false //want a custom server, set to true and then set the DEFAULT_SERVER to your ip/url
+private let useDev4 = false
+private let useDefaultServer = true //want a custom server, set to true and then set the DEFAULT_SERVER to your ip/url
 
 private let SERVER_DEV2 = "http://dev2.fio.dev:8889/v1"
 private let MOCK_SERVER_DEV2 = "http://mock.dapix.io/mockd/DEV2/register_fio_name"
@@ -19,8 +19,8 @@ private let MOCK_SERVER_DEV2 = "http://mock.dapix.io/mockd/DEV2/register_fio_nam
 private let SERVER_DEV4 = "http://dev4.fio.dev:8889/v1"
 private let MOCK_SERVER_DEV4 = "http://mock.dapix.io/mockd/DEV4/register_fio_name"
 
-private let DEFAULT_SERVER = "http://dev4.fio.dev:8889/v1"
-private let MOCK_DEFAULT_SERVER = "http://mock.dapix.io/mockd/DEV4/register_fio_name"
+private let DEFAULT_SERVER = "http://dev3.fio.dev:8889/v1"
+private let MOCK_DEFAULT_SERVER = "http://mock.dapix.io/mockd/DEV3/register_fio_name"
 
 class FIOSDKTests: XCTestCase {
     
@@ -94,8 +94,8 @@ class FIOSDKTests: XCTestCase {
             print (self.requesteeFioName)
             let metadata = RequestFundsRequest.MetaData(memo: "", hash: nil, offlineUrl: nil)
             FIOSDK.sharedInstance().requestFunds(payer: "faucet:fio", payee: self.requesteeFioName, payeePublicAddress: FIOSDK.sharedInstance().getPublicKey(), amount: 9, tokenCode: "FIO", metadata: metadata, maxFee: 0) { (response, error) in
-                if error?.kind == .Success {
-                    sleep(60)
+                if error?.kind == .Failure {
+                    sleep(6)
                     
                     self.alternativeSDKConfig()
                     print (FIOSDK.sharedInstance().getPublicKey())
@@ -105,14 +105,22 @@ class FIOSDKTests: XCTestCase {
                         print(self.requestorFioName)
                         
                         FIOSDK.sharedInstance().requestFunds(payer: "faucet:fio", payee: self.requestorFioName, payeePublicAddress: FIOSDK.sharedInstance().getPublicKey(), amount: 9, tokenCode: "FIO", metadata: metadata, maxFee: 0) { (response, error) in
-                            if error?.kind == .Success {
-                                sleep(60)
+                            if error?.kind == .Failure {
+                                sleep(6)
                                 
                                 self.defaultSDKConfig()
                                 expectation.fulfill()
                             }
+                            else {
+                                print ("failed to request funds - second user")
+                                expectation.fulfill()
+                            }
                         }
                     })
+                }
+                else {
+                    print ("failed to request funds - first user")
+                    expectation.fulfill()
                 }
             }
         })
@@ -706,7 +714,7 @@ class FIOSDKTests: XCTestCase {
         
         FIOSDK.sharedInstance().registerFioDomain(domain, maxFee: 30.0, onCompletion: { (response, error) in
             if error?.kind == .Success {
-                sleep(60)
+                sleep(10)
                 FIOSDK.sharedInstance().renewFioDomain(domain, maxFee: 30.0, walletFioAddress: walletFioAddress, onCompletion: { (response, error) in
                     XCTAssert((error?.kind == FIOError.ErrorKind.Success), "renewFIODomain NOT SUCCESSFUL")
                     XCTAssertNotNil(response)
@@ -720,7 +728,7 @@ class FIOSDKTests: XCTestCase {
             }
         })
         
-        wait(for: [expectation], timeout: TIMEOUT * 1.5)
+        wait(for: [expectation], timeout: TIMEOUT * 2)
     }
     
     func testRenewFIODomainWithInvalidValueShouldNotRenew() {

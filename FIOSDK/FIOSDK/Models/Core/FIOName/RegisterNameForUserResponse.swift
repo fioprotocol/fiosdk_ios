@@ -11,7 +11,7 @@ import Foundation
 public struct RegisterNameForUserResponse: Codable {
     
     public let status: String
-    public let expiration: Date
+    public let expiration: String
     
     enum CodingKeys: String, CodingKey {
         case status
