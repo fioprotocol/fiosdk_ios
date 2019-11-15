@@ -16,10 +16,6 @@ extension FIOSDK.Params {
         case registerFIOAddress = "register_fio_address"
         case transferTokensPubKey = "transfer_tokens_pub_key"
         case transferTokensFIOAddress = "transfer_tokens_fio_address"
-        case addPubAddress = "add_pub_address"
-        case newFundsRequest = "new_funds_request"
-        case rejectFundsRequest = "reject_funds_request"
-        case recordSend = "record_send"
         
     }
 
