@@ -97,6 +97,16 @@ class abiSerializer {
         return try serialize(contract: nil, name: "error_message", type: "abi_def", json: json, abi: abiJson)
     }
     
+    /// Convert JSON ABI data representation to ABIEOS binary of data.
+    ///
+    /// - Parameter json: The JSON data String to serialize.
+    /// - Returns: A String of binary data.
+    /// - Throws: If the data cannot be serialized for any reason.
+    public func serializeContent(contentType: FIOAbiContentType, json: String) throws -> String {
+        let abiJson = try getAbiJsonFile(fileName: "fio.abi.json")
+        return try serialize(contract: nil, name: "", type: contentType.rawValue, json: json, abi: abiJson)
+    }
+    
     /// Calls ABIEOS to carry out JSON to binary conversion using ABIs.
     ///
     /// - Parameters:
@@ -107,6 +117,8 @@ class abiSerializer {
     ///   - abi: A String representation of the ABI to use for conversion.
     /// - Returns: A String of binary serialized data.
     /// - Throws: If the data cannot be serialized for any reason.
+    //shawn notes
+    #warning("I could pass in the raw abi for this here")
     public func serialize(contract: String?, name: String = "", type: String? = nil, json: String, abi: String) throws -> String {
         
         refreshContext()
@@ -156,6 +168,17 @@ class abiSerializer {
     public func deserializeAbi(hex: String) throws -> String {
         let abiJson = try getAbiJsonFile(fileName: "abi.abi.json")
         return try deserialize(contract: nil, name: "", type: "abi_def", hex: hex, abi: abiJson)
+    }
+    
+    
+    /// Converts a binary string of ABIEOS data to JSON string data.
+    ///
+    /// - Parameter hex: The binary data String to deserialize.
+    /// - Returns: A String of JSON data.
+    /// - Throws: If the data cannot be deserialized for any reason.
+    public func deserializeContent(contentType: FIOAbiContentType, hexString: String) throws -> String {
+        let abiJson = try getAbiJsonFile(fileName: "fio.abi.json")
+        return try deserialize(contract: nil, name: "", type: contentType.rawValue, hex: hexString, abi: abiJson)
     }
     
     /// Calls ABIEOS to carry out binary to JSON conversion using ABIs.

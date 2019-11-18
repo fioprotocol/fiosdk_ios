@@ -372,13 +372,18 @@ public class FIOSDK: BaseFIOSDK {
     /// - Parameters:
     ///   - fioPublicKey: FIO public key to get pending requests for. (requestee)
     ///   - completion: Completion hanlder
-    public func getPendingFioRequests(fioPublicKey: String, completion: @escaping (_ pendingRequests: FIOSDK.Responses.PendingFIORequestsResponse?, _ error:FIOError?) -> ()) {
-        let body = PendingFIORequestsRequest(fioPublicKey: fioPublicKey)
+    
+    public func getPendingFioRequests(limit:Int?=nil, offset:Int?=0, completion: @escaping (_ pendingRequests: FIOSDK.Responses.PendingFIORequestsResponse?, _ error:FIOError) -> ()) {
+        let body = PendingFIORequestsRequest(fioPublicKey: self.publicKey, limit: limit, offset: offset ?? 0)
         let url = ChainRouteBuilder.build(route: ChainRoutes.getPendingFIORequests)
         FIOHTTPHelper.postRequestTo(url, withBody: body) { (data, error) in
             if let data = data {
                 do {
-                    let result = try JSONDecoder().decode(FIOSDK.Responses.PendingFIORequestsResponse.self, from: data)
+                    var result = try JSONDecoder().decode(FIOSDK.Responses.PendingFIORequestsResponse.self, from: data)
+                    
+                    // filter the dead records
+                    result.requests = result.requests.filter { $0.fioRequestId >= 0 }
+                    
                     completion(result, FIOError.success())
                 }
                 catch {
@@ -512,6 +517,46 @@ public class FIOSDK: BaseFIOSDK {
         }
     }
     
+    internal func encrypt(publicKey: String, contentType: FIOAbiContentType, contentJson: String) -> String{
+        guard let privateKey = try! PrivateKey(keyString: self.privateKey) else {
+            return ""
+        }
+        
+        let sharedSecret = privateKey.getSharedSecret(publicKey: publicKey)
+               
+        let serializer = abiSerializer()
+        let packed = try? serializer.serializeContent(contentType: contentType, json: contentJson)
+
+        guard let encrypted = Cryptography().encrypt(secret: sharedSecret ?? "", message: packed ?? "", iv: nil) else {
+           return ""
+        }
+               
+        return encrypted.hexEncodedString().uppercased()
+    }
+    
+    internal func decrypt(publicKey: String, contentType: FIOAbiContentType, encryptedContent: String) -> String{
+        guard let myKey = try! PrivateKey(keyString: self.privateKey) else {
+           return ""
+        }
+        let sharedSecret = myKey.getSharedSecret(publicKey: publicKey)
+
+        var possibleDecrypted: Data?
+        do {
+            possibleDecrypted = try Cryptography().decrypt(secret: sharedSecret!, message: encryptedContent.toHexData())
+        }
+        catch {
+            return ""
+        }
+        guard let decrypted = possibleDecrypted  else {
+            return ""
+        }
+
+        let serializer = abiSerializer()
+        let contentJSON = try? serializer.deserializeContent(contentType: contentType, hexString: decrypted.hexEncodedString().uppercased() ?? "")
+
+        return contentJSON ?? ""
+    }
+    
     //MARK: - Request Funds
     
     /// Creates a new funds request.
@@ -527,23 +572,37 @@ public class FIOSDK: BaseFIOSDK {
     ///   - metadata: Contains the: memo or hash or offlineUrl (they are mutually excludent, fill only one)
     ///   - maxFee: Maximum amount of SUFs the user is willing to pay for fee. Should be preceded by /get_fee for correct value.
     ///   - completion: The completion handler containing the result
-    public func requestFunds(payer payerFIOAddress:String, payee payeeFIOAddress: String, payeePublicAddress: String, amount: Float, tokenCode: String, metadata: RequestFundsRequest.MetaData, maxFee: Double, completion: @escaping ( _ response: RequestFundsResponse?, _ error:FIOError? ) -> ()) {
-        let actor = AccountNameGenerator.run(withPublicKey: getSystemPublicKey())
-        let data = RequestFundsRequest(payerFIOAddress: payerFIOAddress, payeeFIOAddress: payeeFIOAddress, content:"", amount: String(amount), tokenCode: tokenCode, actor: actor, maxFee: SUFUtils.amountToSUF(amount: maxFee), tpid:"")
-        
-        signedPostRequestTo(privateKey: getPrivateKey(),
-                            route: ChainRoutes.newFundsRequest,
-                            forAction: ChainActions.newFundsRequest,
-                            withBody: data,
-                            code: "fio.reqobt",
-                            account: actor) { (result, error) in
-                                guard let result = result else {
-                                    completion(nil, error)
-                                    return
-                                }
-                                let handledData: (response: RequestFundsResponse?, error: FIOError) = parseResponseFromTransactionResult(txResult: result)
-                                completion(handledData.response, handledData.error)
+    public func requestFunds(payer payerFIOAddress:String, payee payeeFIOAddress: String, payeePublicAddress: String, amount: Float, tokenCode: String, metadata: RequestFundsRequest.MetaData, maxFee: Int, walletFioAddress:String = "", completion: @escaping ( _ response: RequestFundsResponse?, _ error:FIOError? ) -> ()) {
+       
+        self.getPublicAddress(fioAddress: payerFIOAddress, tokenCode: "FIO") { (response, error) in
+            if (error.kind == FIOError.ErrorKind.Success) {
+                
+                let contentJson = RequestFundsContent(payeePublicAddress: payeePublicAddress, amount: String(amount), tokenCode: tokenCode, memo:metadata.memo ?? "", hash: metadata.hash ?? "", offlineUrl: metadata.offlineUrl ?? "")
+                
+                let encryptedContent = self.encrypt(publicKey: response?.publicAddress ?? "", contentType: FIOAbiContentType.newFundsContent, contentJson: contentJson.toJSONString())
+                
+                let actor = AccountNameGenerator.run(withPublicKey: self.getSystemPublicKey())
+                let data = RequestFundsRequest(payerFIOAddress: payerFIOAddress, payeeFIOAddress: payeeFIOAddress, content:encryptedContent, maxFee: maxFee, tpid: walletFioAddress, actor: actor)
+                
+                signedPostRequestTo(privateKey: self.getPrivateKey(),
+                                           route: ChainRoutes.newFundsRequest,
+                                           forAction: ChainActions.newFundsRequest,
+                                           withBody: data,
+                                           code: "fio.reqobt",
+                                           account: actor) { (result, error) in
+                                               guard let result = result else {
+                                                   completion(nil, error)
+                                                   return
+                                               }
+                                               let handledData: (response: RequestFundsResponse?, error: FIOError) = parseResponseFromTransactionResult(txResult: result)
+                                               completion(handledData.response, handledData.error)
+                       }
+            }
+            else {
+                completion(nil, FIOError.init(kind: .Failure, localizedDescription: "Payer FIO Public Address not found"))
+            }
         }
+
     }
     
     //MARK: - Reject Funds
@@ -588,13 +647,17 @@ public class FIOSDK: BaseFIOSDK {
     /// - Parameters:
     ///   - fioPublicKey: FIO public key to retrieve sent requests.
     ///   - completion: The completion result
-    public func getSentFioRequests(fioPublicKey: String, completion: @escaping (_ response: FIOSDK.Responses.SentFIORequestsResponse?, _ error: FIOError) -> ()){
-        let body = SentFIORequestsRequest(fioPublicKey: fioPublicKey)
+    public func getSentFioRequests(limit:Int?=nil, offset:Int?=0, completion: @escaping (_ response: FIOSDK.Responses.SentFIORequestsResponse?, _ error: FIOError) -> ()){
+        let body = SentFIORequestsRequest(fioPublicKey: self.publicKey, limit: limit, offset: offset ?? 0)
         let url = ChainRouteBuilder.build(route: ChainRoutes.getSentFIORequests)
         FIOHTTPHelper.postRequestTo(url, withBody: body) { (data, error) in
             if let data = data {
                 do {
-                    let result = try JSONDecoder().decode(FIOSDK.Responses.SentFIORequestsResponse.self, from: data)
+                    var result = try JSONDecoder().decode(FIOSDK.Responses.SentFIORequestsResponse.self, from: data)
+                    
+                    // filter the dead records
+                    result.requests = result.requests.filter { $0.fioRequestId >= 0 }
+                    
                     completion(result, FIOError.success())
                 }
                 catch {
@@ -605,7 +668,7 @@ public class FIOSDK: BaseFIOSDK {
                     completion(nil, error)
                 }
                 else {
-                    completion(nil, FIOError.failure(localizedDescription: ChainRoutes.getPendingFIORequests.rawValue + " request failed."))
+                    completion(nil, FIOError.failure(localizedDescription: ChainRoutes.getSentFIORequests.rawValue + " request failed."))
                 }
             }
         }
@@ -695,6 +758,7 @@ public class FIOSDK: BaseFIOSDK {
     //MARK: FIO Public Address
     /// Call this to get the FIO pub address.
     /// - Return: the FIO public address String value.
+    #warning("this needs to be removed OR changed... invalid now")
     public func getFIOPublicAddress() -> String {
         return AccountNameGenerator.run(withPublicKey: getSystemPublicKey())
     }

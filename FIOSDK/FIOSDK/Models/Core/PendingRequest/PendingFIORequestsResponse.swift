@@ -2,105 +2,137 @@
 //  PendingFIORequestsResponse.swift
 //  FIOSDK
 //
-//  Created by Vitor Navarro on 2019-04-04.
+//  Created by Vitor Navarro on 2019-04-03.
+//  Modified by Shawn Arney on 2019-11-04. Adding encryption/decryption
 //  Copyright © 2019 Dapix, Inc. All rights reserved.
 //
 
 import Foundation
 
 extension FIOSDK.Responses {
-
-    /// getPendingFioRequest DTO response
+    
     public struct PendingFIORequestsResponse: Codable {
         
-        public let requests: [PendingFIORequestResponse]
+        public var requests: [PendingFIORequestResponse]
+        public let more: Int
         
-        enum CodingKeys: String, CodingKey{
+        enum CodingKeys: String, CodingKey {
             case requests
+            case more
         }
         
-        /// PendingFioRequestsResponse.request DTO
         public struct PendingFIORequestResponse: Codable {
             
-            public var fundsRequestId: String {
-                return String(fioreqid)
-            }
-            private let fioreqid: Int
+            public let fioRequestId: Int
             public let payerFIOAddress: String
             public let payeeFIOAddress: String
-            public let payeePublicAddress: String
-            public let amount: String
-            public let tokenCode: String
-            public let metadata: MetaData
-            public let timeStamp: TimeInterval
+            public let payerFIOPublicKey: String
+            public let payeeFIOPublicKey: String
+            public let content:MetaData
+            public let timeStamp: Date
+            public let status: String
             
             enum CodingKeys: String, CodingKey {
-                case fioreqid = "fio_request_id"
+                case fioRequestId = "fio_request_id"
                 case payerFIOAddress = "payer_fio_address"
                 case payeeFIOAddress = "payee_fio_address"
-                case payeePublicAddress = "payee_public_address"
-                case amount
-                case tokenCode = "token_code"
-                case metadata
+                case payerFIOPublicKey = "payer_fio_public_key"
+                case payeeFIOPublicKey = "payee_fio_public_key"
                 case timeStamp = "time_stamp"
+                case status
+                case content
             }
             
             public struct MetaData: Codable {
-                
+                public let payeePublicAddress: String
+                public let amount: String
+                public let tokenCode: String
                 public let memo: String
+                public let hash: String
+                public let offlineUrl: String
                 
+                enum CodingKeys: String, CodingKey {
+                    case payeePublicAddress = "payee_public_address"
+                    case amount
+                    case tokenCode = "token_code"
+                    case memo
+                    case hash
+                    case offlineUrl = "offline_url"
+               }
             }
             
-            init(fioreqid: Int,
+            init(fioRequestId: Int,
                  payerFIOAddress: String,
                  payeeFIOAddress: String,
-                 payeePublicAddress: String,
-                 amount: String,
-                 tokenCode: String,
-                 metadata: MetaData,
-                 timeStamp: TimeInterval) {
-                self.fioreqid = fioreqid
+                 payerFIOPublicKey: String,
+                 payeeFIOPublicKey: String,
+                 timeStamp: Date,
+                 status: String,
+                 content:MetaData) {
+                self.fioRequestId = fioRequestId
                 self.payerFIOAddress = payerFIOAddress
                 self.payeeFIOAddress = payeeFIOAddress
-                self.payeePublicAddress = payeePublicAddress
-                self.amount = amount
-                self.tokenCode = tokenCode
-                self.metadata = metadata
+                self.payerFIOPublicKey = payerFIOPublicKey
+                self.payeeFIOPublicKey = payeeFIOPublicKey
                 self.timeStamp = timeStamp
+                self.status = status
+                self.content = content
             }
             
             public init(from decoder: Decoder) throws {
-                let container = try decoder.container(keyedBy: CodingKeys.self)
                 
-                let fioreqid = try container.decodeIfPresent(Int.self, forKey: .fioreqid) ?? 0
+                let container = try decoder.container(keyedBy: CodingKeys.self)
+
                 let payerFIOAddress = try container.decodeIfPresent(String.self, forKey: .payerFIOAddress) ?? ""
                 let payeeFIOAddress = try container.decodeIfPresent(String.self, forKey: .payeeFIOAddress) ?? ""
-                let payeePublicAddress = try container.decodeIfPresent(String.self, forKey: .payeePublicAddress) ?? ""
-                let amount = try container.decodeIfPresent(String.self, forKey: .amount) ?? ""
-                let tokenCode = try container.decodeIfPresent(String.self, forKey: .tokenCode) ?? ""
-                let timeStampValue = try container.decodeIfPresent(Double.self, forKey: .timeStamp)
-                var timeStamp: TimeInterval = Date().timeIntervalSince1970
-                if let timeStampDouble = timeStampValue {
-                    timeStamp = TimeInterval(timeStampDouble)
-                }
-                var metadata = PendingFIORequestResponse.MetaData(memo: "")
-                let metadataString = try container.decodeIfPresent(String.self, forKey: .metadata)?.replacingOccurrences(of: "[object Object]", with: "")
+                let payerFIOPublicKey = try container.decodeIfPresent(String.self, forKey: .payerFIOPublicKey) ?? ""
+                let payeeFIOPublicKey = try container.decodeIfPresent(String.self, forKey: .payeeFIOPublicKey) ?? ""
+                let fioreqid = try container.decodeIfPresent(Int.self, forKey: .fioRequestId) ?? -1
+                let content = try container.decodeIfPresent(String.self, forKey: .content) ?? ""
                 
-                if (metadataString != nil && metadataString!.count > 3){
-                    if let metadataData = metadataString?.data(using: .utf8) {
+                let timeStampString = try (container.decodeIfPresent(String.self, forKey: .timeStamp) ?? "1970-01-01T12:00:00")
+                                            .replacingOccurrences(of: "Z", with: "") + "Z"
+
+                let formatter = ISO8601DateFormatter()
+                let timeStamp = formatter.date(from: timeStampString)
+                
+                let status = try container.decodeIfPresent(String.self, forKey: .status) ?? ""
+                
+                let metadataString = FIOSDK.sharedInstance().decrypt(publicKey: payeeFIOPublicKey, contentType: FIOAbiContentType.newFundsContent, encryptedContent: content)
+                
+                var deadRecord = false
+                var metadata = PendingFIORequestResponse.MetaData(payeePublicAddress: "", amount: "", tokenCode: "", memo: "", hash: "", offlineUrl: "")
+                if let metadataData = metadataString.data(using: .utf8) {
+                    do {
                         metadata = try JSONDecoder().decode(PendingFIORequestResponse.MetaData.self, from: metadataData)
                     }
+                    catch {
+                         deadRecord = true
+                    }
+                }
+                
+                if (deadRecord){
+                    self.init(fioRequestId: -1,
+                        payerFIOAddress: "",
+                        payeeFIOAddress: "",
+                        payerFIOPublicKey: "",
+                        payeeFIOPublicKey: "",
+                        timeStamp: Date(timeIntervalSince1970: 1),
+                        status: "",
+                        content: metadata)
+                    
+                }
+                else {
+                    self.init(fioRequestId: fioreqid,
+                        payerFIOAddress: payerFIOAddress,
+                        payeeFIOAddress: payeeFIOAddress,
+                        payerFIOPublicKey: payerFIOPublicKey,
+                        payeeFIOPublicKey: payeeFIOPublicKey,
+                        timeStamp: timeStamp ?? Date(timeIntervalSince1970: 1),
+                        status: status,
+                        content: metadata)
                 }
 
-                
-                self.init(fioreqid: fioreqid,
-                          payerFIOAddress: payerFIOAddress,
-                          payeeFIOAddress: payeeFIOAddress,
-                          payeePublicAddress: payeePublicAddress,
-                          amount: amount,
-                          tokenCode: tokenCode,
-                          metadata: metadata,
-                          timeStamp: timeStamp)
             }
             
         }
