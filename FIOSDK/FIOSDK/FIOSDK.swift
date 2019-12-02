@@ -101,7 +101,7 @@ public class FIOSDK: BaseFIOSDK {
     //MARK: FIO Name validation
     
     public func isFioNameValid(fioName: String) -> Bool{
-        if fioName.contains(".") {
+        if fioName.contains(":") {
             return isFIOAddressValid(fioName)
         }
         return isFIODomainValid(fioName)

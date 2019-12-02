@@ -28,21 +28,15 @@ public class BaseFIOSDK: NSObject {
             return false
         }
         
-        for namepart in fullNameArr {
-            if (namepart.range(of:"[^A-Za-z0-9]",options: .regularExpression) != nil) {
-                return false
-            }
+        if (address.range(of:"^(?:(?=.{3,64}$)[a-zA-Z0-9]{1}(?:(?!-{2,}))[a-zA-Z0-9-]*(?:(?<!-)):[a-zA-Z0-9]{1}(?:(?!-{2,}))[a-zA-Z0-9-]*(?:(?<!-))$)",options: .regularExpression) != nil) {
+            return true
         }
-        
-        if fullNameArr[0].count < 3 || fullNameArr[0].count > 100 {
-            return false
-        }
-        
-        return true
+
+        return false
     }
     
     internal func isFIODomainValid(_ domain: String) -> Bool {
-        if domain.isEmpty || domain.count > 50 { return false }
+        if domain.isEmpty || domain.count > 62 || domain.count < 1 { return false }
         
         if domain.range(of:"^(\\w)+(-\\w+)*$", options: .regularExpression) == nil {
             return false

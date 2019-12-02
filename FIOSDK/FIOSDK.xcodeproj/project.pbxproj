@@ -84,6 +84,7 @@
 		02A9E6E3230218C500D402DD /* abiSerializer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02A9E6E2230218C500D402DD /* abiSerializer.swift */; };
 		02B1FD7E22BC22EE00671B8C /* GetABIRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02B1FD7D22BC22EE00671B8C /* GetABIRequest.swift */; };
 		02B1FD8022BC22FE00671B8C /* GetABIResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02B1FD7F22BC22FE00671B8C /* GetABIResponse.swift */; };
+		02DB63F72395ACE000382857 /* ValidatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02DB63F62395ACE000382857 /* ValidatorTests.swift */; };
 		2808B91422BA672800FD8607 /* Cryptography.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2808B91322BA672800FD8607 /* Cryptography.swift */; };
 		2808B91722BA838C00FD8607 /* CryptographyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2808B91622BA838C00FD8607 /* CryptographyTests.swift */; };
 		2808B91922BBD14200FD8607 /* FIOHash.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2808B91822BBD14200FD8607 /* FIOHash.swift */; };
@@ -295,6 +296,7 @@
 		02A9E6E2230218C500D402DD /* abiSerializer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = abiSerializer.swift; sourceTree = "<group>"; };
 		02B1FD7D22BC22EE00671B8C /* GetABIRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetABIRequest.swift; sourceTree = "<group>"; };
 		02B1FD7F22BC22FE00671B8C /* GetABIResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetABIResponse.swift; sourceTree = "<group>"; };
+		02DB63F62395ACE000382857 /* ValidatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ValidatorTests.swift; sourceTree = "<group>"; };
 		2808B91322BA672800FD8607 /* Cryptography.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Cryptography.swift; sourceTree = "<group>"; };
 		2808B91622BA838C00FD8607 /* CryptographyTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CryptographyTests.swift; sourceTree = "<group>"; };
 		2808B91822BBD14200FD8607 /* FIOHash.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FIOHash.swift; sourceTree = "<group>"; };
@@ -480,6 +482,7 @@
 				28BED285225BD83400F8606E /* FIODateUtilsTests.swift */,
 				284853B22289C73E00B871E9 /* SUFUtilsTests.swift */,
 				2808B91622BA838C00FD8607 /* CryptographyTests.swift */,
+				02DB63F62395ACE000382857 /* ValidatorTests.swift */,
 			);
 			path = FIOSDKTests;
 			sourceTree = "<group>";
@@ -1344,6 +1347,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				28BB8B662257B60E0049A761 /* FIOKeyManagerTests.swift in Sources */,
+				02DB63F72395ACE000382857 /* ValidatorTests.swift in Sources */,
 				284853B32289C73F00B871E9 /* SUFUtilsTests.swift in Sources */,
 				0203C528217A48100054FA10 /* FIOSDKTests.swift in Sources */,
 				2808B91722BA838C00FD8607 /* CryptographyTests.swift in Sources */,
