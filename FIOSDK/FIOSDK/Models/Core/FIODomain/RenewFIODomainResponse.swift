@@ -13,12 +13,16 @@ extension FIOSDK.Responses {
     public struct RenewFIODomainResponse: Codable {
         
         public let status: String
-        public let expiration: Date
         public let feeCollected: Int
+        private let _expiration: String
+        
+        public var expiration: Date{
+            return _expiration.toLocalDate
+        }
         
         enum CodingKeys: String, CodingKey {
             case status
-            case expiration
+            case _expiration = "expiration"
             case feeCollected = "fee_collected"
         }
         

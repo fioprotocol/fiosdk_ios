@@ -8,21 +8,22 @@
 
 import Foundation
 
-/// Struct to use as DTO for the addpublic address method
-internal struct AddPublicAddress: Codable {
+internal struct AddPublicAddressRequest: Codable {
     
     let fioAddress: String
     let tokenCode: String
     let publicAddress: String
     let actor: String
     let maxFee: Int
+    let walletFioAddress: String
     
     enum CodingKeys: String, CodingKey {
         case fioAddress    = "fio_address"
         case tokenCode     = "token_code"
         case publicAddress = "public_address"
-        case actor
         case maxFee        = "max_fee"
+        case walletFioAddress = "tpid"
+        case actor
     }
     
 }

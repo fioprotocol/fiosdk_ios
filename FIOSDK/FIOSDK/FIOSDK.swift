@@ -129,7 +129,7 @@ public class FIOSDK: BaseFIOSDK {
      * - Parameter maxFee: Maximum amount of SUFs the user is willing to pay for fee. Should be preceded by /get_fee for correct value.
      * - Parameter onCompletion: A callback function that is called when request is finished either with success or failure. Check FIOError.kind to determine if is a success or a failure.
      */
-    public func renewFioAddress(_ fioAddress: String, maxFee: Double, onCompletion: @escaping (_ response: FIOSDK.Responses.RenewFIOAddressResponse? , _ error:FIOError?) -> ()) {
+    public func renewFioAddress(_ fioAddress: String, maxFee: Int, onCompletion: @escaping (_ response: FIOSDK.Responses.RenewFIOAddressResponse? , _ error:FIOError?) -> ()) {
         renewFioAddress(fioAddress, maxFee: maxFee, walletFioAddress: "", onCompletion: onCompletion)
     }
     
@@ -140,18 +140,18 @@ public class FIOSDK: BaseFIOSDK {
      * - Parameter walletFioAddress: FIO Address of the wallet which generates this transaction. 
      * - Parameter onCompletion: A callback function that is called when request is finished either with success or failure. Check FIOError.kind to determine if is a success or a failure.
      */
-    public func renewFioAddress(_ fioAddress: String, maxFee: Double, walletFioAddress: String, onCompletion: @escaping (_ response: FIOSDK.Responses.RenewFIOAddressResponse? , _ error:FIOError?) -> ()) {
+    public func renewFioAddress(_ fioAddress: String, maxFee: Int, walletFioAddress: String, onCompletion: @escaping (_ response: FIOSDK.Responses.RenewFIOAddressResponse? , _ error:FIOError?) -> ()) {
         guard isFIOAddressValid(fioAddress) else {
             onCompletion(nil, FIOError.failure(localizedDescription: "Invalid FIO Address."))
             return
         }
         let actor = AccountNameGenerator.run(withPublicKey: getPublicKey())
-        let domain = RenewFIOAddressRequest(fioAddress: fioAddress, maxFee: SUFUtils.amountToSUF(amount: maxFee), walletFioAddress: walletFioAddress, actor: actor)
+        let domain = RenewFIOAddressRequest(fioAddress: fioAddress, maxFee: maxFee, walletFioAddress: walletFioAddress, actor: actor)
         signedPostRequestTo(privateKey: getPrivateKey(),
                             route: ChainRoutes.renewFIOAddress,
                             forAction: ChainActions.renewFIOAddress,
                             withBody: domain,
-                            code: "fio.system",
+                            code: "fio.address",
                             account: actor) { (data, error) in
                                 if let result = data {
                                     let handledData: (response: FIOSDK.Responses.RenewFIOAddressResponse?, error: FIOError) = parseResponseFromTransactionResult(txResult: result)
@@ -200,18 +200,18 @@ public class FIOSDK: BaseFIOSDK {
      * - Parameter walletFioAddress: FIO Address of the wallet which generates this transaction.
      * - Parameter onCompletion: A callback function that is called when request is finished either with success or failure. Check FIOError.kind to determine if is a success or a failure.
      */
-    public func renewFioDomain(_ fioDomain: String, maxFee: Double, walletFioAddress: String = "", onCompletion: @escaping (_ response: FIOSDK.Responses.RenewFIODomainResponse? , _ error:FIOError?) -> ()) {
+    public func renewFioDomain(_ fioDomain: String, maxFee: Int, walletFioAddress: String = "", onCompletion: @escaping (_ response: FIOSDK.Responses.RenewFIODomainResponse? , _ error:FIOError?) -> ()) {
         guard isFIODomainValid(fioDomain) else {
             onCompletion(nil, FIOError.failure(localizedDescription: "Invalid FIO Domain."))
             return
         }
         let actor = AccountNameGenerator.run(withPublicKey: getPublicKey())
-        let domain = RenewFIODomainRequest(fioDomain: fioDomain, fioPublicKey: FIOSDK.sharedInstance().getPublicKey(), maxFee: SUFUtils.amountToSUF(amount: maxFee),walletFioAddress:walletFioAddress,  actor: actor)
+        let domain = RenewFIODomainRequest(fioDomain: fioDomain, maxFee: maxFee, walletFioAddress:walletFioAddress, actor: actor)
         signedPostRequestTo(privateKey: getPrivateKey(),
                             route: ChainRoutes.renewFIODomain,
                             forAction: ChainActions.renewFIODomain,
                             withBody: domain,
-                            code: "fio.system",
+                            code: "fio.address",
                             account: actor) { (data, error) in
                                 if let result = data {
                                     let handledData: (response: FIOSDK.Responses.RenewFIODomainResponse?, error: FIOError) = parseResponseFromTransactionResult(txResult: result)
@@ -238,18 +238,18 @@ public class FIOSDK: BaseFIOSDK {
      + Set to empty if not known.
      * - Parameter onCompletion: A callback function that is called when request is finished either with success or failure. Check FIOError.kind to determine if is a success or a failure.
      */
-    public func registerFioDomain(_ fioDomain: String, maxFee: Double, walletFioAddress: String = "", onCompletion: @escaping (_ response: FIOSDK.Responses.RegisterFIODomainResponse? , _ error:FIOError?) -> ()) {
+    public func registerFioDomain(_ fioDomain: String, maxFee: Int, walletFioAddress: String = "", onCompletion: @escaping (_ response: FIOSDK.Responses.RegisterFIODomainResponse? , _ error:FIOError?) -> ()) {
         guard isFIODomainValid(fioDomain) else {
             onCompletion(nil, FIOError.failure(localizedDescription: "Invalid FIO Domain."))
             return
         }
         let actor = AccountNameGenerator.run(withPublicKey: getPublicKey())
-        let domain = RegisterFIODomainRequest(fioDomain: fioDomain, fioPublicKey: FIOSDK.sharedInstance().getPublicKey(), maxFee: SUFUtils.amountToSUF(amount: maxFee),walletFioAddress: walletFioAddress, actor: actor)
+        let domain = RegisterFIODomainRequest(fioDomain: fioDomain, fioPublicKey: "", maxFee: maxFee, walletFioAddress: walletFioAddress, actor: actor)
         signedPostRequestTo(privateKey: getPrivateKey(),
                             route: ChainRoutes.registerFIODomain,
                             forAction: ChainActions.registerFIODomain,
                             withBody: domain,
-                            code: "fio.system",
+                            code: "fio.address",
                             account: actor) { (data, error) in
                                 if let result = data {
                                     let handledData: (response: FIOSDK.Responses.RegisterFIODomainResponse?, error: FIOError) = parseResponseFromTransactionResult(txResult: result)
@@ -276,18 +276,18 @@ public class FIOSDK: BaseFIOSDK {
      + Set to empty if not known.
      * - Parameter onCompletion: A callback function that is called when request is finished either with success or failure. Check FIOError.kind to determine if is a success or a failure.
      */
-    public func registerFioAddress(_ fioAddress: String, maxFee: Double, walletFioAddress: String = "", onCompletion: @escaping (_ response: FIOSDK.Responses.RegisterFIOAddressResponse? , _ error:FIOError?) -> ()) {
+    public func registerFioAddress(_ fioAddress: String, maxFee: Int, walletFioAddress: String = "", onCompletion: @escaping (_ response: FIOSDK.Responses.RegisterFIOAddressResponse? , _ error:FIOError?) -> ()) {
         guard isFIOAddressValid(fioAddress) else {
             onCompletion(nil, FIOError.failure(localizedDescription: "Invalid FIO Address."))
             return
         }
         let actor = AccountNameGenerator.run(withPublicKey: getPublicKey())
-        let body = RegisterFIOAddressRequest(fioAddress: fioAddress, fioPublicKey: "", maxFee: SUFUtils.amountToSUF(amount: maxFee), tpid: walletFioAddress, actor: actor)
+        let body = RegisterFIOAddressRequest(fioAddress: fioAddress, fioPublicKey: "", maxFee: maxFee, tpid: walletFioAddress, actor: actor)
         signedPostRequestTo(privateKey: getPrivateKey(),
                             route: ChainRoutes.registerFIOAddress,
                             forAction: ChainActions.registerFIOAddress,
                             withBody: body,
-                            code: "fio.system",
+                            code: "fio.address",
                             account: actor) { (data, error) in
                                 if let result = data {
                                     let handledData: (response: FIOSDK.Responses.RegisterFIOAddressResponse?, error: FIOError) = parseResponseFromTransactionResult(txResult: result)
@@ -305,41 +305,48 @@ public class FIOSDK: BaseFIOSDK {
     
     //MARK: - Add Public Address
     
-    /// Register a public address for a tokenCode under a FIO Address.
-    /// SDK method that calls the addpubaddrs from the fio
-    /// to read further information about the API visit https://stealth.atlassian.net/wiki/spaces/DEV/pages/53280776/API#API-/add_pub_address-Addaddress
-    ///
-    /// - Parameters:
-    ///   - fioAddress: A string name tag in the format of fioaddress.brd.
-    ///   - chain: The token code of a coin, i.e. BTC, EOS, ETH, etc.
-    ///   - publicAddress: A string representing the public address for that FIO Address and coin.
-    ///   - maxFee: Maximum amount of SUFs the user is willing to pay for fee. Should be preceded by /get_fee for correct value.
-    ///   - completion: The completion handler, providing an optional error in case something goes wrong
-    public func addPublicAddress(fioAddress: String, chain: String, publicAddress: String, maxFee: Double, completion: @escaping ( _ error:FIOError?) -> ()) {
+    /** Register a public address for a tokenCode under a FIO Address.
+    * SDK method that calls the addpubaddrs from the fio
+    * to read further information about the API visit https://stealth.atlassian.net/wiki/spaces/DEV/pages/53280776/API#API-/add_pub_address-Addaddress
+    *
+    * - Parameter fioAddress: A string name tag in the format of fioaddress.brd.
+    * - Parameter chain: The token code of a coin, i.e. BTC, EOS, ETH, etc.
+    * - Parameter publicAddress: A string representing the public address for that FIO Address and coin.
+    * - Parameter maxFee: Maximum amount of SUFs the user is willing to pay for fee. Should be preceded by /get_fee for correct value.
+    * - Parameter walletFioAddress:
+    + FIO Address of the wallet which generates this transaction.
+    + This FIO Address will be paid 10% of the fee.
+    + See FIO Protocol#TPIDs for details.
+    + Set to empty if not known.
+    * - Parameter - onCompletion: The completion handler, providing an optional error in case something goes wrong
+    **/
+    public func addPublicAddress(fioAddress: String, tokenCode: String, publicAddress: String, maxFee: Int, walletFioAddress:String = "", onCompletion: @escaping ( _ error:FIOError?) -> ()) {
         guard chain.lowercased() != "fio" else {
-            completion(FIOError(kind: .Failure, localizedDescription: "[FIO SDK] FIO Token pub address should not be added manually."))
+            onCompletion(FIOError(kind: .Failure, localizedDescription: "[FIO SDK] FIO Token pub address should not be added manually."))
             return
         }
         let actor = AccountNameGenerator.run(withPublicKey: getPublicKey())
-        let data = AddPublicAddress(fioAddress: fioAddress, tokenCode: chain, publicAddress: publicAddress, actor: actor, maxFee: SUFUtils.amountToSUF(amount: maxFee))
+        let data = AddPublicAddressRequest(fioAddress: fioAddress, tokenCode: tokenCode, publicAddress: publicAddress, actor: actor, maxFee: maxFee, walletFioAddress: walletFioAddress)
         signedPostRequestTo(privateKey: getPrivateKey(),
                             route: ChainRoutes.addPublicAddress,
                             forAction: ChainActions.addPublicAddress,
                             withBody: data,
-                            code: "fio.system",
+                            code: "fio.address",
                             account: actor) { (data, error) in
                                 if data != nil {
-                                    completion(FIOError.success())
+                                    onCompletion(FIOError.success())
                                 } else {
                                     if let error = error {
-                                        completion(error)
+                                        onCompletion(error)
                                     }
                                     else {
-                                        completion(FIOError.failure(localizedDescription: ChainActions.addPublicAddress.rawValue + " request failed."))
+                                        onCompletion(FIOError.failure(localizedDescription: ChainActions.addPublicAddress.rawValue + " request failed."))
                                     }
                                 }
         }
     }
+    
+    stopp add address... actually needs a response here
     
     //MARK: FIO Name Availability
     
@@ -347,21 +354,21 @@ public class FIOSDK: BaseFIOSDK {
         return (self._abis[accountName] ?? "")
     }
     
-    public func isAvailable(fioAddress:String, completion: @escaping (_ isAvailable: Bool, _ error:FIOError?) -> ()) {
-        let request = AvailCheckRequest(fio_name: fioAddress)
+    public func isAvailable(fioName:String, completion: @escaping (_ isAvailable: Bool, _ error:FIOError?) -> ()) {
+        let request = AvailCheckRequest(fio_name: fioName)
         let url = ChainRouteBuilder.build(route: ChainRoutes.availCheck)
         FIOHTTPHelper.postRequestTo(url,
-                                    withBody: request) { (data, error) in
-                                        guard let data = data, error != nil else {
-                                            completion(false, error ?? FIOError.failure(localizedDescription: "isAvailable failed."))
-                                            return
-                                        }
-                                        do {
-                                            let response = try JSONDecoder().decode(AvailCheckResponse.self, from: data)
-                                            completion(!response.is_registered, FIOError.success())
-                                        }catch let error {
-                                            completion(false, FIOError.failure(localizedDescription: error.localizedDescription))
-                                        }
+            withBody: request) { (data, error) in
+                guard let data = data, error != nil else {
+                    completion(false, error ?? FIOError.failure(localizedDescription: "isAvailable failed."))
+                    return
+                }
+                do {
+                    let response = try JSONDecoder().decode(AvailCheckResponse.self, from: data)
+                    completion(!response.is_registered, FIOError.success())
+                }catch let error {
+                    completion(false, FIOError.failure(localizedDescription: error.localizedDescription))
+                }
         }
     }
     
@@ -469,7 +476,7 @@ public class FIOSDK: BaseFIOSDK {
     ///   - completion: result based on DTO PublicAddressResponse
     public func getPublicAddress(fioAddress: String, tokenCode: String, completion: @escaping (_ publicAddress: FIOSDK.Responses.PublicAddressResponse?, _ error: FIOError) -> ()){
         let body = PublicAddressRequest(fioAddress: fioAddress, tokenCode: tokenCode)
-        let url = ChainRouteBuilder.build(route: ChainRoutes.pubAddressLookup)
+        let url = ChainRouteBuilder.build(route: ChainRoutes.publicAddressLookup)
         FIOHTTPHelper.postRequestTo(url, withBody: body) { (data, error) in
             if let data = data {
                 do {
@@ -484,25 +491,24 @@ public class FIOSDK: BaseFIOSDK {
                     completion(nil, error)
                 }
                 else {
-                    completion(nil, FIOError.failure(localizedDescription: ChainRoutes.pubAddressLookup.rawValue + " request failed."))
+                    completion(nil, FIOError.failure(localizedDescription: ChainRoutes.publicAddressLookup.rawValue + " request failed."))
                 }
             }
         }
     }
     
-    //TODO: THIS SHOULD BE REMOVED ONCE WE DEFINE HOW WE ARE GOING TO PROPERLY STORE/RETRIEVE PUBLIC KEY
-    public func getPublicKey(fioAddress: String, completion: @escaping (_ publicAddress: FIOSDK.Responses.PublicAddressResponse?, _ error: FIOError) -> ()){
-        getPublicAddress(fioAddress: fioAddress, tokenCode: "pubkey", completion: completion)
+    public func getFIOPublicKey(fioAddress: String, completion: @escaping (_ publicAddress: FIOSDK.Responses.PublicAddressResponse?, _ error: FIOError) -> ()){
+        getPublicAddress(fioAddress: fioAddress, tokenCode: "FIO", completion: completion)
     }
     //
     
-    /// Returns a public address for the specified token registered under a FIO public address.
+    /// Returns a public address for the specified token registered under a FIO public key.
     /// - Parameters:
     ///   - forToken: Token code for which public address is to be returned, e.g. "ETH".
-    ///   - withFIOPublicAddress: FIO public Address under which the token was registered.
+    ///   - fioPublicKey: FIO public Key under which the token was registered.
     ///   - onCompletion: A TokenPublicAddressResponse containing FIO address and public address.
-    public func getTokenPublicAddress(forToken token: String, withFIOPublicAddress publicAddress: String, onCompletion: @escaping (_ publicAddress: FIOSDK.Responses.TokenPublicAddressResponse?, _ error: FIOError) -> ()) {
-        FIOSDK.sharedInstance().getFioNames(fioPublicKey: publicAddress) { (response, error) in
+    public func getTokenPublicAddress(forToken token: String, withFIOPublicKey fioPublicKey: String, onCompletion: @escaping (_ publicAddress: FIOSDK.Responses.TokenPublicAddressResponse?, _ error: FIOError) -> ()) {
+        FIOSDK.sharedInstance().getFioNames(fioPublicKey: fioPublicKey) { (response, error) in
             guard error == nil || error?.kind == .Success, let fioAddress = response?.addresses.first?.address else {
                 onCompletion(nil, error ?? FIOError.failure(localizedDescription: "Failed to retrieve token public address."))
                 return

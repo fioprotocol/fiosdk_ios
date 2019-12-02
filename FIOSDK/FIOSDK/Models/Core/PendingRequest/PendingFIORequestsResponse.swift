@@ -93,8 +93,7 @@ extension FIOSDK.Responses {
                 let timeStampString = try (container.decodeIfPresent(String.self, forKey: .timeStamp) ?? "1970-01-01T12:00:00")
                                             .replacingOccurrences(of: "Z", with: "") + "Z"
 
-                let formatter = ISO8601DateFormatter()
-                let timeStamp = formatter.date(from: timeStampString)
+                let timeStamp = timeStampString.toLocalDate
                 
                 let status = try container.decodeIfPresent(String.self, forKey: .status) ?? ""
                 

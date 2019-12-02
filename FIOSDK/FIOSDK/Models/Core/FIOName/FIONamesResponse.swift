@@ -10,7 +10,6 @@ import Foundation
 
 extension FIOSDK.Responses {
 
-    /// DTO to represent the response of /get_fio_names
     public struct FIONamesResponse: Codable {
         
         public let domains: [FIODomainResponse]
@@ -24,28 +23,31 @@ extension FIOSDK.Responses {
         public struct FIODomainResponse: Codable{
             public let domain: String
             private let _expiration: String
-            public let isPublic: Bool
+            private let _isPublic: Int
             
             public var expiration: Date{
-                return Date(timeIntervalSince1970: (Double(_expiration) ?? 0))
+                return _expiration.toLocalDate
+            }
+            
+            public var isPublic: Bool{
+                return (_isPublic == 1 ? true : false)
             }
             
             enum CodingKeys: String, CodingKey{
                 case domain = "fio_domain"
                 case _expiration = "expiration"
-                case isPublic = "is_public"
+                case _isPublic = "is_public"
             }
         }
         
     }
 
-    
     public struct FIOAddressResponse: Codable{
         public let address: String
         private let _expiration: String
-        
+
         public var expiration: Date{
-            return Date(timeIntervalSince1970: (Double(_expiration) ?? 0))
+             return _expiration.toLocalDate
         }
         
         enum CodingKeys: String, CodingKey{

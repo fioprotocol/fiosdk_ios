@@ -171,7 +171,7 @@
 		287F107D22566486001E3B32 /* PendingFIORequestsRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 287F107C22566486001E3B32 /* PendingFIORequestsRequest.swift */; };
 		287F107F2256654B001E3B32 /* AvailCheckResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 287F107E2256654B001E3B32 /* AvailCheckResponse.swift */; };
 		287F10812256658A001E3B32 /* AvailCheckRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 287F10802256658A001E3B32 /* AvailCheckRequest.swift */; };
-		287F108322566813001E3B32 /* AddPublicAddress.swift in Sources */ = {isa = PBXBuildFile; fileRef = 287F108222566813001E3B32 /* AddPublicAddress.swift */; };
+		287F108322566813001E3B32 /* AddPublicAddressRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 287F108222566813001E3B32 /* AddPublicAddressRequest.swift */; };
 		287F1085225673CF001E3B32 /* AddPublicAddressOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 287F1084225673CF001E3B32 /* AddPublicAddressOperation.swift */; };
 		287F1089225676B1001E3B32 /* JSONSerialization.swift in Sources */ = {isa = PBXBuildFile; fileRef = 287F1088225676B1001E3B32 /* JSONSerialization.swift */; };
 		287F108C22567729001E3B32 /* TxResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 287F108B22567729001E3B32 /* TxResult.swift */; };
@@ -383,7 +383,7 @@
 		287F107C22566486001E3B32 /* PendingFIORequestsRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PendingFIORequestsRequest.swift; sourceTree = "<group>"; };
 		287F107E2256654B001E3B32 /* AvailCheckResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AvailCheckResponse.swift; sourceTree = "<group>"; };
 		287F10802256658A001E3B32 /* AvailCheckRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AvailCheckRequest.swift; sourceTree = "<group>"; };
-		287F108222566813001E3B32 /* AddPublicAddress.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddPublicAddress.swift; sourceTree = "<group>"; };
+		287F108222566813001E3B32 /* AddPublicAddressRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddPublicAddressRequest.swift; sourceTree = "<group>"; };
 		287F1084225673CF001E3B32 /* AddPublicAddressOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddPublicAddressOperation.swift; sourceTree = "<group>"; };
 		287F1088225676B1001E3B32 /* JSONSerialization.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSONSerialization.swift; sourceTree = "<group>"; };
 		287F108B22567729001E3B32 /* TxResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TxResult.swift; sourceTree = "<group>"; };
@@ -882,7 +882,7 @@
 			children = (
 				287F107222565902001E3B32 /* PublicAddressResponse.swift */,
 				287F10742256591C001E3B32 /* PublicAddressRequest.swift */,
-				287F108222566813001E3B32 /* AddPublicAddress.swift */,
+				287F108222566813001E3B32 /* AddPublicAddressRequest.swift */,
 				287F1084225673CF001E3B32 /* AddPublicAddressOperation.swift */,
 				2856D26E225CC90800BC5D36 /* TokenPublicAddressResponse.swift */,
 			);
@@ -1244,7 +1244,7 @@
 				285C3C41229C15CC007F3C05 /* FeeEndpoint.swift in Sources */,
 				285C3C382296EE8A007F3C05 /* RegisterFIOAddressRequest.swift in Sources */,
 				2818C6412260BE55001871C8 /* FIOHTTPErrorResponse.swift in Sources */,
-				287F108322566813001E3B32 /* AddPublicAddress.swift in Sources */,
+				287F108322566813001E3B32 /* AddPublicAddressRequest.swift in Sources */,
 				287F10752256591C001E3B32 /* PublicAddressRequest.swift in Sources */,
 				28BB8B6022578F6B0049A761 /* KeychainInteractor.swift in Sources */,
 				2834384E2245439B00E60314 /* hmac.c in Sources */,

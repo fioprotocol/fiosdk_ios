@@ -24,4 +24,11 @@ internal extension String {
         return data
     }
     
+    var toLocalDate: Date {
+        let timeStampString = self.replacingOccurrences(of: "Z", with: "") + "Z"
+
+        let formatter = ISO8601DateFormatter()
+        return formatter.date(from: timeStampString) ?? Date.init(timeIntervalSince1970: 1)
+    }
+    
 }
