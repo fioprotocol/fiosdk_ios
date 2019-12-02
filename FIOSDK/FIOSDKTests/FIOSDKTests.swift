@@ -1145,7 +1145,7 @@ class FIOSDKTests: XCTestCase {
         let expectation = XCTestExpectation(description: "testGetFeeShouldReturnFee")
         
         self.defaultSDKConfig()
-        FIOSDK.sharedInstance().getFee(endPoint: FIOSDK.Params.FeeEndpoint.transferTokensPubKey, onCompletion: { (response, error) in
+        FIOSDK.sharedInstance().getFee(endPoint: FIOSDK.Params.FeeEndpoint.transferTokensUsingPublicKey, onCompletion: { (response, error) in
             XCTAssert((error.kind == FIOError.ErrorKind.Success), "getFee failed: \(error.localizedDescription )")
             guard let fee = response?.fee else {
                 XCTFail("Fee not returned")
@@ -1161,7 +1161,8 @@ class FIOSDKTests: XCTestCase {
     
     func testGetFeeForRegisterFioDomainShouldReturnFee() {
         let expectation = XCTestExpectation(description: "testGetFeeForRegisterFioDomainShouldReturnFee")
-        FIOSDK.sharedInstance().getFeeForRegisterFioDomain(onCompletion: { (response, error) in
+        
+        FIOSDK.sharedInstance().getFee(endPoint: .registerFIODomain, onCompletion: { (response, error) in
             XCTAssert((error.kind == FIOError.ErrorKind.Success), "getFee failed: \(error.localizedDescription )")
             guard let fee = response?.fee else {
                 XCTFail("Fee not returned")
@@ -1177,7 +1178,7 @@ class FIOSDKTests: XCTestCase {
     
     func testGetFeeForRegisterFioAddressShouldReturnFee() {
         let expectation = XCTestExpectation(description: "testGetFeeForRegisterFioAddressShouldReturnFee")
-        FIOSDK.sharedInstance().getFeeForRegisterFioAddress(onCompletion: { (response, error) in
+        FIOSDK.sharedInstance().getFee(endPoint: .registerFIOAddress, onCompletion: { (response, error) in
             XCTAssert((error.kind == FIOError.ErrorKind.Success), "getFee failed: \(error.localizedDescription )")
             guard let fee = response?.fee else {
                 XCTFail("Fee not returned")
@@ -1193,7 +1194,7 @@ class FIOSDKTests: XCTestCase {
     
     func testGetFeeForTransferTokensPubKeyShouldReturnFee() {
         let expectation = XCTestExpectation(description: "testGetFeeForTransferTokensPubKeyShouldReturnFee")
-        FIOSDK.sharedInstance().getFeeForTransferTokensPubKey(onCompletion: { (response, error) in
+        FIOSDK.sharedInstance().getFee(endPoint: .transferTokensUsingPublicKey, onCompletion: { (response, error) in
             XCTAssert((error.kind == FIOError.ErrorKind.Success), "getFee failed: \(error.localizedDescription )")
             guard let fee = response?.fee else {
                 XCTFail("Fee not returned")
@@ -1209,7 +1210,7 @@ class FIOSDKTests: XCTestCase {
     
     func testGetFeeForTransferTokensFioAddressShouldReturnFee() {
         let expectation = XCTestExpectation(description: "testGetFeeForTransferTokensFioAddressShouldReturnFee")
-        FIOSDK.sharedInstance().getFeeForTransferTokensFioAddress(onCompletion: { (response, error) in
+        FIOSDK.sharedInstance().getFee(endPoint: .transferTokensUsingFIOAddress, onCompletion: { (response, error) in
             XCTAssert((error.kind == FIOError.ErrorKind.Success), "getFee failed: \(error.localizedDescription )")
             guard let fee = response?.fee else {
                 XCTFail("Fee not returned")
@@ -1243,7 +1244,7 @@ class FIOSDKTests: XCTestCase {
     func testGetFeeForNewFundsRequestShouldReturnFee() {
         let expectation = XCTestExpectation(description: "testGetFeeForNewFundsRequestShouldReturnFee")
         let walletFioAddress = "test:edge"
-        FIOSDK.sharedInstance().getFeeForNewFundsRequest(fioAddress: walletFioAddress, onCompletion: { (response, error) in
+        FIOSDK.sharedInstance().getFeeForNewFundsRequest(payeePublicAddress: walletFioAddress, onCompletion: { (response, error) in
             XCTAssert((error.kind == FIOError.ErrorKind.Success), "getFee failed: \(error.localizedDescription )")
             guard let fee = response?.fee else {
                 XCTFail("Fee not returned")
@@ -1261,7 +1262,7 @@ class FIOSDKTests: XCTestCase {
     func testGetFeeForRejectFundsRequestShouldReturnFee() {
         let expectation = XCTestExpectation(description: "testGetFeeForRejectFundsRequestShouldReturnFee")
         let walletFioAddress = "test:edge"
-        FIOSDK.sharedInstance().getFeeForRejectFundsRequest(fioAddress: walletFioAddress, onCompletion: { (response, error) in
+        FIOSDK.sharedInstance().getFeeForRejectFundsRequest(payeePublicAddress: walletFioAddress, onCompletion: { (response, error) in
             XCTAssert((error.kind == FIOError.ErrorKind.Success), "getFee failed: \(error.localizedDescription )")
             guard let fee = response?.fee else {
                 XCTFail("Fee not returned")
@@ -1278,7 +1279,7 @@ class FIOSDKTests: XCTestCase {
     func testGetFeeForRecordSendShouldReturnFee() {
         let expectation = XCTestExpectation(description: "testGetFeeForRecordSendShouldReturnFee")
         let walletFioAddress = "test:edge"
-        FIOSDK.sharedInstance().getFeeForRecordSend(fioAddress: walletFioAddress, onCompletion: { (response, error) in
+        FIOSDK.sharedInstance().getFeeForRecordSend(payerFioAddress: walletFioAddress, onCompletion: { (response, error) in
             XCTAssert((error.kind == FIOError.ErrorKind.Success), "getFee failed: \(error.localizedDescription )")
             guard let fee = response?.fee else {
                 XCTFail("Fee not returned")
