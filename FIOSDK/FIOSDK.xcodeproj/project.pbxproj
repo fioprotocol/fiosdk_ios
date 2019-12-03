@@ -85,6 +85,9 @@
 		02B1FD7E22BC22EE00671B8C /* GetABIRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02B1FD7D22BC22EE00671B8C /* GetABIRequest.swift */; };
 		02B1FD8022BC22FE00671B8C /* GetABIResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02B1FD7F22BC22FE00671B8C /* GetABIResponse.swift */; };
 		02DB63F72395ACE000382857 /* ValidatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02DB63F62395ACE000382857 /* ValidatorTests.swift */; };
+		02F62AD72396DADF00B65DC5 /* AddPublicAddressResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02F62AD62396DADF00B65DC5 /* AddPublicAddressResponse.swift */; };
+		02F62AD92396DEA600B65DC5 /* SetFIODomainVisibilityRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02F62AD82396DEA600B65DC5 /* SetFIODomainVisibilityRequest.swift */; };
+		02F62ADB2396DF5400B65DC5 /* SetFIODomainVisibilityResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02F62ADA2396DF5400B65DC5 /* SetFIODomainVisibilityResponse.swift */; };
 		2808B91422BA672800FD8607 /* Cryptography.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2808B91322BA672800FD8607 /* Cryptography.swift */; };
 		2808B91722BA838C00FD8607 /* CryptographyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2808B91622BA838C00FD8607 /* CryptographyTests.swift */; };
 		2808B91922BBD14200FD8607 /* FIOHash.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2808B91822BBD14200FD8607 /* FIOHash.swift */; };
@@ -297,6 +300,9 @@
 		02B1FD7D22BC22EE00671B8C /* GetABIRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetABIRequest.swift; sourceTree = "<group>"; };
 		02B1FD7F22BC22FE00671B8C /* GetABIResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetABIResponse.swift; sourceTree = "<group>"; };
 		02DB63F62395ACE000382857 /* ValidatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ValidatorTests.swift; sourceTree = "<group>"; };
+		02F62AD62396DADF00B65DC5 /* AddPublicAddressResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddPublicAddressResponse.swift; sourceTree = "<group>"; };
+		02F62AD82396DEA600B65DC5 /* SetFIODomainVisibilityRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetFIODomainVisibilityRequest.swift; sourceTree = "<group>"; };
+		02F62ADA2396DF5400B65DC5 /* SetFIODomainVisibilityResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetFIODomainVisibilityResponse.swift; sourceTree = "<group>"; };
 		2808B91322BA672800FD8607 /* Cryptography.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Cryptography.swift; sourceTree = "<group>"; };
 		2808B91622BA838C00FD8607 /* CryptographyTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CryptographyTests.swift; sourceTree = "<group>"; };
 		2808B91822BBD14200FD8607 /* FIOHash.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FIOHash.swift; sourceTree = "<group>"; };
@@ -801,6 +807,8 @@
 				3DDF79D5236367750054BE1E /* RenewFIODomainResponse.swift */,
 				285C3C322296DC3B007F3C05 /* RegisterFIODomainRequest.swift */,
 				285C3C342296DEDD007F3C05 /* RegisterFIODomainResponse.swift */,
+				02F62AD82396DEA600B65DC5 /* SetFIODomainVisibilityRequest.swift */,
+				02F62ADA2396DF5400B65DC5 /* SetFIODomainVisibilityResponse.swift */,
 			);
 			path = FIODomain;
 			sourceTree = "<group>";
@@ -883,6 +891,7 @@
 				287F107222565902001E3B32 /* PublicAddressResponse.swift */,
 				287F10742256591C001E3B32 /* PublicAddressRequest.swift */,
 				287F108222566813001E3B32 /* AddPublicAddressRequest.swift */,
+				02F62AD62396DADF00B65DC5 /* AddPublicAddressResponse.swift */,
 				287F1084225673CF001E3B32 /* AddPublicAddressOperation.swift */,
 				2856D26E225CC90800BC5D36 /* TokenPublicAddressResponse.swift */,
 			);
@@ -1248,6 +1257,8 @@
 				287F10752256591C001E3B32 /* PublicAddressRequest.swift in Sources */,
 				28BB8B6022578F6B0049A761 /* KeychainInteractor.swift in Sources */,
 				2834384E2245439B00E60314 /* hmac.c in Sources */,
+				02F62ADB2396DF5400B65DC5 /* SetFIODomainVisibilityResponse.swift in Sources */,
+				02F62AD92396DEA600B65DC5 /* SetFIODomainVisibilityRequest.swift in Sources */,
 				0203C582217A487A0054FA10 /* PackedTransaction.swift in Sources */,
 				0203C599217A4EC90054FA10 /* Utilities.swift in Sources */,
 				283438482245439B00E60314 /* bip32.c in Sources */,
@@ -1282,6 +1293,7 @@
 				0203C58D217A487A0054FA10 /* PublicKey.swift in Sources */,
 				287F105C22552414001E3B32 /* TransferFIOTokensRequest.swift in Sources */,
 				287F1089225676B1001E3B32 /* JSONSerialization.swift in Sources */,
+				02F62AD72396DADF00B65DC5 /* AddPublicAddressResponse.swift in Sources */,
 				3D1DC6E12350CADA000625E5 /* RenewFIOAddressResponse.swift in Sources */,
 				283438522245439B00E60314 /* ecdsa.c in Sources */,
 				2834382C2245439100E60314 /* platform-specific.inc in Sources */,

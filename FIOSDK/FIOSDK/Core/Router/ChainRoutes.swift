@@ -28,6 +28,7 @@ internal enum ChainRoutes: String {
     case registerFIOAddress       = "/chain/register_fio_address"
     case renewFIODomain           = "/chain/renew_fio_domain"
     case renewFIOAddress          = "/chain/renew_fio_address"
+    case setFIODomainVisibility   = "/chain/set_fio_domain_public"
     case getFee                   = "/chain/get_fee"
     case getABI                   = "/chain/get_raw_abi"
 }

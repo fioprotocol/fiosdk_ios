@@ -266,6 +266,47 @@ public class FIOSDK: BaseFIOSDK {
     }
     
     /**
+     * This function should be called to change the visibility of a domain [visit api](https://stealth.atlassian.net/wiki/spaces/DEV/pages/268009622/API+v0.5#APIv0.5-/set_fio_domain_public-SetFIODomain'spublicflag)
+     * By default all FIO Domains are non-public, meaning only the owner can register FIO Addresses on that domain. Setting them to public allows anyone to register a FIO Address on that domain.
+     * - Parameter fioDomain: The fio domain to set visibility of public or private on
+     * - Parameter isPublic: If set to true, anyone can register fio addresses on the domain.  If set to false, only the owner can
+     * - Parameter maxFee: Maximum amount of SUFs the user is willing to pay for fee. Should be preceded by /get_fee for correct value.
+     * - Parameter walletFioAddress:
+     + FIO Address of the wallet which generates this transaction.
+     + This FIO Address will be paid 10% of the fee.
+     + See FIO Protocol#TPIDs for details.
+     + Set to empty if not known.
+     * - Parameter onCompletion: A callback function that is called when request is finished either with success or failure. Check FIOError.kind to determine if is a success or a failure.
+     */
+    public func setFioDomainVisibility(_ fioDomain: String, isPublic: Bool, maxFee: Int, walletFioAddress: String = "", onCompletion: @escaping (_ response: FIOSDK.Responses.SetFIODomainVisibilityResponse? , _ error:FIOError?) -> ()) {
+        guard isFIODomainValid(fioDomain) else {
+            onCompletion(nil, FIOError.failure(localizedDescription: "Invalid FIO Domain."))
+            return
+        }
+        let actor = AccountNameGenerator.run(withPublicKey: getPublicKey())
+        let body = SetFIODomainVisibilityRequest(fioDomain: fioDomain, isPublic: (isPublic ? 1 : 0), maxFee: maxFee, tpid: walletFioAddress, actor: actor)
+        signedPostRequestTo(privateKey: getPrivateKey(),
+                            route: ChainRoutes.setFIODomainVisibility,
+                            forAction: ChainActions.setFIODomainVisibility,
+                            withBody: body,
+                            code: "fio.address",
+                            account: actor) { (data, error) in
+                                if let result = data {
+                                    let handledData: (response: FIOSDK.Responses.SetFIODomainVisibilityResponse?, error: FIOError) = parseResponseFromTransactionResult(txResult: result)
+                                    onCompletion(handledData.response, handledData.error)
+                                } else {
+                                    if let error = error {
+                                        onCompletion(nil, error)
+                                    }
+                                    else {
+                                        onCompletion(nil, FIOError.failure(localizedDescription: "setFioDomainVisibility request failed."))
+                                    }
+                                }
+        }
+    }
+    
+    
+    /**
      * This function should be called to register a new FIO Address. [visit api](https://stealth.atlassian.net/wiki/spaces/DEV/pages/53280776/API#API-/register_fio_address-RegisterFIOAddress)
      * - Parameter fioAddress: A string to register as FIO Address
      * - Parameter maxFee: Maximum amount of SUFs the user is willing to pay for fee. Should be preceded by /get_fee for correct value.
@@ -310,7 +351,7 @@ public class FIOSDK: BaseFIOSDK {
     * to read further information about the API visit https://stealth.atlassian.net/wiki/spaces/DEV/pages/53280776/API#API-/add_pub_address-Addaddress
     *
     * - Parameter fioAddress: A string name tag in the format of fioaddress.brd.
-    * - Parameter chain: The token code of a coin, i.e. BTC, EOS, ETH, etc.
+    * - Parameter tokenCode: The token code of a coin, i.e. BTC, EOS, ETH, etc.
     * - Parameter publicAddress: A string representing the public address for that FIO Address and coin.
     * - Parameter maxFee: Maximum amount of SUFs the user is willing to pay for fee. Should be preceded by /get_fee for correct value.
     * - Parameter walletFioAddress:
@@ -320,9 +361,9 @@ public class FIOSDK: BaseFIOSDK {
     + Set to empty if not known.
     * - Parameter - onCompletion: The completion handler, providing an optional error in case something goes wrong
     **/
-    public func addPublicAddress(fioAddress: String, tokenCode: String, publicAddress: String, maxFee: Int, walletFioAddress:String = "", onCompletion: @escaping ( _ error:FIOError?) -> ()) {
-        guard chain.lowercased() != "fio" else {
-            onCompletion(FIOError(kind: .Failure, localizedDescription: "[FIO SDK] FIO Token pub address should not be added manually."))
+    public func addPublicAddress(fioAddress: String, tokenCode: String, publicAddress: String, maxFee: Int, walletFioAddress:String = "", onCompletion: @escaping (_ response: FIOSDK.Responses.AddPublicAddressResponse? , _ error:FIOError?) -> ()) {
+        guard tokenCode.lowercased() != "fio" else {
+            onCompletion(nil, FIOError(kind: .Failure, localizedDescription: "[FIO SDK] FIO Token pub address should not be added manually."))
             return
         }
         let actor = AccountNameGenerator.run(withPublicKey: getPublicKey())
@@ -333,20 +374,20 @@ public class FIOSDK: BaseFIOSDK {
                             withBody: data,
                             code: "fio.address",
                             account: actor) { (data, error) in
-                                if data != nil {
-                                    onCompletion(FIOError.success())
+                                if let result = data {
+                                    let handledData: (response: FIOSDK.Responses.AddPublicAddressResponse?, error: FIOError) = parseResponseFromTransactionResult(txResult: result)
+                                    onCompletion(handledData.response, handledData.error)
                                 } else {
                                     if let error = error {
-                                        onCompletion(error)
+                                        onCompletion(nil, error)
                                     }
                                     else {
-                                        onCompletion(FIOError.failure(localizedDescription: ChainActions.addPublicAddress.rawValue + " request failed."))
+                                        onCompletion(nil, FIOError.failure(localizedDescription: "addpublicaddress request failed."))
                                     }
                                 }
         }
     }
     
-    stopp add address... actually needs a response here
     
     //MARK: FIO Name Availability
     
