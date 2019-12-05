@@ -10,18 +10,18 @@ import Foundation
 
 internal struct TransferFIOTokensRequest: Codable {
     
-    let amount: String
-    let actor: String
     let payeePublicKey: String
+    let amount: Int
     let maxFee: Int
     let walletFioAddress: String
+    let actor: String
     
     enum CodingKeys: String, CodingKey {
-        case amount = "amount"
-        case actor = "actor"
         case payeePublicKey = "payee_public_key"
+        case amount = "amount"
         case maxFee = "max_fee"
         case walletFioAddress = "tpid"
+        case actor = "actor"
     }
     
 }

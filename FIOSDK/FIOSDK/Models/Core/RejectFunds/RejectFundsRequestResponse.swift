@@ -13,17 +13,17 @@ extension FIOSDK.Responses {
     public struct RejectFundsRequestResponse: Codable {
         
         public let status: Status
+        public let feeCollected: Int
         
         enum CodingKeys: String, CodingKey {
             case status
+            case feeCollected = "fee_collected"
         }
         
         public enum Status: String, Codable {
             case rejected = "request_rejected", unknown
         }
-        
     }
-    
 }
 
 extension FIOSDK.Responses.RejectFundsRequestResponse.Status {

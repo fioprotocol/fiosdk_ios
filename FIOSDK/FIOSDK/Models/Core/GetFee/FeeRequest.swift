@@ -17,6 +17,4 @@ internal struct FeeRequest: Codable {
         case fioAddress = "fio_address"
         case endPoint = "end_point"
     }
-    
 }
-

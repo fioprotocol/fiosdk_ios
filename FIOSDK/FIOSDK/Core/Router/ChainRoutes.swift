@@ -15,7 +15,7 @@ internal enum ChainRoutes: String {
     case newFundsRequest          = "/chain/new_funds_request"
     case rejectFundsRequest       = "/chain/reject_funds_request"
     case addPublicAddress         = "/chain/add_pub_address"
-    case publicAddressLookup         = "/chain/pub_address_lookup"
+    case publicAddressLookup      = "/chain/pub_address_lookup"
     case getFIONames              = "/chain/get_fio_names"
     case getPendingFIORequests    = "/chain/get_pending_fio_requests"
     case getSentFIORequests       = "/chain/get_sent_fio_requests"

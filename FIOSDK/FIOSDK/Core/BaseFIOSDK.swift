@@ -17,7 +17,7 @@ public class BaseFIOSDK: NSObject {
     internal var systemPublicKey:String = ""
     internal static let keyManager = FIOKeyManager()
     internal let pubAddressTokenFilter: [String: UInt8] = ["fio": 1]
-    internal var _abis: [String: String] = ["fio.system":"", "fio.address":"", "fio.reqobt":"", "fio.token":""]
+    internal var _abis: [String: String] = ["fio.address":"", "fio.reqobt":"", "fio.token":""]
     
     internal override init() {}
     

@@ -10,16 +10,16 @@ import Foundation
 
 internal struct RejectFundsRequest: Codable {
     
-    var fioReqID: String
-    var actor: String
+    let fioRequestId: Int
     let maxFee: Int
     let walletFioAddress: String
+    var actor: String
     
     enum CodingKeys: String, CodingKey {
-        case fioReqID = "fio_request_id"
-        case actor
+        case fioRequestId = "fio_request_id"
         case maxFee = "max_fee"
         case walletFioAddress = "tpid"
+        case actor
     }
     
 }

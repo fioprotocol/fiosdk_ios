@@ -17,7 +17,5 @@ extension FIOSDK.Responses {
         enum CodingKeys: String, CodingKey {
             case fee
         }
-        
     }
-    
 }

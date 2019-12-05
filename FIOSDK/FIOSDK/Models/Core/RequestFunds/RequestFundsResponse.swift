@@ -10,7 +10,7 @@ import Foundation
 
 public struct RequestFundsResponse: Codable {
 
-    #warning("what should fiorequestId be?  A string or Int?")
+    #warning("what should fiorequestId be?  A string or Int? -- seems it is supposed to be an INT - change the spec if required")
     public let fioRequestId: Int
     public let status: String
     public let feeCollected: Int
