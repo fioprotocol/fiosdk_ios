@@ -13,10 +13,10 @@ import Foundation
  **/
 internal class SUFUtils {
     
-    static let SUFUnit = 1000000000.0
+    static let SUFUnit = 1000000000
     
     static func amountToSUF(amount: Double) -> Int {
-        return Int(amount * SUFUnit)
+        return Int(amount * Double(SUFUnit))
     }
     
     static func amountToSUFString(amount: Double) -> String {

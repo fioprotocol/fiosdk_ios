@@ -39,7 +39,7 @@ internal extension String {
     
     func parseWif() throws -> Data? {
         guard let data = decodeChecked(version: 0x80) else {
-            throw NSError(domain: "com.swiftyeos.error", code: 0, userInfo: [NSLocalizedDescriptionKey: "Invalid base58: \(self)"])
+            throw NSError(domain: "com.fiosdk.error", code: 0, userInfo: [NSLocalizedDescriptionKey: "Invalid base58: \(self)"])
         }
         return data
     }
@@ -52,6 +52,7 @@ enum PrivateKeyError: Error {
 
 internal struct PrivateKey {
     
+    private let slipFIO: UInt32 = 235
     static let prefix = "PVT"
     static let delimiter = "_"
     var enclave: SecureEnclave
@@ -64,11 +65,11 @@ internal struct PrivateKey {
         } else {
             let dataParts = keyString.components(separatedBy: PrivateKey.delimiter)
             guard dataParts[0] == PrivateKey.prefix else {
-                throw NSError(domain: "com.swiftyeos.error", code: 0, userInfo: [NSLocalizedDescriptionKey: "Private Key \(keyString) has invalid prefix: \(PrivateKey.delimiter)"])
+                throw NSError(domain: "com.fiosdk.error", code: 0, userInfo: [NSLocalizedDescriptionKey: "Private Key \(keyString) has invalid prefix: \(PrivateKey.delimiter)"])
             }
             
             guard dataParts.count != 2 else {
-                throw NSError(domain: "com.swiftyeos.error", code: 0, userInfo: [NSLocalizedDescriptionKey: "Private Key has data format is not right: \(keyString)"])
+                throw NSError(domain: "com.fiosdk.error", code: 0, userInfo: [NSLocalizedDescriptionKey: "Private Key has data format is not right: \(keyString)"])
             }
             
             enclave = SecureEnclave(rawValue: dataParts[1])!
@@ -87,7 +88,7 @@ internal struct PrivateKey {
         
         let phraseStr = mnemonicString.cString(using: .utf8)
         if mnemonic_check(phraseStr) == 0 {
-            throw NSError(domain: "com.swiftyeos.error", code: 1, userInfo: [NSLocalizedDescriptionKey: "Invalid Mnemonic"])
+            throw NSError(domain: "com.fiosdk.error", code: 1, userInfo: [NSLocalizedDescriptionKey: "Invalid Mnemonic"])
         }
         
         var seed = Data(count: 512/8)
@@ -102,7 +103,7 @@ internal struct PrivateKey {
         }
         
         hdnode_private_ckd(&node, (0x80000000 | (44)));   // 44' - BIP 44 (purpose field)
-        hdnode_private_ckd(&node, (0x80000000 | (194)));  // 194'- EOS (see SLIP 44)
+        hdnode_private_ckd(&node, (0x80000000 | (235)));  // 235'- FIO (see SLIP 44)
         hdnode_private_ckd(&node, (0x80000000 | (0)));    // 0'  - Account 0
         hdnode_private_ckd(&node, 0);                     // 0   - External
         hdnode_private_ckd(&node, 0);                     // 0   - Slot #0
@@ -182,8 +183,6 @@ internal struct PrivateKey {
             print("Problem generating shared secret")
             return nil
         }
-        
-        return ""
     }
     
 }

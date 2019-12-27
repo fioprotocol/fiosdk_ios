@@ -10,11 +10,8 @@ import Foundation
 
 public class BaseFIOSDK: NSObject {
     
-    internal var accountName:String = ""
     internal var privateKey:String = ""
     internal var publicKey:String = ""
-    internal var systemPrivateKey:String = ""
-    internal var systemPublicKey:String = ""
     internal static let keyManager = FIOKeyManager()
     internal let pubAddressTokenFilter: [String: UInt8] = ["fio": 1]
     internal var _abis: [String: String] = ["fio.address":"", "fio.reqobt":"", "fio.token":""]
@@ -45,23 +42,10 @@ public class BaseFIOSDK: NSObject {
         return true
     }
     
-    internal func getAccountName() -> String{
-        return self.accountName
-    }
-    
-    
     internal func getPrivateKey() -> String {
         return self.privateKey
     }
-    
-    internal func getSystemPrivateKey() -> String {
-        return self.systemPrivateKey
-    }
-    
-    internal func getSystemPublicKey() -> String {
-        return self.systemPublicKey
-    }
-    
+
     internal func getURI() -> String {
         return Utilities.sharedInstance().URL
     }

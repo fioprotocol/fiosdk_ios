@@ -8,8 +8,6 @@
 
 import Foundation
 
-private let slipFIO: UInt32 = 235
-
 /**
  * Manages FIO's public and private keys. Private keys follow HD BIP44 specs.
  */
@@ -64,7 +62,7 @@ internal class FIOKeyManager {
     /// - Return: A tuple containing both private and public keys.
     private func generatePrivatePubKeyPair(forMnemonic mnemonic: String) -> (privateKey: String, publicKey: String) {
         do {
-            let privKey = try PrivateKey(enclave: .Secp256k1, mnemonicString: mnemonic, slip: slipFIO)
+            let privKey = try PrivateKey(enclave: .Secp256k1, mnemonicString: mnemonic)
             guard let pk = privKey else { return ("", "") }
             return (pk.rawPrivateKey(), PublicKey(privateKey: pk).rawPublicKey())
         }

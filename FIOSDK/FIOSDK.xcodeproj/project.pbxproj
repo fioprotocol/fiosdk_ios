@@ -137,7 +137,6 @@
 		283438532245439B00E60314 /* bignum.c in Sources */ = {isa = PBXBuildFile; fileRef = 283438452245439B00E60314 /* bignum.c */; };
 		283438542245439B00E60314 /* sha3.c in Sources */ = {isa = PBXBuildFile; fileRef = 283438462245439B00E60314 /* sha3.c */; };
 		283438552245439B00E60314 /* curves.c in Sources */ = {isa = PBXBuildFile; fileRef = 283438472245439B00E60314 /* curves.c */; };
-		283438572245733800E60314 /* PrivateKey+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 283438562245733800E60314 /* PrivateKey+Extensions.swift */; };
 		284853AC2281AEE600B871E9 /* RegisterNameForUserRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 284853AA2281AEE600B871E9 /* RegisterNameForUserRequest.swift */; };
 		284853AD2281AEE600B871E9 /* RegisterNameForUserResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 284853AB2281AEE600B871E9 /* RegisterNameForUserResponse.swift */; };
 		284853B12289C6B900B871E9 /* SUFUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 284853B02289C6B900B871E9 /* SUFUtils.swift */; };
@@ -353,7 +352,6 @@
 		283438452245439B00E60314 /* bignum.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = bignum.c; sourceTree = "<group>"; };
 		283438462245439B00E60314 /* sha3.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = sha3.c; sourceTree = "<group>"; };
 		283438472245439B00E60314 /* curves.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = curves.c; sourceTree = "<group>"; };
-		283438562245733800E60314 /* PrivateKey+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PrivateKey+Extensions.swift"; sourceTree = "<group>"; };
 		284853AA2281AEE600B871E9 /* RegisterNameForUserRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RegisterNameForUserRequest.swift; sourceTree = "<group>"; };
 		284853AB2281AEE600B871E9 /* RegisterNameForUserResponse.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RegisterNameForUserResponse.swift; sourceTree = "<group>"; };
 		284853B02289C6B900B871E9 /* SUFUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SUFUtils.swift; sourceTree = "<group>"; };
@@ -964,7 +962,6 @@
 			isa = PBXGroup;
 			children = (
 				28BB8B612257909E0049A761 /* FIOKeyManager.swift */,
-				283438562245733800E60314 /* PrivateKey+Extensions.swift */,
 				0203C566217A487A0054FA10 /* PublicKey.swift */,
 				0203C567217A487A0054FA10 /* PrivateKey.swift */,
 			);
@@ -1272,7 +1269,6 @@
 				028DBA032356609100D4C70E /* FIOAbiContentType.swift in Sources */,
 				287F1071225656D6001E3B32 /* RequestFundsRequest.swift in Sources */,
 				285C3C3F2297256C007F3C05 /* FeeResponse.swift in Sources */,
-				283438572245733800E60314 /* PrivateKey+Extensions.swift in Sources */,
 				2834384C2245439B00E60314 /* pbkdf2.c in Sources */,
 				2808B91422BA672800FD8607 /* Cryptography.swift in Sources */,
 				287F10512253DAA5001E3B32 /* FIOBalanceRequest.swift in Sources */,

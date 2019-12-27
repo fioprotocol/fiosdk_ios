@@ -20,7 +20,7 @@ public class FIOSDK: BaseFIOSDK {
     //MARK: - Initialization
     
     public static func isInitialized() -> Bool {
-        return !_sharedInstance.accountName.isEmpty && !_sharedInstance.privateKey.isEmpty && !_sharedInstance.publicKey.isEmpty && !_sharedInstance.systemPrivateKey.isEmpty && !_sharedInstance.systemPublicKey.isEmpty && !Utilities.sharedInstance().URL.isEmpty
+        return  !_sharedInstance.privateKey.isEmpty && !_sharedInstance.publicKey.isEmpty && !Utilities.sharedInstance().URL.isEmpty
     }
     
     private static var _sharedInstance: FIOSDK = {
@@ -29,16 +29,7 @@ public class FIOSDK: BaseFIOSDK {
         return sharedInstance
     }()
     
-    public class func sharedInstance(accountName: String? = nil, privateKey:String? = nil, publicKey:String? = nil, systemPrivateKey:String?=nil, systemPublicKey:String? = nil, url:String? = nil, mockUrl: String? = nil) -> FIOSDK {        
-        if (accountName == nil ){
-            if (_sharedInstance.accountName.count < 2 ){
-                //throw FIOError(kind:FIOError.ErrorKind.Failure, localizedDescription: "Account name hasn't been set yet, for the SDK Shared Instance, this needs to be passed in with the first usage")
-                fatalError("Account name hasn't been set yet, for the FIOWalletSDK Shared Instance, this needs to be passed in with the first usage")
-            }
-        }
-        else{
-            _sharedInstance.accountName = accountName!
-        }
+    public class func sharedInstance(privateKey:String? = nil, publicKey:String? = nil, url:String? = nil, mockUrl: String? = nil) -> FIOSDK {
         
         if (privateKey == nil){
             if (_sharedInstance.privateKey.count < 2){
@@ -58,24 +49,6 @@ public class FIOSDK: BaseFIOSDK {
             _sharedInstance.publicKey = publicKey!
         }
         
-        if (systemPrivateKey == nil){
-            if (_sharedInstance.systemPrivateKey.count < 2){
-                fatalError("System Private Key hasn't been set yet, for the FIOWalletSDK Shared Instance, this needs to be passed in with the first usage")
-            }
-        }
-        else {
-            _sharedInstance.systemPrivateKey = systemPrivateKey!
-        }
-        
-        if (systemPublicKey == nil){
-            if (_sharedInstance.systemPublicKey.count < 2){
-                fatalError("System Public Key hasn't been set yet, for the FIOWalletSDK Shared Instance, this needs to be passed in with the first usage")
-            }
-        }
-        else {
-            _sharedInstance.systemPublicKey = systemPublicKey!
-        }
-        
         if (url == nil){
             if (Utilities.sharedInstance().URL.count < 2){
                 fatalError("URL hasn't been set yet, for the FIOWalletSDK Shared Instance, this needs to be passed in with the first usage")
@@ -91,7 +64,7 @@ public class FIOSDK: BaseFIOSDK {
         
         // populate the abis
         let abi = _sharedInstance.getCachedABI(accountName: "fio.system")
-        if (abi == nil || abi.count < 2){
+        if (abi.count < 2){
             _sharedInstance.populateABIs()
         }
         
@@ -366,7 +339,7 @@ public class FIOSDK: BaseFIOSDK {
             return
         }
         let actor = AccountNameGenerator.run(withPublicKey: getPublicKey())
-        let data = AddPublicAddressRequest(fioAddress: fioAddress, tokenCode: tokenCode, publicAddress: publicAddress, actor: actor, maxFee: maxFee, walletFioAddress: walletFioAddress)
+        let data = AddPublicAddressRequest(fioAddress: fioAddress, publicAddresses: [PublicAddress(tokenCode: tokenCode, publicAddress: publicAddress)], actor: actor, maxFee: maxFee, walletFioAddress: walletFioAddress)
         signedPostRequestTo(privateKey: getPrivateKey(),
                             route: ChainRoutes.addPublicAddress,
                             forAction: ChainActions.addPublicAddress,
@@ -387,13 +360,48 @@ public class FIOSDK: BaseFIOSDK {
         }
     }
     
+    //MARK: - Add Public Addresses
     
-    //MARK: FIO Name Availability
+    /** Register public addresses and tokenCodes under a FIO Address.
+    * SDK method that calls the addpubaddrs from the fio
+    * to read further information about the API visit https://stealth.atlassian.net/wiki/spaces/DEV/pages/53280776/API#API-/add_pub_address-Addaddress
+    *
+    * - Parameter fioAddress: A string name tag in the format of fioaddress.brd.
+    * - Parameter publicAddresses: An array of PublicAddress (tokenCode and token's public address) for that FIO Address
+    * - Parameter maxFee: Maximum amount of SUFs the user is willing to pay for fee. Should be preceded by /get_fee for correct value.
+    * - Parameter walletFioAddress:
+    + FIO Address of the wallet which generates this transaction.
+    + Set to empty if not known.
+    * - Parameter - onCompletion: The completion handler, providing an optional error in case something goes wrong
+    **/
+    public func addPublicAddresses(fioAddress: String, publicAddresses:[PublicAddress], maxFee: Int, walletFioAddress:String = "", onCompletion: @escaping (_ response: FIOSDK.Responses.AddPublicAddressResponse? , _ error:FIOError?) -> ()) {
+        let actor = AccountNameGenerator.run(withPublicKey: getPublicKey())
+        let data = AddPublicAddressRequest(fioAddress: fioAddress, publicAddresses: publicAddresses, actor: actor, maxFee: maxFee, walletFioAddress: walletFioAddress)
+        signedPostRequestTo(privateKey: getPrivateKey(),
+                            route: ChainRoutes.addPublicAddress,
+                            forAction: ChainActions.addPublicAddress,
+                            withBody: data,
+                            code: "fio.address",
+                            account: actor) { (data, error) in
+                                if let result = data {
+                                    let handledData: (response: FIOSDK.Responses.AddPublicAddressResponse?, error: FIOError) = parseResponseFromTransactionResult(txResult: result)
+                                    onCompletion(handledData.response, handledData.error)
+                                } else {
+                                    if let error = error {
+                                        onCompletion(nil, error)
+                                    }
+                                    else {
+                                        onCompletion(nil, FIOError.failure(localizedDescription: "addpublicaddress request failed."))
+                                    }
+                                }
+        }
+    }
     
     internal func getCachedABI(accountName: String) -> String{
         return (self._abis[accountName] ?? "")
     }
     
+    //MARK: FIO Name Availability
     public func isAvailable(fioName:String, completion: @escaping (_ isAvailable: Bool, _ error:FIOError?) -> ()) {
         let request = AvailCheckRequest(fio_name: fioName)
         let url = ChainRouteBuilder.build(route: ChainRoutes.availCheck)
@@ -405,7 +413,7 @@ public class FIOSDK: BaseFIOSDK {
                 }
                 do {
                     let response = try JSONDecoder().decode(AvailCheckResponse.self, from: data)
-                    completion(!response.is_registered, FIOError.success())
+                    completion(!response.isRegistered, FIOError.success())
                 }catch let error {
                     completion(false, FIOError.failure(localizedDescription: error.localizedDescription))
                 }
@@ -547,13 +555,13 @@ public class FIOSDK: BaseFIOSDK {
     ///   - forToken: Token code for which public address is to be returned, e.g. "ETH".
     ///   - fioPublicKey: FIO public Key under which the token was registered.
     ///   - onCompletion: A TokenPublicAddressResponse containing FIO address and public address.
-    public func getTokenPublicAddress(forToken token: String, withFIOPublicKey fioPublicKey: String, onCompletion: @escaping (_ publicAddress: FIOSDK.Responses.TokenPublicAddressResponse?, _ error: FIOError) -> ()) {
+    public func getPublicAddress(fioPublicKey: String, tokenCode: String, onCompletion: @escaping (_ publicAddress: FIOSDK.Responses.TokenPublicAddressResponse?, _ error: FIOError) -> ()) {
         FIOSDK.sharedInstance().getFioNames(fioPublicKey: fioPublicKey) { (response, error) in
             guard error == nil || error?.kind == .Success, let fioAddress = response?.addresses.first?.address else {
                 onCompletion(nil, error ?? FIOError.failure(localizedDescription: "Failed to retrieve token public address."))
                 return
             }
-            FIOSDK.sharedInstance().getPublicAddress(fioAddress: fioAddress, tokenCode: token) { (response, error) in
+            FIOSDK.sharedInstance().getPublicAddress(fioAddress: fioAddress, tokenCode: tokenCode) { (response, error) in
                 guard error.kind == .Success, let tokenPubAddress = response?.publicAddress else {
                     onCompletion(nil, error)
                     return
@@ -627,7 +635,7 @@ public class FIOSDK: BaseFIOSDK {
                 
                 let encryptedContent = self.encrypt(publicKey: response?.publicAddress ?? "", contentType: FIOAbiContentType.newFundsContent, contentJson: contentJson.toJSONString())
                 
-                let actor = AccountNameGenerator.run(withPublicKey: self.getSystemPublicKey())
+                let actor = AccountNameGenerator.run(withPublicKey: self.getPublicKey())
                 let data = RequestFundsRequest(payerFIOAddress: payerFIOAddress, payeeFIOAddress: payeeFIOAddress, content:encryptedContent, maxFee: maxFee, tpid: walletFioAddress, actor: actor)
                 
                 signedPostRequestTo(privateKey: self.getPrivateKey(),
@@ -664,7 +672,7 @@ public class FIOSDK: BaseFIOSDK {
     ///   - walletFioAddress: FIO Address of the wallet which generates this transaction.
     ///   - completion: The completion handler containing the result or error.
     public func rejectFundsRequest(fioRequestId: Int, maxFee: Int, walletFioAddress: String = "", completion: @escaping(_ response: FIOSDK.Responses.RejectFundsRequestResponse?,_ :FIOError) -> ()){
-        let actor = AccountNameGenerator.run(withPublicKey: getSystemPublicKey())
+        let actor = AccountNameGenerator.run(withPublicKey:getPublicKey())
         let data = RejectFundsRequest(fioRequestId: fioRequestId, maxFee: maxFee, walletFioAddress: walletFioAddress, actor: actor)
         
         signedPostRequestTo(privateKey: getPrivateKey(),
@@ -744,7 +752,7 @@ public class FIOSDK: BaseFIOSDK {
                            payeeTokenPublicAddress: String,
                            amount: Double,
                            tokenCode: String,
-                           obtId: String = "",
+                           obtId: String,
                            maxFee: Int,
                            metaData: RecordSendRequest.MetaData,
                            walletFioAddress: String = "",
@@ -760,7 +768,7 @@ public class FIOSDK: BaseFIOSDK {
         
             let encryptedContent = self.encrypt(publicKey: payeeFIOPublicKey, contentType: FIOAbiContentType.recordSendContent, contentJson: contentJson.toJSONString())
             
-            let actor = AccountNameGenerator.run(withPublicKey: self.getSystemPublicKey())
+            let actor = AccountNameGenerator.run(withPublicKey: self.getPublicKey())
             let request = RecordSendRequest(payerFIOAddress: payerFIOAddress, payeeFIOAddress: payeeFIOAddress, content: encryptedContent, fioRequestId: fioRequestId, maxFee: maxFee, walletFioAddress: walletFioAddress, actor: actor)
             signedPostRequestTo(privateKey: self.getPrivateKey(),
                                 route: ChainRoutes.recordSend,
@@ -828,7 +836,7 @@ public class FIOSDK: BaseFIOSDK {
      * - Parameter onCompletion: A function that is called once request is over with an optional response with results and error containing the status of the call.
      */
     public func transferFIOTokens(payeePublicKey: String, amount: Int, maxFee: Int, walletFioAddress: String = "", onCompletion: @escaping (_ response: FIOSDK.Responses.TransferFIOTokensResponse?, _ error: FIOError) -> ()){
-        let actor = AccountNameGenerator.run(withPublicKey: getSystemPublicKey())
+        let actor = AccountNameGenerator.run(withPublicKey: getPublicKey())
         let transfer = TransferFIOTokensRequest (payeePublicKey: payeePublicKey, amount: amount, maxFee: maxFee, walletFioAddress: walletFioAddress, actor: actor)
         signedPostRequestTo(privateKey: getPrivateKey(),
             route: ChainRoutes.transferTokens,

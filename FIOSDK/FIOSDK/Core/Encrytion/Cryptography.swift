@@ -135,7 +135,7 @@ struct Cryptography {
         guard let ivData = (iv != nil) ? iv! : generateRandomBytes(size: 16) else { return nil }
         guard let cypherIV = try? encryptAES256CBC(data: message.toHexData(), key: encryptionKey.toHexData(), iv: ivData) else { return nil }
         
-        print ("------")
+        print ("--------")
         
         print (cypherIV.hexEncodedString())
         

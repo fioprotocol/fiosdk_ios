@@ -78,20 +78,20 @@ internal struct PublicKey {
         }
         if nonEOSKey.range(of: PublicKey.delimiter) == nil {
             enclave = .Secp256k1
-            data = try nonEOSKey.publicKeyParseWif()!
+            data = nonEOSKey.publicKeyParseWif()!
         } else {
             let dataParts = nonEOSKey.components(separatedBy: PublicKey.delimiter)
             guard dataParts[0] == PublicKey.prefix else {
-                throw NSError(domain: "com.swiftyeos.error", code: 0, userInfo: [NSLocalizedDescriptionKey: "Private Key \(nonEOSKey) has invalid prefix: \(PrivateKey.delimiter)"])
+                throw NSError(domain: "com.fiosdk.error", code: 0, userInfo: [NSLocalizedDescriptionKey: "Private Key \(nonEOSKey) has invalid prefix: \(PrivateKey.delimiter)"])
             }
             
             guard dataParts.count != 2 else {
-                throw NSError(domain: "com.swiftyeos.error", code: 0, userInfo: [NSLocalizedDescriptionKey: "Private Key has data format is not right: \(nonEOSKey)"])
+                throw NSError(domain: "com.fiosdk.error", code: 0, userInfo: [NSLocalizedDescriptionKey: "Private Key has data format is not right: \(nonEOSKey)"])
             }
             
             enclave = SecureEnclave(rawValue: dataParts[1])!
             let dataString = dataParts[2]
-            data = try dataString.publicKeyParseWif()!
+            data = dataString.publicKeyParseWif()!
         }
     }
     
@@ -102,7 +102,7 @@ internal struct PublicKey {
     
     func rawPublicKey() -> String {
         let withoutDelimiter = self.wif().components(separatedBy: "_").last
-        guard withoutDelimiter!.hasPrefix("EOS") else {
+        guard withoutDelimiter!.hasPrefix("FIO") else {
             return "FIO\(withoutDelimiter!)"
         }
         return withoutDelimiter!

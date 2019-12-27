@@ -45,7 +45,6 @@ class CryptographyTests: XCTestCase {
      
      */
     
-    
     func testAbiNewFundsContentEncryption (){
         let alicefioPrivateKey = "5JLxoeRoMDGBbkLdXJjxuh3zHsSS7Lg6Ak9Ft8v8sSdYPkFuABF"
         let bobfioPublicKeyAlternative  = "FIO7uRvrLVrZCbCM2DtCgUMospqUMnP3JUC1sKHA8zNoF835kJBvN"
@@ -203,14 +202,9 @@ class CryptographyTests: XCTestCase {
             return
         }
         let sharedSecret = myKey.getSharedSecret(publicKey: publicKey)
-        
-        
-        // encrypted.data(using: .utf8) ?? "".data(using: .utf8)!
         var possibleDecrypted: Data?
         do {
             possibleDecrypted = try Cryptography().decrypt(secret: sharedSecret!, message: encrypted.toHexData())
-            //possibleDecrypted = try Cryptography().decrypt(secret: sharedSecret!, message:
-           // possibleDecrypted = try Cryptography().decrypt(secret: sharedSecret!, message: encrypted.data(using: .utf8) ?? "".data(using: .utf8)!)
         }
         catch {
            XCTFail("Encryption failed")
@@ -229,31 +223,31 @@ class CryptographyTests: XCTestCase {
      func testEncryptFixedValueForAndroidShawnMsecondone() {
         
         // encrypt with private + publicAlternate
-        let alicePrivateKey = "5JbcPK6qTpYxMXtfpGXagYbo3KFE3qqxv2tLXLMPR8dTWWeYCp9"
+        let alicePrivateKey = "5JLxoeRoMDGBbkLdXJjxuh3zHsSS7Lg6Ak9Ft8v8sSdYPkFuABF"
         let bobPublicKey  = "FIO7uRvrLVrZCbCM2DtCgUMospqUMnP3JUC1sKHA8zNoF835kJBvN"
         
-           let encryptedAnswer = "5E4EB97B11B96E1728FAAE903B17DABB411D25E0E263783F906D58A30F070411A7F271DD3A77619414FBE0276EA57B2C8D8993C14403C8F1395EB3ABC822B12B1E59D1339D5BB32F07C08D8EAC8EE949"
-           guard let myKey = try! PrivateKey(keyString: alicePrivateKey) else {
-               return
-           }
-           let sharedSecret = myKey.getSharedSecret(publicKey: bobPublicKey)
-          //  let sharedSecret = "88F10119B11958F6CA389372AA168330DDDABCE58F4BEE68B9B52381FC662E288E965E451F4F43C2463660C0E7C06529149D6018AB583E9EBF6D97DA9F2DA904"
-           
-           
-           let message = "5468697320697320612074657374206D657373616765"
+        let encryptedAnswer = "5E4EB97B11B96E1728FAAE903B17DABBB36270529F8C7A7DAD4F9E017A49786FAB657F1FA117B83840DF6C5B6518D7097DCFAA22B34013315174AD36FCEEC68E760A2F3E1794FEFC5054667D2D1930AD"
+        guard let myKey = try! PrivateKey(keyString: alicePrivateKey) else {
+           return
+        }
+        let sharedSecret = myKey.getSharedSecret(publicKey: bobPublicKey)
+        //  let sharedSecret = "88F10119B11958F6CA389372AA168330DDDABCE58F4BEE68B9B52381FC662E288E965E451F4F43C2463660C0E7C06529149D6018AB583E9EBF6D97DA9F2DA904"
+
+
+        let message = "5468697320697320612074657374206D657373616765"
         let IV = "5E4EB97B11B96E1728FAAE903B17DABB".toHexData()
         guard let encrypted = Cryptography().encrypt(secret: sharedSecret!, message: message, iv: IV) else {
-              XCTFail("Encryption failed")
-              return
-           }
-              
-           let asciEncrypted = String(data: encrypted, encoding: .ascii)
-           print (String(data: encrypted, encoding: .ascii))
+          XCTFail("Encryption failed")
+          return
+        }
+          
+        let asciEncrypted = String(data: encrypted, encoding: .ascii)
+        print (String(data: encrypted, encoding: .ascii))
           // print (encrypted.hexEncodedString())
         let myEncrypted = encrypted.hexEncodedString().uppercased()
-            print ("***")
-            print (myEncrypted)
-            print ("***")
+        print ("***")
+        print (myEncrypted)
+        print ("***")
         
         XCTAssert(encryptedAnswer == myEncrypted, "Should be the same")
     }
@@ -261,10 +255,10 @@ class CryptographyTests: XCTestCase {
     func testDecryptFixedValueForAndroidShawnMsecondone() {
         
         // decrypt with privateAlternate + public
-        let alicePublicKey = "FIO8LKt4DBzXKzDGjFcZo5x82Nv5ahmbZ8AUNXBv2vMfm6smiHst3"
+        let alicePublicKey = "FIO5oBUYbtGTxMS66pPkjC2p8pbA3zCtc8XD4dq9fMut867GRdh82"
         let bobPrivateKey = "5JCpqkvsrCzrAC3YWhx7pnLodr3Wr9dNMULYU8yoUrPRzu269Xz"
         
-        let encrypted = "5E4EB97B11B96E1728FAAE903B17DABB411D25E0E263783F906D58A30F070411A7F271DD3A77619414FBE0276EA57B2C8D8993C14403C8F1395EB3ABC822B12B1E59D1339D5BB32F07C08D8EAC8EE949"
+        let encrypted = "5E4EB97B11B96E1728FAAE903B17DABBB36270529F8C7A7DAD4F9E017A49786FAB657F1FA117B83840DF6C5B6518D7097DCFAA22B34013315174AD36FCEEC68E760A2F3E1794FEFC5054667D2D1930AD"
         
         let decryptedAnswer = "5468697320697320612074657374206D657373616765"
         
@@ -272,15 +266,9 @@ class CryptographyTests: XCTestCase {
             return
         }
         let sharedSecret = myKey.getSharedSecret(publicKey: alicePublicKey)
-        
-        
-        // encrypted.data(using: .utf8) ?? "".data(using: .utf8)!
         var possibleDecrypted: Data?
         do {
-            possibleDecrypted = try Cryptography().decrypt(secret: sharedSecret!, message: encrypted.toHexData())
-            //possibleDecrypted = try Cryptography().decrypt(secret: sharedSecret!, message:
-           // possibleDecrypted = try Cryptography().decrypt(secret: sharedSecret!, message: encrypted.data(using: .utf8) ?? "".data(using: .utf8)!)
-        }
+            possibleDecrypted = try Cryptography().decrypt(secret: sharedSecret!, message: encrypted.toHexData())        }
         catch {
            XCTFail("Encryption failed")
         }
@@ -295,142 +283,6 @@ class CryptographyTests: XCTestCase {
         XCTAssert(decryptedAnswer == decrypted.hexEncodedString().uppercased(), "Should be the same")
     }
     
-    
-    // GOOD encrypted: 09758E9C48AAAEE4B7F389C993CC354A48AE6A5B7A6B585C048D4E5C644B360BA9CDD15CAD8C066CE0B8380DB4B74A0EBF27C2084AD2FEB1EC2573BACDBCB2AF5B388D7CB240E168CE9B20AA066F5CA0174F66304C3DF359EF1F6BEB70E531C7
-    func testEncryptDecryptForServerAndroid() {
-        
-        let privateKey = "5JbcPK6qTpYxMXtfpGXagYbo3KFE3qqxv2tLXLMPR8dTWWeYCp9"
-        let publicKey = "FIO8LKt4DBzXKzDGjFcZo5x82Nv5ahmbZ8AUNXBv2vMfm6smiHst3"
-        
-        guard let myKey = try! PrivateKey(keyString: privateKey) else {
-            return
-        }
-        let sharedSecret = myKey.getSharedSecret(publicKey: publicKey)
-        
-        
-        let message = "3546494F356B4A4B4E487763746366554D35585A796957537153544D3548547A7A6E4A503946335A646268615141484556713537356F03392E300346494F000000"
-     //   let secret = "02332627b9325cb70510a70f0f6be4bcb008fbbc7893ca51dedf5bf46aa740c0fc9d3fbd737d09a3c4046d221f4f1a323f515332c3fef46e7f075db561b1a2c9"
-        let IV = "f300888ca4f512cebdc0020ff0f7224c".toHexData()
-        guard let encrypted = Cryptography().encrypt(secret: sharedSecret!, message: message, iv: IV) else {
-           XCTFail("Encryption failed")
-           return
-        }
-           
-        let asciEncrypted = String(data: encrypted, encoding: .ascii)
-        print (String(data: encrypted, encoding: .ascii))
-       // print (encrypted.hexEncodedString())
-        let myEncrypted = encrypted.hexEncodedString()
-        
-        let dEncrypted = asciEncrypted?.data(using:.ascii, allowLossyConversion: true)
-        
-        var possibleDecrypted: Data?
-        do {
-            possibleDecrypted = try Cryptography().decrypt(secret: sharedSecret!, message: dEncrypted!)
-        }
-        catch {
-           XCTFail("Encryption failed")
-        }
-        guard let decrypted = possibleDecrypted  else {
-           XCTFail("Encryption failed")
-           return
-        }
-        print( String(data: decrypted, encoding: .utf8))
-        XCTAssert(message == String(data: decrypted, encoding: .utf8), "Should be the same")
-    }
-    
-    
-    func testEncryptDecryptForServer(){
-        let message = "3546494F356B4A4B4E487763746366554D35585A796957537153544D3548547A7A6E4A503946335A646268615141484556713537356F03392E300346494F000000"
-        let secret = "02332627b9325cb70510a70f0f6be4bcb008fbbc7893ca51dedf5bf46aa740c0fc9d3fbd737d09a3c4046d221f4f1a323f515332c3fef46e7f075db561b1a2c9"
-        let IV = "f300888ca4f512cebdc0020ff0f7224c".toHexData()
-        guard let encrypted = Cryptography().encrypt(secret: secret, message: message, iv: IV) else {
-           XCTFail("Encryption failed")
-           return
-        }
-           
-        
-        
-        print (encrypted.hexEncodedString())
-        let myEncrypted = encrypted.hexEncodedString()
-        
-        var possibleDecrypted: Data?
-        do {
-            possibleDecrypted = try Cryptography().decrypt(secret: secret, message: encrypted)
-        }
-        catch {
-           XCTFail("Encryption failed")
-        }
-        guard let decrypted = possibleDecrypted  else {
-           XCTFail("Encryption failed")
-           return
-        }
-        XCTAssert(message == String(data: decrypted, encoding: .utf8), "Should be the same")
-       }
-    
-    
-    func testEncryptDecryptWithFixedIVShouldSucceed(){
-        let message = "secret messagesecret messagesecret messagesecret messagesecret messagesecret messagesecret message"
-        let secret = "02332627b9325cb70510a70f0f6be4bcb008fbbc7893ca51dedf5bf46aa740c0fc9d3fbd737d09a3c4046d221f4f1a323f515332c3fef46e7f075db561b1a2c9"
-        let IV = "f300888ca4f512cebdc0020ff0f7224c".toHexData()
-        guard let encrypted = Cryptography().encrypt(secret: secret, message: message, iv: IV) else {
-            XCTFail("Encryption failed")
-            return
-        }
-        
-       // print (encrypted.)
-        
-        var possibleDecrypted: Data?
-        do {
-            possibleDecrypted = try Cryptography().decrypt(secret: secret, message: encrypted)
-        }
-        catch {
-            XCTFail("Encryption failed")
-        }
-        guard let decrypted = possibleDecrypted  else {
-            XCTFail("Encryption failed")
-            return
-        }
-        XCTAssert(message == String(data: decrypted, encoding: .utf8), "Should be the same")
-    }
-    
-    func testEncryptDecryptWithRandomIVShouldSucceed(){
-        let message = "secret message"
-        let secret = "02332627b9325cb70510a70f0f6be4bcb008fbbc7893ca51dedf5bf46aa740c0fc9d3fbd737d09a3c4046d221f4f1a323f515332c3fef46e7f075db561b1a2c9"
-        guard let encrypted = Cryptography().encrypt(secret: secret, message: message, iv: nil) else {
-            XCTFail("Encryption failed")
-            return
-        }
-        var possibleDecrypted: Data?
-        do {
-             possibleDecrypted = try Cryptography().decrypt(secret: secret, message: encrypted)
-        }
-        catch {
-            XCTFail("Encryption failed")
-        }
-        guard let decrypted = possibleDecrypted  else {
-            XCTFail("Encryption failed")
-            return
-        }
-        XCTAssert(message == String(data: decrypted, encoding: .utf8), "Should be the same")
-    }
-    
-    func testValidateEncryptionShouldSucceed(){
-        let message = "secret message"
-        let secret = "02332627b9325cb70510a70f0f6be4bcb008fbbc7893ca51dedf5bf46aa740c0fc9d3fbd737d09a3c4046d221f4f1a323f515332c3fef46e7f075db561b1a2c9"
-        let IV = "f300888ca4f512cebdc0020ff0f7224c".toHexData()
-        
-        let encryptedExpectedResult = "f300888ca4f512cebdc0020ff0f7224c7f896315e90e172bed65d005138f224da7301d5563614e3955750e4480aabf7753f44b4975308aeb8e23c31e114962ab"
-        
-        guard let encrypted = Cryptography().encrypt(secret: secret, message: message, iv: IV) else {
-            XCTFail("Encryption failed")
-            return
-        }
-        
-        print (encrypted.hexEncodedString())
-        
-        XCTAssert(encrypted.hexEncodedString() == encryptedExpectedResult, "Should be the same")
-    }
-    
     func testMainEncryptDecrypt(){
         
         let fioPrivateKey = "5JLxoeRoMDGBbkLdXJjxuh3zHsSS7Lg6Ak9Ft8v8sSdYPkFuABF"
@@ -439,7 +291,7 @@ class CryptographyTests: XCTestCase {
         let fioPrivateKeyAlternative = "5JCpqkvsrCzrAC3YWhx7pnLodr3Wr9dNMULYU8yoUrPRzu269Xz"
         let fioPublicKeyAlternative  = "FIO7uRvrLVrZCbCM2DtCgUMospqUMnP3JUC1sKHA8zNoF835kJBvN"
         
-        let fiosdk = FIOSDK.sharedInstance(accountName: "a", privateKey: fioPrivateKey, publicKey: fioPrivateKey, systemPrivateKey: fioPrivateKey, systemPublicKey: fioPublicKey, url: "a", mockUrl: "b")
+        let fiosdk = FIOSDK.sharedInstance(privateKey: fioPrivateKey, publicKey: fioPrivateKey, url: "a", mockUrl: "b")
         
         let contentJson = "{\"amount\":\"9.0\",\"token_code\":\"FIO\",\"memo\":\"\",\"hash\":\"\",\"offline_url\":\"\",\"payee_public_address\":\"FIO5kJKNHwctcfUM5XZyiWSqSTM5HTzznJP9F3ZdbhaQAHEVq575o\"}"
         let encrypted = fiosdk.encrypt(publicKey: fioPublicKeyAlternative, contentType: FIOAbiContentType.newFundsContent, contentJson: contentJson)

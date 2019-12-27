@@ -10,6 +10,10 @@ import Foundation
 
 internal struct AvailCheckResponse: Codable {
     
-    let is_registered: Bool
+    private let is_registered: Int
+    
+    public var isRegistered: Bool{
+        return (is_registered == 1 ? true : false)
+    }
     
 }

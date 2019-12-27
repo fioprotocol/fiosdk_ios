@@ -18,7 +18,7 @@ extension FIOSDK.Responses {
         }
         
         public func displayBalance() -> Double {
-            return Double(balance)/SUFUtils.SUFUnit
+            return Double(balance)/Double(SUFUtils.SUFUnit)
         }
     }
     
