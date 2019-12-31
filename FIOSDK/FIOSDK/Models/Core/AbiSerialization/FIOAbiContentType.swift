@@ -10,5 +10,5 @@ import Foundation
 
 public enum FIOAbiContentType: String {
     case newFundsContent    = "new_funds_content"
-    case recordSendContent  = "record_send_content"
+    case recordObtDataContent  = "record_obt_data_content"
 }

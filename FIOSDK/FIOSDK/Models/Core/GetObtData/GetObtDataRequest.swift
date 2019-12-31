@@ -1,14 +1,12 @@
 //
-//  PendingFIORequestsRequest.swift
+//  GetObtDataRequest.swift
 //  FIOSDK
 //
-//  Created by Vitor Navarro on 2019-04-04.
+//  Created by shawn arney on 12/30/19.
 //  Copyright © 2019 Dapix, Inc. All rights reserved.
 //
 
-import Foundation
-
-internal struct PendingFIORequestsRequest: Codable {
+internal struct GetObtDataRequest: Codable {
     
     public let fioPublicKey: String
     public let limit: Int?

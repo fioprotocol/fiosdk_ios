@@ -226,7 +226,7 @@ class FIOSDKTests: XCTestCase {
         let timestamp = NSDate().timeIntervalSince1970
         let pubAdd = "pubAdd\(Int(timestamp.rounded()))"
         self.alternativeSDKConfig()
-        FIOSDK.sharedInstance().addPublicAddress(fioAddress: self.requestorFioName, tokenCode: "ETH", publicAddress: pubAdd, maxFee: 0) { (response, error) in
+        FIOSDK.sharedInstance().addPublicAddress(fioAddress: self.requesteeFioName, tokenCode: "ETH", publicAddress: pubAdd, maxFee: 0) { (response, error) in
             XCTAssert((error?.kind == FIOError.ErrorKind.Success), "testAddPublicAddress NOT SUCCESSFUL: \(error?.localizedDescription ?? "")")
             expectation.fulfill()
         }
@@ -946,7 +946,7 @@ class FIOSDKTests: XCTestCase {
    
     //MARK: -
     // broken here
-    func testRecordSendWithFakeDataShouldSucceeded() {
+    func testRecordObtDataWithFakeDataShouldSucceeded() {
         let expectation = XCTestExpectation(description: "testRecordSendWithFakeDataShouldSucceeded")
         
         let amount = 4.65
@@ -958,8 +958,8 @@ class FIOSDKTests: XCTestCase {
         let obtID = "0xf6eaddd3851923f6f9653838d3021c02ab123a4a6e4485e83f5063b3711e000b"
         
         defaultSDKConfig()
-        let metaData = RecordSendRequest.MetaData(memo: "", hash: "", offlineUrl: "")
-        FIOSDK.sharedInstance().recordSend(payerFIOAddress: payee, payeeFIOAddress: payor, payerTokenPublicAddress: fromPubAdd, payeeTokenPublicAddress: toPubAdd, amount: amount, tokenCode: "VIT", obtId: obtID, maxFee: SUFUtils.amountToSUF(amount: 2.0), metaData: metaData) { (response, error) in
+        let metaData = RecordObtDataRequest.MetaData(memo: "", hash: "", offlineUrl: "")
+        FIOSDK.sharedInstance().recordObtData(payerFIOAddress: payee, payeeFIOAddress: payor, payerTokenPublicAddress: fromPubAdd, payeeTokenPublicAddress: toPubAdd, amount: amount, tokenCode: "VIT", obtId: obtID, maxFee: SUFUtils.amountToSUF(amount: 2.0), metaData: metaData) { (response, error) in
             XCTAssert((error?.kind == FIOError.ErrorKind.Success), "recordSend NOT SUCCESSFUL")
             expectation.fulfill()
         }

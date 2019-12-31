@@ -8,7 +8,7 @@
 
 import Foundation
 
-public struct RecordSendContent: Codable {
+public struct RecordObtDataContent: Codable {
     
     public let payerPublicAddress: String
     public let payeePublicAddress: String

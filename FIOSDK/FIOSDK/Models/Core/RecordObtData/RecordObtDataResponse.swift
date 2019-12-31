@@ -10,7 +10,7 @@ import Foundation
 
 extension FIOSDK.Responses {
 
-    public struct RecordSendResponse: Codable {
+    public struct RecordObtDataResponse: Codable {
 
         public let status: Status
             public let feeCollected: Int
@@ -26,10 +26,10 @@ extension FIOSDK.Responses {
         }
 }
 
-extension FIOSDK.Responses.RecordSendResponse.Status {
+extension FIOSDK.Responses.RecordObtDataResponse.Status {
     
     public init(from decoder: Decoder) throws {
-        self = try FIOSDK.Responses.RecordSendResponse.Status(rawValue: decoder.singleValueContainer().decode(RawValue.self)) ?? .unknown
+        self = try FIOSDK.Responses.RecordObtDataResponse.Status(rawValue: decoder.singleValueContainer().decode(RawValue.self)) ?? .unknown
     }
     
 }

@@ -13,7 +13,7 @@ internal enum ChainActions: String {
     case newFundsRequest        = "newfundsreq"
     case rejectFundsRequest     = "rejectfndreq"
     case addPublicAddress       = "addaddress"
-    case recordSend             = "recordsend"
+    case recordObtData          = "recordobt"
     case transferTokens         = "trnsfiopubky"
     case registerFIODomain      = "regdomain"
     case registerFIOAddress     = "regaddress"

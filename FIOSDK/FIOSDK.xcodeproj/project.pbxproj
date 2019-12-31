@@ -24,6 +24,8 @@
 		0203C5D8217A71330054FA10 /* FIOError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0203C5D7217A71330054FA10 /* FIOError.swift */; };
 		02253FBA2342BA1300FDD95A /* fio.abi.json in Resources */ = {isa = PBXBuildFile; fileRef = 02253FB92342BA1300FDD95A /* fio.abi.json */; };
 		0245A5B12193BF6900C5A870 /* String+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0245A5B02193BF6900C5A870 /* String+Extensions.swift */; };
+		0284D48B23BAB0550035B627 /* GetObtDataRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0284D48A23BAB0550035B627 /* GetObtDataRequest.swift */; };
+		0284D48D23BAB0B90035B627 /* GetObtDataResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0284D48C23BAB0B90035B627 /* GetObtDataResponse.swift */; };
 		028DBA032356609100D4C70E /* FIOAbiContentType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 028DBA022356609100D4C70E /* FIOAbiContentType.swift */; };
 		028DBA05235669BA00D4C70E /* RequestFundsContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 028DBA04235669BA00D4C70E /* RequestFundsContent.swift */; };
 		02A3AA4922FE28EE007B5586 /* abieos.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 02A3AA0E22FE28ED007B5586 /* abieos.cpp */; };
@@ -88,7 +90,7 @@
 		02F62AD72396DADF00B65DC5 /* AddPublicAddressResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02F62AD62396DADF00B65DC5 /* AddPublicAddressResponse.swift */; };
 		02F62AD92396DEA600B65DC5 /* SetFIODomainVisibilityRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02F62AD82396DEA600B65DC5 /* SetFIODomainVisibilityRequest.swift */; };
 		02F62ADB2396DF5400B65DC5 /* SetFIODomainVisibilityResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02F62ADA2396DF5400B65DC5 /* SetFIODomainVisibilityResponse.swift */; };
-		02F62ADD239701D400B65DC5 /* RecordSendContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02F62ADC239701D400B65DC5 /* RecordSendContent.swift */; };
+		02F62ADD239701D400B65DC5 /* RecordObtDataContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02F62ADC239701D400B65DC5 /* RecordObtDataContent.swift */; };
 		2808B91422BA672800FD8607 /* Cryptography.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2808B91322BA672800FD8607 /* Cryptography.swift */; };
 		2808B91722BA838C00FD8607 /* CryptographyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2808B91622BA838C00FD8607 /* CryptographyTests.swift */; };
 		2808B91922BBD14200FD8607 /* FIOHash.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2808B91822BBD14200FD8607 /* FIOHash.swift */; };
@@ -158,8 +160,8 @@
 		287F10592253ED21001E3B32 /* ChainRoutes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 287F10582253ED21001E3B32 /* ChainRoutes.swift */; };
 		287F105C22552414001E3B32 /* TransferFIOTokensRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 287F105B22552414001E3B32 /* TransferFIOTokensRequest.swift */; };
 		287F105E22552432001E3B32 /* TransferFIOTokensResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 287F105D22552432001E3B32 /* TransferFIOTokensResponse.swift */; };
-		287F1061225524DB001E3B32 /* RecordSendRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 287F1060225524DB001E3B32 /* RecordSendRequest.swift */; };
-		287F106322552543001E3B32 /* RecordSendResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 287F106222552543001E3B32 /* RecordSendResponse.swift */; };
+		287F1061225524DB001E3B32 /* RecordObtDataRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 287F1060225524DB001E3B32 /* RecordObtDataRequest.swift */; };
+		287F106322552543001E3B32 /* RecordObtDataResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 287F106222552543001E3B32 /* RecordObtDataResponse.swift */; };
 		287F106722552809001E3B32 /* SentFIORequestsResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 287F106622552809001E3B32 /* SentFIORequestsResponse.swift */; };
 		287F10692255282D001E3B32 /* SentFIORequestsRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 287F10682255282D001E3B32 /* SentFIORequestsRequest.swift */; };
 		287F106B225654D7001E3B32 /* RejectFundsRequestResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 287F106A225654D7001E3B32 /* RejectFundsRequestResponse.swift */; };
@@ -239,6 +241,8 @@
 		0203C5D7217A71330054FA10 /* FIOError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FIOError.swift; sourceTree = "<group>"; };
 		02253FB92342BA1300FDD95A /* fio.abi.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = fio.abi.json; sourceTree = "<group>"; };
 		0245A5B02193BF6900C5A870 /* String+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Extensions.swift"; sourceTree = "<group>"; };
+		0284D48A23BAB0550035B627 /* GetObtDataRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetObtDataRequest.swift; sourceTree = "<group>"; };
+		0284D48C23BAB0B90035B627 /* GetObtDataResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetObtDataResponse.swift; sourceTree = "<group>"; };
 		028DBA022356609100D4C70E /* FIOAbiContentType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FIOAbiContentType.swift; sourceTree = "<group>"; };
 		028DBA04235669BA00D4C70E /* RequestFundsContent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestFundsContent.swift; sourceTree = "<group>"; };
 		02A3AA0E22FE28ED007B5586 /* abieos.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = abieos.cpp; sourceTree = "<group>"; };
@@ -303,7 +307,7 @@
 		02F62AD62396DADF00B65DC5 /* AddPublicAddressResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddPublicAddressResponse.swift; sourceTree = "<group>"; };
 		02F62AD82396DEA600B65DC5 /* SetFIODomainVisibilityRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetFIODomainVisibilityRequest.swift; sourceTree = "<group>"; };
 		02F62ADA2396DF5400B65DC5 /* SetFIODomainVisibilityResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetFIODomainVisibilityResponse.swift; sourceTree = "<group>"; };
-		02F62ADC239701D400B65DC5 /* RecordSendContent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordSendContent.swift; sourceTree = "<group>"; };
+		02F62ADC239701D400B65DC5 /* RecordObtDataContent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordObtDataContent.swift; sourceTree = "<group>"; };
 		2808B91322BA672800FD8607 /* Cryptography.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Cryptography.swift; sourceTree = "<group>"; };
 		2808B91622BA838C00FD8607 /* CryptographyTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CryptographyTests.swift; sourceTree = "<group>"; };
 		2808B91822BBD14200FD8607 /* FIOHash.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FIOHash.swift; sourceTree = "<group>"; };
@@ -373,8 +377,8 @@
 		287F10582253ED21001E3B32 /* ChainRoutes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChainRoutes.swift; sourceTree = "<group>"; };
 		287F105B22552414001E3B32 /* TransferFIOTokensRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransferFIOTokensRequest.swift; sourceTree = "<group>"; };
 		287F105D22552432001E3B32 /* TransferFIOTokensResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransferFIOTokensResponse.swift; sourceTree = "<group>"; };
-		287F1060225524DB001E3B32 /* RecordSendRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordSendRequest.swift; sourceTree = "<group>"; };
-		287F106222552543001E3B32 /* RecordSendResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordSendResponse.swift; sourceTree = "<group>"; };
+		287F1060225524DB001E3B32 /* RecordObtDataRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordObtDataRequest.swift; sourceTree = "<group>"; };
+		287F106222552543001E3B32 /* RecordObtDataResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordObtDataResponse.swift; sourceTree = "<group>"; };
 		287F106622552809001E3B32 /* SentFIORequestsResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SentFIORequestsResponse.swift; sourceTree = "<group>"; };
 		287F10682255282D001E3B32 /* SentFIORequestsRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SentFIORequestsRequest.swift; sourceTree = "<group>"; };
 		287F106A225654D7001E3B32 /* RejectFundsRequestResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RejectFundsRequestResponse.swift; sourceTree = "<group>"; };
@@ -607,6 +611,15 @@
 				287F10522253DAC0001E3B32 /* FIOBalanceResponse.swift */,
 			);
 			path = Balance;
+			sourceTree = "<group>";
+		};
+		0284D48923BAB00B0035B627 /* GetObtData */ = {
+			isa = PBXGroup;
+			children = (
+				0284D48A23BAB0550035B627 /* GetObtDataRequest.swift */,
+				0284D48C23BAB0B90035B627 /* GetObtDataResponse.swift */,
+			);
+			path = GetObtData;
 			sourceTree = "<group>";
 		};
 		02A3AA0D22FE28D1007B5586 /* AbiSerialization */ = {
@@ -864,7 +877,8 @@
 				2818C6362260B87C001871C8 /* Chain */,
 				287F109E2256A6A3001E3B32 /* PendingRequest */,
 				287F109D2256A698001E3B32 /* SentRequest */,
-				287F109C2256A68C001E3B32 /* RecordSend */,
+				287F109C2256A68C001E3B32 /* RecordObtData */,
+				0284D48923BAB00B0035B627 /* GetObtData */,
 				287F109B2256A67F001E3B32 /* RejectFunds */,
 				287F109A2256A673001E3B32 /* RequestFunds */,
 				287F10982256A630001E3B32 /* FIOName */,
@@ -930,14 +944,14 @@
 			path = RejectFunds;
 			sourceTree = "<group>";
 		};
-		287F109C2256A68C001E3B32 /* RecordSend */ = {
+		287F109C2256A68C001E3B32 /* RecordObtData */ = {
 			isa = PBXGroup;
 			children = (
-				287F1060225524DB001E3B32 /* RecordSendRequest.swift */,
-				287F106222552543001E3B32 /* RecordSendResponse.swift */,
-				02F62ADC239701D400B65DC5 /* RecordSendContent.swift */,
+				287F1060225524DB001E3B32 /* RecordObtDataRequest.swift */,
+				287F106222552543001E3B32 /* RecordObtDataResponse.swift */,
+				02F62ADC239701D400B65DC5 /* RecordObtDataContent.swift */,
 			);
-			path = RecordSend;
+			path = RecordObtData;
 			sourceTree = "<group>";
 		};
 		287F109D2256A698001E3B32 /* SentRequest */ = {
@@ -1274,14 +1288,16 @@
 				287F10512253DAA5001E3B32 /* FIOBalanceRequest.swift in Sources */,
 				285649522229C031006E2533 /* AccountNameGenerator.swift in Sources */,
 				3DDF79D6236367750054BE1E /* RenewFIODomainRequest.swift in Sources */,
+				0284D48D23BAB0B90035B627 /* GetObtDataResponse.swift in Sources */,
 				2834384B2245439B00E60314 /* secp256k1.c in Sources */,
 				287F106F22565603001E3B32 /* RequestFundsResponse.swift in Sources */,
 				287F106722552809001E3B32 /* SentFIORequestsResponse.swift in Sources */,
-				287F1061225524DB001E3B32 /* RecordSendRequest.swift in Sources */,
+				287F1061225524DB001E3B32 /* RecordObtDataRequest.swift in Sources */,
 				287F108E225679B6001E3B32 /* TxResultProcessed.swift in Sources */,
 				287F10532253DAC0001E3B32 /* FIOBalanceResponse.swift in Sources */,
+				0284D48B23BAB0550035B627 /* GetObtDataRequest.swift in Sources */,
 				287F1085225673CF001E3B32 /* AddPublicAddressOperation.swift in Sources */,
-				287F106322552543001E3B32 /* RecordSendResponse.swift in Sources */,
+				287F106322552543001E3B32 /* RecordObtDataResponse.swift in Sources */,
 				2834384F2245439B00E60314 /* bip39.c in Sources */,
 				287F106D22565578001E3B32 /* RejectFundsRequest.swift in Sources */,
 				287F107922565999001E3B32 /* FIONamesRequest.swift in Sources */,
@@ -1292,7 +1308,7 @@
 				0203C58D217A487A0054FA10 /* PublicKey.swift in Sources */,
 				287F105C22552414001E3B32 /* TransferFIOTokensRequest.swift in Sources */,
 				287F1089225676B1001E3B32 /* JSONSerialization.swift in Sources */,
-				02F62ADD239701D400B65DC5 /* RecordSendContent.swift in Sources */,
+				02F62ADD239701D400B65DC5 /* RecordObtDataContent.swift in Sources */,
 				02F62AD72396DADF00B65DC5 /* AddPublicAddressResponse.swift in Sources */,
 				3D1DC6E12350CADA000625E5 /* RenewFIOAddressResponse.swift in Sources */,
 				283438522245439B00E60314 /* ecdsa.c in Sources */,

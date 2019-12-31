@@ -32,7 +32,7 @@
             ]
         },
         {
-            "name": "record_send_content",
+            "name": "record_obt_data_content",
             "base": "",
             "fields": [
                 {

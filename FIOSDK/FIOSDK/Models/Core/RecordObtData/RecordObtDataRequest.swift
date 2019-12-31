@@ -8,7 +8,7 @@
 
 import Foundation
 
-public struct RecordSendRequest: Codable {
+public struct RecordObtDataRequest: Codable {
     
     let payerFIOAddress: String
     let payeeFIOAddress: String
@@ -27,7 +27,7 @@ public struct RecordSendRequest: Codable {
         case walletFioAddress = "tpid"
         case actor
     }
-    
+
     public struct MetaData: Codable{
         public var memo: String?
         public var hash: String?
