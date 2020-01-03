@@ -587,7 +587,7 @@ public class FIOSDK: BaseFIOSDK {
     ///   - completion: result based on DTO PublicAddressResponse
     public func getPublicAddress(fioAddress: String, tokenCode: String, completion: @escaping (_ publicAddress: FIOSDK.Responses.PublicAddressResponse?, _ error: FIOError) -> ()){
         let body = PublicAddressRequest(fioAddress: fioAddress, tokenCode: tokenCode)
-        let url = ChainRouteBuilder.build(route: ChainRoutes.publicAddressLookup)
+        let url = ChainRouteBuilder.build(route: ChainRoutes.getPublicAddress)
         FIOHTTPHelper.postRequestTo(url, withBody: body) { (data, error) in
             if let data = data {
                 do {
@@ -602,7 +602,7 @@ public class FIOSDK: BaseFIOSDK {
                     completion(nil, error)
                 }
                 else {
-                    completion(nil, FIOError.failure(localizedDescription: ChainRoutes.publicAddressLookup.rawValue + " request failed."))
+                    completion(nil, FIOError.failure(localizedDescription: ChainRoutes.getPublicAddress.rawValue + " request failed."))
                 }
             }
         }
@@ -691,8 +691,9 @@ public class FIOSDK: BaseFIOSDK {
     ///   - onCompletion: The completion handler containing the result
     public func requestFunds(payer payerFIOAddress:String, payee payeeFIOAddress: String, payeePublicAddress: String, amount: Float, tokenCode: String, metadata: RequestFundsRequest.MetaData, maxFee: Int, walletFioAddress:String = "", onCompletion: @escaping ( _ response: RequestFundsResponse?, _ error:FIOError? ) -> ()) {
        
-        self.getPublicAddress(fioAddress: payerFIOAddress, tokenCode: "FIO") { (response, error) in
-            if (error.kind == FIOError.ErrorKind.Success) {
+        self.getFIOPublicKey(fioAddress: payerFIOAddress) { (response, error) in
+#warning("remove from production code here.")
+            if (error.kind == FIOError.ErrorKind.Success || payerFIOAddress.lowercased() == "faucet:fio") {
                 
                 let contentJson = RequestFundsContent(payeePublicAddress: payeePublicAddress, amount: String(amount), tokenCode: tokenCode, memo:metadata.memo ?? "", hash: metadata.hash ?? "", offlineUrl: metadata.offlineUrl ?? "")
                 
@@ -808,7 +809,7 @@ public class FIOSDK: BaseFIOSDK {
     ///     - metaData: memo, hash, offlineURL options
     ///     - walletFioAddress: FIO Address of the wallet which generates this transaction.
     ///     - onCompletion: Once finished this callback returns optional response and error.
-    public func recordObtData(fioRequestId: Int? = nil,
+    public func recordObtData(fioRequestId: Int? = 0,
                            payerFIOAddress: String,
                            payeeFIOAddress: String,
                            payerTokenPublicAddress: String,
@@ -823,7 +824,7 @@ public class FIOSDK: BaseFIOSDK {
         
         let contentJson = RecordObtDataContent(payerPublicAddress: payerTokenPublicAddress, payeePublicAddress: payeeTokenPublicAddress, amount: String(amount), tokenCode: tokenCode, status:"sent_to_blockchain", obtId: obtId, memo: metaData.memo ?? "", hash: metaData.hash ?? "", offlineUrl: metaData.offlineUrl ?? "")
         
-        FIOSDK.sharedInstance().getPublicAddress(fioAddress: payeeFIOAddress, tokenCode: tokenCode) { (response, error) in
+        FIOSDK.sharedInstance().getFIOPublicKey(fioAddress: payeeFIOAddress) { (response, error) in
             guard error.kind == .Success, let payeeFIOPublicKey = response?.publicAddress else {
                 onCompletion(nil, error)
                 return
@@ -832,7 +833,7 @@ public class FIOSDK: BaseFIOSDK {
             let encryptedContent = self.encrypt(publicKey: payeeFIOPublicKey, contentType: FIOAbiContentType.recordObtDataContent, contentJson: contentJson.toJSONString())
             
             let actor = AccountNameGenerator.run(withPublicKey: self.getPublicKey())
-            let request = RecordObtDataRequest(payerFIOAddress: payerFIOAddress, payeeFIOAddress: payeeFIOAddress, content: encryptedContent, fioRequestId: fioRequestId, maxFee: maxFee, walletFioAddress: walletFioAddress, actor: actor)
+            let request = RecordObtDataRequest(payerFIOAddress: payerFIOAddress, payeeFIOAddress: payeeFIOAddress, content: encryptedContent, fioRequestId: fioRequestId ?? 0, maxFee: maxFee, walletFioAddress: walletFioAddress, actor: actor)
             signedPostRequestTo(privateKey: self.getPrivateKey(),
                                 route: ChainRoutes.recordObtData,
                                 forAction: ChainActions.recordObtData,

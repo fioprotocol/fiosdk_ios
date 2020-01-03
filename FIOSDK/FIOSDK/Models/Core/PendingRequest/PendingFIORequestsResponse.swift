@@ -97,7 +97,11 @@ extension FIOSDK.Responses {
                 
                 let status = try container.decodeIfPresent(String.self, forKey: .status) ?? ""
                 
-                let metadataString = FIOSDK.sharedInstance().decrypt(publicKey: payeeFIOPublicKey, contentType: FIOAbiContentType.newFundsContent, encryptedContent: content)
+                var metadataString = FIOSDK.sharedInstance().decrypt(publicKey: payeeFIOPublicKey, contentType: FIOAbiContentType.newFundsContent, encryptedContent: content)
+                
+                if (metadataString.count < 1){
+                    metadataString = FIOSDK.sharedInstance().decrypt(publicKey: payerFIOPublicKey, contentType: FIOAbiContentType.recordObtDataContent, encryptedContent: content)
+                }
                 
                 var deadRecord = false
                 var metadata = PendingFIORequestResponse.MetaData(payeePublicAddress: "", amount: "", tokenCode: "", memo: "", hash: "", offlineUrl: "")

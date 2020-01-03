@@ -84,22 +84,26 @@ class FIOSDKTests: XCTestCase {
             XCTAssert((error?.kind == FIOError.ErrorKind.Success), "registerFIOName NOT SUCCESSFUL")
              print ("REQUESTEE:")
             print (self.requesteeFioName)
+            print ("PUBLIC KEY:")
+            print (FIOSDK.sharedInstance().getPublicKey())
+            sleep(6)
             let metadata = RequestFundsRequest.MetaData(memo: "", hash: nil, offlineUrl: nil)
             FIOSDK.sharedInstance().requestFunds(payer: "faucet:fio", payee: self.requesteeFioName, payeePublicAddress: FIOSDK.sharedInstance().getPublicKey(), amount: 9, tokenCode: "FIO", metadata: metadata, maxFee: 0) { (response, error) in
                 if error?.kind == .Success {
-                    sleep(60)
+                    sleep(6)
                     
                     self.alternativeSDKConfig()
                     print (FIOSDK.sharedInstance().getPublicKey())
+                    sleep(6)
                     FIOSDK.sharedInstance().registerFIONameOnBehalfOfUser(fioName: self.requestorFioName, publicKey: FIOSDK.sharedInstance().getPublicKey(), onCompletion: { response, error in ()
                         XCTAssert((error?.kind == FIOError.ErrorKind.Success), "registerFIOName NOT SUCCESSFUL" + (error?.localizedDescription ?? "") )
                         print(error)
                         print ("REQUESTOR:")
                         print(self.requestorFioName)
-                        
+                        sleep (6)
                         FIOSDK.sharedInstance().requestFunds(payer: "faucet:fio", payee: self.requestorFioName, payeePublicAddress: FIOSDK.sharedInstance().getPublicKey(), amount: 9, tokenCode: "FIO", metadata: metadata, maxFee: 0) { (response, error) in
                             if error?.kind == .Success {
-                                sleep(60)
+                                sleep(10)
                                 
                                 self.defaultSDKConfig()
                                 expectation.fulfill()
@@ -951,7 +955,7 @@ class FIOSDKTests: XCTestCase {
         
         let amount = 4.65
         let payee = self.requestorFioName
-        let payor = self.requesteeFioName
+        let payer = self.requesteeFioName
         let timestamp = NSDate().timeIntervalSince1970
         let fromPubAdd = "from\(Int(timestamp.rounded()))"
         let toPubAdd = "to\(Int(timestamp.rounded()))"
@@ -959,7 +963,7 @@ class FIOSDKTests: XCTestCase {
         
         defaultSDKConfig()
         let metaData = RecordObtDataRequest.MetaData(memo: "", hash: "", offlineUrl: "")
-        FIOSDK.sharedInstance().recordObtData(payerFIOAddress: payee, payeeFIOAddress: payor, payerTokenPublicAddress: fromPubAdd, payeeTokenPublicAddress: toPubAdd, amount: amount, tokenCode: "VIT", obtId: obtID, maxFee: SUFUtils.amountToSUF(amount: 2.0), metaData: metaData) { (response, error) in
+        FIOSDK.sharedInstance().recordObtData(payerFIOAddress: payer, payeeFIOAddress: payee, payerTokenPublicAddress: fromPubAdd, payeeTokenPublicAddress: toPubAdd, amount: amount, tokenCode: "VIT", obtId: obtID, maxFee: SUFUtils.amountToSUF(amount: 2.0), metaData: metaData) { (response, error) in
             XCTAssert((error?.kind == FIOError.ErrorKind.Success), "recordSend NOT SUCCESSFUL")
             expectation.fulfill()
         }

@@ -33,7 +33,7 @@ internal func serializeJsonToData<T: Codable>(_ json: T, forCode code:String, fo
     let jsonString = String(decoding: FIOHTTPHelper.bodyFromJson(json)!, as: UTF8.self)
     let myAbi = FIOSDK.sharedInstance().getCachedABI(accountName: code)
     
-    if (myAbi.count > 3){
+    if (myAbi.count > 1){
         let serializer = abiSerializer()
         let serializedResult = try? serializer.serialize(contract: code, name:action.rawValue, json: jsonString, abi: myAbi)
         
