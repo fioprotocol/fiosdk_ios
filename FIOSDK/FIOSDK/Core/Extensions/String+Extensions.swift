@@ -31,4 +31,14 @@ internal extension String {
         return formatter.date(from: timeStampString) ?? Date.init(timeIntervalSince1970: 1)
     }
     
+    func isValidHex() -> Bool {
+
+        if (self.range(of:"^(0x|0X)?[a-fA-F0-9]+$",options: .regularExpression) != nil) {
+            return true
+        }
+
+        return false
+        
+    }
+    
 }

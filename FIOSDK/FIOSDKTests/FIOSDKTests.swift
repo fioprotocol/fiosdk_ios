@@ -347,10 +347,10 @@ class FIOSDKTests: XCTestCase {
         let fioName = "fio\(Int(timestamp.rounded())):brd"
         
         
-        let metadata = RequestFundsRequest.MetaData(memo: "", hash: nil, offlineUrl: nil)
+        let metadata = RequestFundsRequest.MetaData(memo: "hello", hash: nil, offlineUrl: nil)
         
         self.defaultSDKConfig()
-        FIOSDK.sharedInstance().requestFunds(payer: "faucet:fio", payee: self.requesteeFioName, payeePublicAddress: FIOSDK.sharedInstance().getPublicKey(), amount: 2, tokenCode: "FIO", metadata: metadata, maxFee: 0) { (response, error) in
+        FIOSDK.sharedInstance().requestFunds(payer: "faucet:fio", payee: self.requesteeFioName, payeePublicAddress: FIOSDK.sharedInstance().getPublicKey(), amount: 3, tokenCode: "FIO", metadata: metadata, maxFee: 0) { (response, error) in
             if error?.kind == .Success {
                 sleep(60)
                 FIOSDK.sharedInstance().registerFioAddress(fioName, maxFee: 2 ) { (response, error) in
@@ -950,26 +950,38 @@ class FIOSDKTests: XCTestCase {
    
     //MARK: -
     // broken here
-    func testRecordObtDataWithFakeDataShouldSucceeded() {
-        let expectation = XCTestExpectation(description: "testRecordSendWithFakeDataShouldSucceeded")
+    func testRecordObtDataAndGetObtData() {
+        let expectation = XCTestExpectation(description: "testRecordObtDataAndGetObtData - recordObt")
+        let expectationData = XCTestExpectation(description: "testRecordObtDataAndGetObtData - Data")
         
-        let amount = 4.65
+        let amount = 7.65
         let payee = self.requestorFioName
         let payer = self.requesteeFioName
         let timestamp = NSDate().timeIntervalSince1970
-        let fromPubAdd = "from\(Int(timestamp.rounded()))"
-        let toPubAdd = "to\(Int(timestamp.rounded()))"
-        let obtID = "0xf6eaddd3851923f6f9653838d3021c02ab123a4a6e4485e83f5063b3711e000b"
+        let fromPubAdd = "froma\(Int(timestamp.rounded()))"
+        let toPubAdd = "toa\(Int(timestamp.rounded()))"
+        let obtID = "0xf6daddd3851923f6f9653838d3021c02ab123a4a6e4485e83f5063b3711e000b"
         
         defaultSDKConfig()
         let metaData = RecordObtDataRequest.MetaData(memo: "", hash: "", offlineUrl: "")
         FIOSDK.sharedInstance().recordObtData(payerFIOAddress: payer, payeeFIOAddress: payee, payerTokenPublicAddress: fromPubAdd, payeeTokenPublicAddress: toPubAdd, amount: amount, tokenCode: "VIT", obtId: obtID, maxFee: SUFUtils.amountToSUF(amount: 2.0), metaData: metaData) { (response, error) in
             XCTAssert((error?.kind == FIOError.ErrorKind.Success), "recordSend NOT SUCCESSFUL")
             expectation.fulfill()
+            
+            FIOSDK.sharedInstance().getObtData { (obtResponse, fioError) in
+                XCTAssert(obtResponse != nil, "getObtData not found")
+
+                if (obtResponse != nil) {
+                    XCTAssert((obtResponse?.obtData.count ?? 0) > 0, "No getObtData")
+                }
+                expectationData.fulfill()
+            }
+            
         }
 
-        wait(for: [expectation], timeout: TIMEOUT)
+        wait(for: [expectation, expectationData], timeout: TIMEOUT)
     }
+    
     
     func testGetFIOBalanceWithProperSetupShouldReturnValue() {
         let expectation = XCTestExpectation(description: "testGetFIOBalanceWithProperSetupShouldReturnValue")

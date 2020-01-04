@@ -13,7 +13,7 @@ public struct RecordObtDataRequest: Codable {
     let payerFIOAddress: String
     let payeeFIOAddress: String
     let content: String
-    let fioRequestId: Int?
+    let fioRequestId: String
     let maxFee: Int
     let walletFioAddress: String
     let actor: String

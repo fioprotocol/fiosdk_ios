@@ -16,7 +16,7 @@ extension FIOSDK.Responses {
         public let more: Int
         
         enum CodingKeys: String, CodingKey {
-            case obtData
+            case obtData = "obt_data_records"
             case more
         }
         
@@ -102,11 +102,15 @@ extension FIOSDK.Responses {
                 
                 let status = try container.decodeIfPresent(String.self, forKey: .status) ?? ""
                 
+                print("DECRYPTING")
+                print (content)
                 var metadataString = FIOSDK.sharedInstance().decrypt(publicKey: payeeFIOPublicKey, contentType: FIOAbiContentType.recordObtDataContent, encryptedContent: content)
                 
                 if (metadataString.count < 1){
                     metadataString = FIOSDK.sharedInstance().decrypt(publicKey: payerFIOPublicKey, contentType: FIOAbiContentType.recordObtDataContent, encryptedContent: content)
                 }
+                print ("TO:")
+                print(metadataString)
                 
                 var deadRecord = false
                 var metadata = ObtDataResponse.MetaData(payerPublicAddress: "", payeePublicAddress: "", amount: "", tokenCode: "", obtId: "", status: "", memo: "", hash: "", offlineUrl: "")

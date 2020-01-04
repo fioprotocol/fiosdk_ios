@@ -499,7 +499,7 @@ public class FIOSDK: BaseFIOSDK {
                 do {
                     var result = try JSONDecoder().decode(FIOSDK.Responses.GetObtDataResponse.self, from: data)
                     
-                    result.obtData = result.obtData.filter { ($0.fioRequestId ?? 0 ) >= 0 }
+                    result.obtData = result.obtData.filter { ($0.fioRequestId ?? -1) >= 0 }
                     
                     completion(result, FIOError.success())
                 }
@@ -655,6 +655,11 @@ public class FIOSDK: BaseFIOSDK {
         guard let myKey = try! PrivateKey(keyString: self.privateKey) else {
            return ""
         }
+        
+        if (encryptedContent.isValidHex() ==  false) {
+            return ""
+        }
+        
         let sharedSecret = myKey.getSharedSecret(publicKey: publicKey)
 
         var possibleDecrypted: Data?
@@ -809,7 +814,7 @@ public class FIOSDK: BaseFIOSDK {
     ///     - metaData: memo, hash, offlineURL options
     ///     - walletFioAddress: FIO Address of the wallet which generates this transaction.
     ///     - onCompletion: Once finished this callback returns optional response and error.
-    public func recordObtData(fioRequestId: Int? = 0,
+    public func recordObtData(fioRequestId: Int? = nil,
                            payerFIOAddress: String,
                            payeeFIOAddress: String,
                            payerTokenPublicAddress: String,
@@ -833,7 +838,13 @@ public class FIOSDK: BaseFIOSDK {
             let encryptedContent = self.encrypt(publicKey: payeeFIOPublicKey, contentType: FIOAbiContentType.recordObtDataContent, contentJson: contentJson.toJSONString())
             
             let actor = AccountNameGenerator.run(withPublicKey: self.getPublicKey())
-            let request = RecordObtDataRequest(payerFIOAddress: payerFIOAddress, payeeFIOAddress: payeeFIOAddress, content: encryptedContent, fioRequestId: fioRequestId ?? 0, maxFee: maxFee, walletFioAddress: walletFioAddress, actor: actor)
+            var fioReqId = ""
+            if (fioRequestId != nil){
+                fioReqId = String(fioRequestId ?? 0)
+            }
+            
+            let request = RecordObtDataRequest(payerFIOAddress: payerFIOAddress, payeeFIOAddress: payeeFIOAddress, content: encryptedContent, fioRequestId: fioReqId, maxFee: maxFee, walletFioAddress: walletFioAddress, actor: actor)
+            
             signedPostRequestTo(privateKey: self.getPrivateKey(),
                                 route: ChainRoutes.recordObtData,
                                 forAction: ChainActions.recordObtData,
