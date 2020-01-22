@@ -74,7 +74,7 @@ public class FIOSDK: BaseFIOSDK {
     //MARK: FIO Name validation
     
     public func isFioNameValid(fioName: String) -> Bool{
-        if fioName.contains(":") {
+        if fioName.contains("@") {
             return isFIOAddressValid(fioName)
         }
         return isFIODomainValid(fioName)
@@ -517,7 +517,6 @@ public class FIOSDK: BaseFIOSDK {
         }
     }
     
-    
     //MARK: Get FIO Names
     
     /// Returns FIO Addresses and FIO Domains owned by given FIO public key.
@@ -697,8 +696,8 @@ public class FIOSDK: BaseFIOSDK {
     public func requestFunds(payer payerFIOAddress:String, payee payeeFIOAddress: String, payeePublicAddress: String, amount: Float, tokenCode: String, metadata: RequestFundsRequest.MetaData, maxFee: Int, walletFioAddress:String = "", onCompletion: @escaping ( _ response: RequestFundsResponse?, _ error:FIOError? ) -> ()) {
        
         self.getFIOPublicKey(fioAddress: payerFIOAddress) { (response, error) in
-#warning("remove from production code here.")
-            if (error.kind == FIOError.ErrorKind.Success || payerFIOAddress.lowercased() == "faucet:fio") {
+
+            if (error.kind == FIOError.ErrorKind.Success) {
                 
                 let contentJson = RequestFundsContent(payeePublicAddress: payeePublicAddress, amount: String(amount), tokenCode: tokenCode, memo:metadata.memo ?? "", hash: metadata.hash ?? "", offlineUrl: metadata.offlineUrl ?? "")
                 
@@ -971,7 +970,7 @@ public class FIOSDK: BaseFIOSDK {
     ///     - fioAddress: FIO Address incurring the fee and owned by signer.
     ///     - onCompletion: A function that is called once request is over with an optional response with results and error containing the status of the call.
     public func getFeeForAddPublicAddress(fioAddress: String, onCompletion: @escaping (_ response: FIOSDK.Responses.FeeResponse?, _ error: FIOError) -> ()) {
-        self.getFeeResponse(fioAddress: "", endPoint: "add_pub_address", onCompletion: onCompletion)
+        self.getFeeResponse(fioAddress: fioAddress, endPoint: "add_pub_address", onCompletion: onCompletion)
     }
     
     //MARK: getFeeForNewFundsRequest
@@ -1000,8 +999,8 @@ public class FIOSDK: BaseFIOSDK {
     /// - Parameters:
     ///     - payerFioAddress: Payer Fio Address
     ///     - onCompletion: A function that is called once request is over with an optional response with results and error containing the status of the call.
-    public func getFeeForRecordSend(payerFioAddress: String, onCompletion: @escaping (_ response: FIOSDK.Responses.FeeResponse?, _ error: FIOError) -> ()) {
-        self.getFeeResponse(fioAddress: payerFioAddress, endPoint: "record_send", onCompletion: onCompletion)
+    public func getFeeForRecordObtData(payerFioAddress: String, onCompletion: @escaping (_ response: FIOSDK.Responses.FeeResponse?, _ error: FIOError) -> ()) {
+        self.getFeeResponse(fioAddress: payerFioAddress, endPoint: "record_obt_data", onCompletion: onCompletion)
     }
 
 }

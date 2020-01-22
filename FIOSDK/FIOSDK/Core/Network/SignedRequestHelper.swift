@@ -34,6 +34,8 @@ internal func signedPostRequestTo<T: Codable>(privateKey: String, route: ChainRo
        //     then we pack and sign it.
             
             // this result.json is the hex encoding.
+            
+            print(action.rawValue)
             PackedTransactionUtil.packAndSignTransaction(code: code, action: action.rawValue, data: result.json, account: account, privateKey: privateKey, completion: { (signedTx, error) in
                 if let error = translateErrorToFIOError(error: error) {
                     onCompletion(nil, error)
@@ -41,6 +43,8 @@ internal func signedPostRequestTo<T: Codable>(privateKey: String, route: ChainRo
                 else {
                     print("Called FIOSDK action: " + action.rawValue)
                     let url = ChainRouteBuilder.build(route: route)
+                    print("********")
+                    print(url)
                     FIOHTTPHelper.postRequestTo(url, withBody: signedTx, onCompletion: { (data, error) in
                         if data == nil, let error = error {
                             onCompletion(nil, error)

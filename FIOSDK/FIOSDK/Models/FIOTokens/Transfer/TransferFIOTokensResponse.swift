@@ -16,7 +16,7 @@ extension FIOSDK.Responses {
         public let feeCollected: Int
         
         enum CodingKeys: String, CodingKey {
-            case status = "status"
+            case status
             case feeCollected = "fee_collected"
         }
         

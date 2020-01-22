@@ -15,7 +15,6 @@ extension FIOSDK.Params {
         case registerFIODomain = "register_fio_domain"
         case registerFIOAddress = "register_fio_address"
         case transferTokensUsingPublicKey = "transfer_tokens_pub_key"
-        case transferTokensUsingFIOAddress = "transfer_tokens_fio_address"
         
     }
 

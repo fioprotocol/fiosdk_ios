@@ -16,12 +16,12 @@ private let DEFAULT_SERVER = "http://dev3.fio.dev:8889/v1"
 private let MOCK_DEFAULT_SERVER = "http://mock.dapix.io/mockd/DEV3/register_fio_name"
 
 private let ALTERNATE_SERVER = "http://dev2.fio.dev:8889/v1"
-private let MOCK_ALTERNATE_SERVER = "http://mock.dapix.io/mockd/DEV2/register_fio_name"
+private let MOCK_ALTERNATE_SERVER = "http://18.237.79.246/mockd/DEV2/register_fio_name"
 
 class FIOSDKTests: XCTestCase {
     
-    private let privateKey:String = "5KDQzVMaD1iUdYDrA2PNK3qEP7zNbUf8D41ZVKqGzZ117PdM5Ap"
-    private let publicKey:String = "FIO6D6gSipBmP1KW9SMB5r4ELjooaogFt77gEs25V9TU9FrxKVeFb"
+    //private let privateKey:String = "5KDQzVMaD1iUdYDrA2PNK3qEP7zNbUf8D41ZVKqGzZ117PdM5Ap"
+    //private let publicKey:String = "FIO6D6gSipBmP1KW9SMB5r4ELjooaogFt77gEs25V9TU9FrxKVeFb"
     
 
     // stage 1 server: 18.223.14.244
@@ -34,26 +34,43 @@ class FIOSDKTests: XCTestCase {
     private let expectedDefaultPublicKey = "FIO5kJKNHwctcfUM5XZyiWSqSTM5HTzznJP9F3ZdbhaQAHEVq575o"
     private let mockUrl = (useDefaultServer ? MOCK_DEFAULT_SERVER : MOCK_ALTERNATE_SERVER)
     
-    private let fioPrivateKey = "5JLxoeRoMDGBbkLdXJjxuh3zHsSS7Lg6Ak9Ft8v8sSdYPkFuABF"
-    private let fioPublicKey  = "FIO5oBUYbtGTxMS66pPkjC2p8pbA3zCtc8XD4dq9fMut867GRdh82"
+    private let fioPrivateKey = "5Kbb37EAqQgZ9vWUHoPiC2uXYhyGSFNbL6oiDp24Ea1ADxV1qnu"
+    private let fioPublicKey  = "FIO5kJKNHwctcfUM5XZyiWSqSTM5HTzznJP9F3ZdbhaQAHEVq575o"
     
-    private let fioPrivateKeyAlternative = "5JCpqkvsrCzrAC3YWhx7pnLodr3Wr9dNMULYU8yoUrPRzu269Xz"
-    private let fioPublicKeyAlternative  = "FIO7uRvrLVrZCbCM2DtCgUMospqUMnP3JUC1sKHA8zNoF835kJBvN"
+    private let fioPrivateKeyAlternative = "5JvQDLdiYZ6YGyUzsuBsC3VYAP8gJjaGzKG4UvEAuoUoiKAF8c7"
+    private let fioPublicKeyAlternative  = "FIO8eZNfgkkQwKLYHCbUhNQ6nAHqLTffPvQhcJce7ew8ejk7AL1ws"
+    
+    private let faucetPrivateKey = "5KF2B21xT5pE5G3LNA6LKJc6AP2pAd2EnfpAUrJH12SFV8NtvCD"
+    private let faucetPublicKey = "FIO6zwqqzHQcqCc2MB4jpp1F73MXpisEQe2SDghQFSGQKoAPjvQ3H"
+    private let faucetFioAddress = "fio@faucet"
     
     //MARK: test variables
     private var requesteeFioName: String = ""
     private let requesteeAddress: String = "0xc39b2845E3CFAdE5f5b2864fe73f5960B8dB483B"
     private var requestorFioName: String = ""
     private let requestorAddress: String = "0x3A2522321656285661Df2012a3A05bEF84C8B1ed"
+    private var isFunded: Bool = false
     
     //MARK: Setup
     
     override func setUp() {
         // Put setup code here. This method is called before the invocation of each test method in the class.
-
         defaultSDKConfig()
-
-        registerDefaultUsers()
+        if (isFunded == false){
+            print("CHANGED REGISTRATION")
+            isFunded = true
+            let timestamp = NSDate().timeIntervalSince1970
+            requesteeFioName = "sha\(Int(timestamp.rounded()))@brd"
+            requestorFioName = "bar\(Int(timestamp.rounded()))@brd"
+            
+            fundAccountWithFaucet(fioPublicKeyToFund: fioPublicKey)
+            fundAccountWithFaucet(fioPublicKeyToFund: fioPublicKeyAlternative)
+        
+            sleep(6)
+            registerDefaultUsers()
+        }
+        defaultSDKConfig()
+        sleep(6)
     }
     
     override func tearDown() {
@@ -64,63 +81,65 @@ class FIOSDKTests: XCTestCase {
         try? FIOSDK.wipePrivPubKeys()
         let keyPair = FIOSDK.privatePubKeyPair(forMnemonic: defaultMnemonic)
         _ = FIOSDK.sharedInstance(privateKey: keyPair.privateKey, publicKey: keyPair.publicKey, url: defaultServer, mockUrl: mockUrl)
+        
+        print ("DEFAULT KEYS:")
+        print(keyPair.privateKey)
+        print(keyPair.publicKey)
+    }
+    
+    private func fundAccountWithFaucet(fioPublicKeyToFund:String) {
+        
+        _ = FIOSDK.sharedInstance(privateKey: self.faucetPrivateKey, publicKey: self.faucetPublicKey, url: defaultServer, mockUrl: mockUrl)
+
+        sleep(5)
+        print ("*****FAUCET")
+        print (self.faucetPublicKey)
+        print (defaultServer)
+        
+        FIOSDK.sharedInstance().transferFIOTokens(payeePublicKey: fioPublicKeyToFund, amount: SUFUtils.amountToSUF(amount: 100), maxFee: SUFUtils.amountToSUF(amount: 100)) { (response, error) in
+            print("***HERE*****")
+            print(response)
+            print(error)
+            
+        }
     }
     
     private func alternativeSDKConfig() {
         try? FIOSDK.wipePrivPubKeys()
         let keyPair = FIOSDK.privatePubKeyPair(forMnemonic: "gallery hero weekend notable inherit chuckle village spread business scrap surprise finger")
         _ = FIOSDK.sharedInstance(privateKey: keyPair.privateKey, publicKey: keyPair.publicKey, url: defaultServer, mockUrl: mockUrl)
+        
+        print ("ALTERNATE KEYS:")
+        print(keyPair.privateKey)
+        print(keyPair.publicKey)
     }
     
     func registerDefaultUsers() {
-        let timestamp = NSDate().timeIntervalSince1970
-        requesteeFioName = "sha\(Int(timestamp.rounded())):brd"
-        requestorFioName = "bar\(Int(timestamp.rounded())):brd"
         
+        print ("*************REGISTERING*******")
+
+        self.defaultSDKConfig()
         let expectation = XCTestExpectation(description: "testRegisterFIOName")
-        
-        print (FIOSDK.sharedInstance().getPublicKey())
-        FIOSDK.sharedInstance().registerFIONameOnBehalfOfUser(fioName: requesteeFioName, publicKey: FIOSDK.sharedInstance().getPublicKey(), onCompletion: { response, error in ()
-            XCTAssert((error?.kind == FIOError.ErrorKind.Success), "registerFIOName NOT SUCCESSFUL")
-             print ("REQUESTEE:")
-            print (self.requesteeFioName)
-            print ("PUBLIC KEY:")
-            print (FIOSDK.sharedInstance().getPublicKey())
-            sleep(6)
-            let metadata = RequestFundsRequest.MetaData(memo: "", hash: nil, offlineUrl: nil)
-            FIOSDK.sharedInstance().requestFunds(payer: "faucet:fio", payee: self.requesteeFioName, payeePublicAddress: FIOSDK.sharedInstance().getPublicKey(), amount: 9, tokenCode: "FIO", metadata: metadata, maxFee: 0) { (response, error) in
-                if error?.kind == .Success {
-                    sleep(6)
+
+        FIOSDK.sharedInstance().registerFioAddress(requesteeFioName, maxFee: SUFUtils.amountToSUF(amount: 6.0)) { (fioResponse, fioError) in
+            XCTAssert((fioError?.kind == FIOError.ErrorKind.Success), "registerFIOName for default sdk, NOT SUCCESSFUL")
+            
+            if fioError?.kind == .Success {
+                self.alternativeSDKConfig()
+
+            
+                FIOSDK.sharedInstance().registerFioAddress(self.requestorFioName, maxFee: SUFUtils.amountToSUF(amount: 6.0)) { (fioResponse2, fioError2) in
+                    XCTAssert((fioError2?.kind == FIOError.ErrorKind.Success), "registerFIOName for alternate sdk config, NOT SUCCESSFUL")
                     
-                    self.alternativeSDKConfig()
-                    print (FIOSDK.sharedInstance().getPublicKey())
-                    sleep(6)
-                    FIOSDK.sharedInstance().registerFIONameOnBehalfOfUser(fioName: self.requestorFioName, publicKey: FIOSDK.sharedInstance().getPublicKey(), onCompletion: { response, error in ()
-                        XCTAssert((error?.kind == FIOError.ErrorKind.Success), "registerFIOName NOT SUCCESSFUL" + (error?.localizedDescription ?? "") )
-                        print(error)
-                        print ("REQUESTOR:")
-                        print(self.requestorFioName)
-                        sleep (6)
-                        FIOSDK.sharedInstance().requestFunds(payer: "faucet:fio", payee: self.requestorFioName, payeePublicAddress: FIOSDK.sharedInstance().getPublicKey(), amount: 9, tokenCode: "FIO", metadata: metadata, maxFee: 0) { (response, error) in
-                            if error?.kind == .Success {
-                                sleep(10)
-                                
-                                self.defaultSDKConfig()
-                                expectation.fulfill()
-                            }
-                            else {
-                                print ("failed to request funds - second user")
-                                expectation.fulfill()
-                            }
-                        }
-                    })
-                }
-                else {
-                    print ("failed to request funds - first user")
+                    self.defaultSDKConfig()
                     expectation.fulfill()
                 }
             }
-        })
+            else {
+                expectation.fulfill()
+            }
+        }
+        
         
         wait(for: [expectation], timeout: TIMEOUT)
     }
@@ -158,15 +177,17 @@ class FIOSDKTests: XCTestCase {
 
     func testValidation(){
         
-        XCTAssert(FIOSDK.sharedInstance().isFioNameValid(fioName: "test:brd"), "should be valid")
+        XCTAssert(FIOSDK.sharedInstance().isFioNameValid(fioName: "test@brd"), "should be valid")
         
-        XCTAssert (FIOSDK.sharedInstance().isFioNameValid(fioName: "test1234567890123456:brd"), "should be valid")
+        XCTAssert (FIOSDK.sharedInstance().isFioNameValid(fioName: "test1234567890123456@brd"), "should be valid")
         
-        XCTAssert (!FIOSDK.sharedInstance().isFioNameValid(fioName: "test:brd:brd"), "should be invalid")
+        XCTAssert (!FIOSDK.sharedInstance().isFioNameValid(fioName: "test@brd@brd"), "should be invalid")
+        
+        XCTAssert (!FIOSDK.sharedInstance().isFioNameValid(fioName: "test#!@brd"), "should be invalid")
         
         XCTAssert (!FIOSDK.sharedInstance().isFioNameValid(fioName: "test#!:brd"), "should be invalid")
         
-        XCTAssert (!FIOSDK.sharedInstance().isFioNameValid(fioName: "12-:brd"), "should be invalid")
+        XCTAssert (!FIOSDK.sharedInstance().isFioNameValid(fioName: "12-@brd"), "should be invalid")
         
         XCTAssert (FIOSDK.sharedInstance().isFioNameValid(fioName: "brd"), "should be valid")
         
@@ -207,7 +228,7 @@ class FIOSDKTests: XCTestCase {
     func testIsAvailableWithNewNameShouldBeAvailable(){
         let expectation = XCTestExpectation(description: "testIsAvailable")
         let timestamp = NSDate().timeIntervalSince1970
-        let fioAddress = "fioaddress\(Int(timestamp.rounded())):brd"
+        let fioAddress = "fioaddress\(Int(timestamp.rounded()))@brd"
         FIOSDK.sharedInstance().isAvailable(fioName:fioAddress) { (isAvailable, error) in
             XCTAssert((error?.kind == FIOError.ErrorKind.Success), "testIsAvailable NOT SUCCESSFUL")
             
@@ -230,7 +251,7 @@ class FIOSDKTests: XCTestCase {
         let timestamp = NSDate().timeIntervalSince1970
         let pubAdd = "pubAdd\(Int(timestamp.rounded()))"
         self.alternativeSDKConfig()
-        FIOSDK.sharedInstance().addPublicAddress(fioAddress: self.requesteeFioName, tokenCode: "ETH", publicAddress: pubAdd, maxFee: 0) { (response, error) in
+        FIOSDK.sharedInstance().addPublicAddress(fioAddress: self.requestorFioName, tokenCode: "ETH", publicAddress: pubAdd, maxFee: SUFUtils.amountToSUF(amount: 16.0)) { (response, error) in
             XCTAssert((error?.kind == FIOError.ErrorKind.Success), "testAddPublicAddress NOT SUCCESSFUL: \(error?.localizedDescription ?? "")")
             expectation.fulfill()
         }
@@ -264,12 +285,14 @@ class FIOSDKTests: XCTestCase {
         wait(for: [expectation], timeout: TIMEOUT)
     }
     
-  
-    
-    func testGetFioNamesWithUnvalidAddressShouldRespondWithNotFound(){
+    func testGetFioNamesWithInvalidAddressShouldRespondWithNotFound(){
         let expectation = XCTestExpectation(description: "testgetfionames")
         FIOSDK.sharedInstance().getFioNames(fioPublicKey: "NOT VALID ADDRESS") { (data, error) in
-            XCTAssert(error?.kind == FIOError.ErrorKind.Failure, "Should have failed")
+
+            if (data != nil){
+                XCTAssertNil(data,  "Should have failed")
+            }
+
             expectation.fulfill()
         }
         wait(for: [expectation], timeout: TIMEOUT)
@@ -279,7 +302,7 @@ class FIOSDKTests: XCTestCase {
     func testGetFIONameDetailsWithGoodNameShouldSucceed() {
         let expectation = XCTestExpectation(description: "testGetFIONameDetailsWithGoodNameShouldSucceed")
         
-        self.defaultSDKConfig()
+       // self.defaultSDKConfig()
         FIOSDK.sharedInstance().getFIONameDetails(self.requesteeFioName) { (response, error) in
             XCTAssert(error.kind == .Success, "getPublicAddress error")
             XCTAssertNotNil(response, "getPublicAddress error")
@@ -291,11 +314,12 @@ class FIOSDKTests: XCTestCase {
                 XCTAssert(response?.address == self.requesteeFioName, "Wrong fio address")
                 XCTAssertNotNil(response?.address, "name NOT FOUND")
                 XCTAssertNotNil(response?.expiration, "date NOT FOUND")
+                print(error)
                 expectation.fulfill()
             }
         }
         
-        wait(for: [expectation], timeout: TIMEOUT)
+        wait(for: [expectation], timeout: TIMEOUT*2)
     }
     
     func testGetFIONameDetailsWithBadNameShouldFail() {
@@ -337,51 +361,7 @@ class FIOSDKTests: XCTestCase {
         }
         wait(for: [expectation], timeout: TIMEOUT)
     }
-    
-    //THere is something with the ordering after register fio name that is not right, maybe my ordering is not right
-    func testGetTokenPublicAddressWithValidPubAddressShouldSucceed() {
-        let expectation = XCTestExpectation(description: "testGetTokenPublicAddressWithValidPubAddressShouldSucceed")
         
-        let timestamp = NSDate().timeIntervalSince1970
-        let tokenPubAdd = "smp\(Int(timestamp.rounded()))"
-        let fioName = "fio\(Int(timestamp.rounded())):brd"
-        
-        
-        let metadata = RequestFundsRequest.MetaData(memo: "hello", hash: nil, offlineUrl: nil)
-        
-        self.defaultSDKConfig()
-        FIOSDK.sharedInstance().requestFunds(payer: "faucet:fio", payee: self.requesteeFioName, payeePublicAddress: FIOSDK.sharedInstance().getPublicKey(), amount: 3, tokenCode: "FIO", metadata: metadata, maxFee: 0) { (response, error) in
-            if error?.kind == .Success {
-                sleep(60)
-                FIOSDK.sharedInstance().registerFioAddress(fioName, maxFee: 2 ) { (response, error) in
-                    guard error?.kind == .Success else {
-                        XCTFail("User not registered")
-                        expectation.fulfill()
-                        return
-                    }
-                    FIOSDK.sharedInstance().getPublicAddress(fioAddress: fioName, tokenCode: "FIO") { (response, error) in
-                        guard error.kind == .Success, let fioPubAddress = response?.publicAddress else {
-                            XCTFail("Public address not found")
-                            expectation.fulfill()
-                            return
-                        }
-                        FIOSDK.sharedInstance().getPublicAddress(fioPublicKey: fioPubAddress, tokenCode: "BTC") { (response, error) in
-                            XCTAssert(error.kind == .Success, "getTokenPublicAddress failed")
-                            XCTAssertNotNil(response)
-                            expectation.fulfill()
-                        }
-                    }
-                }
-            }
-            else {
-                XCTFail("Failed to call requestFunds prior to registering domain requests")
-                expectation.fulfill()
-            }
-        }
-        
-        wait(for: [expectation], timeout: TIMEOUT)
-    }    
-    
     func testGetTokenPublicAddressWithInvalidTokenShouldFail() {
         let expectation = XCTestExpectation(description: "testGetTokenPublicAddressWithInvalidTokenShouldFail")
         
@@ -414,6 +394,7 @@ class FIOSDKTests: XCTestCase {
                 }
                 else {
                     XCTFail("Failed to call requestFunds")
+                    print(error)
                     expectationReqFunds.fulfill()
                 }
         }
@@ -440,6 +421,7 @@ class FIOSDKTests: XCTestCase {
                 FIOSDK.sharedInstance().requestFunds(payer: from, payee: to, payeePublicAddress: toPubAdd, amount: 1.0, tokenCode: "BTC", metadata: metadata, maxFee: 0) { (response, error) in
                     XCTAssert(error?.kind == .Success, "requestFunds failed")
                     XCTAssertNotNil(response)
+                    print(error)
                     expectation.fulfill()
                 }
             }
@@ -478,7 +460,7 @@ class FIOSDKTests: XCTestCase {
             XCTAssert(error?.kind == .Success && response != nil, "testRejectFundsRequest Couldn't create mock request")
             if let response = response {
                 self.defaultSDKConfig()
-                FIOSDK.sharedInstance().rejectFundsRequest(fioRequestId: response.fioRequestId, maxFee: 0, completion: { (response, error) in
+                FIOSDK.sharedInstance().rejectFundsRequest(fioRequestId: response.fioRequestId, maxFee: 10000000000, completion: { (response, error) in
                     XCTAssert(error.kind == .Success, "testRejectFundsRequest couldn't reject request")
                     expectation.fulfill()
                 })
@@ -515,6 +497,7 @@ class FIOSDKTests: XCTestCase {
                          guard sentError.kind == .Success, sentRecords != nil else {
                             XCTFail("testGetSentAndPendingRequests Request should have sent fio requests")
                             expGetSentRequest.fulfill()
+                            expGetPendingRequest.fulfill()
                             return
                          }
 
@@ -539,6 +522,7 @@ class FIOSDKTests: XCTestCase {
                      XCTFail("Failed to call requestFunds for getSentRequests")
                      expRequestFunds.fulfill()
                      expGetSentRequest.fulfill()
+                     expGetPendingRequest.fulfill()
                  }
          }
 
@@ -563,96 +547,66 @@ class FIOSDKTests: XCTestCase {
     
     func testRegisterFIONameWithNewValueShouldRegister() {
         let timestamp = NSDate().timeIntervalSince1970
-        let fioName = "sha\(Int(timestamp.rounded())):brd"
+        let fioName = "sha\(Int(timestamp.rounded()))@brd"
         let expectation = XCTestExpectation(description: "testRegisterFIONameWithNewValueShouldRegister")
-
-        let metadata = RequestFundsRequest.MetaData(memo: "", hash: nil, offlineUrl: nil)
         
         self.defaultSDKConfig()
-        FIOSDK.sharedInstance().requestFunds(payer: "faucet:fio", payee: self.requesteeFioName, payeePublicAddress: FIOSDK.sharedInstance().getPublicKey(), amount: 2, tokenCode: "FIO", metadata: metadata, maxFee: 0) { (response, error) in
-            if error?.kind == .Success {
-                sleep(60)
-                FIOSDK.sharedInstance().registerFioAddress(fioName, maxFee: 2, onCompletion: {response, error in ()
-                    XCTAssert((error?.kind == FIOError.ErrorKind.Success), "registerFIOName NOT SUCCESSFUL")
-                    expectation.fulfill()
-                })
-            }
-            else {
-                XCTFail("Failed to call requestFunds prior to registering domain requests")
-                expectation.fulfill()
-            }
-        }
+       
+        FIOSDK.sharedInstance().registerFioAddress(fioName, maxFee: SUFUtils.amountToSUF(amount: 16.0), onCompletion: {response, error in ()
+            XCTAssert((error?.kind == FIOError.ErrorKind.Success), "registerFIOName NOT SUCCESSFUL")
+            expectation.fulfill()
+        })
         
         wait(for: [expectation], timeout: TIMEOUT)
     }
     
     func testRegisterFIONameWithAlreadyRegisteredValueShouldFail() {
         let timestamp = NSDate().timeIntervalSince1970
-        let fioName = "sha\(Int(timestamp.rounded())):brd"
+        let fioName = "sha\(Int(timestamp.rounded()))@brd"
         let expectation = XCTestExpectation(description: "testRegisterFIONameWithAlreadyRegisteredValueShouldFail")
 
         
         let metadata = RequestFundsRequest.MetaData(memo: "", hash: nil, offlineUrl: nil)
         
         self.defaultSDKConfig()
-        FIOSDK.sharedInstance().requestFunds(payer: "faucet:fio", payee: self.requesteeFioName, payeePublicAddress: FIOSDK.sharedInstance().getPublicKey(), amount: 2, tokenCode: "FIO", metadata: metadata, maxFee: 0) { (response, error) in
-            if error?.kind == .Success {
-                sleep(60)
-                FIOSDK.sharedInstance().registerFioAddress(fioName, maxFee: 2, onCompletion: { response, error in ()
-                    XCTAssert((error?.kind == FIOError.ErrorKind.Success), "registerFIOName NOT SUCCESSFUL")
-                    FIOSDK.sharedInstance().registerFioAddress(fioName, maxFee: 2, onCompletion: { response, error in ()
-                        XCTAssert((error?.kind == FIOError.ErrorKind.Failure), "registerFIOName NOT SUCCESSFUL")
-                        expectation.fulfill()
-                    })
-                })
-            }
-            else {
-                XCTFail("Failed to call requestFunds prior to registering domain requests")
+
+        FIOSDK.sharedInstance().registerFioAddress(fioName, maxFee: SUFUtils.amountToSUF(amount: 16.0), onCompletion: { response, error in ()
+            XCTAssert((error?.kind == FIOError.ErrorKind.Success), "registerFIOName NOT SUCCESSFUL")
+            FIOSDK.sharedInstance().registerFioAddress(fioName, maxFee: SUFUtils.amountToSUF(amount: 16.0), onCompletion: { response, error in ()
+                XCTAssert((error?.kind == FIOError.ErrorKind.Failure), "registerFIOName NOT SUCCESSFUL")
                 expectation.fulfill()
-            }
-        }
+            })
+        })
 
         wait(for: [expectation], timeout: TIMEOUT)
     }
     
     func testRegisterFIONameWithFIOTokenAddressShouldNotAddAddress() {
         let timestamp = NSDate().timeIntervalSince1970
-        let fioName = "sha\(Int(timestamp.rounded())):brd"
+        let fioName = "sha\(Int(timestamp.rounded()))@brd"
         let expectation = XCTestExpectation(description: "testRegisterFIONameWithAlreadyRegisteredValueShouldFail")
         
-        let metadata = RequestFundsRequest.MetaData(memo: "", hash: nil, offlineUrl: nil)
-        
-        self.defaultSDKConfig()
-        FIOSDK.sharedInstance().requestFunds(payer: "faucet:fio", payee: self.requesteeFioName, payeePublicAddress: FIOSDK.sharedInstance().getPublicKey(), amount: 2, tokenCode: "FIO", metadata: metadata, maxFee: 0) { (response, error) in
-            if error?.kind == .Success {
-                sleep(60)
-                FIOSDK.sharedInstance().registerFioAddress(fioName, maxFee:2, onCompletion: { response, error in ()
-                    XCTAssert((error?.kind == FIOError.ErrorKind.Success), "registerFIOName NOT SUCCESSFUL")
-                    FIOSDK.sharedInstance().getFioNames(fioPublicKey: "ignoreme", completion: { (response, error) in
-                        XCTAssert((error?.kind == FIOError.ErrorKind.Failure), "Added the address it shouldn´t be added")
-                        expectation.fulfill()
-                    })
-                })
-            }
-            else {
-                XCTFail("Failed to call requestFunds prior to registering domain requests")
+        FIOSDK.sharedInstance().registerFioAddress(fioName, maxFee:SUFUtils.amountToSUF(amount: 16.0), onCompletion: { response, error in ()
+            XCTAssert((error?.kind == FIOError.ErrorKind.Success), "registerFIOName NOT SUCCESSFUL")
+            FIOSDK.sharedInstance().getFioNames(fioPublicKey: "ignoreme", completion: { (response, error) in
+                XCTAssert((error?.kind == FIOError.ErrorKind.Failure), "Added the address it shouldn´t be added")
                 expectation.fulfill()
-            }
-        }
-        
+            })
+        })
+            
         wait(for: [expectation], timeout: TIMEOUT)
     }
     
-    func testRenewFIODomainWithNewValueShouldRenewNoWallet() {
+    func testRegisterAndRenewFIODomainWithNewValueShouldRenewNoWallet() {
         let timestamp = NSDate().timeIntervalSince1970
         let domain = "test\(Int(timestamp.rounded()))"
         let expectation = XCTestExpectation(description: "testRenewFIODomainWithNewValueShouldRenewNoWallet")
         self.defaultSDKConfig()
         
-        FIOSDK.sharedInstance().registerFioDomain(domain, maxFee: SUFUtils.amountToSUF(amount: 2.0), onCompletion: { (response, error) in
+        FIOSDK.sharedInstance().registerFioDomain(domain, maxFee: SUFUtils.amountToSUF(amount: 100.0), onCompletion: { (response, error) in
             if error?.kind == .Success {
                 sleep(60)
-                FIOSDK.sharedInstance().renewFioDomain(domain, maxFee: SUFUtils.amountToSUF(amount: 3.0), onCompletion: { (response, error) in
+                FIOSDK.sharedInstance().renewFioDomain(domain, maxFee: SUFUtils.amountToSUF(amount: 100.0), onCompletion: { (response, error) in
                     XCTAssert((error?.kind == FIOError.ErrorKind.Success), "renewFIODomain NOT SUCCESSFUL")
                     XCTAssertNotNil(response)
                     XCTAssert(response?.status != "")
@@ -672,7 +626,7 @@ class FIOSDKTests: XCTestCase {
         let domain = "#&*("
         let expectation = XCTestExpectation(description: "testRenewFIODomainWithInvalidValueShouldNotRenewNoWallet")
         
-        FIOSDK.sharedInstance().renewFioDomain(domain, maxFee: SUFUtils.amountToSUF(amount: 3.0), onCompletion: { (response, error) in
+        FIOSDK.sharedInstance().renewFioDomain(domain, maxFee: SUFUtils.amountToSUF(amount: 100.00), onCompletion: { (response, error) in
             XCTAssert((error?.kind == FIOError.ErrorKind.Failure), String(format:"renewFIODomain Should not renew invalid domains: %@", domain))
             expectation.fulfill()
         })
@@ -680,38 +634,13 @@ class FIOSDKTests: XCTestCase {
         wait(for: [expectation], timeout: TIMEOUT * 1.5)
     }
     
-    func testRenewFIODomainWithNewValueShouldRenew() {
-        let timestamp = NSDate().timeIntervalSince1970
-        let domain = "test\(Int(timestamp.rounded()))"
-        let expectation = XCTestExpectation(description: "testRenewFIODomainWithNewValueShouldRenew")
-        let walletFioAddress = "test:edge"
-        self.defaultSDKConfig()
-        
-        FIOSDK.sharedInstance().registerFioDomain(domain, maxFee: SUFUtils.amountToSUF(amount: 3.0), onCompletion: { (response, error) in
-            if error?.kind == .Success {
-                sleep(10)
-                FIOSDK.sharedInstance().renewFioDomain(domain, maxFee: SUFUtils.amountToSUF(amount: 3.0), walletFioAddress: walletFioAddress, onCompletion: { (response, error) in
-                    XCTAssert((error?.kind == FIOError.ErrorKind.Success), "renewFIODomain NOT SUCCESSFUL")
-                    XCTAssertNotNil(response)
-                    XCTAssert(response?.status != "")
-                    expectation.fulfill()
-                })
-            }
-            else {
-                XCTFail("Failed to call registerFioDomain prior to renew domain requests")
-                expectation.fulfill()
-            }
-        })
-        
-        wait(for: [expectation], timeout: TIMEOUT * 2)
-    }
     
     func testRenewFIODomainWithInvalidValueShouldNotRenew() {
         let domain = "#&*("
         let expectation = XCTestExpectation(description: "testRenewFIODomainWithInvalidValueShouldNotRenew")
-        let walletFioAddress = "test:edge"
+        let walletFioAddress = "test@edge"
         
-        FIOSDK.sharedInstance().renewFioDomain(domain, maxFee: SUFUtils.amountToSUF(amount: 3.0), walletFioAddress: walletFioAddress, onCompletion: { (response, error) in
+        FIOSDK.sharedInstance().renewFioDomain(domain, maxFee: SUFUtils.amountToSUF(amount: 16.0), walletFioAddress: walletFioAddress, onCompletion: { (response, error) in
             XCTAssert((error?.kind == FIOError.ErrorKind.Failure), String(format:"renewFIODomain Should not renew invalid domains: %@", domain))
             expectation.fulfill()
         })
@@ -719,66 +648,16 @@ class FIOSDKTests: XCTestCase {
         wait(for: [expectation], timeout: TIMEOUT * 1.5)
     }
     
-    func testRegisterFIODomainWithNewValueShouldRegister() {
-        let timestamp = NSDate().timeIntervalSince1970
-        let domain = "test\(Int(timestamp.rounded()))"
-        let expectation = XCTestExpectation(description: "testRegisterFIODomainWithNewValueShouldRegister")
-        let metadata = RequestFundsRequest.MetaData(memo: "", hash: nil, offlineUrl: nil)
-        
-        self.defaultSDKConfig()
-        FIOSDK.sharedInstance().requestFunds(payer: "faucet:fio", payee: self.requesteeFioName, payeePublicAddress: FIOSDK.sharedInstance().getPublicKey(), amount: 30, tokenCode: "FIO", metadata: metadata, maxFee: 0) { (response, error) in
-            if error?.kind == .Success {
-                sleep(60)
-                FIOSDK.sharedInstance().registerFioDomain(domain, maxFee: SUFUtils.amountToSUF(amount: 3.0), walletFioAddress:"", onCompletion: { (response, error) in
-                    XCTAssert((error?.kind == FIOError.ErrorKind.Success), "registerFIODomain NOT SUCCESSFUL")
-                    XCTAssertNotNil(response)
-                    XCTAssert(response?.status != "")
-                    expectation.fulfill()
-                })
-            }
-            else {
-                XCTFail("Failed to call requestFunds prior to registering domain requests")
-                expectation.fulfill()
-            }
-        }
-        
-        wait(for: [expectation], timeout: TIMEOUT * 1.5)
-    }
+
     
     func testRegisterFIODomainWithInvalidValueShouldNotRegister() {
         let domain = "#&*("
         let expectation = XCTestExpectation(description: "testRegisterFIODomainWithNewValueShouldRegister")
         
-        FIOSDK.sharedInstance().registerFioDomain(domain, maxFee: SUFUtils.amountToSUF(amount: 3.0), walletFioAddress:"", onCompletion: { (response, error) in
+        FIOSDK.sharedInstance().registerFioDomain(domain, maxFee: SUFUtils.amountToSUF(amount: 20.0), walletFioAddress:"", onCompletion: { (response, error) in
             XCTAssert((error?.kind == FIOError.ErrorKind.Failure), String(format:"registerFIODomain Should not register invalid domains: %@", domain))
             expectation.fulfill()
         })
-        
-        wait(for: [expectation], timeout: TIMEOUT * 1.5)
-    }
-    
-    func testRegisterFIODomainWithNewValueShouldRegisterNoWallet() {
-        let timestamp = NSDate().timeIntervalSince1970
-        let domain = "test\(Int(timestamp.rounded()))"
-        let expectation = XCTestExpectation(description: "testRegisterFIODomainWithNewValueShouldRegister")
-        let metadata = RequestFundsRequest.MetaData(memo: "", hash: nil, offlineUrl: nil)
-        
-        self.defaultSDKConfig()
-        FIOSDK.sharedInstance().requestFunds(payer: "faucet:fio", payee: self.requesteeFioName, payeePublicAddress: FIOSDK.sharedInstance().getPublicKey(), amount: 30, tokenCode: "FIO", metadata: metadata, maxFee: 0) { (response, error) in
-            if error?.kind == .Success {
-                sleep(60)
-                FIOSDK.sharedInstance().registerFioDomain(domain, maxFee: SUFUtils.amountToSUF(amount: 3.0), onCompletion: { (response, error) in
-                    XCTAssert((error?.kind == FIOError.ErrorKind.Success), "registerFIODomain NOT SUCCESSFUL")
-                    XCTAssertNotNil(response)
-                    XCTAssert(response?.status != "")
-                    expectation.fulfill()
-                })
-            }
-            else {
-                XCTFail("Failed to call requestFunds prior to registering domain requests")
-                expectation.fulfill()
-            }
-        }
         
         wait(for: [expectation], timeout: TIMEOUT * 1.5)
     }
@@ -787,7 +666,7 @@ class FIOSDKTests: XCTestCase {
         let domain = "#&*("
         let expectation = XCTestExpectation(description: "testRegisterFIODomainWithNewValueShouldRegister")
         
-        FIOSDK.sharedInstance().registerFioDomain(domain, maxFee: SUFUtils.amountToSUF(amount: 3.0), onCompletion: { (response, error) in
+        FIOSDK.sharedInstance().registerFioDomain(domain, maxFee: SUFUtils.amountToSUF(amount: 16.0), onCompletion: { (response, error) in
             XCTAssert((error?.kind == FIOError.ErrorKind.Failure), String(format:"registerFIODomain Should not register invalid domains: %@", domain))
             expectation.fulfill()
         })
@@ -797,15 +676,15 @@ class FIOSDKTests: XCTestCase {
     
     func testRenewFIOAddressWithNewValueShouldRenew() {
         let timestamp = NSDate().timeIntervalSince1970
-        let address = "test\(Int(timestamp.rounded())):brd"
+        let address = "test\(Int(timestamp.rounded()))@brd"
         let expectation = XCTestExpectation(description: "testRenewFIOAddressWithNewValueShouldRenew")
         let walletFioAddress = "test:edge"
         
         self.defaultSDKConfig()
-        FIOSDK.sharedInstance().registerFioAddress(address, maxFee: SUFUtils.amountToSUF(amount: 3.0), walletFioAddress: walletFioAddress, onCompletion: { (response, error) in
+        FIOSDK.sharedInstance().registerFioAddress(address, maxFee: SUFUtils.amountToSUF(amount: 16.0), walletFioAddress: walletFioAddress, onCompletion: { (response, error) in
             if error?.kind == .Success {
                 sleep(60)
-                FIOSDK.sharedInstance().renewFioAddress(address, maxFee: SUFUtils.amountToSUF(amount: 3.0), walletFioAddress: walletFioAddress, onCompletion: { (response, error) in
+                FIOSDK.sharedInstance().renewFioAddress(address, maxFee: SUFUtils.amountToSUF(amount: 16.0), walletFioAddress: walletFioAddress, onCompletion: { (response, error) in
                     XCTAssert((error?.kind == FIOError.ErrorKind.Success), "renewFIOAddress NOT SUCCESSFUL")
                     XCTAssertNotNil(response)
                     XCTAssert(response?.status != "")
@@ -826,7 +705,7 @@ class FIOSDKTests: XCTestCase {
         let expectation = XCTestExpectation(description: "testRenewFIOAddressWithInvalidValueShouldNotRenew")
         let walletFioAddress = "test:edge"
         
-        FIOSDK.sharedInstance().renewFioAddress(address, maxFee: SUFUtils.amountToSUF(amount: 3.0), walletFioAddress: walletFioAddress, onCompletion: { (response, error) in
+        FIOSDK.sharedInstance().renewFioAddress(address, maxFee: SUFUtils.amountToSUF(amount: 16.0), walletFioAddress: walletFioAddress, onCompletion: { (response, error) in
             XCTAssert((error?.kind == FIOError.ErrorKind.Failure), String(format:"renewFIODomain Should not renew invalid address: %@", address))
             expectation.fulfill()
         })
@@ -836,14 +715,14 @@ class FIOSDKTests: XCTestCase {
     
     func testRenewFIOAddressWithNewValueShouldRegisterNoWallet() {
         let timestamp = NSDate().timeIntervalSince1970
-        let address = "test\(Int(timestamp.rounded())):brd"
+        let address = "test\(Int(timestamp.rounded()))@brd"
         let expectation = XCTestExpectation(description: "testRenewFIOAddressWithNewValueShouldRegister")
         
         self.defaultSDKConfig()
-        FIOSDK.sharedInstance().registerFioAddress(address, maxFee: SUFUtils.amountToSUF(amount: 3.0), onCompletion: { (response, error) in
+        FIOSDK.sharedInstance().registerFioAddress(address, maxFee: SUFUtils.amountToSUF(amount: 16.0), onCompletion: { (response, error) in
             if error?.kind == .Success {
                 sleep(60)
-                FIOSDK.sharedInstance().renewFioAddress(address, maxFee: SUFUtils.amountToSUF(amount: 3.0), onCompletion: { (response, error) in
+                FIOSDK.sharedInstance().renewFioAddress(address, maxFee: SUFUtils.amountToSUF(amount: 16.0), onCompletion: { (response, error) in
                     XCTAssert((error?.kind == FIOError.ErrorKind.Success), "renewFIOAddress NOT SUCCESSFUL")
                     XCTAssertNotNil(response)
                     XCTAssert(response?.status != "")
@@ -863,7 +742,7 @@ class FIOSDKTests: XCTestCase {
         let address = "#&*("
         let expectation = XCTestExpectation(description: "testRenewFIOAddressWithInvalidValueShouldNotRegisterNoWallet")
         
-        FIOSDK.sharedInstance().renewFioAddress(address, maxFee: SUFUtils.amountToSUF(amount: 3.0), onCompletion: { (response, error) in
+        FIOSDK.sharedInstance().renewFioAddress(address, maxFee: SUFUtils.amountToSUF(amount: 16.0), onCompletion: { (response, error) in
             XCTAssert((error?.kind == FIOError.ErrorKind.Failure), String(format:"renewFIODomain Should not renew invalid address: %@", address))
             expectation.fulfill()
         })
@@ -873,28 +752,20 @@ class FIOSDKTests: XCTestCase {
     
     func testRegisterFIOAddressWithNewValueShouldRegister() {
         let timestamp = NSDate().timeIntervalSince1970
-        let address = "test\(Int(timestamp.rounded())):brd"
+        let address = "test\(Int(timestamp.rounded()))@brd"
         let expectation = XCTestExpectation(description: "testRegisterFIOAddressWithNewValueShouldRegister")
         let metadata = RequestFundsRequest.MetaData(memo: "", hash: nil, offlineUrl: nil)
         let walletFioAddress = "test:edge"
         
         self.defaultSDKConfig()
-        FIOSDK.sharedInstance().requestFunds(payer: "faucet:fio", payee: self.requesteeFioName, payeePublicAddress: FIOSDK.sharedInstance().getPublicKey(), amount: 2, tokenCode: "FIO", metadata: metadata, maxFee: 0) { (response, error) in
-            if error?.kind == .Success {
-                sleep(60)
-                FIOSDK.sharedInstance().registerFioAddress(address, maxFee: 2, walletFioAddress: walletFioAddress, onCompletion: { (response, error) in
-                    XCTAssert((error?.kind == FIOError.ErrorKind.Success), "registerFIOAddress NOT SUCCESSFUL")
-                    XCTAssertNotNil(response)
-                    XCTAssert(response?.status != "")
-                    expectation.fulfill()
-                })
-            }
-            else {
-                XCTFail("Failed to call requestFunds prior to registering address requests")
-                expectation.fulfill()
-            }
-        }
-        
+
+        FIOSDK.sharedInstance().registerFioAddress(address, maxFee: SUFUtils.amountToSUF(amount: 16.0), walletFioAddress: walletFioAddress, onCompletion: { (response, error) in
+            XCTAssert((error?.kind == FIOError.ErrorKind.Success), "registerFIOAddress NOT SUCCESSFUL")
+            XCTAssertNotNil(response)
+            XCTAssert(response?.status != "")
+            expectation.fulfill()
+        })
+            
         wait(for: [expectation], timeout: TIMEOUT * 1.5)
     }
     
@@ -902,7 +773,7 @@ class FIOSDKTests: XCTestCase {
         let address = "#&*("
         let expectation = XCTestExpectation(description: "testRegisterFIOAddressWithInvalidValueShouldNotRegister")
         let walletFioAddress = "test:edge"
-        FIOSDK.sharedInstance().registerFioAddress(address, maxFee: SUFUtils.amountToSUF(amount: 3.0), walletFioAddress: walletFioAddress , onCompletion: { (response, error) in
+        FIOSDK.sharedInstance().registerFioAddress(address, maxFee: SUFUtils.amountToSUF(amount: 16.0), walletFioAddress: walletFioAddress , onCompletion: { (response, error) in
             XCTAssert((error?.kind == FIOError.ErrorKind.Failure), String(format:"registerFIOAddress Should not register invalid address: %@", address))
             expectation.fulfill()
         })
@@ -912,26 +783,18 @@ class FIOSDKTests: XCTestCase {
     
     func testRegisterFIOAddressWithNewValueShouldRegisterNoWallet() {
         let timestamp = NSDate().timeIntervalSince1970
-        let address = "test\(Int(timestamp.rounded())):brd"
+        let address = "test\(Int(timestamp.rounded()))@brd"
         let expectation = XCTestExpectation(description: "testRegisterFIOAddressWithNewValueShouldRegister")
         let metadata = RequestFundsRequest.MetaData(memo: "", hash: nil, offlineUrl: nil)
         
         self.defaultSDKConfig()
-        FIOSDK.sharedInstance().requestFunds(payer: "faucet:fio", payee: self.requesteeFioName, payeePublicAddress: FIOSDK.sharedInstance().getPublicKey(), amount: 2, tokenCode: "FIO", metadata: metadata, maxFee: 0) { (response, error) in
-            if error?.kind == .Success {
-                sleep(60)
-                FIOSDK.sharedInstance().registerFioAddress(address, maxFee: SUFUtils.amountToSUF(amount: 3.0), onCompletion: { (response, error) in
-                    XCTAssert((error?.kind == FIOError.ErrorKind.Success), "registerFIOAddress NOT SUCCESSFUL")
-                    XCTAssertNotNil(response)
-                    XCTAssert(response?.status != "")
-                    expectation.fulfill()
-                })
-            }
-            else {
-                XCTFail("Failed to call requestFunds prior to registering address requests")
-                expectation.fulfill()
-            }
-        }
+
+        FIOSDK.sharedInstance().registerFioAddress(address, maxFee: SUFUtils.amountToSUF(amount: 16.0), onCompletion: { (response, error) in
+            XCTAssert((error?.kind == FIOError.ErrorKind.Success), "registerFIOAddress NOT SUCCESSFUL")
+            XCTAssertNotNil(response)
+            XCTAssert(response?.status != "")
+            expectation.fulfill()
+        })
         
         wait(for: [expectation], timeout: TIMEOUT * 1.5)
     }
@@ -940,7 +803,7 @@ class FIOSDKTests: XCTestCase {
         let address = "#&*("
         let expectation = XCTestExpectation(description: "testRegisterFIOAddressWithInvalidValueShouldNotRegister")
         
-        FIOSDK.sharedInstance().registerFioAddress(address, maxFee: SUFUtils.amountToSUF(amount: 3.0), onCompletion: { (response, error) in
+        FIOSDK.sharedInstance().registerFioAddress(address, maxFee: SUFUtils.amountToSUF(amount: 6.0), onCompletion: { (response, error) in
             XCTAssert((error?.kind == FIOError.ErrorKind.Failure), String(format:"registerFIOAddress Should not register invalid address: %@", address))
             expectation.fulfill()
         })
@@ -981,7 +844,6 @@ class FIOSDKTests: XCTestCase {
 
         wait(for: [expectation, expectationData], timeout: TIMEOUT)
     }
-    
     
     func testGetFIOBalanceWithProperSetupShouldReturnValue() {
         let expectation = XCTestExpectation(description: "testGetFIOBalanceWithProperSetupShouldReturnValue")
@@ -1055,21 +917,6 @@ class FIOSDKTests: XCTestCase {
         XCTAssert(!keys.privateKey.isEmpty && !keys.publicKey.isEmpty)
     }
     
-    func testRegisterFIONameOnBehalfOfUserShouldReturnSucess() {
-        let expectation = XCTestExpectation(description: "registerFIONameOnBehalfOfUserShouldReturnSucess")
-        
-        let timestamp = NSDate().timeIntervalSince1970
-        let fioName = "test\(Int(timestamp.rounded())):brd"
-        let publicKey = "FIO8PRe4WRZJj5mkem6qVGKyvNFgPsNnjNN6kPhh6EaCpzCVin5Jj"
-        
-        FIOSDK.sharedInstance().registerFIONameOnBehalfOfUser(fioName: fioName, publicKey: publicKey) { (response, error) in
-            XCTAssert(response != nil, "Something went wrong")
-            expectation.fulfill()
-        }
-        
-        wait(for: [expectation], timeout: TIMEOUT)
-    }
-    
     //MARK: Get Fee tests
     
     func testGetFeeShouldReturnFee() {
@@ -1083,7 +930,7 @@ class FIOSDKTests: XCTestCase {
                 expectation.fulfill()
                 return
             }
-            XCTAssert(fee > 0, "Something went wrong")
+            XCTAssert(fee >= 0, "Something went wrong")
             expectation.fulfill()
         })
         
@@ -1100,7 +947,7 @@ class FIOSDKTests: XCTestCase {
                 expectation.fulfill()
                 return
             }
-            XCTAssert(fee > 0, "Something went wrong")
+            XCTAssert(fee >= 0, "Something went wrong")
             expectation.fulfill()
         })
         
@@ -1132,32 +979,18 @@ class FIOSDKTests: XCTestCase {
                 expectation.fulfill()
                 return
             }
-            XCTAssert(fee > 0, "Something went wrong")
+            XCTAssert(fee >= 0, "Something went wrong")
             expectation.fulfill()
         })
         
         wait(for: [expectation], timeout: TIMEOUT * 3)
     }
     
-    func testGetFeeForTransferTokensFioAddressShouldReturnFee() {
-        let expectation = XCTestExpectation(description: "testGetFeeForTransferTokensFioAddressShouldReturnFee")
-        FIOSDK.sharedInstance().getFee(endPoint: .transferTokensUsingFIOAddress, onCompletion: { (response, error) in
-            XCTAssert((error.kind == FIOError.ErrorKind.Success), "getFee failed: \(error.localizedDescription )")
-            guard let fee = response?.fee else {
-                XCTFail("Fee not returned")
-                expectation.fulfill()
-                return
-            }
-            XCTAssert(fee > 0, "Something went wrong")
-            expectation.fulfill()
-        })
-        
-        wait(for: [expectation], timeout: TIMEOUT * 3)
-    }
     
     func testGetFeeForAddPublicAddressShouldReturnFee() {
         let expectation = XCTestExpectation(description: "testGetFeeForAddPublicAddressShouldReturnFee")
-
+print("****")
+        print(self.requestorFioName)
         FIOSDK.sharedInstance().getFeeForAddPublicAddress(fioAddress: self.requestorFioName, onCompletion: { (response, error) in
             XCTAssert((error.kind == FIOError.ErrorKind.Success), "getFee failed: \(error.localizedDescription )")
             guard let fee = response?.fee else {
@@ -1165,7 +998,7 @@ class FIOSDKTests: XCTestCase {
                 expectation.fulfill()
                 return
             }
-            XCTAssert(fee > 0, "Something went wrong")
+            XCTAssert(fee >= 0, "Something went wrong")
             expectation.fulfill()
         })
         
@@ -1174,6 +1007,8 @@ class FIOSDKTests: XCTestCase {
     
     func testGetFeeForNewFundsRequestShouldReturnFee() {
         let expectation = XCTestExpectation(description: "testGetFeeForNewFundsRequestShouldReturnFee")
+        print("****")
+        print(self.requesteeAddress)
         FIOSDK.sharedInstance().getFeeForNewFundsRequest(payeePublicAddress: self.requesteeAddress, onCompletion: { (response, error) in
             XCTAssert((error.kind == FIOError.ErrorKind.Success), "getFee failed: \(error.localizedDescription )")
             guard let fee = response?.fee else {
@@ -1181,7 +1016,7 @@ class FIOSDKTests: XCTestCase {
                 expectation.fulfill()
                 return
             }
-            XCTAssert(fee > 0, "Something went wrong")
+            XCTAssert(fee >= 0, "Something went wrong")
             expectation.fulfill()
         })
         
@@ -1199,24 +1034,24 @@ class FIOSDKTests: XCTestCase {
                 expectation.fulfill()
                 return
             }
-            XCTAssert(fee > 0, "Something went wrong")
+            XCTAssert(fee >= 0, "Something went wrong")
             expectation.fulfill()
         })
         
         wait(for: [expectation], timeout: TIMEOUT * 3)
     }
     
-    func testGetFeeForRecordSendShouldReturnFee() {
+    func testGetFeeForRecordObtDataShouldReturnFee() {
         let expectation = XCTestExpectation(description: "testGetFeeForRecordSendShouldReturnFee")
 
-        FIOSDK.sharedInstance().getFeeForRecordSend(payerFioAddress: self.requesteeFioName, onCompletion: { (response, error) in
+        FIOSDK.sharedInstance().getFeeForRecordObtData(payerFioAddress: self.requesteeFioName, onCompletion: { (response, error) in
             XCTAssert((error.kind == FIOError.ErrorKind.Success), "getFee failed: \(error.localizedDescription )")
             guard let fee = response?.fee else {
                 XCTFail("Fee not returned")
                 expectation.fulfill()
                 return
             }
-            XCTAssert(fee > 0, "Something went wrong")
+            XCTAssert(fee >= 0, "Something went wrong")
             expectation.fulfill()
         })
         
@@ -1233,26 +1068,6 @@ class FIOSDKTests: XCTestCase {
             XCTAssert(error.kind == .Success, "Something went wrong")
             expectation.fulfill()
         })
-        
-        wait(for: [expectation], timeout: TIMEOUT)
-    }
-    
-    func testRegisterFioAddress() {
-        let expectation = XCTestExpectation(description: "testGetTokenPublicAddressWithValidPubAddressShouldSucceed")
-        
-        let timestamp = NSDate().timeIntervalSince1970
-        //let tokenPubAdd = "smp\(Int(timestamp.rounded()))"
-        let fioName = "fio\(Int(timestamp.rounded())):brd"
-        
-        self.defaultSDKConfig()
-        
-        FIOSDK.sharedInstance().registerFioAddress(fioName,  maxFee: 2) { (response, error) in
-            guard error?.kind == .Success else {
-                XCTFail("User not registered")
-                expectation.fulfill()
-                return
-            }
-        }
         
         wait(for: [expectation], timeout: TIMEOUT)
     }

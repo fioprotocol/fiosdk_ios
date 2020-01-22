@@ -14,7 +14,7 @@ extension FIOSDK.Responses {
         public var balance: Int
         
         enum CodingKeys: String, CodingKey {
-            case balance = "balance"
+            case balance
         }
         
         public func displayBalance() -> Double {

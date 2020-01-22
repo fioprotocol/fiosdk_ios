@@ -16,11 +16,11 @@ class ValidatorTests: XCTestCase {
         
         let fioSDK = FIOSDK()
         
-        XCTAssert(fioSDK.isFioNameValid(fioName: "a:9"), "should be valid fio address")
+        XCTAssert(fioSDK.isFioNameValid(fioName: "a@9"), "should be valid fio address")
         
-        XCTAssert(fioSDK.isFioNameValid(fioName: "fred:testnet"), "should be valid fio address")
+        XCTAssert(fioSDK.isFioNameValid(fioName: "fred@testnet"), "should be valid fio address")
         
-        XCTAssert(fioSDK.isFioNameValid(fioName: "fred-a:testnet") == true, "should be valid fio address")
+        XCTAssert(fioSDK.isFioNameValid(fioName: "fred-a@testnet") == true, "should be valid fio address")
         
         XCTAssert(fioSDK.isFioNameValid(fioName: "fred--:testnet") == false, "should be invalid fio address")
         
@@ -28,9 +28,9 @@ class ValidatorTests: XCTestCase {
         
         XCTAssert(fioSDK.isFioNameValid(fioName: ":") == false, "should be invalid fio address")
         
-        XCTAssert(fioSDK.isFioNameValid(fioName: "64charsrekldowerehfredabcdedefgeteckewerekldowereh:testneth81234") == true, "should be valid fio address")
+        XCTAssert(fioSDK.isFioNameValid(fioName: "64charsrekldowerehfredabcdedefgeteckewerekldowereh@testneth81234") == true, "should be valid fio address")
 
-        XCTAssert(fioSDK.isFioNameValid(fioName: "65charsgrekldowerehfredabcdedefgeteckewerekldowereh:testneth81234") == false, "should be invalid fio address")
+        XCTAssert(fioSDK.isFioNameValid(fioName: "65charsgrekldowerehfredabcdedefgeteckewerekldowereh@testneth81234") == false, "should be invalid fio address")
         
     }
    
@@ -46,7 +46,7 @@ class ValidatorTests: XCTestCase {
            
            XCTAssert(fioSDK.isFioNameValid(fioName: "fred--testnet") == false, "should be invalid fio address")
            
-           XCTAssert(fioSDK.isFioNameValid(fioName: "fred@testnet") == false, "should be invalid fio address")
+           XCTAssert(fioSDK.isFioNameValid(fioName: "fred:testnet") == false, "should be invalid fio address")
            
            XCTAssert(fioSDK.isFioNameValid(fioName: "") == false, "should be invalid fio address")
            

@@ -22,14 +22,35 @@ internal class PackedTransactionUtil: NSObject {
     static func packAndSignTransaction(code: String, action: String, data: String, account: String, privateKey: PrivateKey, completion: @escaping (_ signedTransaction: SignedTransaction?, _ error: Error?) -> ()) {
         FIOSDK.sharedInstance().chainInfo { (chainInfo, error) in
             if error != nil {
+                
+                print("ERROR FROM CHAIN INFO")
+                print (error)
+                
                 completion(nil, error)
                 return
             }
+            
+            if (chainInfo == nil){
+                print("nil chain")
+                completion(nil, FIOError.failure(localizedDescription: "GET ChainInfo is returning nil."))
+                return
+            }
+            print ("chain info")
+            print (chainInfo?.lastIrreversibleBlockNum ?? 0)
             FIOSDK.sharedInstance().getBlock(blockNumOrId: "\(chainInfo!.lastIrreversibleBlockNum)" as AnyObject, completion: { (blockInfo, error) in
                 if error != nil {
                     completion(nil, error)
+                    
+                    print ("ERROR from GET BLOCK")
+                    print (error)
                     return
                 }
+                if (blockInfo == nil) {
+                    print ("nil blockinfo")
+                    completion(nil, FIOError.failure(localizedDescription: "Get BlockInfo is returning nil"))
+                    return
+                }
+                
                 var actions: [Action] = []
                 let auth = Authorization(actor: account, permission: "active")
                 let action = Action(account: code, name: action, authorization: [auth], data: data)

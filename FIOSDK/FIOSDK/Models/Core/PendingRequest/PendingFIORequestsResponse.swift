@@ -30,7 +30,6 @@ extension FIOSDK.Responses {
             public let payeeFIOPublicKey: String
             public let content:MetaData
             public let timeStamp: Date
-            public let status: String
             
             enum CodingKeys: String, CodingKey {
                 case fioRequestId = "fio_request_id"
@@ -39,7 +38,6 @@ extension FIOSDK.Responses {
                 case payerFIOPublicKey = "payer_fio_public_key"
                 case payeeFIOPublicKey = "payee_fio_public_key"
                 case timeStamp = "time_stamp"
-                case status
                 case content
             }
             
@@ -67,7 +65,6 @@ extension FIOSDK.Responses {
                  payerFIOPublicKey: String,
                  payeeFIOPublicKey: String,
                  timeStamp: Date,
-                 status: String,
                  content:MetaData) {
                 self.fioRequestId = fioRequestId
                 self.payerFIOAddress = payerFIOAddress
@@ -75,7 +72,6 @@ extension FIOSDK.Responses {
                 self.payerFIOPublicKey = payerFIOPublicKey
                 self.payeeFIOPublicKey = payeeFIOPublicKey
                 self.timeStamp = timeStamp
-                self.status = status
                 self.content = content
             }
             
@@ -94,8 +90,6 @@ extension FIOSDK.Responses {
                                             .replacingOccurrences(of: "Z", with: "") + "Z"
 
                 let timeStamp = timeStampString.toLocalDate
-                
-                let status = try container.decodeIfPresent(String.self, forKey: .status) ?? ""
                 
                 var metadataString = FIOSDK.sharedInstance().decrypt(publicKey: payeeFIOPublicKey, contentType: FIOAbiContentType.newFundsContent, encryptedContent: content)
                 
@@ -121,7 +115,6 @@ extension FIOSDK.Responses {
                         payerFIOPublicKey: "",
                         payeeFIOPublicKey: "",
                         timeStamp: Date(timeIntervalSince1970: 1),
-                        status: "",
                         content: metadata)
                     
                 }
@@ -131,8 +124,7 @@ extension FIOSDK.Responses {
                         payeeFIOAddress: payeeFIOAddress,
                         payerFIOPublicKey: payerFIOPublicKey,
                         payeeFIOPublicKey: payeeFIOPublicKey,
-                        timeStamp: timeStamp ?? Date(timeIntervalSince1970: 1),
-                        status: status,
+                        timeStamp: timeStamp,
                         content: metadata)
                 }
 

@@ -19,13 +19,13 @@ public class BaseFIOSDK: NSObject {
     internal override init() {}
     
     internal func isFIOAddressValid(_ address: String) -> Bool {
-        let fullNameArr = address.components(separatedBy: ":")
+        let fullNameArr = address.components(separatedBy: "@")
         
         if (fullNameArr.count != 2) {
             return false
         }
         
-        if (address.range(of:"^(?:(?=.{3,64}$)[a-zA-Z0-9]{1}(?:(?!-{2,}))[a-zA-Z0-9-]*(?:(?<!-)):[a-zA-Z0-9]{1}(?:(?!-{2,}))[a-zA-Z0-9-]*(?:(?<!-))$)",options: .regularExpression) != nil) {
+        if (address.range(of:"^(?:(?=.{3,64}$)[a-zA-Z0-9]{1}(?:(?!-{2,}))[a-zA-Z0-9-]*(?:(?<!-))@[a-zA-Z0-9]{1}(?:(?!-{2,}))[a-zA-Z0-9-]*(?:(?<!-))$)",options: .regularExpression) != nil) {
             return true
         }
 

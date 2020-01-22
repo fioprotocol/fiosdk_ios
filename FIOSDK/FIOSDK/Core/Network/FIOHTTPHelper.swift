@@ -35,7 +35,10 @@ internal struct FIOHTTPHelper {
     
     static func rpcPostRequestTo<T: Codable, J: Encodable>(_ fullUrl: String, withBody json: J?, onCompletion: @escaping (_ result: T?, _ error: Error?) -> ()) {
 
+        //print (fullUrl)
+        //print (bodyFromJson(json))
         guard let request = request(url: fullUrl, method: .post, body: bodyFromJson(json)) else {
+            print("A")
             onCompletion(nil, FIOError(kind: .MalformedURL, localizedDescription: "Failed to post request to \(fullUrl)"))
             return
         }
@@ -45,13 +48,13 @@ internal struct FIOHTTPHelper {
             
             DispatchQueue.main.async {
                 guard let data = data, error == nil else {
+                    print("B")
                     onCompletion(nil, NSError(domain: Constants.errorDomain, code: 1,
                                             userInfo: [NSLocalizedDescriptionKey: "Networking error \(String(describing: error)) \(String(describing: response))"]))
                     return
                 }
                 let decoder = RPCDecoder()
                 let jsonString = String(data:data, encoding: .utf8)
-                print(jsonString!)
                 do{
                     let testResponse = try decoder.decode(T.self, from: data)
                     print(testResponse)
@@ -60,13 +63,16 @@ internal struct FIOHTTPHelper {
                 }
                 guard let responseObject = try? decoder.decode(T.self, from: data) else {
                     guard let errorResponse = try? decoder.decode(RPCErrorResponse.self, from: data) else {
+                        print("C")
                         onCompletion(nil, NSError(domain: Constants.errorDomain, code: 1, userInfo: [NSLocalizedDescriptionKey: "Decoding error \(String(describing: error))"]))
                         return
                     }
                     let userInfo = [RPCErrorResponse.ErrorKey: errorResponse]
+                    print("D")
                     onCompletion(nil, NSError(domain: Constants.errorDomain, code: RPCErrorResponse.ErrorCode, userInfo: userInfo))
                     return
                 }
+                print("E")
                 onCompletion(responseObject, error)
             }
             
