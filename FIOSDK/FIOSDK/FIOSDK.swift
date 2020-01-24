@@ -981,20 +981,20 @@ public class FIOSDK: BaseFIOSDK {
     
     /// Compute and return fee amount for specific call and specific user. [visit API specs](https://stealth.atlassian.net/wiki/spaces/DEV/pages/265977939/API+v0.3#APIv0.3-/get_fee-Computeandreturnfeeamountforspecificcallandspecificuser)
     /// - Parameters:
-    ///     - payeePublicAddress: Payee Public Address
+    ///     - payeeFioAddress: Payee FIO Address
     ///     - onCompletion: A function that is called once request is over with an optional response with results and error containing the status of the call.
-    public func getFeeForNewFundsRequest(payeePublicAddress: String, onCompletion: @escaping (_ response: FIOSDK.Responses.FeeResponse?, _ error: FIOError) -> ()) {
-        self.getFeeResponse(fioAddress: payeePublicAddress, endPoint: "new_funds_request", onCompletion: onCompletion)
+    public func getFeeForNewFundsRequest(payeeFioAddress: String, onCompletion: @escaping (_ response: FIOSDK.Responses.FeeResponse?, _ error: FIOError) -> ()) {
+        self.getFeeResponse(fioAddress: payeeFioAddress, endPoint: "new_funds_request", onCompletion: onCompletion)
     }
     
     //MARK: getFeeForRejectFundsRequest
     
     /// Compute and return fee amount for specific call and specific user. [visit API specs](https://stealth.atlassian.net/wiki/spaces/DEV/pages/265977939/API+v0.3#APIv0.3-/get_fee-Computeandreturnfeeamountforspecificcallandspecificuser)
     /// - Parameters:
-    ///     - payeePublicAddress: Payee Public Address from corresponding FIO Request
+    ///     - payeeFioAddress: Payee Fio Address from corresponding FIO Request
     ///     - onCompletion: A function that is called once request is over with an optional response with results and error containing the status of the call.
-    public func getFeeForRejectFundsRequest(payeePublicAddress: String, onCompletion: @escaping (_ response: FIOSDK.Responses.FeeResponse?, _ error: FIOError) -> ()) {
-        self.getFeeResponse(fioAddress: payeePublicAddress, endPoint: "reject_funds_request", onCompletion: onCompletion)
+    public func getFeeForRejectFundsRequest(payeeFioAddress: String, onCompletion: @escaping (_ response: FIOSDK.Responses.FeeResponse?, _ error: FIOError) -> ()) {
+        self.getFeeResponse(fioAddress: payeeFioAddress, endPoint: "reject_funds_request", onCompletion: onCompletion)
     }
     
     //MARK: getFeeForRecordSend
