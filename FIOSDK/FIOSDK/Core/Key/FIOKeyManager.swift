@@ -39,18 +39,15 @@ internal class FIOKeyManager {
             if let fioPrivKey: String? = try? keychain.keychainItem(key: KeychainKeys.fioPrivKey),
                 let fioPubKey: String? = try? keychain.keychainItem(key: KeychainKeys.fioPubKey) {
                 if fioPrivKey != nil && fioPubKey != nil && !fioPrivKey!.isEmpty && !fioPubKey!.isEmpty {
-                    print("[FIOKeyManager] Stored FIO privkey: \(fioPrivKey!) and pubkey: \(fioPubKey!)");
                     return (fioPrivKey!, fioPubKey!)
                 }
             }
             let keyPair = generatePrivatePubKeyPair(forMnemonic: mnemonic)
             try keychain.setKeychainItem(key: KeychainKeys.fioPrivKey, item: keyPair.privateKey)
             try keychain.setKeychainItem(key: KeychainKeys.fioPubKey, item: keyPair.publicKey)
-            print("[FIOKeyManager] Generated FIO privkey: \(keyPair.privateKey) and pubkey: \(keyPair.publicKey)");
             return keyPair
         }
         catch let error {
-            print("[FIOKeyManager] fioPrivKey error: \(error)")
             return ("", "")
         }
     }

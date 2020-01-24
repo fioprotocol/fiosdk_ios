@@ -30,21 +30,13 @@ internal func signedPostRequestTo<T: Codable>(privateKey: String, route: ChainRo
     serializeJsonToData(body, forCode: code, forAction: action) { (result, error) in
         if let result = result {
             
-       //sarney     right now, we take the body and serialize it.
-       //     then we pack and sign it.
-            
-            // this result.json is the hex encoding.
-            
-            print(action.rawValue)
             PackedTransactionUtil.packAndSignTransaction(code: code, action: action.rawValue, data: result.json, account: account, privateKey: privateKey, completion: { (signedTx, error) in
                 if let error = translateErrorToFIOError(error: error) {
                     onCompletion(nil, error)
                 }
                 else {
-                    print("Called FIOSDK action: " + action.rawValue)
                     let url = ChainRouteBuilder.build(route: route)
-                    print("********")
-                    print(url)
+
                     FIOHTTPHelper.postRequestTo(url, withBody: signedTx, onCompletion: { (data, error) in
                         if data == nil, let error = error {
                             onCompletion(nil, error)
@@ -99,11 +91,9 @@ internal func translateErrorToFIOError(error: Error?) -> FIOError? {
     guard error != nil else { return nil }
     if (error! as NSError).code == RPCErrorResponse.ErrorCode {
         let errDescription = "error"
-        print (errDescription)
         return FIOError.init(kind: .Failure, localizedDescription: errDescription)
     } else {
         let errDescription = ("other error: \(String(describing: error?.localizedDescription))")
-        print (errDescription)
         return FIOError.init(kind: .Failure, localizedDescription: errDescription)
     }
 }

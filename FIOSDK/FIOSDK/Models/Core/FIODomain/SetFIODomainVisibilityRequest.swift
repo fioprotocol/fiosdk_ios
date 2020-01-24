@@ -13,14 +13,14 @@ internal struct SetFIODomainVisibilityRequest: Codable {
     let fioDomain: String
     let isPublic: Int
     let maxFee: Int
-    let tpid:String
+    let walletFioAddress:String
     let actor: String
     
     enum CodingKeys: String, CodingKey {
         case fioDomain = "fio_domain"
         case isPublic = "is_public"
         case maxFee = "max_fee"
-        case tpid = "tpid"
+        case walletFioAddress = "tpid"
         case actor
     }
 }

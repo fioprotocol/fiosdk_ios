@@ -29,7 +29,7 @@ public class FIOSDK: BaseFIOSDK {
         return sharedInstance
     }()
     
-    public class func sharedInstance(privateKey:String? = nil, publicKey:String? = nil, url:String? = nil, mockUrl: String? = nil) -> FIOSDK {
+    public class func sharedInstance(privateKey:String? = nil, publicKey:String? = nil, url:String? = nil, mockUrl: String? = nil, walletFioAddress: String? = nil) -> FIOSDK {
         
         if (privateKey == nil){
             if (_sharedInstance.privateKey.count < 2){
@@ -62,8 +62,12 @@ public class FIOSDK: BaseFIOSDK {
             Utilities.sharedInstance().mockURL = mockUrl
         }
         
+        if (walletFioAddress != nil){
+            _sharedInstance.walletFioAddress = walletFioAddress ?? ""
+        }
+        
         // populate the abis
-        let abi = _sharedInstance.getCachedABI(accountName: "fio.system")
+        let abi = _sharedInstance.getCachedABI(accountName: "fio.address")
         if (abi.count < 2){
             _sharedInstance.populateABIs()
         }
@@ -119,7 +123,7 @@ public class FIOSDK: BaseFIOSDK {
             return
         }
         let actor = AccountNameGenerator.run(withPublicKey: getPublicKey())
-        let domain = RenewFIOAddressRequest(fioAddress: fioAddress, maxFee: maxFee, walletFioAddress: walletFioAddress, actor: actor)
+        let domain = RenewFIOAddressRequest(fioAddress: fioAddress, maxFee: maxFee, walletFioAddress: self.getWalletFioAddress(walletFioAddress), actor: actor)
         signedPostRequestTo(privateKey: getPrivateKey(),
                             route: ChainRoutes.renewFIOAddress,
                             forAction: ChainActions.renewFIOAddress,
@@ -179,7 +183,7 @@ public class FIOSDK: BaseFIOSDK {
             return
         }
         let actor = AccountNameGenerator.run(withPublicKey: getPublicKey())
-        let domain = RenewFIODomainRequest(fioDomain: fioDomain, maxFee: maxFee, walletFioAddress:walletFioAddress, actor: actor)
+        let domain = RenewFIODomainRequest(fioDomain: fioDomain, maxFee: maxFee, walletFioAddress:self.getWalletFioAddress(walletFioAddress), actor: actor)
         signedPostRequestTo(privateKey: getPrivateKey(),
                             route: ChainRoutes.renewFIODomain,
                             forAction: ChainActions.renewFIODomain,
@@ -217,7 +221,7 @@ public class FIOSDK: BaseFIOSDK {
             return
         }
         let actor = AccountNameGenerator.run(withPublicKey: getPublicKey())
-        let domain = RegisterFIODomainRequest(fioDomain: fioDomain, fioPublicKey: "", maxFee: maxFee, walletFioAddress: walletFioAddress, actor: actor)
+        let domain = RegisterFIODomainRequest(fioDomain: fioDomain, fioPublicKey: "", maxFee: maxFee, walletFioAddress: self.getWalletFioAddress(walletFioAddress), actor: actor)
         signedPostRequestTo(privateKey: getPrivateKey(),
                             route: ChainRoutes.registerFIODomain,
                             forAction: ChainActions.registerFIODomain,
@@ -257,7 +261,7 @@ public class FIOSDK: BaseFIOSDK {
             return
         }
         let actor = AccountNameGenerator.run(withPublicKey: getPublicKey())
-        let body = SetFIODomainVisibilityRequest(fioDomain: fioDomain, isPublic: (isPublic ? 1 : 0), maxFee: maxFee, tpid: walletFioAddress, actor: actor)
+        let body = SetFIODomainVisibilityRequest(fioDomain: fioDomain, isPublic: (isPublic ? 1 : 0), maxFee: maxFee, walletFioAddress: self.getWalletFioAddress(walletFioAddress), actor: actor)
         signedPostRequestTo(privateKey: getPrivateKey(),
                             route: ChainRoutes.setFIODomainVisibility,
                             forAction: ChainActions.setFIODomainVisibility,
@@ -295,7 +299,7 @@ public class FIOSDK: BaseFIOSDK {
             return
         }
         let actor = AccountNameGenerator.run(withPublicKey: getPublicKey())
-        let body = RegisterFIOAddressRequest(fioAddress: fioAddress, fioPublicKey: "", maxFee: maxFee, tpid: walletFioAddress, actor: actor)
+        let body = RegisterFIOAddressRequest(fioAddress: fioAddress, fioPublicKey: "", maxFee: maxFee, walletFioAddress: self.getWalletFioAddress(walletFioAddress), actor: actor)
         signedPostRequestTo(privateKey: getPrivateKey(),
                             route: ChainRoutes.registerFIOAddress,
                             forAction: ChainActions.registerFIOAddress,
@@ -339,7 +343,7 @@ public class FIOSDK: BaseFIOSDK {
             return
         }
         let actor = AccountNameGenerator.run(withPublicKey: getPublicKey())
-        let data = AddPublicAddressRequest(fioAddress: fioAddress, publicAddresses: [PublicAddress(tokenCode: tokenCode, publicAddress: publicAddress)], actor: actor, maxFee: maxFee, walletFioAddress: walletFioAddress)
+        let data = AddPublicAddressRequest(fioAddress: fioAddress, publicAddresses: [PublicAddress(tokenCode: tokenCode, publicAddress: publicAddress)], actor: actor, maxFee: maxFee, walletFioAddress: self.getWalletFioAddress(walletFioAddress))
         signedPostRequestTo(privateKey: getPrivateKey(),
                             route: ChainRoutes.addPublicAddress,
                             forAction: ChainActions.addPublicAddress,
@@ -376,7 +380,7 @@ public class FIOSDK: BaseFIOSDK {
     **/
     public func addPublicAddresses(fioAddress: String, publicAddresses:[PublicAddress], maxFee: Int, walletFioAddress:String = "", onCompletion: @escaping (_ response: FIOSDK.Responses.AddPublicAddressResponse? , _ error:FIOError?) -> ()) {
         let actor = AccountNameGenerator.run(withPublicKey: getPublicKey())
-        let data = AddPublicAddressRequest(fioAddress: fioAddress, publicAddresses: publicAddresses, actor: actor, maxFee: maxFee, walletFioAddress: walletFioAddress)
+        let data = AddPublicAddressRequest(fioAddress: fioAddress, publicAddresses: publicAddresses, actor: actor, maxFee: maxFee, walletFioAddress: self.getWalletFioAddress(walletFioAddress))
         signedPostRequestTo(privateKey: getPrivateKey(),
                             route: ChainRoutes.addPublicAddress,
                             forAction: ChainActions.addPublicAddress,
@@ -704,7 +708,7 @@ public class FIOSDK: BaseFIOSDK {
                 let encryptedContent = self.encrypt(publicKey: response?.publicAddress ?? "", contentType: FIOAbiContentType.newFundsContent, contentJson: contentJson.toJSONString())
                 
                 let actor = AccountNameGenerator.run(withPublicKey: self.getPublicKey())
-                let data = RequestFundsRequest(payerFIOAddress: payerFIOAddress, payeeFIOAddress: payeeFIOAddress, content:encryptedContent, maxFee: maxFee, tpid: walletFioAddress, actor: actor)
+                let data = RequestFundsRequest(payerFIOAddress: payerFIOAddress, payeeFIOAddress: payeeFIOAddress, content:encryptedContent, maxFee: maxFee, walletFioAddress: self.getWalletFioAddress(walletFioAddress), actor: actor)
                 
                 signedPostRequestTo(privateKey: self.getPrivateKey(),
                                    route: ChainRoutes.newFundsRequest,
@@ -741,7 +745,7 @@ public class FIOSDK: BaseFIOSDK {
     ///   - completion: The completion handler containing the result or error.
     public func rejectFundsRequest(fioRequestId: Int, maxFee: Int, walletFioAddress: String = "", completion: @escaping(_ response: FIOSDK.Responses.RejectFundsRequestResponse?,_ :FIOError) -> ()){
         let actor = AccountNameGenerator.run(withPublicKey:getPublicKey())
-        let data = RejectFundsRequest(fioRequestId: fioRequestId, maxFee: maxFee, walletFioAddress: walletFioAddress, actor: actor)
+        let data = RejectFundsRequest(fioRequestId: fioRequestId, maxFee: maxFee, walletFioAddress: self.getWalletFioAddress(walletFioAddress), actor: actor)
         
         signedPostRequestTo(privateKey: getPrivateKey(),
                             route: ChainRoutes.rejectFundsRequest,
@@ -842,7 +846,7 @@ public class FIOSDK: BaseFIOSDK {
                 fioReqId = String(fioRequestId ?? 0)
             }
             
-            let request = RecordObtDataRequest(payerFIOAddress: payerFIOAddress, payeeFIOAddress: payeeFIOAddress, content: encryptedContent, fioRequestId: fioReqId, maxFee: maxFee, walletFioAddress: walletFioAddress, actor: actor)
+            let request = RecordObtDataRequest(payerFIOAddress: payerFIOAddress, payeeFIOAddress: payeeFIOAddress, content: encryptedContent, fioRequestId: fioReqId, maxFee: maxFee, walletFioAddress: self.getWalletFioAddress(walletFioAddress), actor: actor)
             
             signedPostRequestTo(privateKey: self.getPrivateKey(),
                                 route: ChainRoutes.recordObtData,
@@ -911,7 +915,7 @@ public class FIOSDK: BaseFIOSDK {
      */
     public func transferFIOTokens(payeePublicKey: String, amount: Int, maxFee: Int, walletFioAddress: String = "", onCompletion: @escaping (_ response: FIOSDK.Responses.TransferFIOTokensResponse?, _ error: FIOError) -> ()){
         let actor = AccountNameGenerator.run(withPublicKey: getPublicKey())
-        let transfer = TransferFIOTokensRequest (payeePublicKey: payeePublicKey, amount: amount, maxFee: maxFee, walletFioAddress: walletFioAddress, actor: actor)
+        let transfer = TransferFIOTokensRequest (payeePublicKey: payeePublicKey, amount: amount, maxFee: maxFee, walletFioAddress: self.getWalletFioAddress(walletFioAddress), actor: actor)
         signedPostRequestTo(privateKey: getPrivateKey(),
             route: ChainRoutes.transferTokens,
             forAction: ChainActions.transferTokens,
