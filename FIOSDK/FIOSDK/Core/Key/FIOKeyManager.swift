@@ -33,7 +33,7 @@ internal class FIOKeyManager {
     /// - Parameters:
     ///   - mnemonic: The text to use in key pair generation.
     /// - Return: A tuple containing both private and public keys.
-    func privatePubKeyPair(mnemonic: String?) -> (privateKey: String, publicKey: String) {
+    func privatePublicKeyPair(mnemonic: String?) -> (privateKey: String, publicKey: String) {
         guard let mnemonic = mnemonic else { return ("", "") }
         do {
             if let fioPrivKey: String? = try? keychain.keychainItem(key: KeychainKeys.fioPrivKey),
@@ -42,7 +42,7 @@ internal class FIOKeyManager {
                     return (fioPrivKey!, fioPubKey!)
                 }
             }
-            let keyPair = generatePrivatePubKeyPair(forMnemonic: mnemonic)
+            let keyPair = generatePrivatePublicKeyPair(forMnemonic: mnemonic)
             try keychain.setKeychainItem(key: KeychainKeys.fioPrivKey, item: keyPair.privateKey)
             try keychain.setKeychainItem(key: KeychainKeys.fioPubKey, item: keyPair.publicKey)
             return keyPair
@@ -57,7 +57,7 @@ internal class FIOKeyManager {
     /// - Parameters:
     ///   - mnemonic: The text to use in key pair generation.
     /// - Return: A tuple containing both private and public keys.
-    private func generatePrivatePubKeyPair(forMnemonic mnemonic: String) -> (privateKey: String, publicKey: String) {
+    private func generatePrivatePublicKeyPair(forMnemonic mnemonic: String) -> (privateKey: String, publicKey: String) {
         do {
             let privKey = try PrivateKey(enclave: .Secp256k1, mnemonicString: mnemonic)
             guard let pk = privKey else { return ("", "") }

@@ -29,6 +29,14 @@ public class FIOSDK: BaseFIOSDK {
         return sharedInstance
     }()
     
+    /**
+     * This is the Singleton for the FIOSDK.  Initialize it with these parameters.
+     * - Parameter privateKey: the fio private key of the client sending requests to FIO API.
+     * - Parameter publicKey: the fio public key of the client sending requests to FIO API.
+     * - Parameter url: the url to the FIO API.
+     * - Parameter mockUrl: This is the mock url used for the registerFioNameOnBehalfOfUser call.
+     * - Parameter walletFioAddress: FIO Address of the wallet which generates this transaction.  Set to empty if not known.
+     */
     public class func sharedInstance(privateKey:String? = nil, publicKey:String? = nil, url:String? = nil, mockUrl: String? = nil, walletFioAddress: String? = nil) -> FIOSDK {
         
         if (privateKey == nil){
@@ -76,7 +84,7 @@ public class FIOSDK: BaseFIOSDK {
     }
     
     //MARK: FIO Name validation
-    
+    // Is the fio name valid?
     public func isFioNameValid(fioName: String) -> Bool{
         if fioName.contains("@") {
             return isFIOAddressValid(fioName)
@@ -84,39 +92,48 @@ public class FIOSDK: BaseFIOSDK {
         return isFIODomainValid(fioName)
     }
     
-    /// This method creates a private and public key based on a mnemonic, it does store both keys in keychain. Use it to setup FIOSDK properly.
-    ///
-    /// - Parameters:
-    ///   - mnemonic: The text to use in key pair generation.
-    /// - Return: A tuple containing both private and public keys to be used in FIOSDK setup.
-    static public func privatePubKeyPair(forMnemonic mnemonic: String) -> (privateKey: String, publicKey: String) {
-        return keyManager.privatePubKeyPair(mnemonic: mnemonic)
+    //MARK: Private and Public Key Pairs
+    /**
+     * Generate a private and public key pair.
+     * This method creates a private and public key based on a mnemonic, it does store both keys in keychain. To be used by the FIOSDK sharedInstance() Singleton
+     * - Parameter mnemonic: The text to use in key pair generation.
+     * - Return: A tuple containing both private and public keys to be used by the FIOSDK sharedInstance() Singleton.
+     */
+    static public func privatePublicKeyPair(forMnemonic mnemonic: String) -> (privateKey: String, publicKey: String) {
+        return keyManager.privatePublicKeyPair(mnemonic: mnemonic)
     }
     
-    /// This method remove private and public keys from keychain. It may throw keychain access errors while doing so.
-    static public func wipePrivPubKeys() throws {
+    /**
+     * This method removes private and public keys from the keychain. It may throw keychain access errors while doing so.
+     * - throws: throw keychain access errors
+     */
+    static public func wipePrivatePublicKeys() throws {
         try keyManager.wipeKeys()
     }
     
-    
-    //MARK: - Renew FIO address request
+    //MARK: - Renew FIO address
     /**
-     * This function should be called to renew a FIO Address. [visit api](https://stealth.atlassian.net/wiki/spaces/DEV/pages/265977939/API+v0.3#APIv0.3-/renew_fio_address-RenewFIOAddress)
+     * This function should be called to renew a FIO Address.
      * - Parameter fioAddress: A string to register as FIO Domain
-     * - Parameter maxFee: Maximum amount of SUFs the user is willing to pay for fee. Should be preceded by /get_fee for correct value.
-     * - Parameter onCompletion: A callback function that is called when request is finished either with success or failure. Check FIOError.kind to determine if is a success or a failure.
-     */
+     * - Parameter maxFee: Maximum amount of SUFs the user is willing to pay for fee. Should be preceded by calling the getFee() method for the correct value.
+     * - Parameter walletFioAddress: FIO Address of the wallet which generates this transaction.
+     + Set to empty if not known.
+     + This can be passed into the sharedInstance (Singleton) initializer to be used for all method calls OR overridden here
+     * - Parameter - onCompletion: The completion handler, providing an optional error in case something goes wrong
+     **/
     public func renewFioAddress(_ fioAddress: String, maxFee: Int, onCompletion: @escaping (_ response: FIOSDK.Responses.RenewFIOAddressResponse? , _ error:FIOError?) -> ()) {
         renewFioAddress(fioAddress, maxFee: maxFee, walletFioAddress: "", onCompletion: onCompletion)
     }
     
     /**
-     * This function should be called to renew a FIO Address. [visit api](https://stealth.atlassian.net/wiki/spaces/DEV/pages/265977939/API+v0.3#APIv0.3-/renew_fio_address-RenewFIOAddress)
+     * This function should be called to renew a FIO Address.
      * - Parameter fioAddress: A string to register as FIO Domain
-     * - Parameter maxFee: Maximum amount of SUFs the user is willing to pay for fee. Should be preceded by /get_fee for correct value.
-     * - Parameter walletFioAddress: FIO Address of the wallet which generates this transaction. 
-     * - Parameter onCompletion: A callback function that is called when request is finished either with success or failure. Check FIOError.kind to determine if is a success or a failure.
-     */
+     * - Parameter maxFee: Maximum amount of SUFs the user is willing to pay for fee. Should be preceded by calling the getFee() method for the correct value.
+     * - Parameter walletFioAddress: FIO Address of the wallet which generates this transaction.
+     + Set to empty if not known.
+     + This can be passed into the sharedInstance (Singleton) initializer to be used for all method calls OR overridden here
+     * - Parameter - onCompletion: The completion handler, providing an optional error in case something goes wrong
+     **/
     public func renewFioAddress(_ fioAddress: String, maxFee: Int, walletFioAddress: String, onCompletion: @escaping (_ response: FIOSDK.Responses.RenewFIOAddressResponse? , _ error:FIOError?) -> ()) {
         guard isFIOAddressValid(fioAddress) else {
             onCompletion(nil, FIOError.failure(localizedDescription: "Invalid FIO Address."))
@@ -144,17 +161,16 @@ public class FIOSDK: BaseFIOSDK {
         }
     }
     
-    //MARK: - Register FIO Name request
-    
+    //MARK: - Register FIO Name On Behalf of User
     /**
      * Register a fioName for someone else using that user's public key. CURRENTLY A MOCK!!!!
-     * - Parameter fioName: A string to register as FIO Address
+     * - Parameter fioName: Name to register as FIO Address
      * - Parameter publicKey: User's public key to register FIO name for.
-     * - Parameter completion: A callback function that is called when request is finished either with success or failure. Check FIOError.kind to determine if is a success or a failure.
+     * - Parameter onCompletion: A callback function that is called when request is finished either with success or failure. Check FIOError.kind to determine if is a success or a failure.
      */
     public func registerFIONameOnBehalfOfUser(fioName: String, publicKey: String, onCompletion: @escaping (_ registeredName: RegisterNameForUserResponse? , _ error:FIOError?) -> ()) {
         let registerName = RegisterNameForUserRequest(fioName: fioName, publicKey: publicKey)
-        FIOHTTPHelper.postRequestTo(getMockURI() ?? "http://mock.dapix.io/mockd/DEV1/register_fio_name", withBody: registerName) { (result, error) in
+        FIOHTTPHelper.postRequestTo(getMockURI() ?? "", withBody: registerName) { (result, error) in
             guard let result = result else {
                 onCompletion(nil, error)
                 return
@@ -170,13 +186,16 @@ public class FIOSDK: BaseFIOSDK {
         }
     }
     
+    //MARK: Renew Fio Domain
     /**
-     * This function should be called to renew a FIO Domain at any time by any user. [visit api](https://stealth.atlassian.net/wiki/spaces/DEV/pages/265977939/API+v0.3#APIv0.3-/renew_fio_domain-RenewFIODomain)
+     * This method should be called to renew a FIO Domain at any time, by any user.
      * - Parameter fioDomain: A string to register as FIO Domain
-     * - Parameter maxFee: Maximum amount of SUFs the user is willing to pay for fee. Should be preceded by /get_fee for correct value.
+     * - Parameter maxFee: Maximum amount of SUFs the user is willing to pay for fee. Should be preceded by calling the getFee() method for the correct value.
      * - Parameter walletFioAddress: FIO Address of the wallet which generates this transaction.
-     * - Parameter onCompletion: A callback function that is called when request is finished either with success or failure. Check FIOError.kind to determine if is a success or a failure.
-     */
+     + Set to empty if not known.
+     + This can be passed into the sharedInstance (Singleton) initializer to be used for all method calls OR overridden here
+     * - Parameter - onCompletion: The completion handler, providing an optional error in case something goes wrong
+     **/
     public func renewFioDomain(_ fioDomain: String, maxFee: Int, walletFioAddress: String = "", onCompletion: @escaping (_ response: FIOSDK.Responses.RenewFIODomainResponse? , _ error:FIOError?) -> ()) {
         guard isFIODomainValid(fioDomain) else {
             onCompletion(nil, FIOError.failure(localizedDescription: "Invalid FIO Domain."))
@@ -205,16 +224,14 @@ public class FIOSDK: BaseFIOSDK {
     }
     
     /**
-     * This function should be called to register a new FIO Domain. [visit api](https://stealth.atlassian.net/wiki/spaces/DEV/pages/53280776/API#API-/register_fio_domain-RegisterFIODomain)
+     * This method should be called to register a new FIO Domain.
      * - Parameter fioDomain: A string to register as FIO Domain
-     * - Parameter maxFee: Maximum amount of SUFs the user is willing to pay for fee. Should be preceded by /get_fee for correct value.
-     * - Parameter walletFioAddress:
-     + FIO Address of the wallet which generates this transaction.
-     + This FIO Address will be paid 10% of the fee.
-     + See FIO Protocol#TPIDs for details.
+     * - Parameter maxFee: Maximum amount of SUFs the user is willing to pay for fee. Should be preceded by calling the getFee() method for the correct value.
+     * - Parameter walletFioAddress: FIO Address of the wallet which generates this transaction.
      + Set to empty if not known.
-     * - Parameter onCompletion: A callback function that is called when request is finished either with success or failure. Check FIOError.kind to determine if is a success or a failure.
-     */
+     + This can be passed into the sharedInstance (Singleton) initializer to be used for all method calls OR overridden here
+     * - Parameter - onCompletion: The completion handler, providing an optional error in case something goes wrong
+     **/
     public func registerFioDomain(_ fioDomain: String, maxFee: Int, walletFioAddress: String = "", onCompletion: @escaping (_ response: FIOSDK.Responses.RegisterFIODomainResponse? , _ error:FIOError?) -> ()) {
         guard isFIODomainValid(fioDomain) else {
             onCompletion(nil, FIOError.failure(localizedDescription: "Invalid FIO Domain."))
@@ -242,19 +259,18 @@ public class FIOSDK: BaseFIOSDK {
         }
     }
     
+    //MARK: Fio Domain Visibility
     /**
-     * This function should be called to change the visibility of a domain [visit api](https://stealth.atlassian.net/wiki/spaces/DEV/pages/268009622/API+v0.5#APIv0.5-/set_fio_domain_public-SetFIODomain'spublicflag)
+     * This method should be called to change the visibility of a domain.
      * By default all FIO Domains are non-public, meaning only the owner can register FIO Addresses on that domain. Setting them to public allows anyone to register a FIO Address on that domain.
      * - Parameter fioDomain: The fio domain to set visibility of public or private on
      * - Parameter isPublic: If set to true, anyone can register fio addresses on the domain.  If set to false, only the owner can
-     * - Parameter maxFee: Maximum amount of SUFs the user is willing to pay for fee. Should be preceded by /get_fee for correct value.
-     * - Parameter walletFioAddress:
-     + FIO Address of the wallet which generates this transaction.
-     + This FIO Address will be paid 10% of the fee.
-     + See FIO Protocol#TPIDs for details.
+     * - Parameter maxFee: Maximum amount of SUFs the user is willing to pay for fee. Should be preceded by calling the getFee() method for the correct value.
+     * - Parameter walletFioAddress: FIO Address of the wallet which generates this transaction.
      + Set to empty if not known.
-     * - Parameter onCompletion: A callback function that is called when request is finished either with success or failure. Check FIOError.kind to determine if is a success or a failure.
-     */
+     + This can be passed into the sharedInstance (Singleton) initializer to be used for all method calls OR overridden here
+     * - Parameter - onCompletion: The completion handler, providing an optional error in case something goes wrong
+     **/
     public func setFioDomainVisibility(_ fioDomain: String, isPublic: Bool, maxFee: Int, walletFioAddress: String = "", onCompletion: @escaping (_ response: FIOSDK.Responses.SetFIODomainVisibilityResponse? , _ error:FIOError?) -> ()) {
         guard isFIODomainValid(fioDomain) else {
             onCompletion(nil, FIOError.failure(localizedDescription: "Invalid FIO Domain."))
@@ -282,17 +298,16 @@ public class FIOSDK: BaseFIOSDK {
         }
     }
     
+    //MARK: Register FIO Address
     /**
-     * This function should be called to register a new FIO Address. [visit api](https://stealth.atlassian.net/wiki/spaces/DEV/pages/53280776/API#API-/register_fio_address-RegisterFIOAddress)
+     * This method should be called to register a new FIO Address.
      * - Parameter fioAddress: A string to register as FIO Address
-     * - Parameter maxFee: Maximum amount of SUFs the user is willing to pay for fee. Should be preceded by /get_fee for correct value.
-     * - Parameter walletFioAddress:
-     + FIO Address of the wallet which generates this transaction.
-     + This FIO Address will be paid 10% of the fee.
-     + See FIO Protocol#TPIDs for details.
+     * - Parameter maxFee: Maximum amount of SUFs the user is willing to pay for fee. Should be preceded by calling the getFee() method for the correct value.
+     * - Parameter walletFioAddress: FIO Address of the wallet which generates this transaction.
      + Set to empty if not known.
-     * - Parameter onCompletion: A callback function that is called when request is finished either with success or failure. Check FIOError.kind to determine if is a success or a failure.
-     */
+     + This can be passed into the sharedInstance (Singleton) initializer to be used for all method calls OR overridden here
+     * - Parameter - onCompletion: The completion handler, providing an optional error in case something goes wrong
+     **/
     public func registerFioAddress(_ fioAddress: String, maxFee: Int, walletFioAddress: String = "", onCompletion: @escaping (_ response: FIOSDK.Responses.RegisterFIOAddressResponse? , _ error:FIOError?) -> ()) {
         guard isFIOAddressValid(fioAddress) else {
             onCompletion(nil, FIOError.failure(localizedDescription: "Invalid FIO Address."))
@@ -322,24 +337,20 @@ public class FIOSDK: BaseFIOSDK {
     
     //MARK: - Add Public Address
     
-    /** Register a public address for a tokenCode under a FIO Address.
-    * SDK method that calls the addpubaddrs from the fio
-    * to read further information about the API visit https://stealth.atlassian.net/wiki/spaces/DEV/pages/53280776/API#API-/add_pub_address-Addaddress
+    /** Adds a public address of the specific token to the FIO Address.
     *
-    * - Parameter fioAddress: A string name tag in the format of fioaddress.brd.
+    * - Parameter fioAddress: FIO Address to add the public address to.
     * - Parameter tokenCode: The token code of a coin, i.e. BTC, EOS, ETH, etc.
-    * - Parameter publicAddress: A string representing the public address for that FIO Address and coin.
-    * - Parameter maxFee: Maximum amount of SUFs the user is willing to pay for fee. Should be preceded by /get_fee for correct value.
-    * - Parameter walletFioAddress:
-    + FIO Address of the wallet which generates this transaction.
-    + This FIO Address will be paid 10% of the fee.
-    + See FIO Protocol#TPIDs for details.
+    * - Parameter publicAddress: The public address for the specified token.
+    * - Parameter maxFee: Maximum amount of SUFs the user is willing to pay for fee. Should be preceded by calling the getFee() method for the correct value.
+    * - Parameter walletFioAddress: FIO Address of the wallet which generates this transaction.
     + Set to empty if not known.
+    + This can be passed into the sharedInstance (Singleton) initializer to be used for all method calls OR overridden here
     * - Parameter - onCompletion: The completion handler, providing an optional error in case something goes wrong
     **/
     public func addPublicAddress(fioAddress: String, tokenCode: String, publicAddress: String, maxFee: Int, walletFioAddress:String = "", onCompletion: @escaping (_ response: FIOSDK.Responses.AddPublicAddressResponse? , _ error:FIOError?) -> ()) {
         guard tokenCode.lowercased() != "fio" else {
-            onCompletion(nil, FIOError(kind: .Failure, localizedDescription: "[FIO SDK] FIO Token pub address should not be added manually."))
+            onCompletion(nil, FIOError(kind: .Failure, localizedDescription: "The FIO TokenCode should not be added using this method.  It is associated with the FIO Public Address at fio address registration."))
             return
         }
         let actor = AccountNameGenerator.run(withPublicKey: getPublicKey())
@@ -364,18 +375,14 @@ public class FIOSDK: BaseFIOSDK {
         }
     }
     
-    //MARK: - Add Public Addresses
-    
-    /** Register public addresses and tokenCodes under a FIO Address.
-    * SDK method that calls the addpubaddrs from the fio
-    * to read further information about the API visit https://stealth.atlassian.net/wiki/spaces/DEV/pages/53280776/API#API-/add_pub_address-Addaddress
+    /** Adds public addressess for specific tokens to the FIO Address.
     *
     * - Parameter fioAddress: A string name tag in the format of fioaddress.brd.
     * - Parameter publicAddresses: An array of PublicAddress (tokenCode and token's public address) for that FIO Address
-    * - Parameter maxFee: Maximum amount of SUFs the user is willing to pay for fee. Should be preceded by /get_fee for correct value.
-    * - Parameter walletFioAddress:
-    + FIO Address of the wallet which generates this transaction.
+    * - Parameter maxFee: Maximum amount of SUFs the user is willing to pay for fee. Should be preceded by calling the getFee() method for the correct value.
+    * - Parameter walletFioAddress: FIO Address of the wallet which generates this transaction.
     + Set to empty if not known.
+    + This can be passed into the sharedInstance (Singleton) initializer to be used for all method calls OR overridden here
     * - Parameter - onCompletion: The completion handler, providing an optional error in case something goes wrong
     **/
     public func addPublicAddresses(fioAddress: String, publicAddresses:[PublicAddress], maxFee: Int, walletFioAddress:String = "", onCompletion: @escaping (_ response: FIOSDK.Responses.AddPublicAddressResponse? , _ error:FIOError?) -> ()) {
@@ -401,38 +408,45 @@ public class FIOSDK: BaseFIOSDK {
         }
     }
     
+    //MARK: getCachedABI
     internal func getCachedABI(accountName: String) -> String{
         return (self._abis[accountName] ?? "")
     }
     
-    //MARK: FIO Name Availability
-    public func isAvailable(fioName:String, completion: @escaping (_ isAvailable: Bool, _ error:FIOError?) -> ()) {
+    //MARK: isAvailable?
+    
+    /** Is the Fio Name Available?
+     *
+     * - Parameter fioName: Is the fio address or fio domain available?
+     * - Parameter - onCompletion: The completion handler, providing an optional error in case something goes wrong
+     **/
+    public func isAvailable(fioName:String, onCompletion: @escaping (_ isAvailable: Bool, _ error:FIOError?) -> ()) {
         let request = AvailCheckRequest(fio_name: fioName)
         let url = ChainRouteBuilder.build(route: ChainRoutes.availCheck)
         FIOHTTPHelper.postRequestTo(url,
             withBody: request) { (data, error) in
                 guard let data = data, error != nil else {
-                    completion(false, error ?? FIOError.failure(localizedDescription: "isAvailable failed."))
+                    onCompletion(false, error ?? FIOError.failure(localizedDescription: "isAvailable failed."))
                     return
                 }
                 do {
                     let response = try JSONDecoder().decode(AvailCheckResponse.self, from: data)
-                    completion(!response.isRegistered, FIOError.success())
+                    onCompletion(!response.isRegistered, FIOError.success())
                 }catch let error {
-                    completion(false, FIOError.failure(localizedDescription: error.localizedDescription))
+                    onCompletion(false, FIOError.failure(localizedDescription: error.localizedDescription))
                 }
         }
     }
     
     //MARK: Get Pending FIO Requests
     
-    /// Pending requests call polls for any pending requests sent to a receiver. [visit api specs](https://stealth.atlassian.net/wiki/spaces/DEV/pages/53280776/API#API-/get_pending_fio_requests-GetpendingFIORequests)
-    ///
-    /// - Parameters:
-    ///   - fioPublicKey: FIO public key to get pending requests for. (requestee)
-    ///   - completion: Completion hanlder
-    
-    public func getPendingFioRequests(limit:Int?=nil, offset:Int?=0, completion: @escaping (_ pendingRequests: FIOSDK.Responses.PendingFIORequestsResponse?, _ error:FIOError) -> ()) {
+    /** Get Pending FIO Requests for the payer
+     *
+     * - Parameter limit: Number of request to return. If omitted, all requests will be returned.
+     * - Parameter offset: First request from list to return. If omitted, 0 is assumed.
+     * - Parameter - onCompletion: The completion handler, providing an optional error in case something goes wrong
+     **/
+    public func getPendingFioRequests(limit:Int?=nil, offset:Int?=0, onCompletion: @escaping (_ pendingRequests: FIOSDK.Responses.PendingFIORequestsResponse?, _ error:FIOError) -> ()) {
         let body = PendingFIORequestsRequest(fioPublicKey: self.publicKey, limit: limit, offset: offset ?? 0)
         let url = ChainRouteBuilder.build(route: ChainRoutes.getPendingFIORequests)
         FIOHTTPHelper.postRequestTo(url, withBody: body) { (data, error) in
@@ -443,33 +457,34 @@ public class FIOSDK: BaseFIOSDK {
                     // filter the dead records
                     result.requests = result.requests.filter { $0.fioRequestId >= 0 }
                     
-                    completion(result, FIOError.success())
+                    onCompletion(result, FIOError.success())
                 }
                 catch {
-                    completion(nil, FIOError.failure(localizedDescription: "Parsing json failed."))
+                    onCompletion(nil, FIOError.failure(localizedDescription: "Parsing json failed."))
                 }
             } else {
                 if let error = error {
-                    completion(nil, error)
+                    onCompletion(nil, error)
                 }
                 else {
-                    completion(nil, FIOError.failure(localizedDescription: ChainRoutes.getPendingFIORequests.rawValue + " request failed."))
+                    onCompletion(nil, FIOError.failure(localizedDescription: ChainRoutes.getPendingFIORequests.rawValue + " request failed."))
                 }
             }
         }
     }
     
-    //MARK: GetObtDataByTokenCode
+    //MARK: GetObtData
     
-    /// Gets for any Obt Data sent using public key associated with the FIO SDK instance.
-    /// - Parameters:
-    ///   - tokenCode Only return Obt Data with this tokenCode (i.e. BTC, ETH, etc..)
-    ///   - limit Number of records to return. If omitted, all records will be returned.
-    ///   - offset First record from list to return. If omitted, 0 is assumed.
-    ///   - completion: Completion handler
-    public func getObtDataByTokenCode(tokenCode:String, limit:Int?=nil, offset:Int?=0, completion: @escaping (_ obtDataResponse: FIOSDK.Responses.GetObtDataResponse?, _ error:FIOError) -> ()) {
+    /** Get ObtData associated with the public key of this FIO SDK instance.
+     *
+     * - Parameter tokenCode: Filter the ObtData returned, by the tokenCode (i.e. BTC, ETH)
+     * - Parameter limit: Number of obtData records to return. If omitted, all records will be returned.
+     * - Parameter offset: First record from list to return. If omitted, 0 is assumed.
+     * - Parameter - onCompletion: The completion handler, providing an optional error in case something goes wrong
+     **/
+    public func getObtDataByTokenCode(tokenCode:String, limit:Int?=nil, offset:Int?=0, onCompletion: @escaping (_ obtDataResponse: FIOSDK.Responses.GetObtDataResponse?, _ error:FIOError) -> ()) {
         
-        self.getObtData(limit:limit, offset:offset , completion: { (response, error) in
+        self.getObtData(limit:limit, offset:offset , onCompletion: { (response, error) in
         
             if (error.kind == FIOError.ErrorKind.Success) {
 
@@ -477,25 +492,24 @@ public class FIOSDK: BaseFIOSDK {
                     var result = response
                     result?.obtData = response!.obtData.filter { ($0.content.tokenCode.lowercased() == tokenCode.lowercased()) }
                     
-                    completion(result, error)
+                    onCompletion(result, error)
                 }
                 
             }
             else{
-                completion(nil, error)
+                onCompletion(nil, error)
             }
             
         })
     }
     
-    //MARK: GetObtData
-    
-    /// Gets for any Obt Data sent using public key associated with the FIO SDK instance.
-    /// - Parameters:
-    ///   - limit Number of records to return. If omitted, all records will be returned.
-    ///   - offset First record from list to return. If omitted, 0 is assumed.
-    ///   - completion: Completion handler
-    public func getObtData(limit:Int?=nil, offset:Int?=0, completion: @escaping (_ obtDataResponse: FIOSDK.Responses.GetObtDataResponse?, _ error:FIOError) -> ()) {
+    /** Returns ObtData associated with the public key of this FIO SDK instance.
+     *
+     * - Parameter limit: Number of obtData records to return. If omitted, all records will be returned.
+     * - Parameter offset: First record from list to return. If omitted, 0 is assumed.
+     * - Parameter onCompletion: The completion handler, providing an optional error in case something goes wrong
+     **/
+    public func getObtData(limit:Int?=nil, offset:Int?=0, onCompletion: @escaping (_ obtDataResponse: FIOSDK.Responses.GetObtDataResponse?, _ error:FIOError) -> ()) {
         let body = GetObtDataRequest(fioPublicKey: self.publicKey, limit: limit, offset: offset ?? 0)
         let url = ChainRouteBuilder.build(route: ChainRoutes.getObtData)
         FIOHTTPHelper.postRequestTo(url, withBody: body) { (data, error) in
@@ -505,30 +519,30 @@ public class FIOSDK: BaseFIOSDK {
                     
                     result.obtData = result.obtData.filter { ($0.fioRequestId ?? -1) >= 0 }
                     
-                    completion(result, FIOError.success())
+                    onCompletion(result, FIOError.success())
                 }
                 catch {
-                    completion(nil, FIOError.failure(localizedDescription: "Parsing json failed."))
+                    onCompletion(nil, FIOError.failure(localizedDescription: "Parsing json failed."))
                 }
             } else {
                 if let error = error {
-                    completion(nil, error)
+                    onCompletion(nil, error)
                 }
                 else {
-                    completion(nil, FIOError.failure(localizedDescription: ChainRoutes.getObtData.rawValue + " request failed."))
+                    onCompletion(nil, FIOError.failure(localizedDescription: ChainRoutes.getObtData.rawValue + " request failed."))
                 }
             }
         }
     }
-    
+
     //MARK: Get FIO Names
     
-    /// Returns FIO Addresses and FIO Domains owned by given FIO public key.
-    ///
-    /// - Parameters:
-    ///   - FIOPublicKey: FIO public key from which to recover FIO names, if any.
-    ///   - completion: Completion handler
-    public func getFioNames(fioPublicKey: String, completion: @escaping (_ names: FIOSDK.Responses.FIONamesResponse?, _ error: FIOError?) -> ()){
+    /** Returns FIO Addresses and FIO Domains owned by given FIO public key.
+     *
+     * - Parameter fioPublicKey: FIO public key of owner.
+     * - Parameter onCompletion: The completion handler, providing an optional error in case something goes wrong
+     **/
+    public func getFioNames(fioPublicKey: String, onCompletion: @escaping (_ names: FIOSDK.Responses.FIONamesResponse?, _ error: FIOError?) -> ()){
         let body = FIONamesRequest(fioPublicKey: fioPublicKey)
         let url = ChainRouteBuilder.build(route: ChainRoutes.getFIONames)
         FIOHTTPHelper.postRequestTo(url, withBody: body) { (data, error) in
@@ -539,30 +553,32 @@ public class FIOSDK: BaseFIOSDK {
                         address.expiration > nextAddress.expiration
                     })
                     let newResult = FIOSDK.Responses.FIONamesResponse(domains: result.domains, addresses: newestAddresses)
-                    completion(newResult, FIOError.success())
+                    onCompletion(newResult, FIOError.success())
                 }
                 catch {
-                    completion(nil, FIOError.failure(localizedDescription: "Parsing json failed."))
+                    onCompletion(nil, FIOError.failure(localizedDescription: "Parsing json failed."))
                 }
             } else {
                 if let error = error {
-                    completion(nil, error)
+                    onCompletion(nil, error)
                 }
                 else {
-                    completion(nil, FIOError.failure(localizedDescription: ChainRoutes.getFIONames.rawValue + " request failed."))
+                    onCompletion(nil, FIOError.failure(localizedDescription: ChainRoutes.getFIONames.rawValue + " request failed."))
                 }
             }
         }
     }
     
-    //MARK: Single FIO Name
+    //MARK: Get FIO Address Details
     
-    /// Returns details about the FIO address.
-    /// - Parameters:
-    ///   - fioAddress: FIO Address for which to get details to, e.g. "alice.brd"
-    ///   - onCompletion: A FioAddressResponse object containing details.
-    public func getFIONameDetails(_ fioAddress: String, onCompletion: @escaping (_ publicAddress: FIOSDK.Responses.FIOAddressResponse?, _ error: FIOError) -> ()) {
-        FIOSDK.sharedInstance().getFioNames(fioPublicKey: FIOSDK.sharedInstance().getPublicKey(), completion: { (response, error) in
+    /** Returns details about the FIO address.
+     *
+     * - Parameter fioPublicKey: FIO public key of owner.
+     * - Parameter fioAddress: FIO Address for which to get details to, e.g. "alice@brd"
+     * - Parameter onCompletion: The completion handler, providing an optional error in case something goes wrong
+     **/
+    public func getFioAddressDetails(_ fioPublicKey:String, fioAddress: String, onCompletion: @escaping (_ publicAddress: FIOSDK.Responses.FIOAddressResponse?, _ error: FIOError) -> ()) {
+        FIOSDK.sharedInstance().getFioNames(fioPublicKey: fioPublicKey, onCompletion: { (response, error) in
             guard error?.kind == .Success, let addresses = response?.addresses else {
                 onCompletion(nil, error ?? FIOError.failure(localizedDescription: "FIO details not found"))
                 return
@@ -573,54 +589,27 @@ public class FIOSDK: BaseFIOSDK {
             }
             onCompletion(result, error ?? FIOError.success())
         })
-    }    
+    }
     
-    //MARK: Public Address Lookup
-    
-    /// Returns a public address for a specified FIO Address, based on a given token for example ETH. [visit the API specs](https://stealth.atlassian.net/wiki/spaces/DEV/pages/53280776/API#API-/pub_address_lookup-FIOAddresslookup)
-    /// example response:
-    /// ```
-    /// // example response
-    /// let result: [String: String] =  ["pub_address": "0xab5801a7d398351b8be11c439e05c5b3259aec9b", "token_code": "ETH", "fio_address": "purse.alice"]
-    /// ```
-    ///
-    /// - Parameters:
-    ///   - fioAddress: FIO Address for which public address is to be returned, e.g. "alice.brd"
-    ///   - tokenCode: Token code for which public address is to be returned, e.g. "ETH".
-    ///   - completion: result based on DTO PublicAddressResponse
-    public func getPublicAddress(fioAddress: String, tokenCode: String, completion: @escaping (_ publicAddress: FIOSDK.Responses.PublicAddressResponse?, _ error: FIOError) -> ()){
-        let body = PublicAddressRequest(fioAddress: fioAddress, tokenCode: tokenCode)
-        let url = ChainRouteBuilder.build(route: ChainRoutes.getPublicAddress)
-        FIOHTTPHelper.postRequestTo(url, withBody: body) { (data, error) in
-            if let data = data {
-                do {
-                    let result = try JSONDecoder().decode(FIOSDK.Responses.PublicAddressResponse.self, from: data)
-                    completion(result, FIOError.success())
-                }
-                catch {
-                    completion(nil, FIOError.failure(localizedDescription: "Parsing json failed."))
-                }
-            } else {
-                if let error = error {
-                    completion(nil, error)
-                }
-                else {
-                    completion(nil, FIOError.failure(localizedDescription: ChainRoutes.getPublicAddress.rawValue + " request failed."))
-                }
-            }
+    /** Returns details about the FIO address.  For the address associated with the FIO public key of the FIOSDK sharedInstance (Singleton).
+     *
+     * - Parameter fioAddress: FIO Address for which to get details to, e.g. "alice@brd"
+     * - Parameter onCompletion: The completion handler, providing an optional error in case something goes wrong
+     **/
+    public func getFioAddressDetails(_ fioAddress: String, onCompletion: @escaping (_ publicAddress: FIOSDK.Responses.FIOAddressResponse?, _ error: FIOError) -> ()) {
+        FIOSDK.sharedInstance().getFioAddressDetails(FIOSDK.sharedInstance().publicKey, fioAddress:fioAddress) { (response, error) in
+            onCompletion(response, error)
         }
     }
     
-    public func getFIOPublicKey(fioAddress: String, completion: @escaping (_ publicAddress: FIOSDK.Responses.PublicAddressResponse?, _ error: FIOError) -> ()){
-        getPublicAddress(fioAddress: fioAddress, tokenCode: "FIO", completion: completion)
-    }
-    //
+    //MARK: Get Public Address
     
-    /// Returns a public address for the specified token registered under a FIO public key.
-    /// - Parameters:
-    ///   - forToken: Token code for which public address is to be returned, e.g. "ETH".
-    ///   - fioPublicKey: FIO public Key under which the token was registered.
-    ///   - onCompletion: A TokenPublicAddressResponse containing FIO address and public address.
+    /** Returns a public address for the specified token registered under a FIO public key.
+     *
+     * - Parameter fioPublicKey: FIO public key of owner.
+     * - Parameter tokenCode: FIO Address for which to get details to, e.g. "alice@brd"
+     * - Parameter onCompletion: The completion handler, providing an optional error in case something goes wrong
+     **/
     public func getPublicAddress(fioPublicKey: String, tokenCode: String, onCompletion: @escaping (_ publicAddress: FIOSDK.Responses.TokenPublicAddressResponse?, _ error: FIOError) -> ()) {
         FIOSDK.sharedInstance().getFioNames(fioPublicKey: fioPublicKey) { (response, error) in
             guard error == nil || error?.kind == .Success, let fioAddress = response?.addresses.first?.address else {
@@ -636,6 +625,46 @@ public class FIOSDK: BaseFIOSDK {
             }
         }
     }
+    
+    /** Returns a public address for a specified FIO Address, for a given token (i.e. BTC, ETH)
+     *
+     * - Parameter fioAddress: FIO Address associated with the public address being retrieved, e.g. "alice@brd"
+     * - Parameter tokenCode: tokenCode of the public address to, (i.e. BTC, ETH)
+     * - Parameter onCompletion: The completion handler, providing an optional error in case something goes wrong
+     **/
+    public func getPublicAddress(fioAddress: String, tokenCode: String, onCompletion: @escaping (_ publicAddress: FIOSDK.Responses.PublicAddressResponse?, _ error: FIOError) -> ()){
+        let body = PublicAddressRequest(fioAddress: fioAddress, tokenCode: tokenCode)
+        let url = ChainRouteBuilder.build(route: ChainRoutes.getPublicAddress)
+        FIOHTTPHelper.postRequestTo(url, withBody: body) { (data, error) in
+            if let data = data {
+                do {
+                    let result = try JSONDecoder().decode(FIOSDK.Responses.PublicAddressResponse.self, from: data)
+                    onCompletion(result, FIOError.success())
+                }
+                catch {
+                    onCompletion(nil, FIOError.failure(localizedDescription: "Parsing json failed."))
+                }
+            } else {
+                if let error = error {
+                    onCompletion(nil, error)
+                }
+                else {
+                    onCompletion(nil, FIOError.failure(localizedDescription: ChainRoutes.getPublicAddress.rawValue + " request failed."))
+                }
+            }
+        }
+    }
+    
+    /** Returns the FIO PublicKey, associated with the FIO address.
+     *
+     * - Parameter fioAddress: FIO Address for which to get details to, e.g. "alice@brd"
+     * - Parameter onCompletion: The completion handler, providing an optional error in case something goes wrong
+     **/
+    public func getFioPublicKey(fioAddress: String, onCompletion: @escaping (_ publicAddress: FIOSDK.Responses.PublicAddressResponse?, _ error: FIOError) -> ()){
+        getPublicAddress(fioAddress: fioAddress, tokenCode: "FIO", onCompletion: onCompletion)
+    }
+    
+    //MARK: Encrypt/Decrypt
     
     internal func encrypt(publicKey: String, contentType: FIOAbiContentType, contentJson: String) -> String{
         guard let privateKey = try! PrivateKey(keyString: self.privateKey) else {
@@ -677,29 +706,30 @@ public class FIOSDK: BaseFIOSDK {
         }
 
         let serializer = abiSerializer()
-        let contentJSON = try? serializer.deserializeContent(contentType: contentType, hexString: decrypted.hexEncodedString().uppercased() ?? "")
+        let contentJSON = try? serializer.deserializeContent(contentType: contentType, hexString: decrypted.hexEncodedString().uppercased())
 
         return contentJSON ?? ""
     }
     
     //MARK: - Request Funds
     
-    /// Creates a new funds request.
-    /// To read further infomation about this [visit the API specs](https://stealth.atlassian.net/wiki/spaces/DEV/pages/53280776/API#API-/new_funds_request-Createnewfundsrequest)
-    /// Note: requestor is sender, requestee is receiver
-    ///
-    /// - Parameters:
-    ///   - payerFIOAddress: FIO Address of the payer. This address will receive the request and will initiate payment, i.e. requestee:brd
-    ///   - payeeFIOAddress: FIO Address of the payee. This address is sending the request and will receive payment, i.e. requestor:brd
-    ///   - payeePublicAddress: Payee's public address where they want funds sent.
-    ///   - amount: Amount requested.
-    ///   - tokenCode: Code of the token represented in Amount requested, i.e. ETH
-    ///   - metadata: Contains the: memo or hash or offlineUrl
-    ///   - maxFee: Maximum amount of SUFs the user is willing to pay for fee. Should be preceded by /get_fee for correct value.
-    ///   - onCompletion: The completion handler containing the result
+    /** Creates a new funds request
+     *
+     * - Parameter payerFIOAddress: FIO Address of the payer. This address will receive the request and will initiate payment, i.e. requestee:brd
+     * - Parameter payeeFIOAddress: FIO Address of the payee. This address is sending the request and will receive payment, i.e. requestor:brd
+     * - Parameter payeePublicAddress: Payee's public address where they want funds sent.
+     * - Parameter amount: Amount requested.
+     * - Parameter tokenCode: Code of the token represented in Amount requested, i.e. ETH
+     * - Parameter metadata: Contains the: memo or hash or offlineUrl
+     * - Parameter maxFee: Maximum amount of SUFs the user is willing to pay for fee. Should be preceded by calling the getFee() method for the correct value.
+     * - Parameter walletFioAddress: FIO Address of the wallet which generates this transaction.
+     + Set to empty if not known.
+     + This can be passed into the sharedInstance (Singleton) initializer to be used for all method calls OR overridden here
+     * - Parameter - onCompletion: The completion handler, providing an optional error in case something goes wrong
+     **/
     public func requestFunds(payer payerFIOAddress:String, payee payeeFIOAddress: String, payeePublicAddress: String, amount: Float, tokenCode: String, metadata: RequestFundsRequest.MetaData, maxFee: Int, walletFioAddress:String = "", onCompletion: @escaping ( _ response: RequestFundsResponse?, _ error:FIOError? ) -> ()) {
        
-        self.getFIOPublicKey(fioAddress: payerFIOAddress) { (response, error) in
+        self.getFioPublicKey(fioAddress: payerFIOAddress) { (response, error) in
 
             if (error.kind == FIOError.ErrorKind.Success) {
                 
@@ -733,17 +763,16 @@ public class FIOSDK: BaseFIOSDK {
     
     //MARK: - Reject Funds
     
-    /// Reject funds request.
-    /// To read further infomation about this [visit the API specs] [1]
-    ///
-    ///    [1]: https://stealth.atlassian.net/wiki/spaces/DEV/pages/265977939/API+v0.3#APIv0.3-/reject_funds_request-Rejectfundsrequest "api specs"
-    ///
-    /// - Parameters:
-    ///   - fioRequestId: ID of that fund request.
-    ///   - maxFee: Maximum amount of SUFs the user is willing to pay for fee. Should be preceded by /get_fee for correct value.
-    ///   - walletFioAddress: FIO Address of the wallet which generates this transaction.
-    ///   - completion: The completion handler containing the result or error.
-    public func rejectFundsRequest(fioRequestId: Int, maxFee: Int, walletFioAddress: String = "", completion: @escaping(_ response: FIOSDK.Responses.RejectFundsRequestResponse?,_ :FIOError) -> ()){
+    /** Reject funds request.
+     *
+     * - Parameter fioRequestId: fio request Id of the funds request record to reject
+     * - Parameter maxFee: Maximum amount of SUFs the user is willing to pay for fee. Should be preceded by calling the getFee() method for the correct value.
+     * - Parameter walletFioAddress: FIO Address of the wallet which generates this transaction.
+     + Set to empty if not known.
+     + This can be passed into the sharedInstance (Singleton) initializer to be used for all method calls OR overridden here
+     * - Parameter - onCompletion: The completion handler, providing an optional error in case something goes wrong
+     **/
+    public func rejectFundsRequest(fioRequestId: Int, maxFee: Int, walletFioAddress: String = "", onCompletion: @escaping(_ response: FIOSDK.Responses.RejectFundsRequestResponse?,_ :FIOError) -> ()){
         let actor = AccountNameGenerator.run(withPublicKey:getPublicKey())
         let data = RejectFundsRequest(fioRequestId: fioRequestId, maxFee: maxFee, walletFioAddress: self.getWalletFioAddress(walletFioAddress), actor: actor)
         
@@ -754,26 +783,27 @@ public class FIOSDK: BaseFIOSDK {
                             code: "fio.reqobt",
                             account: actor) { (result, error) in
                                 guard let result = result else {
-                                    completion(nil, error ?? FIOError.init(kind: .Failure, localizedDescription: "The request couldn't rejected"))
+                                    onCompletion(nil, error ?? FIOError.init(kind: .Failure, localizedDescription: "The request couldn't rejected"))
                                     return
                                 }
                                 let handledData: (response: FIOSDK.Responses.RejectFundsRequestResponse?, error: FIOError) = parseResponseFromTransactionResult(txResult: result)
                                 guard handledData.response?.status == .rejected else {
-                                    completion(nil, FIOError.failure(localizedDescription: "The request couldn't rejected"))
+                                    onCompletion(nil, FIOError.failure(localizedDescription: "The request couldn't rejected"))
                                     return
                                 }
-                                completion(handledData.response, FIOError.success())
+                                onCompletion(handledData.response, FIOError.success())
         }
     }
     
     //MARK: Get Sent FIO Requests
     
-    /// Get all requests sent by the given FIO public key. Usually made with requestFunds.
-    /// To read further infomation about this [visit the API specs](https://stealth.atlassian.net/wiki/spaces/DEV/pages/53280776/API#API-/get_sent_fio_requests-GetFIORequestssentout)
-    /// - Parameters:
-    ///   - fioPublicKey: FIO public key to retrieve sent requests.
-    ///   - completion: The completion result
-    public func getSentFioRequests(limit:Int?=nil, offset:Int?=0, completion: @escaping (_ response: FIOSDK.Responses.SentFIORequestsResponse?, _ error: FIOError) -> ()){
+    /** Get Sent FIO Requests for the SDK sharedInstance(singleton) associated with the fio public key
+     *
+     * - Parameter limit: Number of obtData records to return. If omitted, all records will be returned.
+     * - Parameter offset: First record from list to return. If omitted, 0 is assumed.
+     * - Parameter - onCompletion: The completion handler, providing an optional error in case something goes wrong
+     **/
+    public func getSentFioRequests(limit:Int?=nil, offset:Int?=0, onCompletion: @escaping (_ response: FIOSDK.Responses.SentFIORequestsResponse?, _ error: FIOError) -> ()){
         let body = SentFIORequestsRequest(fioPublicKey: self.publicKey, limit: limit, offset: offset ?? 0)
         let url = ChainRouteBuilder.build(route: ChainRoutes.getSentFIORequests)
         FIOHTTPHelper.postRequestTo(url, withBody: body) { (data, error) in
@@ -784,39 +814,41 @@ public class FIOSDK: BaseFIOSDK {
                     // filter the dead records
                     result.requests = result.requests.filter { $0.fioRequestId >= 0 }
                     
-                    completion(result, FIOError.success())
+                    onCompletion(result, FIOError.success())
                 }
                 catch {
-                    completion(nil, FIOError.failure(localizedDescription: "Parsing json failed."))
+                    onCompletion(nil, FIOError.failure(localizedDescription: "Parsing json failed."))
                 }
             } else {
                 if let error = error {
-                    completion(nil, error)
+                    onCompletion(nil, error)
                 }
                 else {
-                    completion(nil, FIOError.failure(localizedDescription: ChainRoutes.getSentFIORequests.rawValue + " request failed."))
+                    onCompletion(nil, FIOError.failure(localizedDescription: ChainRoutes.getSentFIORequests.rawValue + " request failed."))
                 }
             }
         }
     }
     
-    //MARK: Record Send
+    //MARK: Record ObtData
 
-    /// Record a transation on another blockhain (OBT: other block chain transaction). Should be called after any transaction if recordSendAutoResolvingWith is not called. [visit api specs](https://stealth.atlassian.net/wiki/spaces/DEV/pages/53280776/API#API-/record_send-Recordssendonanotherblockchain)
-    ///
-    /// - Parameters:
-    ///     - fioRequestId: The FIO request ID to register the transaction for. Only required when approving transaction request.
-    ///     - payerFIOAddress: FIO Address of the payer. This address initiated payment. (requestor)
-    ///     - payeeFIOAddress: FIO Address of the payee. This address is receiving payment. (requestee)
-    ///     - payerTokenPublicAddress: Public address on other blockchain of user sending funds. (requestor)
-    ///     - payeeTokenPublicAddress: Public address on other blockchain of user receiving funds. (requestee)
-    ///     - amount: The value being sent.
-    ///     - tokenCode: Token code i.e. BTC, ETH, etc.
-    ///     - obtId: The transaction ID (OBT) representing the transaction from one blockchain to another one.
-    ///     - maxFee: Maximum amount of SUFs the user is willing to pay for fee. Should be preceded by /get_fee for correct value.
-    ///     - metaData: memo, hash, offlineURL options
-    ///     - walletFioAddress: FIO Address of the wallet which generates this transaction.
-    ///     - onCompletion: Once finished this callback returns optional response and error.
+    /** Record a transaction on another blockhain (OBT: other block chain transaction).
+     *
+     * - Parameter fioRequestId: The fio request Id to record data against.  Set to nil if there is no associated fio request
+     * - Parameter payerFIOAddress: FIO Address of the payer. This address will receive the request and will initiate payment, i.e. requestee:brd
+     * - Parameter payeeFIOAddress: FIO Address of the payee. This address is sending the request and will receive payment, i.e. requestor:brd
+     * - Parameter payerTokenPublicAddress: Payee's public address where they want funds sent.
+     * - Parameter payeeTokenPublicAddress: Payee's public address where they want funds sent.
+     * - Parameter amount: Amount requested.
+     * - Parameter tokenCode: Code of the token represented in Amount requested, i.e. ETH
+     * - Parameter obtId: Other Blockchain Transaction Id i.e. 0x3234222...
+     * - Parameter metadata: Contains the: memo or hash or offlineUrl
+     * - Parameter maxFee: Maximum amount of SUFs the user is willing to pay for fee. Should be preceded by calling the getFee() method for the correct value.
+     * - Parameter walletFioAddress: FIO Address of the wallet which generates this transaction.
+     + Set to empty if not known.
+     + This can be passed into the sharedInstance (Singleton) initializer to be used for all method calls OR overridden here
+     * - Parameter - onCompletion: The completion handler, providing an optional error in case something goes wrong
+     **/
     public func recordObtData(fioRequestId: Int? = nil,
                            payerFIOAddress: String,
                            payeeFIOAddress: String,
@@ -832,7 +864,7 @@ public class FIOSDK: BaseFIOSDK {
         
         let contentJson = RecordObtDataContent(payerPublicAddress: payerTokenPublicAddress, payeePublicAddress: payeeTokenPublicAddress, amount: String(amount), tokenCode: tokenCode, status:"sent_to_blockchain", obtId: obtId, memo: metaData.memo ?? "", hash: metaData.hash ?? "", offlineUrl: metaData.offlineUrl ?? "")
         
-        FIOSDK.sharedInstance().getFIOPublicKey(fioAddress: payeeFIOAddress) { (response, error) in
+        FIOSDK.sharedInstance().getFioPublicKey(fioAddress: payeeFIOAddress) { (response, error) in
             guard error.kind == .Success, let payeeFIOPublicKey = response?.publicAddress else {
                 onCompletion(nil, error)
                 return
@@ -866,9 +898,10 @@ public class FIOSDK: BaseFIOSDK {
     
     //MARK: Get FIO Balance
     
-    /// Retrieves balance of FIO tokens. [visit API specs](https://stealth.atlassian.net/wiki/spaces/DEV/pages/265977939/API+v0.3#APIv0.3-/get_fio_balance-GetFIObalance)
-    /// - Parameters:
-    ///     - onCompletion: A function that is called once request is over with an optional response that should contain balance and error containing the status of the call.
+    /** Returns balance of the FIO Token.  For the public key of the FIOSDK sharedInstance (Singleton).
+     *
+     * - Parameter - onCompletion: The completion handler, providing an optional error in case something goes wrong
+     **/
     public func getFIOBalance(onCompletion: @escaping (_ response: FIOSDK.Responses.FIOBalanceResponse?, _ error: FIOError) -> ()){
         FIOSDK.sharedInstance().getFIOBalance(fioPublicKey: FIOSDK.sharedInstance().getPrivateKey(), onCompletion: { (resp, err) in
             onCompletion(resp, err)
@@ -876,10 +909,10 @@ public class FIOSDK: BaseFIOSDK {
         })
     }
     
-    /// Retrieves balance of FIO tokens. [visit API specs](https://stealth.atlassian.net/wiki/spaces/DEV/pages/265977939/API+v0.3#APIv0.3-/get_fio_balance-GetFIObalance)
-    /// - Parameters:
-    ///     - fioPublicKey: The FIO public key to get FIO tokens balance for.
-    ///     - onCompletion: A function that is called once request is over with an optional response that should contain balance and error containing the status of the call.
+    /** Returns balance of the FIO Token.
+     * - Parameter - fioPublicKey: The FIO public key to get the FIO token balance for.
+     * - Parameter - onCompletion: The completion handler, providing an optional error in case something goes wrong
+     **/
     public func getFIOBalance(fioPublicKey: String, onCompletion: @escaping (_ response: FIOSDK.Responses.FIOBalanceResponse?, _ error: FIOError) -> ()){
         let body = FIOBalanceRequest(fioPublicKey: fioPublicKey)
         let url = ChainRouteBuilder.build(route: ChainRoutes.getFIOBalance)
@@ -903,16 +936,18 @@ public class FIOSDK: BaseFIOSDK {
         }
     }
     
-    //MARK: Transfer Tokens
+    //MARK: Transfer FIO Tokens
     
     /**
-     * Transfers FIO tokens. [visit API specs](https://stealth.atlassian.net/wiki/spaces/DEV/pages/265977939/API+v0.3#APIv0.3-/transfer_tokens_pub_key-TransferFIOtokens)
+     * Transfers FIO tokens.
      * - Parameter payeePublicKey: The receiver public key.
      * - Parameter amount: The value in SUFs that will be transfered from the calling account to the especified account.
-     * - Parameter maxFee: Maximum amount of SUFs the user is willing to pay for fee. Should be preceded by /get_fee for correct value.
+     * - Parameter maxFee: Maximum amount of SUFs the user is willing to pay for fee. Should be preceded by calling the getFee() method for the correct value.
      * - Parameter walletFioAddress: FIO Address of the wallet which generates this transaction.
-     * - Parameter onCompletion: A function that is called once request is over with an optional response with results and error containing the status of the call.
-     */
+     + Set to empty if not known.
+     + This can be passed into the sharedInstance (Singleton) initializer to be used for all method calls OR overridden here
+     * - Parameter - onCompletion: The completion handler, providing an optional error in case something goes wrong
+     **/
     public func transferFIOTokens(payeePublicKey: String, amount: Int, maxFee: Int, walletFioAddress: String = "", onCompletion: @escaping (_ response: FIOSDK.Responses.TransferFIOTokensResponse?, _ error: FIOError) -> ()){
         let actor = AccountNameGenerator.run(withPublicKey: getPublicKey())
         let transfer = TransferFIOTokensRequest (payeePublicKey: payeePublicKey, amount: amount, maxFee: maxFee, walletFioAddress: self.getWalletFioAddress(walletFioAddress), actor: actor)
@@ -931,19 +966,23 @@ public class FIOSDK: BaseFIOSDK {
         }
     }
     
-    //MARK: Get Fee
-    /// Compute and return fee amount for specific call and specific user. [visit API specs](https://stealth.atlassian.net/wiki/spaces/DEV/pages/265977939/API+v0.3#APIv0.3-/get_fee-Computeandreturnfeeamountforspecificcallandspecificuser)
-    /// - Parameters:
-    ///     - endPoint: Name of API call end point, e.g. register_fio_domain
-    ///     - onCompletion: A function that is called once request is over with an optional response with results and error containing the status of the call.
+    //MARK: Get Fees
+
+    /** Returns Fee for the selected API endpoint
+     *
+     * - Parameter endPoint: Name of API call end point, e.g. registerFIODomain
+     * - Parameter - onCompletion: The completion handler, providing an optional error in case something goes wrong
+     **/
     public func getFee(endPoint: FIOSDK.Params.FeeEndpoint, onCompletion: @escaping (_ response: FIOSDK.Responses.FeeResponse?, _ error: FIOError) -> ()) {
         self.getFeeResponse(fioAddress: "", endPoint: endPoint.rawValue, onCompletion: onCompletion)
     }
     
-    /// Compute and return fee amount for specific call and specific user. [visit API specs](https://stealth.atlassian.net/wiki/spaces/DEV/pages/265977939/API+v0.3#APIv0.3-/get_fee-Computeandreturnfeeamountforspecificcallandspecificuser)
-    /// - Parameters:
-    ///     - body: FeeRequest Object
-    ///     - onCompletion: A function that is called once request is over with an optional response with results and error containing the status of the call.
+    /** Returns FeeResponse for the selected API endpoint
+     *
+     * - Parameter fioAddress: FIO Address
+     * - Parameter endPoint: Name of API call end point, e.g. registerFIODomain
+     * - Parameter - onCompletion: The completion handler, providing an optional error in case something goes wrong
+     **/
     internal func getFeeResponse(fioAddress: String, endPoint: String,  onCompletion: @escaping (_ response: FIOSDK.Responses.FeeResponse?, _ error: FIOError) -> ()) {
         let body = FeeRequest(fioAddress: fioAddress, endPoint: endPoint)
         let url = ChainRouteBuilder.build(route: ChainRoutes.getFee)
@@ -967,49 +1006,48 @@ public class FIOSDK: BaseFIOSDK {
         }
     }
     
-    //MARK: getFeeForAddPublicAddress
-    
-    /// Compute and return fee amount for specific call and specific user. [visit API specs](https://stealth.atlassian.net/wiki/spaces/DEV/pages/265977939/API+v0.3#APIv0.3-/get_fee-Computeandreturnfeeamountforspecificcallandspecificuser)
-    /// - Parameters:
-    ///     - fioAddress: FIO Address incurring the fee and owned by signer.
-    ///     - onCompletion: A function that is called once request is over with an optional response with results and error containing the status of the call.
+    /** Returns Fee for the Add Public Address API endpoint
+     *
+     * - Parameter fioAddress: FIO Address
+     * - Parameter endPoint: Name of API call end point, e.g. registerFIODomain
+     * - Parameter - onCompletion: The completion handler, providing an optional error in case something goes wrong
+     **/
     public func getFeeForAddPublicAddress(fioAddress: String, onCompletion: @escaping (_ response: FIOSDK.Responses.FeeResponse?, _ error: FIOError) -> ()) {
         self.getFeeResponse(fioAddress: fioAddress, endPoint: "add_pub_address", onCompletion: onCompletion)
     }
     
-    //MARK: getFeeForNewFundsRequest
-    
-    /// Compute and return fee amount for specific call and specific user. [visit API specs](https://stealth.atlassian.net/wiki/spaces/DEV/pages/265977939/API+v0.3#APIv0.3-/get_fee-Computeandreturnfeeamountforspecificcallandspecificuser)
-    /// - Parameters:
-    ///     - payeeFioAddress: Payee FIO Address
-    ///     - onCompletion: A function that is called once request is over with an optional response with results and error containing the status of the call.
+    /** Returns Fee for the Funds Request API endpoint
+     *
+     * - Parameter payeeFioAddress: payee FIO Address
+     * - Parameter endPoint: Name of API call end point, e.g. registerFIODomain
+     * - Parameter - onCompletion: The completion handler, providing an optional error in case something goes wrong
+     **/
     public func getFeeForNewFundsRequest(payeeFioAddress: String, onCompletion: @escaping (_ response: FIOSDK.Responses.FeeResponse?, _ error: FIOError) -> ()) {
         self.getFeeResponse(fioAddress: payeeFioAddress, endPoint: "new_funds_request", onCompletion: onCompletion)
     }
     
-    //MARK: getFeeForRejectFundsRequest
-    
-    /// Compute and return fee amount for specific call and specific user. [visit API specs](https://stealth.atlassian.net/wiki/spaces/DEV/pages/265977939/API+v0.3#APIv0.3-/get_fee-Computeandreturnfeeamountforspecificcallandspecificuser)
-    /// - Parameters:
-    ///     - payeeFioAddress: Payee Fio Address from corresponding FIO Request
-    ///     - onCompletion: A function that is called once request is over with an optional response with results and error containing the status of the call.
+    /** Returns Fee for the Request Funds API endpoint
+     *
+     * - Parameter payeeFioAddress: Payee FIO Address
+     * - Parameter endPoint: Name of API call end point, e.g. registerFIODomain
+     * - Parameter - onCompletion: The completion handler, providing an optional error in case something goes wrong
+     **/
     public func getFeeForRejectFundsRequest(payeeFioAddress: String, onCompletion: @escaping (_ response: FIOSDK.Responses.FeeResponse?, _ error: FIOError) -> ()) {
         self.getFeeResponse(fioAddress: payeeFioAddress, endPoint: "reject_funds_request", onCompletion: onCompletion)
     }
     
-    //MARK: getFeeForRecordSend
-    
-    /// Compute and return fee amount for specific call and specific user. [visit API specs](https://stealth.atlassian.net/wiki/spaces/DEV/pages/265977939/API+v0.3#APIv0.3-/get_fee-Computeandreturnfeeamountforspecificcallandspecificuser)
-    /// - Parameters:
-    ///     - payerFioAddress: Payer Fio Address
-    ///     - onCompletion: A function that is called once request is over with an optional response with results and error containing the status of the call.
+    /** Returns Fee for the Record ObtData API endpoint
+     *
+     * - Parameter payerFioAddress: The Payer FIO Address
+     * - Parameter endPoint: Name of API call end point, e.g. registerFIODomain
+     * - Parameter - onCompletion: The completion handler, providing an optional error in case something goes wrong
+     **/
     public func getFeeForRecordObtData(payerFioAddress: String, onCompletion: @escaping (_ response: FIOSDK.Responses.FeeResponse?, _ error: FIOError) -> ()) {
         self.getFeeResponse(fioAddress: payerFioAddress, endPoint: "record_obt_data", onCompletion: onCompletion)
     }
 
 }
 
-#warning("does this do anything, valid?")
 extension Formatter {
     static let iso8601: DateFormatter = {
         let formatter = DateFormatter()
@@ -1020,3 +1058,4 @@ extension Formatter {
         return formatter
     }()
 }
+
