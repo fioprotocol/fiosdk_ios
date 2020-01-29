@@ -52,22 +52,22 @@ class FIOKeyManagerTests: XCTestCase {
     }
     
     func testPrivatePubKeyPairWithoutPhraseShouldBeEmptyTuple() {
-        let keys = fioKeyManager.privatePubKeyPair(mnemonic: nil)
+        let keys = fioKeyManager.privatePublicKeyPair(mnemonic: nil)
         
         XCTAssert(keys.privateKey == "", "Private key should not be generated without phrase")
         XCTAssert(keys.publicKey == "", "Public key should not be generated without phrase")
     }
     
     func testPrivatePubKeyPairWithPhraseShouldBeGenerated() {
-        let keys = fioKeyManager.privatePubKeyPair(mnemonic: mnemonic)
+        let keys = fioKeyManager.privatePublicKeyPair(mnemonic: mnemonic)
         XCTAssert(!keys.privateKey.isEmpty, "Private key should be generated")
         XCTAssert(!keys.publicKey.isEmpty, "Public key should be generated")
     }
 
     func testGeneratePrivPubKeyPairTwoTimesShouldReturnStoredKeys() {
-        let keys = fioKeyManager.privatePubKeyPair(mnemonic: mnemonic)
+        let keys = fioKeyManager.privatePublicKeyPair(mnemonic: mnemonic)
         let storedPrivKey = keychainInteractor.item(key: KeychainKeys.fioPrivKey)
-        XCTAssert(keys.privateKey == storedPrivKey && storedPrivKey == fioKeyManager.privatePubKeyPair(mnemonic: mnemonic).privateKey, "Subsequent requests to generate key should not generate new key")
+        XCTAssert(keys.privateKey == storedPrivKey && storedPrivKey == fioKeyManager.privatePublicKeyPair(mnemonic: mnemonic).privateKey, "Subsequent requests to generate key should not generate new key")
     }
     
     func testWipeKeysShouldSucceed() {

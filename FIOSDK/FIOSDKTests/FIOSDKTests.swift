@@ -78,8 +78,8 @@ class FIOSDKTests: XCTestCase {
     }
     
     private func defaultSDKConfig() {
-        try? FIOSDK.wipePrivPubKeys()
-        let keyPair = FIOSDK.privatePubKeyPair(forMnemonic: defaultMnemonic)
+        try? FIOSDK.wipePrivatePublicKeys()
+        let keyPair = FIOSDK.privatePublicKeyPair(forMnemonic: defaultMnemonic)
         _ = FIOSDK.sharedInstance(privateKey: keyPair.privateKey, publicKey: keyPair.publicKey, url: defaultServer, mockUrl: mockUrl)
         
         print ("DEFAULT KEYS:")
@@ -105,8 +105,8 @@ class FIOSDKTests: XCTestCase {
     }
     
     private func alternativeSDKConfig() {
-        try? FIOSDK.wipePrivPubKeys()
-        let keyPair = FIOSDK.privatePubKeyPair(forMnemonic: "gallery hero weekend notable inherit chuckle village spread business scrap surprise finger")
+        try? FIOSDK.wipePrivatePublicKeys()
+        let keyPair = FIOSDK.privatePublicKeyPair(forMnemonic: "gallery hero weekend notable inherit chuckle village spread business scrap surprise finger")
         _ = FIOSDK.sharedInstance(privateKey: keyPair.privateKey, publicKey: keyPair.publicKey, url: defaultServer, mockUrl: mockUrl)
         
         print ("ALTERNATE KEYS:")
@@ -147,9 +147,9 @@ class FIOSDKTests: XCTestCase {
     //MARK: -
     
     func testPublicKeyFromStringShouldGeneratePublicKey() {
-        try? FIOSDK.wipePrivPubKeys()
+        try? FIOSDK.wipePrivatePublicKeys()
         let mnemonic = "gallery hero weekend notable inherit chuckle village spread business scrap surprise finger"
-        let keyPair = FIOSDK.privatePubKeyPair(forMnemonic: mnemonic)
+        let keyPair = FIOSDK.privatePublicKeyPair(forMnemonic: mnemonic)
         let privKey = try? PrivateKey(enclave: .Secp256k1, mnemonicString: mnemonic)
         guard let pk = privKey else {
             XCTFail()
@@ -159,6 +159,10 @@ class FIOSDKTests: XCTestCase {
             XCTFail()
             return
         }
+        print ("*-*")
+        print ("*" + pubkey!.rawPublicKey() + "*")
+        print ("*" + PublicKey(privateKey: pk!).rawPublicKey() + "*")
+        print ("*-*")
         XCTAssert(pubkey!.rawPublicKey() == PublicKey(privateKey: pk!).rawPublicKey())
     }
     
@@ -278,7 +282,10 @@ class FIOSDKTests: XCTestCase {
                 expectation.fulfill()
                 return
             }
-            FIOSDK.sharedInstance().getPublicAddress(fioAddress: self.requestorFioName, tokenCode: "PKEY", completion: { (response, error) in
+            
+            
+            
+            FIOSDK.sharedInstance().getPublicAddress(fioAddress: self.requestorFioName, tokenCode: "PKEY", onCompletion: { (response, error) in
                 XCTAssert((error.kind == FIOError.ErrorKind.Success), "testAddPublicAddress NOT SUCCESSFUL: \(error.localizedDescription)")
                 expectation.fulfill()
             })
@@ -304,7 +311,9 @@ class FIOSDKTests: XCTestCase {
         let expectation = XCTestExpectation(description: "testGetFIONameDetailsWithGoodNameShouldSucceed")
         
        // self.defaultSDKConfig()
-        FIOSDK.sharedInstance().getFIONameDetails(self.requesteeFioName) { (response, error) in
+        
+        
+        FIOSDK.sharedInstance().getFioAddressDetails(self.requesteeFioName) { (response, error) in
             XCTAssert(error.kind == .Success, "getPublicAddress error")
             XCTAssertNotNil(response, "getPublicAddress error")
             
@@ -326,7 +335,7 @@ class FIOSDKTests: XCTestCase {
     func testGetFIONameDetailsWithBadNameShouldFail() {
         let expectation = XCTestExpectation(description: "testGetFIONameDetailsWithBadNameShouldFail")
         
-        FIOSDK.sharedInstance().getFIONameDetails("NOT_VALID_NAME") { (response, error) in
+        FIOSDK.sharedInstance().getFioAddressDetails("NOT_VALID_NAME") { (response, error) in
             XCTAssert(response == nil || error.kind == .Failure, "Should've failed but succeeded")
             expectation.fulfill()
         }
@@ -463,7 +472,7 @@ class FIOSDKTests: XCTestCase {
             XCTAssert(error?.kind == .Success && response != nil, "testRejectFundsRequest Couldn't create mock request"  + (error?.localizedDescription ?? ""))
             if let response = response {
                 self.defaultSDKConfig()
-                FIOSDK.sharedInstance().rejectFundsRequest(fioRequestId: response.fioRequestId, maxFee: 10000000000, completion: { (response, error) in
+                FIOSDK.sharedInstance().rejectFundsRequest(fioRequestId: response.fioRequestId, maxFee: 10000000000, onCompletion: { (response, error) in
                     XCTAssert(error.kind == .Success, "testRejectFundsRequest couldn't reject request"  + (error.localizedDescription ?? ""))
                     expectation.fulfill()
                 })
@@ -836,7 +845,7 @@ class FIOSDKTests: XCTestCase {
         let expectation = XCTestExpectation(description: "testGetFIOBalanceWithProperSetupShouldReturnValue")
         let fioPubAddress = FIOSDK.sharedInstance().publicKey;
         
-        FIOSDK.sharedInstance().getFIOBalance(fioPublicKey: fioPubAddress) { (response, error) in
+        FIOSDK.sharedInstance().getFioBalance(fioPublicKey: fioPubAddress) { (response, error) in
             XCTAssert((error.kind == FIOError.ErrorKind.Success), "Get FIO Balance NOT SUCCESSFUL: \(error.localizedDescription )")
             XCTAssert((response?.displayBalance() != nil ), "Get FIO Balance NOT SUCCESSFUL: \(error.localizedDescription )")
             expectation.fulfill()
@@ -895,12 +904,12 @@ class FIOSDKTests: XCTestCase {
     }
     
     func testPrivatePubKeyPairMultipleGenerateShouldWork() {
-        try? FIOSDK.wipePrivPubKeys()
-        var keys = FIOSDK.privatePubKeyPair(forMnemonic: "hotel royal gasp strike hurdle expect dish surface era observe casual pond")
+        try? FIOSDK.wipePrivatePublicKeys()
+        var keys = FIOSDK.privatePublicKeyPair(forMnemonic: "hotel royal gasp strike hurdle expect dish surface era observe casual pond")
         XCTAssert(!keys.privateKey.isEmpty && !keys.publicKey.isEmpty)
-        keys = FIOSDK.privatePubKeyPair(forMnemonic: "mirror bid phrase scheme wing valid fringe insane august wasp join toast")
+        keys = FIOSDK.privatePublicKeyPair(forMnemonic: "mirror bid phrase scheme wing valid fringe insane august wasp join toast")
         XCTAssert(!keys.privateKey.isEmpty && !keys.publicKey.isEmpty)
-        keys = FIOSDK.privatePubKeyPair(forMnemonic: defaultMnemonic)
+        keys = FIOSDK.privatePublicKeyPair(forMnemonic: defaultMnemonic)
         XCTAssert(!keys.privateKey.isEmpty && !keys.publicKey.isEmpty)
     }
     
