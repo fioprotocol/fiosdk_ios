@@ -902,8 +902,8 @@ public class FIOSDK: BaseFIOSDK {
      *
      * - Parameter - onCompletion: The completion handler, providing an optional error in case something goes wrong
      **/
-    public func getFIOBalance(onCompletion: @escaping (_ response: FIOSDK.Responses.FIOBalanceResponse?, _ error: FIOError) -> ()){
-        FIOSDK.sharedInstance().getFIOBalance(fioPublicKey: FIOSDK.sharedInstance().getPrivateKey(), onCompletion: { (resp, err) in
+    public func getFioBalance(onCompletion: @escaping (_ response: FIOSDK.Responses.FIOBalanceResponse?, _ error: FIOError) -> ()){
+        FIOSDK.sharedInstance().getFioBalance(fioPublicKey: FIOSDK.sharedInstance().getPrivateKey(), onCompletion: { (resp, err) in
             onCompletion(resp, err)
             return
         })
@@ -913,7 +913,7 @@ public class FIOSDK: BaseFIOSDK {
      * - Parameter - fioPublicKey: The FIO public key to get the FIO token balance for.
      * - Parameter - onCompletion: The completion handler, providing an optional error in case something goes wrong
      **/
-    public func getFIOBalance(fioPublicKey: String, onCompletion: @escaping (_ response: FIOSDK.Responses.FIOBalanceResponse?, _ error: FIOError) -> ()){
+    public func getFioBalance(fioPublicKey: String, onCompletion: @escaping (_ response: FIOSDK.Responses.FIOBalanceResponse?, _ error: FIOError) -> ()){
         let body = FIOBalanceRequest(fioPublicKey: fioPublicKey)
         let url = ChainRouteBuilder.build(route: ChainRoutes.getFIOBalance)
         FIOHTTPHelper.postRequestTo(url, withBody: body) { (data, error) in
