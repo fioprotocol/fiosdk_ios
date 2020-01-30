@@ -679,7 +679,9 @@ public class FIOSDK: BaseFIOSDK {
         guard let encrypted = Cryptography().encrypt(secret: sharedSecret ?? "", message: packed ?? "", iv: nil) else {
            return ""
         }
-               
+        
+     //NEW   encrypted.base64EncodedString()
+        
         return encrypted.hexEncodedString().uppercased()
     }
     
@@ -688,6 +690,7 @@ public class FIOSDK: BaseFIOSDK {
            return ""
         }
         
+        //NEW - REMOVE, as it is now base64 encoded
         if (encryptedContent.isValidHex() ==  false) {
             return ""
         }
@@ -697,6 +700,8 @@ public class FIOSDK: BaseFIOSDK {
         var possibleDecrypted: Data?
         do {
             possibleDecrypted = try Cryptography().decrypt(secret: sharedSecret!, message: encryptedContent.toHexData())
+            
+           //NEW possibleDecrypted = try Cryptography().decrypt(secret: sharedSecret!, message: Data(base64Encoded: encryptedContent))
         }
         catch {
             return ""

@@ -9,11 +9,11 @@
 import XCTest
 @testable import FIOSDK
 
-private let useDefaultServer = false //want a custom server, set to true and then set the DEFAULT_SERVER to your ip/url
-private let useAlternateServer = true
+private let useDefaultServer = true //want a custom server, set to true and then set the DEFAULT_SERVER to your ip/url
+private let useAlternateServer = false
 
-private let DEFAULT_SERVER = "http://dev3.fio.dev:8889/v1"
-private let MOCK_DEFAULT_SERVER = "http://mock.dapix.io/mockd/DEV3/register_fio_name"
+private let DEFAULT_SERVER = "https://testnet.fioprotocol.io:443/v1"
+private let MOCK_DEFAULT_SERVER = ""
 
 private let ALTERNATE_SERVER = "http://dev2.fio.dev:8889/v1"
 private let MOCK_ALTERNATE_SERVER = "http://18.237.79.246/mockd/DEV2/register_fio_name"
@@ -56,7 +56,7 @@ class FIOSDKTests: XCTestCase {
     override func setUp() {
         // Put setup code here. This method is called before the invocation of each test method in the class.
         defaultSDKConfig()
-        if (isFunded == false){
+        if (isFunded == false || requesteeFioName.count < 1){
             print("CHANGED REGISTRATION")
             isFunded = true
             let timestamp = NSDate().timeIntervalSince1970
@@ -79,8 +79,7 @@ class FIOSDKTests: XCTestCase {
     
     private func defaultSDKConfig() {
         try? FIOSDK.wipePrivatePublicKeys()
-        let keyPair = FIOSDK.privatePublicKeyPair(forMnemonic: defaultMnemonic)
-        _ = FIOSDK.sharedInstance(privateKey: keyPair.privateKey, publicKey: keyPair.publicKey, url: defaultServer, mockUrl: mockUrl)
+        _ = FIOSDK.sharedInstance(privateKey: fioPrivateKey, publicKey: fioPublicKey, url: defaultServer, mockUrl: mockUrl)
         
         print ("DEFAULT KEYS:")
         print(keyPair.privateKey)
@@ -106,8 +105,7 @@ class FIOSDKTests: XCTestCase {
     
     private func alternativeSDKConfig() {
         try? FIOSDK.wipePrivatePublicKeys()
-        let keyPair = FIOSDK.privatePublicKeyPair(forMnemonic: "gallery hero weekend notable inherit chuckle village spread business scrap surprise finger")
-        _ = FIOSDK.sharedInstance(privateKey: keyPair.privateKey, publicKey: keyPair.publicKey, url: defaultServer, mockUrl: mockUrl)
+        _ = FIOSDK.sharedInstance(privateKey: fioPrivateKeyAlternative, publicKey: fioPublicKeyAlternative, url: defaultServer, mockUrl: mockUrl)
         
         print ("ALTERNATE KEYS:")
         print(keyPair.privateKey)
@@ -139,7 +137,6 @@ class FIOSDKTests: XCTestCase {
                 expectation.fulfill()
             }
         }
-        
         
         wait(for: [expectation], timeout: TIMEOUT)
     }
