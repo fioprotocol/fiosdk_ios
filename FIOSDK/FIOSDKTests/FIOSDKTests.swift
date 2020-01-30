@@ -564,7 +564,7 @@ class FIOSDKTests: XCTestCase {
         
         self.defaultSDKConfig()
        
-        FIOSDK.sharedInstance().registerFioAddress(fioName, maxFee: SUFUtils.amountToSUF(amount: 1100.0), onCompletion: {response, error in ()
+        FIOSDK.sharedInstance().registerFioAddress(fioName, maxFee: SUFUtils.amountToSUF(amount: 100.0), onCompletion: {response, error in ()
             XCTAssert((error?.kind == FIOError.ErrorKind.Success), "registerFIOName NOT SUCCESSFUL" + (error?.localizedDescription ?? "") )
             expectation.fulfill()
         })
