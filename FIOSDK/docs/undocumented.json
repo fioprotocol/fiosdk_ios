@@ -1,0 +1,1475 @@
+{
+  "warnings": [
+    {
+      "file": "/Users/shawnarney/Dropbox/working/dapix/code/fiosdk_ios/FIOSDK/FIOSDK/Core/BaseFIOSDK.swift",
+      "line": 11,
+      "symbol": "BaseFIOSDK",
+      "symbol_kind": "source.lang.swift.decl.class",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/shawnarney/Dropbox/working/dapix/code/fiosdk_ios/FIOSDK/FIOSDK/Core/BaseFIOSDK.swift",
+      "line": 59,
+      "symbol": "BaseFIOSDK.getPublicKey()",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/shawnarney/Dropbox/working/dapix/code/fiosdk_ios/FIOSDK/FIOSDK/Core/Helpers/DateUtils.swift",
+      "line": 13,
+      "symbol": "FIOSDK.DateUtils",
+      "symbol_kind": "source.lang.swift.decl.struct",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/shawnarney/Dropbox/working/dapix/code/fiosdk_ios/FIOSDK/FIOSDK/Core/Helpers/DateUtils.swift",
+      "line": 17,
+      "symbol": "FIOSDK.DateUtils.formattedDate(interval:format:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.static",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/shawnarney/Dropbox/working/dapix/code/fiosdk_ios/FIOSDK/FIOSDK/Core/Helpers/DateUtils.swift",
+      "line": 24,
+      "symbol": "FIOSDK.DateUtils.formattedDate(interval:format:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.static",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/shawnarney/Dropbox/working/dapix/code/fiosdk_ios/FIOSDK/FIOSDK/Core/Helpers/DateUtils.swift",
+      "line": 31,
+      "symbol": "FIOSDK.DateUtils.formattedDate(date:format:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.static",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/shawnarney/Dropbox/working/dapix/code/fiosdk_ios/FIOSDK/FIOSDK/Core/Keychain/KeychainInteractor.swift",
+      "line": 105,
+      "symbol": "secureAllocator",
+      "symbol_kind": "source.lang.swift.decl.var.global",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/shawnarney/Dropbox/working/dapix/code/fiosdk_ios/FIOSDK/FIOSDK/FIOSDK.swift",
+      "line": 11,
+      "symbol": "FIOSDK",
+      "symbol_kind": "source.lang.swift.decl.class",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/shawnarney/Dropbox/working/dapix/code/fiosdk_ios/FIOSDK/FIOSDK/FIOSDK.swift",
+      "line": 11,
+      "symbol": "FIOSDK",
+      "symbol_kind": "source.lang.swift.decl.extension",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/shawnarney/Dropbox/working/dapix/code/fiosdk_ios/FIOSDK/FIOSDK/FIOSDK.swift",
+      "line": 11,
+      "symbol": "FIOSDK.Params",
+      "symbol_kind": "source.lang.swift.decl.extension",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/shawnarney/Dropbox/working/dapix/code/fiosdk_ios/FIOSDK/FIOSDK/FIOSDK.swift",
+      "line": 11,
+      "symbol": "FIOSDK.Responses",
+      "symbol_kind": "source.lang.swift.decl.extension",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/shawnarney/Dropbox/working/dapix/code/fiosdk_ios/FIOSDK/FIOSDK/FIOSDK.swift",
+      "line": 11,
+      "symbol": "FIOSDK.Responses",
+      "symbol_kind": "source.lang.swift.decl.extension",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/shawnarney/Dropbox/working/dapix/code/fiosdk_ios/FIOSDK/FIOSDK/FIOSDK.swift",
+      "line": 11,
+      "symbol": "FIOSDK.Responses",
+      "symbol_kind": "source.lang.swift.decl.extension",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/shawnarney/Dropbox/working/dapix/code/fiosdk_ios/FIOSDK/FIOSDK/FIOSDK.swift",
+      "line": 11,
+      "symbol": "FIOSDK.Responses",
+      "symbol_kind": "source.lang.swift.decl.extension",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/shawnarney/Dropbox/working/dapix/code/fiosdk_ios/FIOSDK/FIOSDK/FIOSDK.swift",
+      "line": 11,
+      "symbol": "FIOSDK.Responses",
+      "symbol_kind": "source.lang.swift.decl.extension",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/shawnarney/Dropbox/working/dapix/code/fiosdk_ios/FIOSDK/FIOSDK/FIOSDK.swift",
+      "line": 11,
+      "symbol": "FIOSDK.Responses",
+      "symbol_kind": "source.lang.swift.decl.extension",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/shawnarney/Dropbox/working/dapix/code/fiosdk_ios/FIOSDK/FIOSDK/FIOSDK.swift",
+      "line": 11,
+      "symbol": "FIOSDK.Responses",
+      "symbol_kind": "source.lang.swift.decl.extension",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/shawnarney/Dropbox/working/dapix/code/fiosdk_ios/FIOSDK/FIOSDK/FIOSDK.swift",
+      "line": 11,
+      "symbol": "FIOSDK.Responses",
+      "symbol_kind": "source.lang.swift.decl.extension",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/shawnarney/Dropbox/working/dapix/code/fiosdk_ios/FIOSDK/FIOSDK/FIOSDK.swift",
+      "line": 11,
+      "symbol": "FIOSDK.Responses",
+      "symbol_kind": "source.lang.swift.decl.extension",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/shawnarney/Dropbox/working/dapix/code/fiosdk_ios/FIOSDK/FIOSDK/FIOSDK.swift",
+      "line": 11,
+      "symbol": "FIOSDK.Responses",
+      "symbol_kind": "source.lang.swift.decl.extension",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/shawnarney/Dropbox/working/dapix/code/fiosdk_ios/FIOSDK/FIOSDK/FIOSDK.swift",
+      "line": 11,
+      "symbol": "FIOSDK.Responses",
+      "symbol_kind": "source.lang.swift.decl.extension",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/shawnarney/Dropbox/working/dapix/code/fiosdk_ios/FIOSDK/FIOSDK/FIOSDK.swift",
+      "line": 11,
+      "symbol": "FIOSDK.Responses",
+      "symbol_kind": "source.lang.swift.decl.extension",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/shawnarney/Dropbox/working/dapix/code/fiosdk_ios/FIOSDK/FIOSDK/FIOSDK.swift",
+      "line": 11,
+      "symbol": "FIOSDK.Responses",
+      "symbol_kind": "source.lang.swift.decl.extension",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/shawnarney/Dropbox/working/dapix/code/fiosdk_ios/FIOSDK/FIOSDK/FIOSDK.swift",
+      "line": 11,
+      "symbol": "FIOSDK.Responses",
+      "symbol_kind": "source.lang.swift.decl.extension",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/shawnarney/Dropbox/working/dapix/code/fiosdk_ios/FIOSDK/FIOSDK/FIOSDK.swift",
+      "line": 11,
+      "symbol": "FIOSDK.Responses",
+      "symbol_kind": "source.lang.swift.decl.extension",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/shawnarney/Dropbox/working/dapix/code/fiosdk_ios/FIOSDK/FIOSDK/FIOSDK.swift",
+      "line": 11,
+      "symbol": "FIOSDK.Responses",
+      "symbol_kind": "source.lang.swift.decl.extension",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/shawnarney/Dropbox/working/dapix/code/fiosdk_ios/FIOSDK/FIOSDK/FIOSDK.swift",
+      "line": 12,
+      "symbol": "FIOSDK.Responses",
+      "symbol_kind": "source.lang.swift.decl.extension",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/shawnarney/Dropbox/working/dapix/code/fiosdk_ios/FIOSDK/FIOSDK/FIOSDK.swift",
+      "line": 12,
+      "symbol": "FIOSDK.Responses",
+      "symbol_kind": "source.lang.swift.decl.extension",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/shawnarney/Dropbox/working/dapix/code/fiosdk_ios/FIOSDK/FIOSDK/FIOSDK.swift",
+      "line": 16,
+      "symbol": "FIOSDK.Responses",
+      "symbol_kind": "source.lang.swift.decl.enum",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/shawnarney/Dropbox/working/dapix/code/fiosdk_ios/FIOSDK/FIOSDK/FIOSDK.swift",
+      "line": 18,
+      "symbol": "FIOSDK.Params",
+      "symbol_kind": "source.lang.swift.decl.enum",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/shawnarney/Dropbox/working/dapix/code/fiosdk_ios/FIOSDK/FIOSDK/FIOSDK.swift",
+      "line": 22,
+      "symbol": "FIOSDK.isInitialized()",
+      "symbol_kind": "source.lang.swift.decl.function.method.static",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/shawnarney/Dropbox/working/dapix/code/fiosdk_ios/FIOSDK/FIOSDK/FIOSDK.swift",
+      "line": 88,
+      "symbol": "FIOSDK.isFioNameValid(fioName:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/shawnarney/Dropbox/working/dapix/code/fiosdk_ios/FIOSDK/FIOSDK/Models/Core/AbiSerialization/FIOAbiContentType.swift",
+      "line": 11,
+      "symbol": "FIOAbiContentType",
+      "symbol_kind": "source.lang.swift.decl.enum",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/shawnarney/Dropbox/working/dapix/code/fiosdk_ios/FIOSDK/FIOSDK/Models/Core/AbiSerialization/FIOAbiContentType.swift",
+      "line": 12,
+      "symbol": "FIOAbiContentType.newFundsContent",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/shawnarney/Dropbox/working/dapix/code/fiosdk_ios/FIOSDK/FIOSDK/Models/Core/AbiSerialization/FIOAbiContentType.swift",
+      "line": 13,
+      "symbol": "FIOAbiContentType.recordObtDataContent",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/shawnarney/Dropbox/working/dapix/code/fiosdk_ios/FIOSDK/FIOSDK/Models/Core/FIOAddress/RegisterFIOAddressResponse.swift",
+      "line": 13,
+      "symbol": "FIOSDK.Responses.RegisterFIOAddressResponse",
+      "symbol_kind": "source.lang.swift.decl.struct",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/shawnarney/Dropbox/working/dapix/code/fiosdk_ios/FIOSDK/FIOSDK/Models/Core/FIOAddress/RegisterFIOAddressResponse.swift",
+      "line": 15,
+      "symbol": "FIOSDK.Responses.RegisterFIOAddressResponse.status",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/shawnarney/Dropbox/working/dapix/code/fiosdk_ios/FIOSDK/FIOSDK/Models/Core/FIOAddress/RegisterFIOAddressResponse.swift",
+      "line": 16,
+      "symbol": "FIOSDK.Responses.RegisterFIOAddressResponse.feeCollected",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/shawnarney/Dropbox/working/dapix/code/fiosdk_ios/FIOSDK/FIOSDK/Models/Core/FIOAddress/RegisterFIOAddressResponse.swift",
+      "line": 19,
+      "symbol": "FIOSDK.Responses.RegisterFIOAddressResponse.expiration",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/shawnarney/Dropbox/working/dapix/code/fiosdk_ios/FIOSDK/FIOSDK/Models/Core/FIOAddress/RenewFIOAddressResponse.swift",
+      "line": 13,
+      "symbol": "FIOSDK.Responses.RenewFIOAddressResponse",
+      "symbol_kind": "source.lang.swift.decl.struct",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/shawnarney/Dropbox/working/dapix/code/fiosdk_ios/FIOSDK/FIOSDK/Models/Core/FIOAddress/RenewFIOAddressResponse.swift",
+      "line": 15,
+      "symbol": "FIOSDK.Responses.RenewFIOAddressResponse.status",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/shawnarney/Dropbox/working/dapix/code/fiosdk_ios/FIOSDK/FIOSDK/Models/Core/FIOAddress/RenewFIOAddressResponse.swift",
+      "line": 16,
+      "symbol": "FIOSDK.Responses.RenewFIOAddressResponse.feeCollected",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/shawnarney/Dropbox/working/dapix/code/fiosdk_ios/FIOSDK/FIOSDK/Models/Core/FIOAddress/RenewFIOAddressResponse.swift",
+      "line": 19,
+      "symbol": "FIOSDK.Responses.RenewFIOAddressResponse.expiration",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/shawnarney/Dropbox/working/dapix/code/fiosdk_ios/FIOSDK/FIOSDK/Models/Core/FIODomain/RegisterFIODomainResponse.swift",
+      "line": 13,
+      "symbol": "FIOSDK.Responses.RegisterFIODomainResponse",
+      "symbol_kind": "source.lang.swift.decl.struct",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/shawnarney/Dropbox/working/dapix/code/fiosdk_ios/FIOSDK/FIOSDK/Models/Core/FIODomain/RegisterFIODomainResponse.swift",
+      "line": 15,
+      "symbol": "FIOSDK.Responses.RegisterFIODomainResponse.status",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/shawnarney/Dropbox/working/dapix/code/fiosdk_ios/FIOSDK/FIOSDK/Models/Core/FIODomain/RegisterFIODomainResponse.swift",
+      "line": 16,
+      "symbol": "FIOSDK.Responses.RegisterFIODomainResponse.feeCollected",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/shawnarney/Dropbox/working/dapix/code/fiosdk_ios/FIOSDK/FIOSDK/Models/Core/FIODomain/RegisterFIODomainResponse.swift",
+      "line": 19,
+      "symbol": "FIOSDK.Responses.RegisterFIODomainResponse.expiration",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/shawnarney/Dropbox/working/dapix/code/fiosdk_ios/FIOSDK/FIOSDK/Models/Core/FIODomain/RenewFIODomainResponse.swift",
+      "line": 13,
+      "symbol": "FIOSDK.Responses.RenewFIODomainResponse",
+      "symbol_kind": "source.lang.swift.decl.struct",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/shawnarney/Dropbox/working/dapix/code/fiosdk_ios/FIOSDK/FIOSDK/Models/Core/FIODomain/RenewFIODomainResponse.swift",
+      "line": 15,
+      "symbol": "FIOSDK.Responses.RenewFIODomainResponse.status",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/shawnarney/Dropbox/working/dapix/code/fiosdk_ios/FIOSDK/FIOSDK/Models/Core/FIODomain/RenewFIODomainResponse.swift",
+      "line": 16,
+      "symbol": "FIOSDK.Responses.RenewFIODomainResponse.feeCollected",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/shawnarney/Dropbox/working/dapix/code/fiosdk_ios/FIOSDK/FIOSDK/Models/Core/FIODomain/RenewFIODomainResponse.swift",
+      "line": 19,
+      "symbol": "FIOSDK.Responses.RenewFIODomainResponse.expiration",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/shawnarney/Dropbox/working/dapix/code/fiosdk_ios/FIOSDK/FIOSDK/Models/Core/FIODomain/SetFIODomainVisibilityResponse.swift",
+      "line": 12,
+      "symbol": "FIOSDK.Responses.SetFIODomainVisibilityResponse",
+      "symbol_kind": "source.lang.swift.decl.struct",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/shawnarney/Dropbox/working/dapix/code/fiosdk_ios/FIOSDK/FIOSDK/Models/Core/FIODomain/SetFIODomainVisibilityResponse.swift",
+      "line": 14,
+      "symbol": "FIOSDK.Responses.SetFIODomainVisibilityResponse.status",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/shawnarney/Dropbox/working/dapix/code/fiosdk_ios/FIOSDK/FIOSDK/Models/Core/FIODomain/SetFIODomainVisibilityResponse.swift",
+      "line": 15,
+      "symbol": "FIOSDK.Responses.SetFIODomainVisibilityResponse.feeCollected",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/shawnarney/Dropbox/working/dapix/code/fiosdk_ios/FIOSDK/FIOSDK/Models/Core/FIOError.swift",
+      "line": 11,
+      "symbol": "FIOError",
+      "symbol_kind": "source.lang.swift.decl.struct",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/shawnarney/Dropbox/working/dapix/code/fiosdk_ios/FIOSDK/FIOSDK/Models/Core/FIOError.swift",
+      "line": 13,
+      "symbol": "FIOError.ErrorKind",
+      "symbol_kind": "source.lang.swift.decl.enum",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/shawnarney/Dropbox/working/dapix/code/fiosdk_ios/FIOSDK/FIOSDK/Models/Core/FIOError.swift",
+      "line": 14,
+      "symbol": "FIOError.ErrorKind.Success",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/shawnarney/Dropbox/working/dapix/code/fiosdk_ios/FIOSDK/FIOSDK/Models/Core/FIOError.swift",
+      "line": 15,
+      "symbol": "FIOError.ErrorKind.NoDataReturned",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/shawnarney/Dropbox/working/dapix/code/fiosdk_ios/FIOSDK/FIOSDK/Models/Core/FIOError.swift",
+      "line": 16,
+      "symbol": "FIOError.ErrorKind.FailedToUsePrivKey",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/shawnarney/Dropbox/working/dapix/code/fiosdk_ios/FIOSDK/FIOSDK/Models/Core/FIOError.swift",
+      "line": 17,
+      "symbol": "FIOError.ErrorKind.MalformedRequest",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/shawnarney/Dropbox/working/dapix/code/fiosdk_ios/FIOSDK/FIOSDK/Models/Core/FIOError.swift",
+      "line": 18,
+      "symbol": "FIOError.ErrorKind.MalformedURL",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/shawnarney/Dropbox/working/dapix/code/fiosdk_ios/FIOSDK/FIOSDK/Models/Core/FIOError.swift",
+      "line": 19,
+      "symbol": "FIOError.ErrorKind.Failure",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/shawnarney/Dropbox/working/dapix/code/fiosdk_ios/FIOSDK/FIOSDK/Models/Core/FIOError.swift",
+      "line": 21,
+      "symbol": "FIOError.kind",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/shawnarney/Dropbox/working/dapix/code/fiosdk_ios/FIOSDK/FIOSDK/Models/Core/FIOError.swift",
+      "line": 22,
+      "symbol": "FIOError.localizedDescription",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/shawnarney/Dropbox/working/dapix/code/fiosdk_ios/FIOSDK/FIOSDK/Models/Core/FIOName/FIONamesResponse.swift",
+      "line": 13,
+      "symbol": "FIOSDK.Responses.FIONamesResponse",
+      "symbol_kind": "source.lang.swift.decl.struct",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/shawnarney/Dropbox/working/dapix/code/fiosdk_ios/FIOSDK/FIOSDK/Models/Core/FIOName/FIONamesResponse.swift",
+      "line": 15,
+      "symbol": "FIOSDK.Responses.FIONamesResponse.domains",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/shawnarney/Dropbox/working/dapix/code/fiosdk_ios/FIOSDK/FIOSDK/Models/Core/FIOName/FIONamesResponse.swift",
+      "line": 16,
+      "symbol": "FIOSDK.Responses.FIONamesResponse.addresses",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/shawnarney/Dropbox/working/dapix/code/fiosdk_ios/FIOSDK/FIOSDK/Models/Core/FIOName/FIONamesResponse.swift",
+      "line": 23,
+      "symbol": "FIOSDK.Responses.FIONamesResponse.FIODomainResponse",
+      "symbol_kind": "source.lang.swift.decl.struct",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/shawnarney/Dropbox/working/dapix/code/fiosdk_ios/FIOSDK/FIOSDK/Models/Core/FIOName/FIONamesResponse.swift",
+      "line": 24,
+      "symbol": "FIOSDK.Responses.FIONamesResponse.FIODomainResponse.domain",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/shawnarney/Dropbox/working/dapix/code/fiosdk_ios/FIOSDK/FIOSDK/Models/Core/FIOName/FIONamesResponse.swift",
+      "line": 28,
+      "symbol": "FIOSDK.Responses.FIONamesResponse.FIODomainResponse.expiration",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/shawnarney/Dropbox/working/dapix/code/fiosdk_ios/FIOSDK/FIOSDK/Models/Core/FIOName/FIONamesResponse.swift",
+      "line": 32,
+      "symbol": "FIOSDK.Responses.FIONamesResponse.FIODomainResponse.isPublic",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/shawnarney/Dropbox/working/dapix/code/fiosdk_ios/FIOSDK/FIOSDK/Models/Core/FIOName/FIONamesResponse.swift",
+      "line": 45,
+      "symbol": "FIOSDK.Responses.FIOAddressResponse",
+      "symbol_kind": "source.lang.swift.decl.struct",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/shawnarney/Dropbox/working/dapix/code/fiosdk_ios/FIOSDK/FIOSDK/Models/Core/FIOName/FIONamesResponse.swift",
+      "line": 46,
+      "symbol": "FIOSDK.Responses.FIOAddressResponse.address",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/shawnarney/Dropbox/working/dapix/code/fiosdk_ios/FIOSDK/FIOSDK/Models/Core/FIOName/FIONamesResponse.swift",
+      "line": 49,
+      "symbol": "FIOSDK.Responses.FIOAddressResponse.expiration",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/shawnarney/Dropbox/working/dapix/code/fiosdk_ios/FIOSDK/FIOSDK/Models/Core/FIOName/RegisterNameForUserResponse.swift",
+      "line": 11,
+      "symbol": "RegisterNameForUserResponse",
+      "symbol_kind": "source.lang.swift.decl.struct",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/shawnarney/Dropbox/working/dapix/code/fiosdk_ios/FIOSDK/FIOSDK/Models/Core/FIOName/RegisterNameForUserResponse.swift",
+      "line": 13,
+      "symbol": "RegisterNameForUserResponse.status",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/shawnarney/Dropbox/working/dapix/code/fiosdk_ios/FIOSDK/FIOSDK/Models/Core/FIOName/RegisterNameForUserResponse.swift",
+      "line": 14,
+      "symbol": "RegisterNameForUserResponse.expiration",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/shawnarney/Dropbox/working/dapix/code/fiosdk_ios/FIOSDK/FIOSDK/Models/Core/GetABI/GetABIResponse.swift",
+      "line": 13,
+      "symbol": "FIOSDK.Responses.GetABIResponse",
+      "symbol_kind": "source.lang.swift.decl.struct",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/shawnarney/Dropbox/working/dapix/code/fiosdk_ios/FIOSDK/FIOSDK/Models/Core/GetABI/GetABIResponse.swift",
+      "line": 15,
+      "symbol": "FIOSDK.Responses.GetABIResponse.accountName",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/shawnarney/Dropbox/working/dapix/code/fiosdk_ios/FIOSDK/FIOSDK/Models/Core/GetABI/GetABIResponse.swift",
+      "line": 16,
+      "symbol": "FIOSDK.Responses.GetABIResponse.codeHash",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/shawnarney/Dropbox/working/dapix/code/fiosdk_ios/FIOSDK/FIOSDK/Models/Core/GetABI/GetABIResponse.swift",
+      "line": 17,
+      "symbol": "FIOSDK.Responses.GetABIResponse.abiHash",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/shawnarney/Dropbox/working/dapix/code/fiosdk_ios/FIOSDK/FIOSDK/Models/Core/GetABI/GetABIResponse.swift",
+      "line": 18,
+      "symbol": "FIOSDK.Responses.GetABIResponse.abi",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/shawnarney/Dropbox/working/dapix/code/fiosdk_ios/FIOSDK/FIOSDK/Models/Core/GetFee/FeeEndpoint.swift",
+      "line": 13,
+      "symbol": "FIOSDK.Params.FeeEndpoint",
+      "symbol_kind": "source.lang.swift.decl.enum",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/shawnarney/Dropbox/working/dapix/code/fiosdk_ios/FIOSDK/FIOSDK/Models/Core/GetFee/FeeEndpoint.swift",
+      "line": 15,
+      "symbol": "FIOSDK.Params.FeeEndpoint.registerFIODomain",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/shawnarney/Dropbox/working/dapix/code/fiosdk_ios/FIOSDK/FIOSDK/Models/Core/GetFee/FeeEndpoint.swift",
+      "line": 16,
+      "symbol": "FIOSDK.Params.FeeEndpoint.registerFIOAddress",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/shawnarney/Dropbox/working/dapix/code/fiosdk_ios/FIOSDK/FIOSDK/Models/Core/GetFee/FeeEndpoint.swift",
+      "line": 17,
+      "symbol": "FIOSDK.Params.FeeEndpoint.transferTokensUsingPublicKey",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/shawnarney/Dropbox/working/dapix/code/fiosdk_ios/FIOSDK/FIOSDK/Models/Core/GetFee/FeeResponse.swift",
+      "line": 13,
+      "symbol": "FIOSDK.Responses.FeeResponse",
+      "symbol_kind": "source.lang.swift.decl.struct",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/shawnarney/Dropbox/working/dapix/code/fiosdk_ios/FIOSDK/FIOSDK/Models/Core/GetFee/FeeResponse.swift",
+      "line": 15,
+      "symbol": "FIOSDK.Responses.FeeResponse.fee",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/shawnarney/Dropbox/working/dapix/code/fiosdk_ios/FIOSDK/FIOSDK/Models/Core/GetObtData/GetObtDataResponse.swift",
+      "line": 13,
+      "symbol": "FIOSDK.Responses.GetObtDataResponse",
+      "symbol_kind": "source.lang.swift.decl.struct",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/shawnarney/Dropbox/working/dapix/code/fiosdk_ios/FIOSDK/FIOSDK/Models/Core/GetObtData/GetObtDataResponse.swift",
+      "line": 15,
+      "symbol": "FIOSDK.Responses.GetObtDataResponse.obtData",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/shawnarney/Dropbox/working/dapix/code/fiosdk_ios/FIOSDK/FIOSDK/Models/Core/GetObtData/GetObtDataResponse.swift",
+      "line": 16,
+      "symbol": "FIOSDK.Responses.GetObtDataResponse.more",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/shawnarney/Dropbox/working/dapix/code/fiosdk_ios/FIOSDK/FIOSDK/Models/Core/GetObtData/GetObtDataResponse.swift",
+      "line": 23,
+      "symbol": "FIOSDK.Responses.GetObtDataResponse.ObtDataResponse",
+      "symbol_kind": "source.lang.swift.decl.struct",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/shawnarney/Dropbox/working/dapix/code/fiosdk_ios/FIOSDK/FIOSDK/Models/Core/GetObtData/GetObtDataResponse.swift",
+      "line": 25,
+      "symbol": "FIOSDK.Responses.GetObtDataResponse.ObtDataResponse.fioRequestId",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/shawnarney/Dropbox/working/dapix/code/fiosdk_ios/FIOSDK/FIOSDK/Models/Core/GetObtData/GetObtDataResponse.swift",
+      "line": 26,
+      "symbol": "FIOSDK.Responses.GetObtDataResponse.ObtDataResponse.payerFIOAddress",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/shawnarney/Dropbox/working/dapix/code/fiosdk_ios/FIOSDK/FIOSDK/Models/Core/GetObtData/GetObtDataResponse.swift",
+      "line": 27,
+      "symbol": "FIOSDK.Responses.GetObtDataResponse.ObtDataResponse.payeeFIOAddress",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/shawnarney/Dropbox/working/dapix/code/fiosdk_ios/FIOSDK/FIOSDK/Models/Core/GetObtData/GetObtDataResponse.swift",
+      "line": 28,
+      "symbol": "FIOSDK.Responses.GetObtDataResponse.ObtDataResponse.payerFIOPublicKey",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/shawnarney/Dropbox/working/dapix/code/fiosdk_ios/FIOSDK/FIOSDK/Models/Core/GetObtData/GetObtDataResponse.swift",
+      "line": 29,
+      "symbol": "FIOSDK.Responses.GetObtDataResponse.ObtDataResponse.payeeFIOPublicKey",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/shawnarney/Dropbox/working/dapix/code/fiosdk_ios/FIOSDK/FIOSDK/Models/Core/GetObtData/GetObtDataResponse.swift",
+      "line": 30,
+      "symbol": "FIOSDK.Responses.GetObtDataResponse.ObtDataResponse.content",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/shawnarney/Dropbox/working/dapix/code/fiosdk_ios/FIOSDK/FIOSDK/Models/Core/GetObtData/GetObtDataResponse.swift",
+      "line": 31,
+      "symbol": "FIOSDK.Responses.GetObtDataResponse.ObtDataResponse.timeStamp",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/shawnarney/Dropbox/working/dapix/code/fiosdk_ios/FIOSDK/FIOSDK/Models/Core/GetObtData/GetObtDataResponse.swift",
+      "line": 32,
+      "symbol": "FIOSDK.Responses.GetObtDataResponse.ObtDataResponse.status",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/shawnarney/Dropbox/working/dapix/code/fiosdk_ios/FIOSDK/FIOSDK/Models/Core/GetObtData/GetObtDataResponse.swift",
+      "line": 45,
+      "symbol": "FIOSDK.Responses.GetObtDataResponse.ObtDataResponse.MetaData",
+      "symbol_kind": "source.lang.swift.decl.struct",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/shawnarney/Dropbox/working/dapix/code/fiosdk_ios/FIOSDK/FIOSDK/Models/Core/GetObtData/GetObtDataResponse.swift",
+      "line": 46,
+      "symbol": "FIOSDK.Responses.GetObtDataResponse.ObtDataResponse.MetaData.payerPublicAddress",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/shawnarney/Dropbox/working/dapix/code/fiosdk_ios/FIOSDK/FIOSDK/Models/Core/GetObtData/GetObtDataResponse.swift",
+      "line": 47,
+      "symbol": "FIOSDK.Responses.GetObtDataResponse.ObtDataResponse.MetaData.payeePublicAddress",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/shawnarney/Dropbox/working/dapix/code/fiosdk_ios/FIOSDK/FIOSDK/Models/Core/GetObtData/GetObtDataResponse.swift",
+      "line": 48,
+      "symbol": "FIOSDK.Responses.GetObtDataResponse.ObtDataResponse.MetaData.amount",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/shawnarney/Dropbox/working/dapix/code/fiosdk_ios/FIOSDK/FIOSDK/Models/Core/GetObtData/GetObtDataResponse.swift",
+      "line": 49,
+      "symbol": "FIOSDK.Responses.GetObtDataResponse.ObtDataResponse.MetaData.tokenCode",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/shawnarney/Dropbox/working/dapix/code/fiosdk_ios/FIOSDK/FIOSDK/Models/Core/GetObtData/GetObtDataResponse.swift",
+      "line": 50,
+      "symbol": "FIOSDK.Responses.GetObtDataResponse.ObtDataResponse.MetaData.obtId",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/shawnarney/Dropbox/working/dapix/code/fiosdk_ios/FIOSDK/FIOSDK/Models/Core/GetObtData/GetObtDataResponse.swift",
+      "line": 51,
+      "symbol": "FIOSDK.Responses.GetObtDataResponse.ObtDataResponse.MetaData.status",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/shawnarney/Dropbox/working/dapix/code/fiosdk_ios/FIOSDK/FIOSDK/Models/Core/GetObtData/GetObtDataResponse.swift",
+      "line": 52,
+      "symbol": "FIOSDK.Responses.GetObtDataResponse.ObtDataResponse.MetaData.memo",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/shawnarney/Dropbox/working/dapix/code/fiosdk_ios/FIOSDK/FIOSDK/Models/Core/GetObtData/GetObtDataResponse.swift",
+      "line": 53,
+      "symbol": "FIOSDK.Responses.GetObtDataResponse.ObtDataResponse.MetaData.hash",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/shawnarney/Dropbox/working/dapix/code/fiosdk_ios/FIOSDK/FIOSDK/Models/Core/GetObtData/GetObtDataResponse.swift",
+      "line": 54,
+      "symbol": "FIOSDK.Responses.GetObtDataResponse.ObtDataResponse.MetaData.offlineUrl",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/shawnarney/Dropbox/working/dapix/code/fiosdk_ios/FIOSDK/FIOSDK/Models/Core/PendingRequest/PendingFIORequestsResponse.swift",
+      "line": 14,
+      "symbol": "FIOSDK.Responses.PendingFIORequestsResponse",
+      "symbol_kind": "source.lang.swift.decl.struct",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/shawnarney/Dropbox/working/dapix/code/fiosdk_ios/FIOSDK/FIOSDK/Models/Core/PendingRequest/PendingFIORequestsResponse.swift",
+      "line": 16,
+      "symbol": "FIOSDK.Responses.PendingFIORequestsResponse.requests",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/shawnarney/Dropbox/working/dapix/code/fiosdk_ios/FIOSDK/FIOSDK/Models/Core/PendingRequest/PendingFIORequestsResponse.swift",
+      "line": 17,
+      "symbol": "FIOSDK.Responses.PendingFIORequestsResponse.more",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/shawnarney/Dropbox/working/dapix/code/fiosdk_ios/FIOSDK/FIOSDK/Models/Core/PendingRequest/PendingFIORequestsResponse.swift",
+      "line": 24,
+      "symbol": "FIOSDK.Responses.PendingFIORequestsResponse.PendingFIORequestResponse",
+      "symbol_kind": "source.lang.swift.decl.struct",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/shawnarney/Dropbox/working/dapix/code/fiosdk_ios/FIOSDK/FIOSDK/Models/Core/PendingRequest/PendingFIORequestsResponse.swift",
+      "line": 26,
+      "symbol": "FIOSDK.Responses.PendingFIORequestsResponse.PendingFIORequestResponse.fioRequestId",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/shawnarney/Dropbox/working/dapix/code/fiosdk_ios/FIOSDK/FIOSDK/Models/Core/PendingRequest/PendingFIORequestsResponse.swift",
+      "line": 27,
+      "symbol": "FIOSDK.Responses.PendingFIORequestsResponse.PendingFIORequestResponse.payerFIOAddress",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/shawnarney/Dropbox/working/dapix/code/fiosdk_ios/FIOSDK/FIOSDK/Models/Core/PendingRequest/PendingFIORequestsResponse.swift",
+      "line": 28,
+      "symbol": "FIOSDK.Responses.PendingFIORequestsResponse.PendingFIORequestResponse.payeeFIOAddress",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/shawnarney/Dropbox/working/dapix/code/fiosdk_ios/FIOSDK/FIOSDK/Models/Core/PendingRequest/PendingFIORequestsResponse.swift",
+      "line": 29,
+      "symbol": "FIOSDK.Responses.PendingFIORequestsResponse.PendingFIORequestResponse.payerFIOPublicKey",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/shawnarney/Dropbox/working/dapix/code/fiosdk_ios/FIOSDK/FIOSDK/Models/Core/PendingRequest/PendingFIORequestsResponse.swift",
+      "line": 30,
+      "symbol": "FIOSDK.Responses.PendingFIORequestsResponse.PendingFIORequestResponse.payeeFIOPublicKey",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/shawnarney/Dropbox/working/dapix/code/fiosdk_ios/FIOSDK/FIOSDK/Models/Core/PendingRequest/PendingFIORequestsResponse.swift",
+      "line": 31,
+      "symbol": "FIOSDK.Responses.PendingFIORequestsResponse.PendingFIORequestResponse.content",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/shawnarney/Dropbox/working/dapix/code/fiosdk_ios/FIOSDK/FIOSDK/Models/Core/PendingRequest/PendingFIORequestsResponse.swift",
+      "line": 32,
+      "symbol": "FIOSDK.Responses.PendingFIORequestsResponse.PendingFIORequestResponse.timeStamp",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/shawnarney/Dropbox/working/dapix/code/fiosdk_ios/FIOSDK/FIOSDK/Models/Core/PendingRequest/PendingFIORequestsResponse.swift",
+      "line": 44,
+      "symbol": "FIOSDK.Responses.PendingFIORequestsResponse.PendingFIORequestResponse.MetaData",
+      "symbol_kind": "source.lang.swift.decl.struct",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/shawnarney/Dropbox/working/dapix/code/fiosdk_ios/FIOSDK/FIOSDK/Models/Core/PendingRequest/PendingFIORequestsResponse.swift",
+      "line": 45,
+      "symbol": "FIOSDK.Responses.PendingFIORequestsResponse.PendingFIORequestResponse.MetaData.payeePublicAddress",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/shawnarney/Dropbox/working/dapix/code/fiosdk_ios/FIOSDK/FIOSDK/Models/Core/PendingRequest/PendingFIORequestsResponse.swift",
+      "line": 46,
+      "symbol": "FIOSDK.Responses.PendingFIORequestsResponse.PendingFIORequestResponse.MetaData.amount",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/shawnarney/Dropbox/working/dapix/code/fiosdk_ios/FIOSDK/FIOSDK/Models/Core/PendingRequest/PendingFIORequestsResponse.swift",
+      "line": 47,
+      "symbol": "FIOSDK.Responses.PendingFIORequestsResponse.PendingFIORequestResponse.MetaData.tokenCode",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/shawnarney/Dropbox/working/dapix/code/fiosdk_ios/FIOSDK/FIOSDK/Models/Core/PendingRequest/PendingFIORequestsResponse.swift",
+      "line": 48,
+      "symbol": "FIOSDK.Responses.PendingFIORequestsResponse.PendingFIORequestResponse.MetaData.memo",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/shawnarney/Dropbox/working/dapix/code/fiosdk_ios/FIOSDK/FIOSDK/Models/Core/PendingRequest/PendingFIORequestsResponse.swift",
+      "line": 49,
+      "symbol": "FIOSDK.Responses.PendingFIORequestsResponse.PendingFIORequestResponse.MetaData.hash",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/shawnarney/Dropbox/working/dapix/code/fiosdk_ios/FIOSDK/FIOSDK/Models/Core/PendingRequest/PendingFIORequestsResponse.swift",
+      "line": 50,
+      "symbol": "FIOSDK.Responses.PendingFIORequestsResponse.PendingFIORequestResponse.MetaData.offlineUrl",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/shawnarney/Dropbox/working/dapix/code/fiosdk_ios/FIOSDK/FIOSDK/Models/Core/PublicAddress/AddPublicAddressRequest.swift",
+      "line": 28,
+      "symbol": "PublicAddress",
+      "symbol_kind": "source.lang.swift.decl.struct",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/shawnarney/Dropbox/working/dapix/code/fiosdk_ios/FIOSDK/FIOSDK/Models/Core/PublicAddress/AddPublicAddressResponse.swift",
+      "line": 12,
+      "symbol": "FIOSDK.Responses.AddPublicAddressResponse",
+      "symbol_kind": "source.lang.swift.decl.struct",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/shawnarney/Dropbox/working/dapix/code/fiosdk_ios/FIOSDK/FIOSDK/Models/Core/PublicAddress/AddPublicAddressResponse.swift",
+      "line": 14,
+      "symbol": "FIOSDK.Responses.AddPublicAddressResponse.status",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/shawnarney/Dropbox/working/dapix/code/fiosdk_ios/FIOSDK/FIOSDK/Models/Core/PublicAddress/AddPublicAddressResponse.swift",
+      "line": 15,
+      "symbol": "FIOSDK.Responses.AddPublicAddressResponse.feeCollected",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/shawnarney/Dropbox/working/dapix/code/fiosdk_ios/FIOSDK/FIOSDK/Models/Core/PublicAddress/TokenPublicAddressResponse.swift",
+      "line": 16,
+      "symbol": "FIOSDK.Responses.TokenPublicAddressResponse.fioAddress",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/shawnarney/Dropbox/working/dapix/code/fiosdk_ios/FIOSDK/FIOSDK/Models/Core/PublicAddress/TokenPublicAddressResponse.swift",
+      "line": 17,
+      "symbol": "FIOSDK.Responses.TokenPublicAddressResponse.tokenPublicAddress",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/shawnarney/Dropbox/working/dapix/code/fiosdk_ios/FIOSDK/FIOSDK/Models/Core/RecordObtData/RecordObtDataContent.swift",
+      "line": 11,
+      "symbol": "RecordObtDataContent",
+      "symbol_kind": "source.lang.swift.decl.struct",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/shawnarney/Dropbox/working/dapix/code/fiosdk_ios/FIOSDK/FIOSDK/Models/Core/RecordObtData/RecordObtDataContent.swift",
+      "line": 13,
+      "symbol": "RecordObtDataContent.payerPublicAddress",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/shawnarney/Dropbox/working/dapix/code/fiosdk_ios/FIOSDK/FIOSDK/Models/Core/RecordObtData/RecordObtDataContent.swift",
+      "line": 14,
+      "symbol": "RecordObtDataContent.payeePublicAddress",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/shawnarney/Dropbox/working/dapix/code/fiosdk_ios/FIOSDK/FIOSDK/Models/Core/RecordObtData/RecordObtDataContent.swift",
+      "line": 15,
+      "symbol": "RecordObtDataContent.amount",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/shawnarney/Dropbox/working/dapix/code/fiosdk_ios/FIOSDK/FIOSDK/Models/Core/RecordObtData/RecordObtDataContent.swift",
+      "line": 16,
+      "symbol": "RecordObtDataContent.tokenCode",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/shawnarney/Dropbox/working/dapix/code/fiosdk_ios/FIOSDK/FIOSDK/Models/Core/RecordObtData/RecordObtDataContent.swift",
+      "line": 17,
+      "symbol": "RecordObtDataContent.status",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/shawnarney/Dropbox/working/dapix/code/fiosdk_ios/FIOSDK/FIOSDK/Models/Core/RecordObtData/RecordObtDataContent.swift",
+      "line": 18,
+      "symbol": "RecordObtDataContent.obtId",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/shawnarney/Dropbox/working/dapix/code/fiosdk_ios/FIOSDK/FIOSDK/Models/Core/RecordObtData/RecordObtDataContent.swift",
+      "line": 19,
+      "symbol": "RecordObtDataContent.memo",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/shawnarney/Dropbox/working/dapix/code/fiosdk_ios/FIOSDK/FIOSDK/Models/Core/RecordObtData/RecordObtDataContent.swift",
+      "line": 20,
+      "symbol": "RecordObtDataContent.hash",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/shawnarney/Dropbox/working/dapix/code/fiosdk_ios/FIOSDK/FIOSDK/Models/Core/RecordObtData/RecordObtDataContent.swift",
+      "line": 21,
+      "symbol": "RecordObtDataContent.offlineUrl",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/shawnarney/Dropbox/working/dapix/code/fiosdk_ios/FIOSDK/FIOSDK/Models/Core/RecordObtData/RecordObtDataRequest.swift",
+      "line": 11,
+      "symbol": "RecordObtDataRequest",
+      "symbol_kind": "source.lang.swift.decl.struct",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/shawnarney/Dropbox/working/dapix/code/fiosdk_ios/FIOSDK/FIOSDK/Models/Core/RecordObtData/RecordObtDataRequest.swift",
+      "line": 31,
+      "symbol": "RecordObtDataRequest.MetaData",
+      "symbol_kind": "source.lang.swift.decl.struct",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/shawnarney/Dropbox/working/dapix/code/fiosdk_ios/FIOSDK/FIOSDK/Models/Core/RecordObtData/RecordObtDataRequest.swift",
+      "line": 32,
+      "symbol": "RecordObtDataRequest.MetaData.memo",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/shawnarney/Dropbox/working/dapix/code/fiosdk_ios/FIOSDK/FIOSDK/Models/Core/RecordObtData/RecordObtDataRequest.swift",
+      "line": 33,
+      "symbol": "RecordObtDataRequest.MetaData.hash",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/shawnarney/Dropbox/working/dapix/code/fiosdk_ios/FIOSDK/FIOSDK/Models/Core/RecordObtData/RecordObtDataRequest.swift",
+      "line": 34,
+      "symbol": "RecordObtDataRequest.MetaData.offlineUrl",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/shawnarney/Dropbox/working/dapix/code/fiosdk_ios/FIOSDK/FIOSDK/Models/Core/RecordObtData/RecordObtDataRequest.swift",
+      "line": 36,
+      "symbol": "RecordObtDataRequest.MetaData.init(memo:hash:offlineUrl:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/shawnarney/Dropbox/working/dapix/code/fiosdk_ios/FIOSDK/FIOSDK/Models/Core/RecordObtData/RecordObtDataResponse.swift",
+      "line": 13,
+      "symbol": "FIOSDK.Responses.RecordObtDataResponse",
+      "symbol_kind": "source.lang.swift.decl.struct",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/shawnarney/Dropbox/working/dapix/code/fiosdk_ios/FIOSDK/FIOSDK/Models/Core/RecordObtData/RecordObtDataResponse.swift",
+      "line": 15,
+      "symbol": "FIOSDK.Responses.RecordObtDataResponse.status",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/shawnarney/Dropbox/working/dapix/code/fiosdk_ios/FIOSDK/FIOSDK/Models/Core/RecordObtData/RecordObtDataResponse.swift",
+      "line": 16,
+      "symbol": "FIOSDK.Responses.RecordObtDataResponse.feeCollected",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/shawnarney/Dropbox/working/dapix/code/fiosdk_ios/FIOSDK/FIOSDK/Models/Core/RecordObtData/RecordObtDataResponse.swift",
+      "line": 23,
+      "symbol": "FIOSDK.Responses.RecordObtDataResponse.Status",
+      "symbol_kind": "source.lang.swift.decl.enum",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/shawnarney/Dropbox/working/dapix/code/fiosdk_ios/FIOSDK/FIOSDK/Models/Core/RecordObtData/RecordObtDataResponse.swift",
+      "line": 24,
+      "symbol": "FIOSDK.Responses.RecordObtDataResponse.Status.sentToBlockchain",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/shawnarney/Dropbox/working/dapix/code/fiosdk_ios/FIOSDK/FIOSDK/Models/Core/RecordObtData/RecordObtDataResponse.swift",
+      "line": 24,
+      "symbol": "FIOSDK.Responses.RecordObtDataResponse.Status.unknown",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/shawnarney/Dropbox/working/dapix/code/fiosdk_ios/FIOSDK/FIOSDK/Models/Core/RejectFunds/RejectFundsRequestResponse.swift",
+      "line": 13,
+      "symbol": "FIOSDK.Responses.RejectFundsRequestResponse",
+      "symbol_kind": "source.lang.swift.decl.struct",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/shawnarney/Dropbox/working/dapix/code/fiosdk_ios/FIOSDK/FIOSDK/Models/Core/RejectFunds/RejectFundsRequestResponse.swift",
+      "line": 15,
+      "symbol": "FIOSDK.Responses.RejectFundsRequestResponse.status",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/shawnarney/Dropbox/working/dapix/code/fiosdk_ios/FIOSDK/FIOSDK/Models/Core/RejectFunds/RejectFundsRequestResponse.swift",
+      "line": 16,
+      "symbol": "FIOSDK.Responses.RejectFundsRequestResponse.feeCollected",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/shawnarney/Dropbox/working/dapix/code/fiosdk_ios/FIOSDK/FIOSDK/Models/Core/RejectFunds/RejectFundsRequestResponse.swift",
+      "line": 23,
+      "symbol": "FIOSDK.Responses.RejectFundsRequestResponse.Status",
+      "symbol_kind": "source.lang.swift.decl.enum",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/shawnarney/Dropbox/working/dapix/code/fiosdk_ios/FIOSDK/FIOSDK/Models/Core/RejectFunds/RejectFundsRequestResponse.swift",
+      "line": 24,
+      "symbol": "FIOSDK.Responses.RejectFundsRequestResponse.Status.rejected",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/shawnarney/Dropbox/working/dapix/code/fiosdk_ios/FIOSDK/FIOSDK/Models/Core/RejectFunds/RejectFundsRequestResponse.swift",
+      "line": 24,
+      "symbol": "FIOSDK.Responses.RejectFundsRequestResponse.Status.unknown",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/shawnarney/Dropbox/working/dapix/code/fiosdk_ios/FIOSDK/FIOSDK/Models/Core/RequestFunds/RequestFundsContent.swift",
+      "line": 11,
+      "symbol": "RequestFundsContent",
+      "symbol_kind": "source.lang.swift.decl.struct",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/shawnarney/Dropbox/working/dapix/code/fiosdk_ios/FIOSDK/FIOSDK/Models/Core/RequestFunds/RequestFundsContent.swift",
+      "line": 13,
+      "symbol": "RequestFundsContent.payeePublicAddress",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/shawnarney/Dropbox/working/dapix/code/fiosdk_ios/FIOSDK/FIOSDK/Models/Core/RequestFunds/RequestFundsContent.swift",
+      "line": 14,
+      "symbol": "RequestFundsContent.amount",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/shawnarney/Dropbox/working/dapix/code/fiosdk_ios/FIOSDK/FIOSDK/Models/Core/RequestFunds/RequestFundsContent.swift",
+      "line": 15,
+      "symbol": "RequestFundsContent.tokenCode",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/shawnarney/Dropbox/working/dapix/code/fiosdk_ios/FIOSDK/FIOSDK/Models/Core/RequestFunds/RequestFundsContent.swift",
+      "line": 16,
+      "symbol": "RequestFundsContent.memo",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/shawnarney/Dropbox/working/dapix/code/fiosdk_ios/FIOSDK/FIOSDK/Models/Core/RequestFunds/RequestFundsContent.swift",
+      "line": 17,
+      "symbol": "RequestFundsContent.hash",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/shawnarney/Dropbox/working/dapix/code/fiosdk_ios/FIOSDK/FIOSDK/Models/Core/RequestFunds/RequestFundsContent.swift",
+      "line": 18,
+      "symbol": "RequestFundsContent.offlineUrl",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/shawnarney/Dropbox/working/dapix/code/fiosdk_ios/FIOSDK/FIOSDK/Models/Core/RequestFunds/RequestFundsRequest.swift",
+      "line": 11,
+      "symbol": "RequestFundsRequest",
+      "symbol_kind": "source.lang.swift.decl.struct",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/shawnarney/Dropbox/working/dapix/code/fiosdk_ios/FIOSDK/FIOSDK/Models/Core/RequestFunds/RequestFundsRequest.swift",
+      "line": 13,
+      "symbol": "RequestFundsRequest.payerFIOAddress",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/shawnarney/Dropbox/working/dapix/code/fiosdk_ios/FIOSDK/FIOSDK/Models/Core/RequestFunds/RequestFundsRequest.swift",
+      "line": 14,
+      "symbol": "RequestFundsRequest.payeeFIOAddress",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/shawnarney/Dropbox/working/dapix/code/fiosdk_ios/FIOSDK/FIOSDK/Models/Core/RequestFunds/RequestFundsRequest.swift",
+      "line": 15,
+      "symbol": "RequestFundsRequest.content",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/shawnarney/Dropbox/working/dapix/code/fiosdk_ios/FIOSDK/FIOSDK/Models/Core/RequestFunds/RequestFundsRequest.swift",
+      "line": 16,
+      "symbol": "RequestFundsRequest.maxFee",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/shawnarney/Dropbox/working/dapix/code/fiosdk_ios/FIOSDK/FIOSDK/Models/Core/RequestFunds/RequestFundsRequest.swift",
+      "line": 17,
+      "symbol": "RequestFundsRequest.walletFioAddress",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/shawnarney/Dropbox/working/dapix/code/fiosdk_ios/FIOSDK/FIOSDK/Models/Core/RequestFunds/RequestFundsRequest.swift",
+      "line": 18,
+      "symbol": "RequestFundsRequest.actor",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/shawnarney/Dropbox/working/dapix/code/fiosdk_ios/FIOSDK/FIOSDK/Models/Core/RequestFunds/RequestFundsRequest.swift",
+      "line": 29,
+      "symbol": "RequestFundsRequest.MetaData",
+      "symbol_kind": "source.lang.swift.decl.struct",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/shawnarney/Dropbox/working/dapix/code/fiosdk_ios/FIOSDK/FIOSDK/Models/Core/RequestFunds/RequestFundsRequest.swift",
+      "line": 30,
+      "symbol": "RequestFundsRequest.MetaData.memo",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/shawnarney/Dropbox/working/dapix/code/fiosdk_ios/FIOSDK/FIOSDK/Models/Core/RequestFunds/RequestFundsRequest.swift",
+      "line": 31,
+      "symbol": "RequestFundsRequest.MetaData.hash",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/shawnarney/Dropbox/working/dapix/code/fiosdk_ios/FIOSDK/FIOSDK/Models/Core/RequestFunds/RequestFundsRequest.swift",
+      "line": 32,
+      "symbol": "RequestFundsRequest.MetaData.offlineUrl",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/shawnarney/Dropbox/working/dapix/code/fiosdk_ios/FIOSDK/FIOSDK/Models/Core/RequestFunds/RequestFundsRequest.swift",
+      "line": 34,
+      "symbol": "RequestFundsRequest.MetaData.init(memo:hash:offlineUrl:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/shawnarney/Dropbox/working/dapix/code/fiosdk_ios/FIOSDK/FIOSDK/Models/Core/RequestFunds/RequestFundsResponse.swift",
+      "line": 11,
+      "symbol": "RequestFundsResponse",
+      "symbol_kind": "source.lang.swift.decl.struct",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/shawnarney/Dropbox/working/dapix/code/fiosdk_ios/FIOSDK/FIOSDK/Models/Core/RequestFunds/RequestFundsResponse.swift",
+      "line": 14,
+      "symbol": "RequestFundsResponse.fioRequestId",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/shawnarney/Dropbox/working/dapix/code/fiosdk_ios/FIOSDK/FIOSDK/Models/Core/RequestFunds/RequestFundsResponse.swift",
+      "line": 15,
+      "symbol": "RequestFundsResponse.status",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/shawnarney/Dropbox/working/dapix/code/fiosdk_ios/FIOSDK/FIOSDK/Models/Core/RequestFunds/RequestFundsResponse.swift",
+      "line": 16,
+      "symbol": "RequestFundsResponse.feeCollected",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/shawnarney/Dropbox/working/dapix/code/fiosdk_ios/FIOSDK/FIOSDK/Models/Core/SentRequest/SentFIORequestsResponse.swift",
+      "line": 14,
+      "symbol": "FIOSDK.Responses.SentFIORequestsResponse",
+      "symbol_kind": "source.lang.swift.decl.struct",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/shawnarney/Dropbox/working/dapix/code/fiosdk_ios/FIOSDK/FIOSDK/Models/Core/SentRequest/SentFIORequestsResponse.swift",
+      "line": 16,
+      "symbol": "FIOSDK.Responses.SentFIORequestsResponse.requests",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/shawnarney/Dropbox/working/dapix/code/fiosdk_ios/FIOSDK/FIOSDK/Models/Core/SentRequest/SentFIORequestsResponse.swift",
+      "line": 17,
+      "symbol": "FIOSDK.Responses.SentFIORequestsResponse.more",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/shawnarney/Dropbox/working/dapix/code/fiosdk_ios/FIOSDK/FIOSDK/Models/Core/SentRequest/SentFIORequestsResponse.swift",
+      "line": 24,
+      "symbol": "FIOSDK.Responses.SentFIORequestsResponse.SentFIORequestResponse",
+      "symbol_kind": "source.lang.swift.decl.struct",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/shawnarney/Dropbox/working/dapix/code/fiosdk_ios/FIOSDK/FIOSDK/Models/Core/SentRequest/SentFIORequestsResponse.swift",
+      "line": 26,
+      "symbol": "FIOSDK.Responses.SentFIORequestsResponse.SentFIORequestResponse.fioRequestId",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/shawnarney/Dropbox/working/dapix/code/fiosdk_ios/FIOSDK/FIOSDK/Models/Core/SentRequest/SentFIORequestsResponse.swift",
+      "line": 27,
+      "symbol": "FIOSDK.Responses.SentFIORequestsResponse.SentFIORequestResponse.payerFIOAddress",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/shawnarney/Dropbox/working/dapix/code/fiosdk_ios/FIOSDK/FIOSDK/Models/Core/SentRequest/SentFIORequestsResponse.swift",
+      "line": 28,
+      "symbol": "FIOSDK.Responses.SentFIORequestsResponse.SentFIORequestResponse.payeeFIOAddress",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/shawnarney/Dropbox/working/dapix/code/fiosdk_ios/FIOSDK/FIOSDK/Models/Core/SentRequest/SentFIORequestsResponse.swift",
+      "line": 29,
+      "symbol": "FIOSDK.Responses.SentFIORequestsResponse.SentFIORequestResponse.payerFIOPublicKey",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/shawnarney/Dropbox/working/dapix/code/fiosdk_ios/FIOSDK/FIOSDK/Models/Core/SentRequest/SentFIORequestsResponse.swift",
+      "line": 30,
+      "symbol": "FIOSDK.Responses.SentFIORequestsResponse.SentFIORequestResponse.payeeFIOPublicKey",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/shawnarney/Dropbox/working/dapix/code/fiosdk_ios/FIOSDK/FIOSDK/Models/Core/SentRequest/SentFIORequestsResponse.swift",
+      "line": 31,
+      "symbol": "FIOSDK.Responses.SentFIORequestsResponse.SentFIORequestResponse.content",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/shawnarney/Dropbox/working/dapix/code/fiosdk_ios/FIOSDK/FIOSDK/Models/Core/SentRequest/SentFIORequestsResponse.swift",
+      "line": 32,
+      "symbol": "FIOSDK.Responses.SentFIORequestsResponse.SentFIORequestResponse.timeStamp",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/shawnarney/Dropbox/working/dapix/code/fiosdk_ios/FIOSDK/FIOSDK/Models/Core/SentRequest/SentFIORequestsResponse.swift",
+      "line": 33,
+      "symbol": "FIOSDK.Responses.SentFIORequestsResponse.SentFIORequestResponse.status",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/shawnarney/Dropbox/working/dapix/code/fiosdk_ios/FIOSDK/FIOSDK/Models/Core/SentRequest/SentFIORequestsResponse.swift",
+      "line": 46,
+      "symbol": "FIOSDK.Responses.SentFIORequestsResponse.SentFIORequestResponse.MetaData",
+      "symbol_kind": "source.lang.swift.decl.struct",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/shawnarney/Dropbox/working/dapix/code/fiosdk_ios/FIOSDK/FIOSDK/Models/Core/SentRequest/SentFIORequestsResponse.swift",
+      "line": 47,
+      "symbol": "FIOSDK.Responses.SentFIORequestsResponse.SentFIORequestResponse.MetaData.payeePublicAddress",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/shawnarney/Dropbox/working/dapix/code/fiosdk_ios/FIOSDK/FIOSDK/Models/Core/SentRequest/SentFIORequestsResponse.swift",
+      "line": 48,
+      "symbol": "FIOSDK.Responses.SentFIORequestsResponse.SentFIORequestResponse.MetaData.amount",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/shawnarney/Dropbox/working/dapix/code/fiosdk_ios/FIOSDK/FIOSDK/Models/Core/SentRequest/SentFIORequestsResponse.swift",
+      "line": 49,
+      "symbol": "FIOSDK.Responses.SentFIORequestsResponse.SentFIORequestResponse.MetaData.tokenCode",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/shawnarney/Dropbox/working/dapix/code/fiosdk_ios/FIOSDK/FIOSDK/Models/Core/SentRequest/SentFIORequestsResponse.swift",
+      "line": 50,
+      "symbol": "FIOSDK.Responses.SentFIORequestsResponse.SentFIORequestResponse.MetaData.memo",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/shawnarney/Dropbox/working/dapix/code/fiosdk_ios/FIOSDK/FIOSDK/Models/Core/SentRequest/SentFIORequestsResponse.swift",
+      "line": 51,
+      "symbol": "FIOSDK.Responses.SentFIORequestsResponse.SentFIORequestResponse.MetaData.hash",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/shawnarney/Dropbox/working/dapix/code/fiosdk_ios/FIOSDK/FIOSDK/Models/Core/SentRequest/SentFIORequestsResponse.swift",
+      "line": 52,
+      "symbol": "FIOSDK.Responses.SentFIORequestsResponse.SentFIORequestResponse.MetaData.offlineUrl",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/shawnarney/Dropbox/working/dapix/code/fiosdk_ios/FIOSDK/FIOSDK/Models/FIOTokens/Balance/FIOBalanceResponse.swift",
+      "line": 13,
+      "symbol": "FIOSDK.Responses.FIOBalanceResponse",
+      "symbol_kind": "source.lang.swift.decl.struct",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/shawnarney/Dropbox/working/dapix/code/fiosdk_ios/FIOSDK/FIOSDK/Models/FIOTokens/Balance/FIOBalanceResponse.swift",
+      "line": 14,
+      "symbol": "FIOSDK.Responses.FIOBalanceResponse.balance",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/shawnarney/Dropbox/working/dapix/code/fiosdk_ios/FIOSDK/FIOSDK/Models/FIOTokens/Balance/FIOBalanceResponse.swift",
+      "line": 20,
+      "symbol": "FIOSDK.Responses.FIOBalanceResponse.displayBalance()",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/shawnarney/Dropbox/working/dapix/code/fiosdk_ios/FIOSDK/FIOSDK/Models/FIOTokens/Transfer/TransferFIOTokensResponse.swift",
+      "line": 13,
+      "symbol": "FIOSDK.Responses.TransferFIOTokensResponse",
+      "symbol_kind": "source.lang.swift.decl.struct",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/shawnarney/Dropbox/working/dapix/code/fiosdk_ios/FIOSDK/FIOSDK/Models/FIOTokens/Transfer/TransferFIOTokensResponse.swift",
+      "line": 15,
+      "symbol": "FIOSDK.Responses.TransferFIOTokensResponse.status",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/shawnarney/Dropbox/working/dapix/code/fiosdk_ios/FIOSDK/FIOSDK/Models/FIOTokens/Transfer/TransferFIOTokensResponse.swift",
+      "line": 16,
+      "symbol": "FIOSDK.Responses.TransferFIOTokensResponse.feeCollected",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    }
+  ],
+  "source_directory": "/Users/shawnarney/Dropbox/working/dapix/code/fiosdk_ios/FIOSDK"
+}
