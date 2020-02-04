@@ -51,6 +51,8 @@ class CryptographyTests: XCTestCase {
     let bobfioPrivateKeyAlternative = "5JCpqkvsrCzrAC3YWhx7pnLodr3Wr9dNMULYU8yoUrPRzu269Xz"
     let alicefioPublicKey  = "FIO5oBUYbtGTxMS66pPkjC2p8pbA3zCtc8XD4dq9fMut867GRdh82"
         
+        let encryptedAnswer = "11VJ1mUV8CM/WIJ9D7HO2KM2T4QzwFBSXq68kvtDFm6XQ2wXFegxMffmzx2mtTr8oBOg9YmdaEZz57pYICoHRBOCkxkjHoxhGAfNy+hF71sBxRZ2tO4vi/LpsRAZ0ybtEbhPBWmfpaIeRM3PXGEFan42CSS4ZmTxensy1JWSg8s="
+        
         let payeePublicAddress = "0xc39b2845E3CFAdE5f5b2864fe73f5960B8dB483B"
         let amount = 3.58
         let tokenCode = "ETH"
@@ -64,6 +66,7 @@ class CryptographyTests: XCTestCase {
         
         print ("--encrypted--")
         print (encryptedContent)
+  
     }
     
     func encrypt (privateKey: String, publicKey: String, contentType: FIOAbiContentType, contentJson: String) -> String {
@@ -85,20 +88,24 @@ class CryptographyTests: XCTestCase {
         guard let encrypted = Cryptography().encrypt(secret: sharedSecret ?? "", message: packed ?? "", iv: nil) else {
             return ""
         }
-                
-        return encrypted.hexEncodedString().uppercased()
+            
+        return encrypted.base64EncodedString()
     }
     
     func testAbiNewFundsContentDecryption (){
-        let privateKey = "5JbcPK6qTpYxMXtfpGXagYbo3KFE3qqxv2tLXLMPR8dTWWeYCp9"
-        let publicKey = "FIO8LKt4DBzXKzDGjFcZo5x82Nv5ahmbZ8AUNXBv2vMfm6smiHst3"
-        let packedAnswer = "2A30786333396232383435453343464164453566356232383634666537336635393630423864423438334204332E3538034554480C74657374696E6720746869730000"
-        let encryptedAnswer = "189EB032C20E35E001AF9A030B7D40B3E882441D2476ED3101A2E614F18A6974D06C4CC0913EFE52143D3207123794A0A1DF88501774BD2CAD4968EB8DC757080B0922B7F1CC29875662753B1D3874B4565C646CE7CF722B5E3F26B3481A5F7BC8C7430F8177BC42C08DF0E9D3F677F1AE56FBA03D3220E7E5B4980D8B65A6EC"
+        let bobfioPrivateKeyAlternative = "5JCpqkvsrCzrAC3YWhx7pnLodr3Wr9dNMULYU8yoUrPRzu269Xz"
+        let alicefioPublicKey  = "FIO5oBUYbtGTxMS66pPkjC2p8pbA3zCtc8XD4dq9fMut867GRdh82"
+        
+        let rawJsonItemDecrypted = "0xc39b2845E3CFAdE5f5b2864fe73f5960B8dB483B"
+        let encryptedAnswer = "eiz5OdqZlXqf1nb6qX2smgBxapcHfYvVtM/cq5TnKhNogJ/YbL8icdMg5HyBkjo+wG0ovUAfi54wSbCW4HUa9e8a7jgxW4mUbTXgqnDpMcx5ziJKrcxzQOgEAv2GrNyZD5Xp523blW63AsXz0Zj2xL5/f1Z8KjpMOE9YLh+dUyE="
 
-        let decryptedContent = self.decrypt(privateKey: privateKey, publicKey: publicKey, contentType: FIOAbiContentType.newFundsContent, encrypted: encryptedAnswer)
+        let decryptedContent = self.decrypt(privateKey: bobfioPrivateKeyAlternative, publicKey: alicefioPublicKey, contentType: FIOAbiContentType.newFundsContent, encrypted: encryptedAnswer)
         
         print ("--decrypted--")
         print (decryptedContent)
+        
+        
+        XCTAssert(decryptedContent.contains(rawJsonItemDecrypted), "Decypption failed, unable to find value that should be decrypted")
     }
     
     internal func decrypt(privateKey: String, publicKey: String, contentType: FIOAbiContentType, encrypted: String) -> String{
@@ -109,7 +116,10 @@ class CryptographyTests: XCTestCase {
         
         var possibleDecrypted: Data?
         do {
-           possibleDecrypted = try Cryptography().decrypt(secret: sharedSecret!, message: encrypted.toHexData())
+           //possibleDecrypted = try Cryptography().decrypt(secret: sharedSecret!, message: encrypted.toHexData())
+            
+            possibleDecrypted = try Cryptography().decrypt(secret: sharedSecret!, message: Data(base64Encoded: encrypted) ?? "".data(using: .utf8)!)
+            
            //possibleDecrypted = try Cryptography().decrypt(secret: sharedSecret!, message:
           // possibleDecrypted = try Cryptography().decrypt(secret: sharedSecret!, message: encrypted.data(using: .utf8) ?? "".data(using: .utf8)!)
         }

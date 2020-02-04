@@ -81,9 +81,6 @@ class FIOSDKTests: XCTestCase {
         try? FIOSDK.wipePrivatePublicKeys()
         _ = FIOSDK.sharedInstance(privateKey: fioPrivateKey, publicKey: fioPublicKey, url: defaultServer, mockUrl: mockUrl)
         
-        print ("DEFAULT KEYS:")
-        print(keyPair.privateKey)
-        print(keyPair.publicKey)
     }
     
     private func fundAccountWithFaucet(fioPublicKeyToFund:String) {
@@ -107,9 +104,6 @@ class FIOSDKTests: XCTestCase {
         try? FIOSDK.wipePrivatePublicKeys()
         _ = FIOSDK.sharedInstance(privateKey: fioPrivateKeyAlternative, publicKey: fioPublicKeyAlternative, url: defaultServer, mockUrl: mockUrl)
         
-        print ("ALTERNATE KEYS:")
-        print(keyPair.privateKey)
-        print(keyPair.publicKey)
     }
     
     func registerDefaultUsers() {
