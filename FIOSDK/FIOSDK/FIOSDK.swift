@@ -680,9 +680,7 @@ public class FIOSDK: BaseFIOSDK {
            return ""
         }
         
-     //NEW   encrypted.base64EncodedString()
-        
-        return encrypted.hexEncodedString().uppercased()
+        return  encrypted.base64EncodedString()
     }
     
     internal func decrypt(publicKey: String, contentType: FIOAbiContentType, encryptedContent: String) -> String{
@@ -690,30 +688,30 @@ public class FIOSDK: BaseFIOSDK {
            return ""
         }
         
-        //NEW - REMOVE, as it is now base64 encoded
-        if (encryptedContent.isValidHex() ==  false) {
+        if let decodedContentData = Data(base64Encoded: encryptedContent) {
+            
+            let sharedSecret = myKey.getSharedSecret(publicKey: publicKey)
+
+            var possibleDecrypted: Data?
+            do {
+                possibleDecrypted = try Cryptography().decrypt(secret: sharedSecret!, message: decodedContentData)
+            }
+            catch {
+                return ""
+            }
+            guard let decrypted = possibleDecrypted  else {
+                return ""
+            }
+
+            let serializer = abiSerializer()
+            let contentJSON = try? serializer.deserializeContent(contentType: contentType, hexString: decrypted.hexEncodedString().uppercased())
+
+            return contentJSON ?? ""
+
+        } else {
             return ""
         }
         
-        let sharedSecret = myKey.getSharedSecret(publicKey: publicKey)
-
-        var possibleDecrypted: Data?
-        do {
-            possibleDecrypted = try Cryptography().decrypt(secret: sharedSecret!, message: encryptedContent.toHexData())
-            
-           //NEW possibleDecrypted = try Cryptography().decrypt(secret: sharedSecret!, message: Data(base64Encoded: encryptedContent))
-        }
-        catch {
-            return ""
-        }
-        guard let decrypted = possibleDecrypted  else {
-            return ""
-        }
-
-        let serializer = abiSerializer()
-        let contentJSON = try? serializer.deserializeContent(contentType: contentType, hexString: decrypted.hexEncodedString().uppercased())
-
-        return contentJSON ?? ""
     }
     
     //MARK: - Request Funds

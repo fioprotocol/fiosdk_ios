@@ -108,6 +108,26 @@ class CryptographyTests: XCTestCase {
         XCTAssert(decryptedContent.contains(rawJsonItemDecrypted), "Decypption failed, unable to find value that should be decrypted")
     }
     
+    func testAbiNewFundsKotlinBase64Decryption() {
+        
+        let encryptedAnswer = "uK3WjSjS2c9jI8eVO/APwfb08BQcclxx6g0YiEBgP7s68iJmPqgSkmvKT7WfF2K/bkXgsexTfSNgZuk7Wl2rPT0uwmM+2Em/o1QLdmrq2UrERmoYovsGxPk/jSnTadpf"
+ 
+        let bobfioPrivateKeyAlternative = "5Ja67427GaXjzbawx74dsvEoWcEzXtgDjAG8bah6NGt68YWZ3bu"
+        let alicefioPublicKey  = "FIO5YB9ivgKMjNrHtangJvUSfunaX3cwwmiQQrd4YHfVTvyxc2swE"
+
+        let rawJsonItemDecrypted = "1PzCN3cBkTL72GPeJmpcueU4wQi9guiLa6"
+
+        let decryptedContent = self.decrypt(privateKey: bobfioPrivateKeyAlternative, publicKey: alicefioPublicKey, contentType: FIOAbiContentType.newFundsContent, encrypted: encryptedAnswer)
+
+        print ("--decrypted--")
+        print (decryptedContent)
+
+
+        XCTAssert(decryptedContent.contains(rawJsonItemDecrypted), "Decypption failed, unable to find value that should be decrypted")
+
+        
+    }
+    
     internal func decrypt(privateKey: String, publicKey: String, contentType: FIOAbiContentType, encrypted: String) -> String{
         guard let myKey = try! PrivateKey(keyString: privateKey) else {
             return ""
@@ -314,7 +334,7 @@ class CryptographyTests: XCTestCase {
         let sharedSecret = privateKey.getSharedSecret(publicKey: fioPublicKeyAlternative) ?? ""
         var possibleDecrypted: Data?
         do {
-            possibleDecrypted = try Cryptography().decrypt(secret: sharedSecret, message: encrypted.uppercased().toHexData())
+            possibleDecrypted = try Cryptography().decrypt(secret: sharedSecret, message: Data(base64Encoded: encrypted) ?? "".data(using: .utf8)!)
         }
         catch {
             XCTFail("Decryption failed")
