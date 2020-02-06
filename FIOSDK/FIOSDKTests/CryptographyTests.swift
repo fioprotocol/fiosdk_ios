@@ -59,7 +59,7 @@ class CryptographyTests: XCTestCase {
         let metadata = RequestFundsRequest.MetaData(memo: "testing this for eth", hash: "", offlineUrl: "")
         
 
-        let contentJson = RequestFundsContent(payeePublicAddress: payeePublicAddress, amount: String(amount), tokenCode: tokenCode, memo:metadata.memo ?? "", hash: metadata.hash ?? "", offlineUrl: metadata.offlineUrl ?? "")
+        let contentJson = RequestFundsContent(payeePublicAddress: payeePublicAddress, amount: String(amount), chainCode: tokenCode, tokenCode: tokenCode, memo:metadata.memo ?? "", hash: metadata.hash ?? "", offlineUrl: metadata.offlineUrl ?? "")
         
         print (contentJson.toJSONString())
         let encryptedContent = self.encrypt(privateKey: alicefioPrivateKey, publicKey: bobfioPublicKeyAlternative, contentType: FIOAbiContentType.newFundsContent, contentJson: contentJson.toJSONString())

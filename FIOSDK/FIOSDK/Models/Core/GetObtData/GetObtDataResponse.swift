@@ -46,6 +46,7 @@ extension FIOSDK.Responses {
                 public let payerPublicAddress: String
                 public let payeePublicAddress: String
                 public let amount: String
+                public let chainCode: String
                 public let tokenCode: String
                 public let obtId: String
                 public let status: String
@@ -57,6 +58,7 @@ extension FIOSDK.Responses {
                     case payerPublicAddress = "payer_public_address"
                     case payeePublicAddress = "payee_public_address"
                     case amount
+                    case chainCode = "chain_code"
                     case tokenCode = "token_code"
                     case obtId = "obt_id"
                     case status
@@ -109,7 +111,7 @@ extension FIOSDK.Responses {
                 }
                 
                 var deadRecord = false
-                var metadata = ObtDataResponse.MetaData(payerPublicAddress: "", payeePublicAddress: "", amount: "", tokenCode: "", obtId: "", status: "", memo: "", hash: "", offlineUrl: "")
+                var metadata = ObtDataResponse.MetaData(payerPublicAddress: "", payeePublicAddress: "", amount: "", chainCode: "", tokenCode: "", obtId: "", status: "", memo: "", hash: "", offlineUrl: "")
                 if let metadataData = metadataString.data(using: .utf8) {
                     do {
                         metadata = try JSONDecoder().decode(ObtDataResponse.MetaData.self, from: metadataData)

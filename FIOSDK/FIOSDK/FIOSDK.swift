@@ -340,6 +340,7 @@ public class FIOSDK: BaseFIOSDK {
     /** Adds a public address of the specific token to the FIO Address.
     *
     * - Parameter fioAddress: FIO Address to add the public address to.
+    * - Parameter chainCode: Blockchain code for blockchain hosting this token.
     * - Parameter tokenCode: The token code of a coin, i.e. BTC, EOS, ETH, etc.
     * - Parameter publicAddress: The public address for the specified token.
     * - Parameter maxFee: Maximum amount of SUFs the user is willing to pay for fee. Should be preceded by calling the getFee() method for the correct value.
@@ -348,13 +349,13 @@ public class FIOSDK: BaseFIOSDK {
     + This can be passed into the sharedInstance (Singleton) initializer to be used for all method calls OR overridden here
     * - Parameter - onCompletion: The completion handler, providing an optional error in case something goes wrong
     **/
-    public func addPublicAddress(fioAddress: String, tokenCode: String, publicAddress: String, maxFee: Int, walletFioAddress:String = "", onCompletion: @escaping (_ response: FIOSDK.Responses.AddPublicAddressResponse? , _ error:FIOError?) -> ()) {
+    public func addPublicAddress(fioAddress: String, chainCode: String, tokenCode: String, publicAddress: String, maxFee: Int, walletFioAddress:String = "", onCompletion: @escaping (_ response: FIOSDK.Responses.AddPublicAddressResponse? , _ error:FIOError?) -> ()) {
         guard tokenCode.lowercased() != "fio" else {
             onCompletion(nil, FIOError(kind: .Failure, localizedDescription: "The FIO TokenCode should not be added using this method.  It is associated with the FIO Public Address at fio address registration."))
             return
         }
         let actor = AccountNameGenerator.run(withPublicKey: getPublicKey())
-        let data = AddPublicAddressRequest(fioAddress: fioAddress, publicAddresses: [PublicAddress(tokenCode: tokenCode, publicAddress: publicAddress)], actor: actor, maxFee: maxFee, walletFioAddress: self.getWalletFioAddress(walletFioAddress))
+        let data = AddPublicAddressRequest(fioAddress: fioAddress, publicAddresses: [PublicAddress(chainCode: chainCode, tokenCode: tokenCode, publicAddress: publicAddress)], actor: actor, maxFee: maxFee, walletFioAddress: self.getWalletFioAddress(walletFioAddress))
         signedPostRequestTo(privateKey: getPrivateKey(),
                             route: ChainRoutes.addPublicAddress,
                             forAction: ChainActions.addPublicAddress,
@@ -607,16 +608,17 @@ public class FIOSDK: BaseFIOSDK {
     /** Returns a public address for the specified token registered under a FIO public key.
      *
      * - Parameter fioPublicKey: FIO public key of owner.
-     * - Parameter tokenCode: FIO Address for which to get details to, e.g. "alice@brd"
+     * - Parameter chainCode: Blockchain code for blockchain hosting this token.
+     * - Parameter tokenCode: tokenCode of the public address to, (i.e. BTC, ETH)
      * - Parameter onCompletion: The completion handler, providing an optional error in case something goes wrong
      **/
-    public func getPublicAddress(fioPublicKey: String, tokenCode: String, onCompletion: @escaping (_ publicAddress: FIOSDK.Responses.TokenPublicAddressResponse?, _ error: FIOError) -> ()) {
+    public func getPublicAddress(fioPublicKey: String, chainCode: String, tokenCode: String, onCompletion: @escaping (_ publicAddress: FIOSDK.Responses.TokenPublicAddressResponse?, _ error: FIOError) -> ()) {
         FIOSDK.sharedInstance().getFioNames(fioPublicKey: fioPublicKey) { (response, error) in
             guard error == nil || error?.kind == .Success, let fioAddress = response?.addresses.first?.address else {
                 onCompletion(nil, error ?? FIOError.failure(localizedDescription: "Failed to retrieve token public address."))
                 return
             }
-            FIOSDK.sharedInstance().getPublicAddress(fioAddress: fioAddress, tokenCode: tokenCode) { (response, error) in
+            FIOSDK.sharedInstance().getPublicAddress(fioAddress: fioAddress, chainCode: chainCode, tokenCode: tokenCode) { (response, error) in
                 guard error.kind == .Success, let tokenPubAddress = response?.publicAddress else {
                     onCompletion(nil, error)
                     return
@@ -629,11 +631,12 @@ public class FIOSDK: BaseFIOSDK {
     /** Returns a public address for a specified FIO Address, for a given token (i.e. BTC, ETH)
      *
      * - Parameter fioAddress: FIO Address associated with the public address being retrieved, e.g. "alice@brd"
+     * - Parameter chainCode: Blockchain code for blockchain hosting this token.
      * - Parameter tokenCode: tokenCode of the public address to, (i.e. BTC, ETH)
      * - Parameter onCompletion: The completion handler, providing an optional error in case something goes wrong
      **/
-    public func getPublicAddress(fioAddress: String, tokenCode: String, onCompletion: @escaping (_ publicAddress: FIOSDK.Responses.PublicAddressResponse?, _ error: FIOError) -> ()){
-        let body = PublicAddressRequest(fioAddress: fioAddress, tokenCode: tokenCode)
+    public func getPublicAddress(fioAddress: String, chainCode: String, tokenCode: String, onCompletion: @escaping (_ publicAddress: FIOSDK.Responses.PublicAddressResponse?, _ error: FIOError) -> ()){
+        let body = PublicAddressRequest(fioAddress: fioAddress, chainCode: chainCode, tokenCode: tokenCode)
         let url = ChainRouteBuilder.build(route: ChainRoutes.getPublicAddress)
         FIOHTTPHelper.postRequestTo(url, withBody: body) { (data, error) in
             if let data = data {
@@ -661,7 +664,7 @@ public class FIOSDK: BaseFIOSDK {
      * - Parameter onCompletion: The completion handler, providing an optional error in case something goes wrong
      **/
     public func getFioPublicKey(fioAddress: String, onCompletion: @escaping (_ publicAddress: FIOSDK.Responses.PublicAddressResponse?, _ error: FIOError) -> ()){
-        getPublicAddress(fioAddress: fioAddress, tokenCode: "FIO", onCompletion: onCompletion)
+        getPublicAddress(fioAddress: fioAddress, chainCode: "FIO", tokenCode: "FIO", onCompletion: onCompletion)
     }
     
     //MARK: Encrypt/Decrypt
@@ -730,13 +733,13 @@ public class FIOSDK: BaseFIOSDK {
      + This can be passed into the sharedInstance (Singleton) initializer to be used for all method calls OR overridden here
      * - Parameter - onCompletion: The completion handler, providing an optional error in case something goes wrong
      **/
-    public func requestFunds(payer payerFIOAddress:String, payee payeeFIOAddress: String, payeePublicAddress: String, amount: Float, tokenCode: String, metadata: RequestFundsRequest.MetaData, maxFee: Int, walletFioAddress:String = "", onCompletion: @escaping ( _ response: RequestFundsResponse?, _ error:FIOError? ) -> ()) {
+    public func requestFunds(payer payerFIOAddress:String, payee payeeFIOAddress: String, payeePublicAddress: String, amount: Float, chainCode: String, tokenCode: String, metadata: RequestFundsRequest.MetaData, maxFee: Int, walletFioAddress:String = "", onCompletion: @escaping ( _ response: RequestFundsResponse?, _ error:FIOError? ) -> ()) {
        
         self.getFioPublicKey(fioAddress: payerFIOAddress) { (response, error) in
 
             if (error.kind == FIOError.ErrorKind.Success) {
                 
-                let contentJson = RequestFundsContent(payeePublicAddress: payeePublicAddress, amount: String(amount), tokenCode: tokenCode, memo:metadata.memo ?? "", hash: metadata.hash ?? "", offlineUrl: metadata.offlineUrl ?? "")
+                let contentJson = RequestFundsContent(payeePublicAddress: payeePublicAddress, amount: String(amount), chainCode: chainCode, tokenCode: tokenCode, memo:metadata.memo ?? "", hash: metadata.hash ?? "", offlineUrl: metadata.offlineUrl ?? "")
                 
                 let encryptedContent = self.encrypt(publicKey: response?.publicAddress ?? "", contentType: FIOAbiContentType.newFundsContent, contentJson: contentJson.toJSONString())
                 
@@ -858,6 +861,7 @@ public class FIOSDK: BaseFIOSDK {
                            payerTokenPublicAddress: String,
                            payeeTokenPublicAddress: String,
                            amount: Double,
+                           chainCode: String,
                            tokenCode: String,
                            obtId: String,
                            maxFee: Int,
@@ -865,7 +869,7 @@ public class FIOSDK: BaseFIOSDK {
                            walletFioAddress: String = "",
                            onCompletion: @escaping (_ response: FIOSDK.Responses.RecordObtDataResponse?, _ error: FIOError?) -> ()){
         
-        let contentJson = RecordObtDataContent(payerPublicAddress: payerTokenPublicAddress, payeePublicAddress: payeeTokenPublicAddress, amount: String(amount), tokenCode: tokenCode, status:"sent_to_blockchain", obtId: obtId, memo: metaData.memo ?? "", hash: metaData.hash ?? "", offlineUrl: metaData.offlineUrl ?? "")
+        let contentJson = RecordObtDataContent(payerPublicAddress: payerTokenPublicAddress, payeePublicAddress: payeeTokenPublicAddress, amount: String(amount), chainCode: chainCode, tokenCode: tokenCode, status:"sent_to_blockchain", obtId: obtId, memo: metaData.memo ?? "", hash: metaData.hash ?? "", offlineUrl: metaData.offlineUrl ?? "")
         
         FIOSDK.sharedInstance().getFioPublicKey(fioAddress: payeeFIOAddress) { (response, error) in
             guard error.kind == .Success, let payeeFIOPublicKey = response?.publicAddress else {

@@ -44,6 +44,7 @@ extension FIOSDK.Responses {
             public struct MetaData: Codable {
                 public let payeePublicAddress: String
                 public let amount: String
+                public let chainCode: String
                 public let tokenCode: String
                 public let memo: String
                 public let hash: String
@@ -52,6 +53,7 @@ extension FIOSDK.Responses {
                 enum CodingKeys: String, CodingKey {
                     case payeePublicAddress = "payee_public_address"
                     case amount
+                    case chainCode = "chain_code"
                     case tokenCode = "token_code"
                     case memo
                     case hash
@@ -98,7 +100,7 @@ extension FIOSDK.Responses {
                 }
                 
                 var deadRecord = false
-                var metadata = PendingFIORequestResponse.MetaData(payeePublicAddress: "", amount: "", tokenCode: "", memo: "", hash: "", offlineUrl: "")
+                var metadata = PendingFIORequestResponse.MetaData(payeePublicAddress: "", amount: "", chainCode: "", tokenCode: "", memo: "", hash: "", offlineUrl: "")
                 if let metadataData = metadataString.data(using: .utf8) {
                     do {
                         metadata = try JSONDecoder().decode(PendingFIORequestResponse.MetaData.self, from: metadataData)

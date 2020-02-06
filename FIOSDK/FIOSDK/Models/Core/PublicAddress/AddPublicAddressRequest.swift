@@ -26,10 +26,12 @@ internal struct AddPublicAddressRequest: Codable {
 }
 
 public struct PublicAddress: Codable {
+    let chainCode: String
     let tokenCode: String
     let publicAddress: String
     
     enum CodingKeys: String, CodingKey {
+        case chainCode = "chain_code"
         case tokenCode = "token_code"
         case publicAddress = "public_address"
     }

@@ -232,7 +232,19 @@ internal struct DataWriter {
             pushLong(value: action.name.eosTypeNameToLong())
             pushPermission(permissions: action.authorization)
             if action.data != nil {
-                pushData(data: action.data!.hexadecimal()!)
+                
+                if let hexDec = action.data!.hexadecimal() {
+                    pushData(data: hexDec)
+                }
+                else {
+                    pushVariableUInt(value: 0)
+                }
+               // pushData(data: action.data!.hexadecimal()!)
+                
+                // it is not true that this is always there.
+                // is failing with forced.
+                
+                
             } else {
                 pushVariableUInt(value: 0)
             }

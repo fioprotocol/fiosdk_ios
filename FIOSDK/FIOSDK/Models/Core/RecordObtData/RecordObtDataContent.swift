@@ -13,6 +13,7 @@ public struct RecordObtDataContent: Codable {
     public let payerPublicAddress: String
     public let payeePublicAddress: String
     public let amount: String
+    public let chainCode: String
     public let tokenCode: String
     public let status: String
     public let obtId: String
@@ -24,6 +25,7 @@ public struct RecordObtDataContent: Codable {
         case payerPublicAddress = "payer_public_address"
         case payeePublicAddress = "payee_public_address"
         case amount
+        case chainCode = "chain_code"
         case tokenCode = "token_code"
         case status
         case obtId = "obt_id"
