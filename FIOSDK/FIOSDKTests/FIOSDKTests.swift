@@ -202,6 +202,35 @@ class FIOSDKTests: XCTestCase {
         
         XCTAssert (!FIOSDK.sharedInstance().isFioNameValid(fioName: addressWith62Chars), "should be invalid")
         
+        // chain code validation
+        XCTAssert(FIOSDK.sharedInstance().isChainCodeValid("BTC0132342"), "should be valid")
+        XCTAssert(FIOSDK.sharedInstance().isChainCodeValid("BTC"), "should be valid")
+        XCTAssert(FIOSDK.sharedInstance().isChainCodeValid("B"), "should be valid")
+        XCTAssert(FIOSDK.sharedInstance().isChainCodeValid("0"), "should be valid")
+        XCTAssert(!FIOSDK.sharedInstance().isChainCodeValid("BTC01323423"), "should be invalid")
+        XCTAssert(!FIOSDK.sharedInstance().isChainCodeValid(""), "should be invalid")
+        
+        // token code validation
+        XCTAssert(FIOSDK.sharedInstance().isTokenCodeValid("BTC0132342"), "should be valid")
+        XCTAssert(FIOSDK.sharedInstance().isTokenCodeValid("BTC"), "should be valid")
+        XCTAssert(FIOSDK.sharedInstance().isTokenCodeValid("B"), "should be valid")
+        XCTAssert(FIOSDK.sharedInstance().isTokenCodeValid("0"), "should be valid")
+        XCTAssert(!FIOSDK.sharedInstance().isTokenCodeValid("BTC01323423"), "should be invalid")
+        XCTAssert(!FIOSDK.sharedInstance().isTokenCodeValid(""), "should be invalid")
+        
+        // public address validation
+        XCTAssert(FIOSDK.sharedInstance().isPublicAddressValid("b"), "should be valid")
+        XCTAssert(FIOSDK.sharedInstance()   .isPublicAddressValid("abacdefghaiweroiefjewriefoiwej3314539104371571xwere343424373573244737473474747474774747474329sjxzdddddddddddddddddddhagagggyiila"), "should be valid")
+        
+        XCTAssert(!FIOSDK.sharedInstance().isPublicAddressValid(""), "should be invalid")
+        XCTAssert(!FIOSDK.sharedInstance()   .isPublicAddressValid("aaabcdefghaiweroiefjewriefoiwej3314539104371571xwere343424373573244737473474747474774747474329sjxzdddddddddddddddddddhagagggyiila"), "should be invalid")
+        
+        // fio public key validation
+        XCTAssert(FIOSDK.sharedInstance().isFioPublicKeyValid("FIOa"), "should be valid")  // really needs to be more sophisticated
+        XCTAssert(!FIOSDK.sharedInstance().isFioPublicKeyValid("FIO"), "should be invalid")
+        XCTAssert(!FIOSDK.sharedInstance().isFioPublicKeyValid("b"), "should be invalid")
+        XCTAssert(!FIOSDK.sharedInstance().isFioPublicKeyValid(""), "should be invalid")
+    
     }
     
     func testIsAvailableWithAlreadyTakenNameShouldNotBeAvailable(){

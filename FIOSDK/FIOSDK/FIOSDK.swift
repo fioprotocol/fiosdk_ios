@@ -350,10 +350,25 @@ public class FIOSDK: BaseFIOSDK {
     * - Parameter - onCompletion: The completion handler, providing an optional error in case something goes wrong
     **/
     public func addPublicAddress(fioAddress: String, chainCode: String, tokenCode: String, publicAddress: String, maxFee: Int, walletFioAddress:String = "", onCompletion: @escaping (_ response: FIOSDK.Responses.AddPublicAddressResponse? , _ error:FIOError?) -> ()) {
-        guard tokenCode.lowercased() != "fio" else {
+        
+        // validation
+        guard chainCode.lowercased() != "fio" else {
             onCompletion(nil, FIOError(kind: .Failure, localizedDescription: "The FIO TokenCode should not be added using this method.  It is associated with the FIO Public Address at fio address registration."))
             return
         }
+        if (!self.isChainCodeValid(chainCode)){
+            onCompletion(nil, FIOError(kind: .Failure, localizedDescription: "The chainCode is not valid.  Needs to have 1 character or a maximum of 10 characters.  Must be a-z0-9"))
+            return
+        }
+        if (!self.isTokenCodeValid(tokenCode)){
+            onCompletion(nil, FIOError(kind: .Failure, localizedDescription:  "The tokenCode is not valid.  Needs to have 1 character or a maximum of 10 characters.  Must be a-z0-9"))
+            return
+        }
+        if (!self.isPublicAddressValid(publicAddress)){
+            onCompletion(nil, FIOError(kind: .Failure, localizedDescription:  "The publicAddress is not valid.  Needs to have 1 character or a maximum of 128 characters."))
+            return
+        }
+        
         let actor = AccountNameGenerator.run(withPublicKey: getPublicKey())
         let data = AddPublicAddressRequest(fioAddress: fioAddress, publicAddresses: [PublicAddress(chainCode: chainCode, tokenCode: tokenCode, publicAddress: publicAddress)], actor: actor, maxFee: maxFee, walletFioAddress: self.getWalletFioAddress(walletFioAddress))
         signedPostRequestTo(privateKey: getPrivateKey(),
@@ -725,6 +740,7 @@ public class FIOSDK: BaseFIOSDK {
      * - Parameter payeeFIOAddress: FIO Address of the payee. This address is sending the request and will receive payment, i.e. requestor:brd
      * - Parameter payeePublicAddress: Payee's public address where they want funds sent.
      * - Parameter amount: Amount requested.
+     * - Parameter chainCode: Blockchain code for blockchain hosting this token.
      * - Parameter tokenCode: Code of the token represented in Amount requested, i.e. ETH
      * - Parameter metadata: Contains the: memo or hash or offlineUrl
      * - Parameter maxFee: Maximum amount of SUFs the user is willing to pay for fee. Should be preceded by calling the getFee() method for the correct value.
@@ -846,6 +862,7 @@ public class FIOSDK: BaseFIOSDK {
      * - Parameter payerTokenPublicAddress: Payee's public address where they want funds sent.
      * - Parameter payeeTokenPublicAddress: Payee's public address where they want funds sent.
      * - Parameter amount: Amount requested.
+     * - Parameter chainCode: Blockchain code for blockchain hosting this token.
      * - Parameter tokenCode: Code of the token represented in Amount requested, i.e. ETH
      * - Parameter obtId: Other Blockchain Transaction Id i.e. 0x3234222...
      * - Parameter metadata: Contains the: memo or hash or offlineUrl
@@ -1052,6 +1069,8 @@ public class FIOSDK: BaseFIOSDK {
     public func getFeeForRecordObtData(payerFioAddress: String, onCompletion: @escaping (_ response: FIOSDK.Responses.FeeResponse?, _ error: FIOError) -> ()) {
         self.getFeeResponse(fioAddress: payerFioAddress, endPoint: "record_obt_data", onCompletion: onCompletion)
     }
+    
+    
 
 }
 

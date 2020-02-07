@@ -19,7 +19,39 @@ public class BaseFIOSDK: NSObject {
     
     internal override init() {}
     
-    internal func isFIOAddressValid(_ address: String) -> Bool {
+    public func isTokenCodeValid(_ tokenCode:String) -> Bool {
+        if (tokenCode.count > 0 && tokenCode.count < 11){
+            if (tokenCode.range(of:"[a-zA-Z0-9]",options: .regularExpression) != nil) {
+                return true
+            }
+        }
+        return false
+    }
+    
+    public func isChainCodeValid(_ chainCode:String) -> Bool {
+        if (chainCode.count > 0 && chainCode.count < 11){
+            if (chainCode.range(of:"[a-zA-Z0-9]",options: .regularExpression) != nil) {
+                return true
+            }
+        }
+        return false
+    }
+    
+    public func isFioPublicKeyValid(_ fioPublicKey: String) -> Bool {
+        if (fioPublicKey.count < 4){
+            return false
+        }
+        if (fioPublicKey.lowercased().hasPrefix("fio")){
+            return true
+        }
+        return false
+    }
+    
+    public func isPublicAddressValid(_ publicAddress:String) -> Bool {
+        return (publicAddress.count > 0 && publicAddress.count < 129)
+    }
+    
+    public func isFIOAddressValid(_ address: String) -> Bool {
         let fullNameArr = address.components(separatedBy: "@")
         
         if (fullNameArr.count != 2) {
@@ -33,7 +65,7 @@ public class BaseFIOSDK: NSObject {
         return false
     }
     
-    internal func isFIODomainValid(_ domain: String) -> Bool {
+    public func isFIODomainValid(_ domain: String) -> Bool {
         if domain.isEmpty || domain.count > 62 || domain.count < 1 { return false }
         
         if domain.range(of:"^(\\w)+(-\\w+)*$", options: .regularExpression) == nil {

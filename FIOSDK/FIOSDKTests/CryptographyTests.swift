@@ -10,46 +10,12 @@ import XCTest
 @testable import FIOSDK
 
 class CryptographyTests: XCTestCase {
-    // encryption piece
-    // step 1 - serialize the content
-    // after encryption - it returns a hex string
-    
-    /*
-     
-     fun decryptSharedMessage(encryptedMessageAsHexString: String, sharedKey: ByteArray): String
-     {
-         val hashedSecretKey = HashUtils.sha512(sharedKey)
-
-         val decryptionKey = hashedSecretKey.copyOf(32)
-         val hmacKey = hashedSecretKey.copyOfRange(32,hashedSecretKey.size)
-
-         val messageBytes = encryptedMessageAsHexString.hexStringToByteArray()
-         val hmacContent = messageBytes.copyOfRange(0,messageBytes.size-32)
-         val messageHmacData = messageBytes.copyOfRange(hmacContent.size,messageBytes.size)
-
-         val iv = hmacContent.copyOf(16)
-         val encryptedMessage = hmacContent.copyOfRange(iv.size,hmacContent.size)
-
-         val hmacData = Cryptography.createHmac(hmacContent,hmacKey)
-         if(hmacData.equals(messageHmacData))
-             throw FIOError("Hmac does not match.")
-         else
-         {
-             val decrypter = Cryptography(decryptionKey, iv)
-             val decryptedMessage = decrypter.decrypt(encryptedMessage)
-
-             return decryptedMessage.toHexString()
-         }
-     }
-     
-     
-     */
     
     func testAbiNewFundsContentEncryption (){
         let alicefioPrivateKey = "5JLxoeRoMDGBbkLdXJjxuh3zHsSS7Lg6Ak9Ft8v8sSdYPkFuABF"
         let bobfioPublicKeyAlternative  = "FIO7uRvrLVrZCbCM2DtCgUMospqUMnP3JUC1sKHA8zNoF835kJBvN"
-    let bobfioPrivateKeyAlternative = "5JCpqkvsrCzrAC3YWhx7pnLodr3Wr9dNMULYU8yoUrPRzu269Xz"
-    let alicefioPublicKey  = "FIO5oBUYbtGTxMS66pPkjC2p8pbA3zCtc8XD4dq9fMut867GRdh82"
+        let bobfioPrivateKeyAlternative = "5JCpqkvsrCzrAC3YWhx7pnLodr3Wr9dNMULYU8yoUrPRzu269Xz"
+        let alicefioPublicKey  = "FIO5oBUYbtGTxMS66pPkjC2p8pbA3zCtc8XD4dq9fMut867GRdh82"
         
         let encryptedAnswer = "11VJ1mUV8CM/WIJ9D7HO2KM2T4QzwFBSXq68kvtDFm6XQ2wXFegxMffmzx2mtTr8oBOg9YmdaEZz57pYICoHRBOCkxkjHoxhGAfNy+hF71sBxRZ2tO4vi/LpsRAZ0ybtEbhPBWmfpaIeRM3PXGEFan42CSS4ZmTxensy1JWSg8s="
         
@@ -97,7 +63,7 @@ class CryptographyTests: XCTestCase {
         let alicefioPublicKey  = "FIO5oBUYbtGTxMS66pPkjC2p8pbA3zCtc8XD4dq9fMut867GRdh82"
         
         let rawJsonItemDecrypted = "0xc39b2845E3CFAdE5f5b2864fe73f5960B8dB483B"
-        let encryptedAnswer = "eiz5OdqZlXqf1nb6qX2smgBxapcHfYvVtM/cq5TnKhNogJ/YbL8icdMg5HyBkjo+wG0ovUAfi54wSbCW4HUa9e8a7jgxW4mUbTXgqnDpMcx5ziJKrcxzQOgEAv2GrNyZD5Xp523blW63AsXz0Zj2xL5/f1Z8KjpMOE9YLh+dUyE="
+        let encryptedAnswer = "uaB7gApTgf/Uwj3pbDi1vy7yb1xh1qjI2s+fahdy3kCrX2kZOWXpa8lUAdIYBTzUuk2IuSAP72BR49wJy+i1YiMNeMdQ+at0kQ1nDrDE+89Ra24bkIMzj8fCh23Yj8hxhn+Et6hgqpE2DhiWeGxVYAwTYlUiKzq3j18CspKKJPVJiqOh6UvwHX+sRcL+ZY8P"
 
         let decryptedContent = self.decrypt(privateKey: bobfioPrivateKeyAlternative, publicKey: alicefioPublicKey, contentType: FIOAbiContentType.newFundsContent, encrypted: encryptedAnswer)
         
@@ -108,6 +74,7 @@ class CryptographyTests: XCTestCase {
         XCTAssert(decryptedContent.contains(rawJsonItemDecrypted), "Decypption failed, unable to find value that should be decrypted")
     }
     
+    ///TODO: this is broken
     func testAbiNewFundsKotlinBase64Decryption() {
         
         let encryptedAnswer = "uK3WjSjS2c9jI8eVO/APwfb08BQcclxx6g0YiEBgP7s68iJmPqgSkmvKT7WfF2K/bkXgsexTfSNgZuk7Wl2rPT0uwmM+2Em/o1QLdmrq2UrERmoYovsGxPk/jSnTadpf"
@@ -122,9 +89,7 @@ class CryptographyTests: XCTestCase {
         print ("--decrypted--")
         print (decryptedContent)
 
-
         XCTAssert(decryptedContent.contains(rawJsonItemDecrypted), "Decypption failed, unable to find value that should be decrypted")
-
         
     }
     
@@ -192,31 +157,30 @@ class CryptographyTests: XCTestCase {
     //answer A55627B9E12AC16FB82FFF1D514EB40B62F418BCB863357086B0C79D623FA62B99BCF97D83611FDF814842D46FBD118A4C0571521F4A1BE5E442A1E7457D2C7A00DE2AA4553743AEA58C0E5759F5CF5583172815F914824BE10F8CD408D4B0B073D003F647616F6A6E0F040DD219A266E60D39742681974FDCE9EC2A57779442
     func testEncryptFixedValueForAndroidShawnM() {
         
-           let privateKey = "5JbcPK6qTpYxMXtfpGXagYbo3KFE3qqxv2tLXLMPR8dTWWeYCp9"
-           let publicKey = "FIO8LKt4DBzXKzDGjFcZo5x82Nv5ahmbZ8AUNXBv2vMfm6smiHst3"
-        
-           
-           guard let myKey = try! PrivateKey(keyString: privateKey) else {
-               return
-           }
-           let sharedSecret = myKey.getSharedSecret(publicKey: publicKey)
-          //  let sharedSecret = "88F10119B11958F6CA389372AA168330DDDABCE58F4BEE68B9B52381FC662E288E965E451F4F43C2463660C0E7C06529149D6018AB583E9EBF6D97DA9F2DA904"
-           
-           
-           let message = "3546494F356B4A4B4E487763746366554D35585A796957537153544D3548547A7A6E4A503946335A646268615141484556713537356F03392E300346494F000000"
+        let privateKey = "5JbcPK6qTpYxMXtfpGXagYbo3KFE3qqxv2tLXLMPR8dTWWeYCp9"
+        let publicKey = "FIO8LKt4DBzXKzDGjFcZo5x82Nv5ahmbZ8AUNXBv2vMfm6smiHst3"
+
+        guard let myKey = try! PrivateKey(keyString: privateKey) else {
+           return
+        }
+        let sharedSecret = myKey.getSharedSecret(publicKey: publicKey)
+        //  let sharedSecret = "88F10119B11958F6CA389372AA168330DDDABCE58F4BEE68B9B52381FC662E288E965E451F4F43C2463660C0E7C06529149D6018AB583E9EBF6D97DA9F2DA904"
+
+
+        let message = "3546494F356B4A4B4E487763746366554D35585A796957537153544D3548547A7A6E4A503946335A646268615141484556713537356F03392E300346494F000000"
         let IV = "a55627b9e12ac16fb82fff1d514eb40b".toHexData()
         guard let encrypted = Cryptography().encrypt(secret: sharedSecret!, message: message, iv: IV) else {
-              XCTFail("Encryption failed")
-              return
-           }
-              
-           let asciEncrypted = String(data: encrypted, encoding: .ascii)
-           print (String(data: encrypted, encoding: .ascii))
-          // print (encrypted.hexEncodedString())
+          XCTFail("Encryption failed")
+          return
+        }
+          
+        let asciEncrypted = String(data: encrypted, encoding: .ascii)
+        print (String(data: encrypted, encoding: .ascii))
+        // print (encrypted.hexEncodedString())
         let myEncrypted = encrypted.hexEncodedString().uppercased()
-            print ("***")
-            print (myEncrypted)
-            print ("***")
+        print ("***")
+        print (myEncrypted)
+        print ("***")
     }
     
     /* the results of a decryption, should be the hexencoded string, uppercased.  For use by the ABI process */
@@ -313,6 +277,7 @@ class CryptographyTests: XCTestCase {
         XCTAssert(decryptedAnswer == decrypted.hexEncodedString().uppercased(), "Should be the same")
     }
     
+    // this is broken
     func testMainEncryptDecrypt(){
         
         let fioPrivateKey = "5JLxoeRoMDGBbkLdXJjxuh3zHsSS7Lg6Ak9Ft8v8sSdYPkFuABF"
@@ -323,7 +288,7 @@ class CryptographyTests: XCTestCase {
         
         let fiosdk = FIOSDK.sharedInstance(privateKey: fioPrivateKey, publicKey: fioPrivateKey, url: "a", mockUrl: "b")
         
-        let contentJson = "{\"amount\":\"9.0\",\"token_code\":\"FIO\",\"memo\":\"\",\"hash\":\"\",\"offline_url\":\"\",\"payee_public_address\":\"FIO5kJKNHwctcfUM5XZyiWSqSTM5HTzznJP9F3ZdbhaQAHEVq575o\"}"
+        let contentJson = "{\"amount\":\"9.0\",\"chain_code\":\"FIO\",\"token_code\":\"FIO\",\"memo\":\"\",\"hash\":\"\",\"offline_url\":\"\",\"payee_public_address\":\"FIO5kJKNHwctcfUM5XZyiWSqSTM5HTzznJP9F3ZdbhaQAHEVq575o\"}"
         let encrypted = fiosdk.encrypt(publicKey: fioPublicKeyAlternative, contentType: FIOAbiContentType.newFundsContent, contentJson: contentJson)
         print (encrypted)
         
@@ -346,8 +311,6 @@ class CryptographyTests: XCTestCase {
         print (decrypted)
         
     }
-    
-    
     
     func testEncryptFixedValueForAndroidShawnMDiffKeys() {
            
@@ -375,14 +338,14 @@ class CryptographyTests: XCTestCase {
         print ("***")
         print (myEncrypted)
         print ("***")
-       }
+    }
        
-   /* the results of a decryption, should be the hexencoded string, uppercased.  For use by the ABI process */
+    /* the results of a decryption, should be the hexencoded string, uppercased.  For use by the ABI process */
     //
-   func testDecryptFixedValueForAndroidShawnMDiffKeys() {
+    func testDecryptFixedValueForAndroidShawnMDiffKeys() {
        
-          let alicefioPublicKey  = "FIO5oBUYbtGTxMS66pPkjC2p8pbA3zCtc8XD4dq9fMut867GRdh82"
-          let bobfioPrivateKeyAlternative = "5JCpqkvsrCzrAC3YWhx7pnLodr3Wr9dNMULYU8yoUrPRzu269Xz"
+      let alicefioPublicKey  = "FIO5oBUYbtGTxMS66pPkjC2p8pbA3zCtc8XD4dq9fMut867GRdh82"
+      let bobfioPrivateKeyAlternative = "5JCpqkvsrCzrAC3YWhx7pnLodr3Wr9dNMULYU8yoUrPRzu269Xz"
     
     
        let encrypted = "A55627B9E12AC16FB82FFF1D514EB40B847399E055FD2CBC57D4295B8745DD46E7A165E99D988CB65455B24ED52E4E241429DEFE9C883984E23255C2D1E3C1706A2483C1AA964B2B485C9487FC919DE9B3DEC2136E387942FFAA7F007501B0D54973B5F3C91F7A1FE6630DC61FFBA9A4148DE16176513A8E23A0243EF02AA0F0"
@@ -418,19 +381,19 @@ class CryptographyTests: XCTestCase {
     
     
     /* the results of an android decryption, should be the hexencoded string, uppercased.  For use by the ABI process */
-     // this is the android request_funds... does it decrypt correctly?
+    // this is the android request_funds... does it decrypt correctly?
     func testDecryptFixedValueForAndroidShawnMDiffKeys_fromAndroid() {
         let bobfioPrivateKeyAlternative = "5JCpqkvsrCzrAC3YWhx7pnLodr3Wr9dNMULYU8yoUrPRzu269Xz"
         let alicefioPublicKey  = "FIO5oBUYbtGTxMS66pPkjC2p8pbA3zCtc8XD4dq9fMut867GRdh82"
            
         let encrypted = "A754EB5349FB8DABC25DCE3E477FE244F319E0EAB8549CA9BF5B8F445B99FCBC068BBCD06CA9498A1E7DD9824E75ADB26A6C99DCB6F51B6BE1BA2CB1BD430DFB4D1CA2280C5F17485FC8F2F7C77E9E32"
-        
-        
+
+
         let decryptedContent = self.decrypt(privateKey: bobfioPrivateKeyAlternative, publicKey: alicefioPublicKey, contentType: FIOAbiContentType.newFundsContent, encrypted: encrypted)
                
-       print ("--decrypted--")
-       print (decryptedContent)
-        
+        print ("--decrypted--")
+        print (decryptedContent)
+
     }
     
 }
