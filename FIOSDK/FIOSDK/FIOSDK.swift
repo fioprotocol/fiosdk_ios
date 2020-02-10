@@ -1069,9 +1069,6 @@ public class FIOSDK: BaseFIOSDK {
     public func getFeeForRecordObtData(payerFioAddress: String, onCompletion: @escaping (_ response: FIOSDK.Responses.FeeResponse?, _ error: FIOError) -> ()) {
         self.getFeeResponse(fioAddress: payerFioAddress, endPoint: "record_obt_data", onCompletion: onCompletion)
     }
-    
-    
-
 }
 
 extension Formatter {

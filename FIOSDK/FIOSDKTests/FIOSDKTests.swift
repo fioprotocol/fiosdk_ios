@@ -1075,6 +1075,40 @@ print("****")
         wait(for: [expectation], timeout: TIMEOUT * 3)
     }
     
+    func testGetFeeForRenewAddressShouldReturnFee() {
+        let expectation = XCTestExpectation(description: "testGetFeeForRenewAddressShouldReturnFee")
+
+        FIOSDK.sharedInstance().getFee(endPoint: FIOSDK.Params.FeeEndpoint.renewFIOAddress, onCompletion: { (response, error) in
+            XCTAssert((error.kind == FIOError.ErrorKind.Success), "getFee failed: \(error.localizedDescription )")
+            guard let fee = response?.fee else {
+                XCTFail("Fee not returned")
+                expectation.fulfill()
+                return
+            }
+            XCTAssert(fee >= 0, "Something went wrong")
+            expectation.fulfill()
+        })
+        
+        wait(for: [expectation], timeout: TIMEOUT * 3)
+    }
+    
+    func testGetFeeForRenewDomainShouldReturnFee() {
+        let expectation = XCTestExpectation(description: "testGetFeeForRenewDomainShouldReturnFee")
+
+        FIOSDK.sharedInstance().getFee(endPoint: FIOSDK.Params.FeeEndpoint.renewFIODomain, onCompletion: { (response, error) in
+            XCTAssert((error.kind == FIOError.ErrorKind.Success), "getFee failed: \(error.localizedDescription )")
+            guard let fee = response?.fee else {
+                XCTFail("Fee not returned")
+                expectation.fulfill()
+                return
+            }
+            XCTAssert(fee >= 0, "Something went wrong")
+            expectation.fulfill()
+        })
+        
+        wait(for: [expectation], timeout: TIMEOUT * 3)
+    }
+    
     func testGetAbi() {
         let expectation = XCTestExpectation(description: "testGetABI")
         
