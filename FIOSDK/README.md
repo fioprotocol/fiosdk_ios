@@ -22,10 +22,10 @@ Visit the [FIO Protocol Developer Hub](https://developers.fioprotocol.io) to get
 		./buildsdk_simulator.sh 
 
 # Generating Documentation
-Jazzy is used to generate the documentation. After installing jazzy via 'gem install jazzy'.
-	in terminal, navigate to the main folder, and run these commands:
-	cd FIOSDK
-	jazzy
+Jazzy is used to generate documentation. After installing jazzy via '[sudo] gem install jazzy'.
+
+	in terminal, navigate to the main folder, and run this build script:
+		./build_docs.sh
 
 	i.e. https://github.com/realm/jazzy
 

@@ -12,7 +12,7 @@ The FIO iOS SDK is developed in Swift.
 Visit the [FIO Protocol Developer Hub](https://developers.fioprotocol.io) to get information on FIO SDK versions. Only use an SDK that has a major version number that matches the current FIO Protocol blockchain major version number (e.g. 1.x.x).
 
 # Documentation
-Documentation for this project, is available here:
+Documentation for this iOS SDK, is available here:
 	FIOSDK/
 		readme.md - readme on the sdk
 		docs/ - documentation on the iOS SDK
