@@ -972,7 +972,7 @@ public class FIOSDK: BaseFIOSDK {
      + This can be passed into the sharedInstance (Singleton) initializer to be used for all method calls OR overridden here
      * - Parameter - onCompletion: The completion handler, providing an optional error in case something goes wrong
      **/
-    public func transferFIOTokens(payeePublicKey: String, amount: Int, maxFee: Int, walletFioAddress: String = "", onCompletion: @escaping (_ response: FIOSDK.Responses.TransferFIOTokensResponse?, _ error: FIOError) -> ()){
+    public func transferTokens(payeePublicKey: String, amount: Int, maxFee: Int, walletFioAddress: String = "", onCompletion: @escaping (_ response: FIOSDK.Responses.TransferFIOTokensResponse?, _ error: FIOError) -> ()){
         let actor = AccountNameGenerator.run(withPublicKey: getPublicKey())
         let transfer = TransferFIOTokensRequest (payeePublicKey: payeePublicKey, amount: amount, maxFee: maxFee, walletFioAddress: self.getWalletFioAddress(walletFioAddress), actor: actor)
         signedPostRequestTo(privateKey: getPrivateKey(),

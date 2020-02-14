@@ -9,22 +9,17 @@
 import XCTest
 @testable import FIOSDK
 
-private let useDefaultServer = false //want a custom server, set to true and then set the DEFAULT_SERVER to your ip/url
-private let useAlternateServer = true
+private let useDefaultServer = true //want a custom server, set to true and then set the DEFAULT_SERVER to your ip/url
+private let useAlternateServer = false
 
-private let DEFAULT_SERVER = "https://testnet.fioprotocol.io:443/v1"
+private let DEFAULT_SERVER = "https://testnet.fioprotocol.io/v1"
 private let MOCK_DEFAULT_SERVER = ""
 
 private let ALTERNATE_SERVER = "https://dev2.fio.dev/v1"
-private let MOCK_ALTERNATE_SERVER = "http://18.237.79.246/mockd/DEV2/register_fio_name"
+private let MOCK_ALTERNATE_SERVER = ""
 
 class FIOSDKTests: XCTestCase {
     
-    //private let privateKey:String = "5KDQzVMaD1iUdYDrA2PNK3qEP7zNbUf8D41ZVKqGzZ117PdM5Ap"
-    //private let publicKey:String = "FIO6D6gSipBmP1KW9SMB5r4ELjooaogFt77gEs25V9TU9FrxKVeFb"
-    
-
-    // stage 1 server: 18.223.14.244
     private let TIMEOUT:Double = 240.0
     
     //MARK: Constants
@@ -34,22 +29,23 @@ class FIOSDKTests: XCTestCase {
     private let expectedDefaultPublicKey = "FIO5kJKNHwctcfUM5XZyiWSqSTM5HTzznJP9F3ZdbhaQAHEVq575o"
     private let mockUrl = (useDefaultServer ? MOCK_DEFAULT_SERVER : MOCK_ALTERNATE_SERVER)
     
-    private let fioPrivateKey = "5Kbb37EAqQgZ9vWUHoPiC2uXYhyGSFNbL6oiDp24Ea1ADxV1qnu"
-    private let fioPublicKey  = "FIO5kJKNHwctcfUM5XZyiWSqSTM5HTzznJP9F3ZdbhaQAHEVq575o"
-    
-    private let fioPrivateKeyAlternative = "5JvQDLdiYZ6YGyUzsuBsC3VYAP8gJjaGzKG4UvEAuoUoiKAF8c7"
-    private let fioPublicKeyAlternative  = "FIO8eZNfgkkQwKLYHCbUhNQ6nAHqLTffPvQhcJce7ew8ejk7AL1ws"
+    private let fioPrivateKey = "5Je5uqXQ86rymhCPhjwpAUTR2dngJnmwKQduAKrKqmRtBTYG4sE"
+    private let fioPublicKey = "FIO6J1uka8y14eoZZ9hWtDGVMRUjXQXqDpqbBMzs6yRMyazx9eAku"
+    private let fioPrivateKeyAlternative = "5Hpw3ccf8igGgtuWRoaEwGU7DhCbdzmvdEK83NrcCUCvjY4EhNz"
+    private let fioPublicKeyAlternative = "FIO8kYn3qRD8UBJLsBwT3XBqgTwk6sdg9DT6YSJ4iaQ5Eyy6rwaKH"
     
     private let faucetPrivateKey = "5KF2B21xT5pE5G3LNA6LKJc6AP2pAd2EnfpAUrJH12SFV8NtvCD"
     private let faucetPublicKey = "FIO6zwqqzHQcqCc2MB4jpp1F73MXpisEQe2SDghQFSGQKoAPjvQ3H"
     private let faucetFioAddress = "fio@faucet"
     
+    private let TEST_DOMAIN = "fiotestnet"
+    
     //MARK: test variables
-    private var requesteeFioName: String = ""
+    private var requesteeFioName: String = "alicetest61@fiotestnet"
     private let requesteeAddress: String = "0xc39b2845E3CFAdE5f5b2864fe73f5960B8dB483B"
-    private var requestorFioName: String = ""
+    private var requestorFioName: String = "bobtest61@fiotestnet"
     private let requestorAddress: String = "0x3A2522321656285661Df2012a3A05bEF84C8B1ed"
-    private var isFunded: Bool = false
+    private var isFunded: Bool = true
     
     //MARK: Setup
     
@@ -92,7 +88,7 @@ class FIOSDKTests: XCTestCase {
         print (self.faucetPublicKey)
         print (defaultServer)
         
-        FIOSDK.sharedInstance().transferFIOTokens(payeePublicKey: fioPublicKeyToFund, amount: SUFUtils.amountToSUF(amount: 10000), maxFee: SUFUtils.amountToSUF(amount: 10000)) { (response, error) in
+        FIOSDK.sharedInstance().transferTokens(payeePublicKey: fioPublicKeyToFund, amount: SUFUtils.amountToSUF(amount: 10000), maxFee: SUFUtils.amountToSUF(amount: 10000)) { (response, error) in
             print("***HERE*****")
             print(response)
             print(error)
@@ -579,7 +575,7 @@ class FIOSDKTests: XCTestCase {
     
     func testRegisterFIONameWithNewValueShouldRegister() {
         let timestamp = NSDate().timeIntervalSince1970
-        let fioName = "sha\(Int(timestamp.rounded()))@brd"
+        let fioName = "sha\(Int(timestamp.rounded()))@" + TEST_DOMAIN
         let expectation = XCTestExpectation(description: "testRegisterFIONameWithNewValueShouldRegister")
         
         self.defaultSDKConfig()
@@ -594,7 +590,7 @@ class FIOSDKTests: XCTestCase {
     
     func testRegisterFIONameWithAlreadyRegisteredValueShouldFail() {
         let timestamp = NSDate().timeIntervalSince1970
-        let fioName = "sha\(Int(timestamp.rounded()))@brd"
+        let fioName = "sha\(Int(timestamp.rounded()))@" + TEST_DOMAIN
         let expectation = XCTestExpectation(description: "testRegisterFIONameWithAlreadyRegisteredValueShouldFail")
 
         
@@ -693,7 +689,7 @@ class FIOSDKTests: XCTestCase {
     
     func testRenewFIOAddressWithNewValueShouldRenew() {
         let timestamp = NSDate().timeIntervalSince1970
-        let address = "test\(Int(timestamp.rounded()))@brd"
+        let address = "test\(Int(timestamp.rounded()))@" + TEST_DOMAIN
         let expectation = XCTestExpectation(description: "testRenewFIOAddressWithNewValueShouldRenew")
         let walletFioAddress = ""
         
@@ -720,7 +716,7 @@ class FIOSDKTests: XCTestCase {
     func testRenewFIOAddressWithInvalidValueShouldNotRenew() {
         let address = "#&*("
         let expectation = XCTestExpectation(description: "testRenewFIOAddressWithInvalidValueShouldNotRenew")
-        let walletFioAddress = "test:edge"
+        let walletFioAddress = "test@fiotestnet"
         
         FIOSDK.sharedInstance().renewFioAddress(address, maxFee: SUFUtils.amountToSUF(amount: 1100.0), walletFioAddress: walletFioAddress, onCompletion: { (response, error) in
             XCTAssert((error?.kind == FIOError.ErrorKind.Failure), String(format:"renewFIODomain Should not renew invalid address: %@", address))
@@ -732,7 +728,7 @@ class FIOSDKTests: XCTestCase {
     
     func testRenewFIOAddressWithNewValueShouldRegisterNoWallet() {
         let timestamp = NSDate().timeIntervalSince1970
-        let address = "test\(Int(timestamp.rounded()))@brd"
+        let address = "test\(Int(timestamp.rounded()))@" + TEST_DOMAIN
         let expectation = XCTestExpectation(description: "testRenewFIOAddressWithNewValueShouldRegister")
         
         self.defaultSDKConfig()
@@ -767,29 +763,10 @@ class FIOSDKTests: XCTestCase {
         wait(for: [expectation], timeout: TIMEOUT * 1.5)
     }
     
-    func testRegisterFIOAddressWithNewValueShouldRegister() {
-        let timestamp = NSDate().timeIntervalSince1970
-        let address = "test\(Int(timestamp.rounded()))@brd"
-        let expectation = XCTestExpectation(description: "testRegisterFIOAddressWithNewValueShouldRegister")
-        let metadata = RequestFundsRequest.MetaData(memo: "", hash: nil, offlineUrl: nil)
-        let walletFioAddress = ""
-        
-        self.defaultSDKConfig()
-
-        FIOSDK.sharedInstance().registerFioAddress(address, maxFee: SUFUtils.amountToSUF(amount: 1100.0), walletFioAddress: walletFioAddress, onCompletion: { (response, error) in
-            XCTAssert((error?.kind == FIOError.ErrorKind.Success), "registerFIOAddress NOT SUCCESSFUL")
-            XCTAssertNotNil(response)
-            XCTAssert(response?.status != "")
-            expectation.fulfill()
-        })
-            
-        wait(for: [expectation], timeout: TIMEOUT * 1.5)
-    }
-    
     func testRegisterFIOAddressWithInvalidValueShouldNotRegister() {
         let address = "#&*("
         let expectation = XCTestExpectation(description: "testRegisterFIOAddressWithInvalidValueShouldNotRegister")
-        let walletFioAddress = "test:edge"
+        let walletFioAddress = "test@fiotestnet"
         FIOSDK.sharedInstance().registerFioAddress(address, maxFee: SUFUtils.amountToSUF(amount: 1100.0), walletFioAddress: walletFioAddress , onCompletion: { (response, error) in
             XCTAssert((error?.kind == FIOError.ErrorKind.Failure), String(format:"registerFIOAddress Should not register invalid address: %@", address))
             expectation.fulfill()
@@ -800,7 +777,7 @@ class FIOSDKTests: XCTestCase {
     
     func testRegisterFIOAddressWithNewValueShouldRegisterNoWallet() {
         let timestamp = NSDate().timeIntervalSince1970
-        let address = "test\(Int(timestamp.rounded()))@brd"
+        let address = "test\(Int(timestamp.rounded()))@" + TEST_DOMAIN
         let expectation = XCTestExpectation(description: "testRegisterFIOAddressWithNewValueShouldRegister")
         let metadata = RequestFundsRequest.MetaData(memo: "", hash: nil, offlineUrl: nil)
         
@@ -820,7 +797,7 @@ class FIOSDKTests: XCTestCase {
         let address = "#&*("
         let expectation = XCTestExpectation(description: "testRegisterFIOAddressWithInvalidValueShouldNotRegister")
         
-        FIOSDK.sharedInstance().registerFioAddress(address, maxFee: SUFUtils.amountToSUF(amount: 100.0), onCompletion: { (response, error) in
+        FIOSDK.sharedInstance().registerFioAddress(address, maxFee: SUFUtils.amountToSUF(amount: 1000.0), onCompletion: { (response, error) in
             XCTAssert((error?.kind == FIOError.ErrorKind.Failure), String(format:"registerFIOAddress Should not register invalid address: %@", address))
             expectation.fulfill()
         })
@@ -885,37 +862,13 @@ class FIOSDKTests: XCTestCase {
         let amount: Double = 1.0
         let walletFioAddress = "test@edge"
         
-        fioSDK.transferFIOTokens(payeePublicKey: payeePublicKey, amount: SUFUtils.amountToSUF(amount: amount), maxFee: SUFUtils.amountToSUF(amount: 12.0), walletFioAddress: walletFioAddress) { (response, error) in
+        fioSDK.transferTokens(payeePublicKey: payeePublicKey, amount: SUFUtils.amountToSUF(amount: amount), maxFee: SUFUtils.amountToSUF(amount: 12.0), walletFioAddress: walletFioAddress) { (response, error) in
             XCTAssert((error.kind == FIOError.ErrorKind.Success), "transfer failed: \(error.localizedDescription )")
             XCTAssertNotNil(response?.feeCollected)
             //Transfer back
             self.defaultSDKConfig()
-            sleep(60)
-            FIOSDK.sharedInstance().transferFIOTokens(payeePublicKey: payerPublicKey, amount: SUFUtils.amountToSUF(amount: amount), maxFee: SUFUtils.amountToSUF(amount: 2.0), walletFioAddress: walletFioAddress) { (response, error) in
-                XCTAssert((error.kind == FIOError.ErrorKind.Success), "transfer failed: \(error.localizedDescription )")
-                expectation.fulfill()
-            }
-        }
-        
-        wait(for: [expectation], timeout: TIMEOUT * 1.5)
-    }
-    
-    func testTransferTokensWithGoodAccountsShouldBeSuccessfulNoWallet() {
-        let expectation = XCTestExpectation(description: "testTransferTokensWithGoodAccountsShouldBeSuccessfulNoWallet")
-        
-        self.defaultSDKConfig()
-        let payeePublicKey = FIOSDK.sharedInstance().getPublicKey()
-        let fioSDK = FIOSDK.sharedInstance(privateKey: fioPrivateKey, publicKey: fioPublicKey, url: defaultServer)
-        let payerPublicKey = fioSDK.getPublicKey()
-        let amount: Double = 1.0
-        
-        fioSDK.transferFIOTokens(payeePublicKey: payeePublicKey, amount: SUFUtils.amountToSUF(amount: amount), maxFee: SUFUtils.amountToSUF(amount: 2.0)) { (response, error) in
-            XCTAssert((error.kind == FIOError.ErrorKind.Success), "transfer failed: \(error.localizedDescription )")
-            XCTAssertNotNil(response?.feeCollected)
-            //Transfer back
-            self.defaultSDKConfig()
-            sleep(60)
-            FIOSDK.sharedInstance().transferFIOTokens(payeePublicKey: payerPublicKey, amount: SUFUtils.amountToSUF(amount: amount), maxFee: SUFUtils.amountToSUF(amount: 2.0)) { (response, error) in
+            sleep(20)
+            FIOSDK.sharedInstance().transferTokens(payeePublicKey: payerPublicKey, amount: SUFUtils.amountToSUF(amount: amount), maxFee: SUFUtils.amountToSUF(amount: 2.0), walletFioAddress: walletFioAddress) { (response, error) in
                 XCTAssert((error.kind == FIOError.ErrorKind.Success), "transfer failed: \(error.localizedDescription )")
                 expectation.fulfill()
             }
@@ -1114,8 +1067,6 @@ print("****")
         
         self.defaultSDKConfig()
         FIOSDK.sharedInstance().getABI(accountName:"fio.address", onCompletion: { (response, error) in
-            print("**")
-            print (response)
             XCTAssert(error.kind == .Success, "Something went wrong")
             expectation.fulfill()
         })

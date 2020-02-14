@@ -77,10 +77,9 @@ class CryptographyTests: XCTestCase {
     ///TODO: this is broken
     func testAbiNewFundsKotlinBase64Decryption() {
         
-        let encryptedAnswer = "uK3WjSjS2c9jI8eVO/APwfb08BQcclxx6g0YiEBgP7s68iJmPqgSkmvKT7WfF2K/bkXgsexTfSNgZuk7Wl2rPT0uwmM+2Em/o1QLdmrq2UrERmoYovsGxPk/jSnTadpf"
- 
-        let bobfioPrivateKeyAlternative = "5Ja67427GaXjzbawx74dsvEoWcEzXtgDjAG8bah6NGt68YWZ3bu"
-        let alicefioPublicKey  = "FIO5YB9ivgKMjNrHtangJvUSfunaX3cwwmiQQrd4YHfVTvyxc2swE"
+        let encryptedAnswer = "eiZj0JKbi0z5yf6jH/k46o04zc/srywnTMgxNxeQADvq8v9xWJVbFyWTrCSi9XpoK08gNBO/wencFW1hm3bnzr+SmNoDYpzZjdmtjggAl2f8Bw+BRv/+X6e1ei6upa9zVLzym7+p/kgaAyEQv5ghtg=="
+        let bobfioPrivateKeyAlternative = "5JCpqkvsrCzrAC3YWhx7pnLodr3Wr9dNMULYU8yoUrPRzu269Xz"
+        let alicefioPublicKey  = "FIO5oBUYbtGTxMS66pPkjC2p8pbA3zCtc8XD4dq9fMut867GRdh82"
 
         let rawJsonItemDecrypted = "1PzCN3cBkTL72GPeJmpcueU4wQi9guiLa6"
 

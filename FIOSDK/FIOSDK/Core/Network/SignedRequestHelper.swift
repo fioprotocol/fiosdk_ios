@@ -22,6 +22,7 @@ import Foundation
  *      - onCompletion: A callback function that is called when request is finished with is Data value and either with success or failure, both values are optional. Check FIOError.kind to determine if is a success or a failure.
  */
 internal func signedPostRequestTo<T: Codable>(privateKey: String, route: ChainRoutes, forAction action: ChainActions, withBody body: T, code: String, account: String, onCompletion: @escaping (_ result: TxResult?, FIOError?) -> Void) {
+    
     guard let privateKey = try! PrivateKey(keyString: privateKey) else {
         onCompletion(nil, FIOError(kind: .FailedToUsePrivKey, localizedDescription: "Failed to retrieve private key."))
         return
