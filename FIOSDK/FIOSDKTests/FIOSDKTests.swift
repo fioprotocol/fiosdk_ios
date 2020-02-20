@@ -47,6 +47,24 @@ class FIOSDKTests: XCTestCase {
     private let requestorAddress: String = "0x3A2522321656285661Df2012a3A05bEF84C8B1ed"
     private var isFunded: Bool = true
     
+    
+    // used to demonstrate how to parse a json string - used for pushTransaction Test
+    internal struct RegAddressResponse:Codable {
+        public let status: String
+        public let feeCollected: Int
+        private let _expiration: String
+        
+        public var expiration: Date{
+            return _expiration.toLocalDate
+        }
+        
+        enum CodingKeys: String, CodingKey {
+            case status
+            case _expiration = "expiration"
+            case feeCollected = "fee_collected"
+        }
+    }
+    
     //MARK: Setup
     
     override func setUp() {
@@ -480,14 +498,15 @@ class FIOSDKTests: XCTestCase {
     func testRejectFundsRequest(){
         let expectation = XCTestExpectation(description: "testRejectFundsRequest")
         let metadata = RequestFundsRequest.MetaData(memo: "", hash: nil, offlineUrl: nil)
-        self.alternativeSDKConfig()
-        sleep(6)
+        self.alternativeSDKConfig() // bob -- requestor
+        sleep(10)
         //requestor is sender, requestee is receiver
         FIOSDK.sharedInstance().requestFunds(payer: self.requesteeFioName, payee: self.requestorFioName, payeePublicAddress: FIOSDK.sharedInstance().getPublicKey(), amount: 9, chainCode: "FIO", tokenCode: "FIO", metadata: metadata, maxFee: 10000000000) { (response, error) in
             
             XCTAssert(error?.kind == .Success && response != nil, "testRejectFundsRequest Couldn't create mock request"  + (error?.localizedDescription ?? ""))
             if let response = response {
                 self.defaultSDKConfig()
+                sleep(10)
                 FIOSDK.sharedInstance().rejectFundsRequest(fioRequestId: response.fioRequestId, maxFee: 10000000000, onCompletion: { (response, error) in
                     XCTAssert(error.kind == .Success, "testRejectFundsRequest couldn't reject request"  + (error.localizedDescription ?? ""))
                     expectation.fulfill()
@@ -1073,5 +1092,85 @@ print("****")
         
         wait(for: [expectation], timeout: TIMEOUT)
     }
+    
+    func testPushTransactionUsingJSONData() {
+        let expectationPush = XCTestExpectation(description: "testPushTransactionJSON")
+        
+        self.defaultSDKConfig()
+        let timestamp = NSDate().timeIntervalSince1970
+        
+        let fioAddress = "sha\(Int(timestamp.rounded()))@" + TEST_DOMAIN
+        let actor = AccountNameGenerator.run(withPublicKey: FIOSDK.sharedInstance().getPublicKey())
+        
+        let registration = RegisterFIOAddressRequest(fioAddress: fioAddress, fioPublicKey: "", maxFee: SUFUtils.amountToSUF(amount: 1000), walletFioAddress: "", actor: actor)
+        let jsonString = String(decoding: FIOHTTPHelper.bodyFromJson(registration)!, as: UTF8.self)
+        
+        print(jsonString)
+        FIOSDK.sharedInstance().pushTransaction(accountName: "fio.address", contractName: "regaddress", jsonData: jsonString, onCompletion: { (response, error) in
+            if error.kind == .Success {
+                
+                if (response != nil ) {
+                    guard let responseString = response!.processed?.actionTraces.first?.receipt.response.value as? String, let responseData = responseString.data(using: .utf8), let regResponse = try? JSONDecoder().decode(RegAddressResponse.self, from: responseData) else {
+                        XCTFail("Failed to decode pushTransaction results")
+                        expectationPush.fulfill()
+                        return
+                    }
+
+                    XCTAssert((regResponse.status.lowercased() == "ok"), "unable to register, status is:" + regResponse.status)
+                    expectationPush.fulfill()
+                }
+                else {
+                    XCTFail("unable to register, no status")
+                    expectationPush.fulfill()
+                }
+            }
+            else {
+                XCTFail("Failed to call pushTransaction")
+                print(error)
+                expectationPush.fulfill()
+            }
+        })
+        
+        wait(for: [expectationPush], timeout: TIMEOUT)
+    }
+    
+    func testPushTransactionUsingCodableStruct() {
+           let expectationPush = XCTestExpectation(description: "testPushTransactionJSON")
+           
+           self.defaultSDKConfig()
+           let timestamp = NSDate().timeIntervalSince1970
+           
+           let fioAddress = "sha\(Int(timestamp.rounded()))@" + TEST_DOMAIN
+           let actor = AccountNameGenerator.run(withPublicKey: FIOSDK.sharedInstance().getPublicKey())
+           
+           let registration = RegisterFIOAddressRequest(fioAddress: fioAddress, fioPublicKey: "", maxFee: SUFUtils.amountToSUF(amount: 1000), walletFioAddress: "", actor: actor)
+           
+           FIOSDK.sharedInstance().pushTransaction(accountName: "fio.address", contractName: "regaddress", codableData: registration, onCompletion: { (response, error) in
+               if error.kind == .Success {
+                   
+                   if (response != nil ) {
+                       guard let responseString = response!.processed?.actionTraces.first?.receipt.response.value as? String, let responseData = responseString.data(using: .utf8), let regResponse = try? JSONDecoder().decode(RegAddressResponse.self, from: responseData) else {
+                           XCTFail("Failed to decode pushTransaction results")
+                           expectationPush.fulfill()
+                           return
+                       }
+
+                       XCTAssert((regResponse.status.lowercased() == "ok"), "unable to register, status is:" + regResponse.status)
+                       expectationPush.fulfill()
+                   }
+                   else {
+                       XCTFail("unable to register, no status")
+                       expectationPush.fulfill()
+                   }
+               }
+               else {
+                   XCTFail("Failed to call pushTransaction")
+                   print(error)
+                   expectationPush.fulfill()
+               }
+           })
+           
+           wait(for: [expectationPush], timeout: TIMEOUT)
+       }
     
 }

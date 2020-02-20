@@ -32,4 +32,5 @@ internal enum ChainRoutes: String {
     case setFIODomainVisibility   = "/chain/set_fio_domain_public"
     case getFee                   = "/chain/get_fee"
     case getABI                   = "/chain/get_raw_abi"
+    case pushTransaction          = "/chain/push_transaction"
 }

@@ -8,8 +8,8 @@
 
 import Foundation
 
-internal struct TxResult: Codable {
-    
-    var processed: TxResultProcessed?
-    
+extension FIOSDK.Responses {
+    public struct TxResult: Codable {
+        var processed: TxResultProcessed?
+    }
 }

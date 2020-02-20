@@ -29,13 +29,21 @@ internal struct SerializeJsonResponse {
  *      - forAction: The API action (ChainActions) that will use the serialized json
  *      - onCompletion: A callback with either SerializeJsonResponse or FIOError as serialization result.
  */
-internal func serializeJsonToData<T: Codable>(_ json: T, forCode code:String, forAction action: ChainActions, onCompletion: @escaping (SerializeJsonResponse?, FIOError?) -> Void) {
-    let jsonString = String(decoding: FIOHTTPHelper.bodyFromJson(json)!, as: UTF8.self)
+internal func serializeJsonToData<T: Codable>(_ json: T, forCode code:String, forAction action: String, onCompletion: @escaping (SerializeJsonResponse?, FIOError?) -> Void) {
+
+    var jsonString = "{}"
+    if json is String {
+        jsonString = json as! String
+    }
+    else {
+        jsonString = String(decoding: FIOHTTPHelper.bodyFromJson(json)!, as: UTF8.self)
+    }
+    
     let myAbi = FIOSDK.sharedInstance().getCachedABI(accountName: code)
     
     if (myAbi.count > 1){
         let serializer = abiSerializer()
-        let serializedResult = try? serializer.serialize(contract: code, name:action.rawValue, json: jsonString, abi: myAbi)
+        let serializedResult = try? serializer.serialize(contract: code, name:action, json: jsonString, abi: myAbi)
         
         if (serializedResult != nil) {
             onCompletion(SerializeJsonResponse(json:serializedResult!), nil)
@@ -51,7 +59,7 @@ internal func serializeJsonToData<T: Codable>(_ json: T, forCode code:String, fo
             ) in
             if (error.kind == FIOError.ErrorKind.Success){
                 let serializer = abiSerializer()
-                let serializedResult = try? serializer.serialize(contract: code, name:action.rawValue, json: jsonString, abi: response?.abi ?? "")
+                let serializedResult = try? serializer.serialize(contract: code, name:action, json: jsonString, abi: response?.abi ?? "")
                 
                 if (serializedResult != nil) {
                     onCompletion(SerializeJsonResponse(json:serializedResult!), nil)

@@ -315,6 +315,7 @@ public class FIOSDK: BaseFIOSDK {
         }
         let actor = AccountNameGenerator.run(withPublicKey: getPublicKey())
         let body = RegisterFIOAddressRequest(fioAddress: fioAddress, fioPublicKey: "", maxFee: maxFee, walletFioAddress: self.getWalletFioAddress(walletFioAddress), actor: actor)
+        
         signedPostRequestTo(privateKey: getPrivateKey(),
                             route: ChainRoutes.registerFIOAddress,
                             forAction: ChainActions.registerFIOAddress,
@@ -1068,6 +1069,47 @@ public class FIOSDK: BaseFIOSDK {
      **/
     public func getFeeForRecordObtData(payerFioAddress: String, onCompletion: @escaping (_ response: FIOSDK.Responses.FeeResponse?, _ error: FIOError) -> ()) {
         self.getFeeResponse(fioAddress: payerFioAddress, endPoint: "record_obt_data", onCompletion: onCompletion)
+    }
+    
+    /** Allows users to send their own content directly to FIO contracts
+     *
+     * - Parameter accountName: FIO account name
+     * - Parameter contractName: FIO contract name
+     * - Parameter jsonData: JSON string of data to send
+     * - Parameter - onCompletion: The completion handler, providing an optional error in case something goes wrong
+     **/
+    public func pushTransaction (accountName: String, contractName: String, jsonData: String, onCompletion: @escaping (_ response: FIOSDK.Responses.TxResult?, _ error: FIOError) -> ()){
+        let actor = AccountNameGenerator.run(withPublicKey: getPublicKey())
+        
+        signedPostRequestTo(privateKey: getPrivateKey(),
+            route: ChainRoutes.pushTransaction,
+            forAction: contractName,
+            withBody: jsonData,
+            code: accountName,
+            account: actor) { (result, error) in
+                guard let result = result else {
+                    onCompletion(nil, error ?? FIOError.failure(localizedDescription: "\(ChainRoutes.pushTransaction.rawValue) call failed."))
+                    return
+                }
+
+                onCompletion(result, FIOError.success())
+        }
+    }
+    
+    /** Allows users to send their own content directly to FIO contracts
+     *
+     * - Parameter accountName: FIO account name
+     * - Parameter contractName: FIO contract name
+     * - Parameter codableData: a Codable(Encodable) struct of data to send, that will be converted into JSON
+     * - Parameter - onCompletion: The completion handler, providing an optional error in case something goes wrong
+     **/
+    public func pushTransaction <J: Encodable> (accountName: String, contractName: String, codableData: J, onCompletion: @escaping (_ response: FIOSDK.Responses.TxResult?, _ error: FIOError) -> ()){
+        
+        let jsonString = String(decoding: FIOHTTPHelper.bodyFromJson(codableData)!, as: UTF8.self)
+        pushTransaction(accountName: accountName, contractName: contractName, jsonData: jsonString) { (response, error) in
+            onCompletion(response, error)
+        }
+
     }
 }
 

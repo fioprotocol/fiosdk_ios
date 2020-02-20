@@ -8,8 +8,8 @@
 
 import Foundation
 
-internal struct TxResultActionTrace: Codable {
-    
-    var receipt: TxResultReceipt
-    
+extension FIOSDK.Responses {
+    public struct TxResultActionTrace: Codable {
+        var receipt: TxResultReceipt
+    }
 }
