@@ -1053,12 +1053,12 @@ public class FIOSDK: BaseFIOSDK {
     
     /** Returns Fee for the Request Funds API endpoint
      *
-     * - Parameter payeeFioAddress: Payee FIO Address
+     * - Parameter payerFioAddress: Payer FIO Address
      * - Parameter endPoint: Name of API call end point, e.g. registerFIODomain
      * - Parameter - onCompletion: The completion handler, providing an optional error in case something goes wrong
      **/
-    public func getFeeForRejectFundsRequest(payeeFioAddress: String, onCompletion: @escaping (_ response: FIOSDK.Responses.FeeResponse?, _ error: FIOError) -> ()) {
-        self.getFeeResponse(fioAddress: payeeFioAddress, endPoint: "reject_funds_request", onCompletion: onCompletion)
+    public func getFeeForRejectFundsRequest(payerFioAddress: String, onCompletion: @escaping (_ response: FIOSDK.Responses.FeeResponse?, _ error: FIOError) -> ()) {
+        self.getFeeResponse(fioAddress: payerFioAddress, endPoint: "reject_funds_request", onCompletion: onCompletion)
     }
     
     /** Returns Fee for the Record ObtData API endpoint

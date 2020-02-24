@@ -1016,7 +1016,7 @@ print("****")
     func testGetFeeForRejectFundsRequestShouldReturnFee() {
         let expectation = XCTestExpectation(description: "testGetFeeForRejectFundsRequestShouldReturnFee")
         
-        FIOSDK.sharedInstance().getFeeForRejectFundsRequest(payeeFioAddress: self.requestorFioName, onCompletion: { (response, error) in
+        FIOSDK.sharedInstance().getFeeForRejectFundsRequest(payerFioAddress: self.requestorFioName, onCompletion: { (response, error) in
             XCTAssert((error.kind == FIOError.ErrorKind.Success), "getFee failed: \(error.localizedDescription )")
             guard let fee = response?.fee else {
                 XCTFail("Fee not returned")
