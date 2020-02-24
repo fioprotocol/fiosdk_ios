@@ -51,7 +51,7 @@ public class BaseFIOSDK: NSObject {
         return (publicAddress.count > 0 && publicAddress.count < 129)
     }
     
-    public func isFIOAddressValid(_ address: String) -> Bool {
+    public func isFioAddressValid(_ address: String) -> Bool {
         let fullNameArr = address.components(separatedBy: "@")
         
         if (fullNameArr.count != 2) {
@@ -65,7 +65,7 @@ public class BaseFIOSDK: NSObject {
         return false
     }
     
-    public func isFIODomainValid(_ domain: String) -> Bool {
+    public func isFioDomainValid(_ domain: String) -> Bool {
         if domain.isEmpty || domain.count > 62 || domain.count < 1 { return false }
         
         if domain.range(of:"^(\\w)+(-\\w+)*$", options: .regularExpression) == nil {

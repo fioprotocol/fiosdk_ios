@@ -87,9 +87,9 @@ public class FIOSDK: BaseFIOSDK {
     // Is the fio name valid?
     public func isFioNameValid(fioName: String) -> Bool{
         if fioName.contains("@") {
-            return isFIOAddressValid(fioName)
+            return isFioAddressValid(fioName)
         }
-        return isFIODomainValid(fioName)
+        return isFioDomainValid(fioName)
     }
     
     //MARK: Private and Public Key Pairs
@@ -135,7 +135,7 @@ public class FIOSDK: BaseFIOSDK {
      * - Parameter - onCompletion: The completion handler, providing an optional error in case something goes wrong
      **/
     public func renewFioAddress(_ fioAddress: String, maxFee: Int, technologyProviderId: String, onCompletion: @escaping (_ response: FIOSDK.Responses.RenewFIOAddressResponse? , _ error:FIOError?) -> ()) {
-        guard isFIOAddressValid(fioAddress) else {
+        guard isFioAddressValid(fioAddress) else {
             onCompletion(nil, FIOError.failure(localizedDescription: "Invalid FIO Address."))
             return
         }
@@ -168,7 +168,7 @@ public class FIOSDK: BaseFIOSDK {
      * - Parameter publicKey: User's public key to register FIO name for.
      * - Parameter onCompletion: A callback function that is called when request is finished either with success or failure. Check FIOError.kind to determine if is a success or a failure.
      */
-    public func registerFIONameOnBehalfOfUser(fioName: String, publicKey: String, onCompletion: @escaping (_ registeredName: RegisterNameForUserResponse? , _ error:FIOError?) -> ()) {
+    public func registerFioNameOnBehalfOfUser(fioName: String, publicKey: String, onCompletion: @escaping (_ registeredName: RegisterNameForUserResponse? , _ error:FIOError?) -> ()) {
         let registerName = RegisterNameForUserRequest(fioName: fioName, publicKey: publicKey)
         FIOHTTPHelper.postRequestTo(getMockURI() ?? "", withBody: registerName) { (result, error) in
             guard let result = result else {
@@ -197,7 +197,7 @@ public class FIOSDK: BaseFIOSDK {
      * - Parameter - onCompletion: The completion handler, providing an optional error in case something goes wrong
      **/
     public func renewFioDomain(_ fioDomain: String, maxFee: Int, technologyProviderId: String = "", onCompletion: @escaping (_ response: FIOSDK.Responses.RenewFIODomainResponse? , _ error:FIOError?) -> ()) {
-        guard isFIODomainValid(fioDomain) else {
+        guard isFioDomainValid(fioDomain) else {
             onCompletion(nil, FIOError.failure(localizedDescription: "Invalid FIO Domain."))
             return
         }
@@ -233,7 +233,7 @@ public class FIOSDK: BaseFIOSDK {
      * - Parameter - onCompletion: The completion handler, providing an optional error in case something goes wrong
      **/
     public func registerFioDomain(_ fioDomain: String, maxFee: Int, technologyProviderId: String = "", onCompletion: @escaping (_ response: FIOSDK.Responses.RegisterFIODomainResponse? , _ error:FIOError?) -> ()) {
-        guard isFIODomainValid(fioDomain) else {
+        guard isFioDomainValid(fioDomain) else {
             onCompletion(nil, FIOError.failure(localizedDescription: "Invalid FIO Domain."))
             return
         }
@@ -272,7 +272,7 @@ public class FIOSDK: BaseFIOSDK {
      * - Parameter - onCompletion: The completion handler, providing an optional error in case something goes wrong
      **/
     public func setFioDomainVisibility(_ fioDomain: String, isPublic: Bool, maxFee: Int, technologyProviderId: String = "", onCompletion: @escaping (_ response: FIOSDK.Responses.SetFIODomainVisibilityResponse? , _ error:FIOError?) -> ()) {
-        guard isFIODomainValid(fioDomain) else {
+        guard isFioDomainValid(fioDomain) else {
             onCompletion(nil, FIOError.failure(localizedDescription: "Invalid FIO Domain."))
             return
         }
@@ -309,7 +309,7 @@ public class FIOSDK: BaseFIOSDK {
      * - Parameter - onCompletion: The completion handler, providing an optional error in case something goes wrong
      **/
     public func registerFioAddress(_ fioAddress: String, maxFee: Int, technologyProviderId: String = "", onCompletion: @escaping (_ response: FIOSDK.Responses.RegisterFIOAddressResponse? , _ error:FIOError?) -> ()) {
-        guard isFIOAddressValid(fioAddress) else {
+        guard isFioAddressValid(fioAddress) else {
             onCompletion(nil, FIOError.failure(localizedDescription: "Invalid FIO Address."))
             return
         }
