@@ -15,7 +15,7 @@ public class BaseFIOSDK: NSObject {
     internal static let keyManager = FIOKeyManager()
     internal let pubAddressTokenFilter: [String: UInt8] = ["fio": 1]
     internal var _abis: [String: String] = ["fio.address":"", "fio.reqobt":"", "fio.token":""]
-    internal var walletFioAddress = ""
+    internal var technologyProviderId = ""
     
     internal override init() {}
     
@@ -92,8 +92,8 @@ public class BaseFIOSDK: NSObject {
         return self.publicKey.replacingOccurrences(of: "EOS", with: "FIO")
     }
     
-    internal func getWalletFioAddress(_ walletFioAddress: String) -> String {
-        return (walletFioAddress.count > 2 ? walletFioAddress : self.walletFioAddress)
+    internal func getTechnologyProviderId(_ technologyProviderId: String) -> String {
+        return (technologyProviderId.count > 2 ? technologyProviderId : self.technologyProviderId)
     }
     
     //MARK: - Chain Info

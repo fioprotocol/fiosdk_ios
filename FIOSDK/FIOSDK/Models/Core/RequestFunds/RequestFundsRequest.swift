@@ -14,7 +14,7 @@ public struct RequestFundsRequest: Codable {
     public let payeeFIOAddress: String
     public let content: String
     public let maxFee: Int
-    public let walletFioAddress: String
+    public let technologyProviderId: String
     public let actor: String
     
     enum CodingKeys: String, CodingKey{
@@ -22,7 +22,7 @@ public struct RequestFundsRequest: Codable {
         case payeeFIOAddress = "payee_fio_address"
         case content
         case maxFee = "max_fee"
-        case walletFioAddress = "tpid"
+        case technologyProviderId = "tpid"
         case actor
     }
     

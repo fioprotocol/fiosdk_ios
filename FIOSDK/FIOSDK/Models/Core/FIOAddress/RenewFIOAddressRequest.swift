@@ -12,13 +12,13 @@ internal struct RenewFIOAddressRequest: Codable {
     
     let fioAddress: String
     let maxFee: Int
-    let walletFioAddress: String
+    let technologyProviderId: String
     let actor: String
     
     enum CodingKeys: String, CodingKey {
         case fioAddress = "fio_address"
         case maxFee = "max_fee"
-        case walletFioAddress = "tpid"
+        case technologyProviderId = "tpid"
         case actor
     }
     

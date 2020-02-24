@@ -15,7 +15,7 @@ public struct RecordObtDataRequest: Codable {
     let content: String
     let fioRequestId: String
     let maxFee: Int
-    let walletFioAddress: String
+    let technologyProviderId: String
     let actor: String
     
     enum CodingKeys: String, CodingKey {
@@ -24,7 +24,7 @@ public struct RecordObtDataRequest: Codable {
         case content
         case fioRequestId = "fio_request_id"
         case maxFee = "max_fee"
-        case walletFioAddress = "tpid"
+        case technologyProviderId = "tpid"
         case actor
     }
 

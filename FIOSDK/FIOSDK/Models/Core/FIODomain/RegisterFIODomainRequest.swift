@@ -13,14 +13,14 @@ internal struct RegisterFIODomainRequest: Codable {
     let fioDomain: String
     let fioPublicKey: String
     let maxFee: Int
-    let walletFioAddress: String
+    let technologyProviderId: String
     let actor: String
     
     enum CodingKeys: String, CodingKey {
         case fioDomain = "fio_domain"
         case fioPublicKey = "owner_fio_public_key"
         case maxFee = "max_fee"
-        case walletFioAddress = "tpid"
+        case technologyProviderId = "tpid"
         case actor
     }
     
