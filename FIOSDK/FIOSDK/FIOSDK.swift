@@ -996,10 +996,11 @@ public class FIOSDK: BaseFIOSDK {
     /** Returns Fee for the selected API endpoint
      *
      * - Parameter endPoint: Name of API call end point, e.g. registerFIODomain
+     * - Parameter fioAddress: FIO Address - required for some endpoints
      * - Parameter - onCompletion: The completion handler, providing an optional error in case something goes wrong
      **/
-    public func getFee(endPoint: FIOSDK.Params.FeeEndpoint, onCompletion: @escaping (_ response: FIOSDK.Responses.FeeResponse?, _ error: FIOError) -> ()) {
-        self.getFeeResponse(fioAddress: "", endPoint: endPoint.rawValue, onCompletion: onCompletion)
+    public func getFee(endPoint: FIOSDK.Params.FeeEndpoint, fioAddress:String = "", onCompletion: @escaping (_ response: FIOSDK.Responses.FeeResponse?, _ error: FIOError) -> ()) {
+        self.getFeeResponse(fioAddress: fioAddress, endPoint: endPoint.rawValue, onCompletion: onCompletion)
     }
     
     /** Returns FeeResponse for the selected API endpoint
