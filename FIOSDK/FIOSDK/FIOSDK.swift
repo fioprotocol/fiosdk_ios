@@ -679,7 +679,7 @@ public class FIOSDK: BaseFIOSDK {
      * - Parameter fioAddress: FIO Address for which to get details to, e.g. "alice@brd"
      * - Parameter onCompletion: The completion handler, providing an optional error in case something goes wrong
      **/
-    public func getFioPublicKey(fioAddress: String, onCompletion: @escaping (_ publicAddress: FIOSDK.Responses.PublicAddressResponse?, _ error: FIOError) -> ()){
+    public func getFioPublicAddress(fioAddress: String, onCompletion: @escaping (_ publicAddress: FIOSDK.Responses.PublicAddressResponse?, _ error: FIOError) -> ()){
         getPublicAddress(fioAddress: fioAddress, chainCode: "FIO", tokenCode: "FIO", onCompletion: onCompletion)
     }
     
@@ -752,7 +752,7 @@ public class FIOSDK: BaseFIOSDK {
      **/
     public func requestFunds(payer payerFIOAddress:String, payee payeeFIOAddress: String, payeePublicAddress: String, amount: Float, chainCode: String, tokenCode: String, metadata: RequestFundsRequest.MetaData, maxFee: Int, technologyProviderId:String = "", onCompletion: @escaping ( _ response: RequestFundsResponse?, _ error:FIOError? ) -> ()) {
        
-        self.getFioPublicKey(fioAddress: payerFIOAddress) { (response, error) in
+        self.getFioPublicAddress(fioAddress: payerFIOAddress) { (response, error) in
 
             if (error.kind == FIOError.ErrorKind.Success) {
                 
@@ -889,7 +889,7 @@ public class FIOSDK: BaseFIOSDK {
         
         let contentJson = RecordObtDataContent(payerPublicAddress: payerTokenPublicAddress, payeePublicAddress: payeeTokenPublicAddress, amount: String(amount), chainCode: chainCode, tokenCode: tokenCode, status:"sent_to_blockchain", obtId: obtId, memo: metaData.memo ?? "", hash: metaData.hash ?? "", offlineUrl: metaData.offlineUrl ?? "")
         
-        FIOSDK.sharedInstance().getFioPublicKey(fioAddress: payeeFIOAddress) { (response, error) in
+        FIOSDK.sharedInstance().getFioPublicAddress(fioAddress: payeeFIOAddress) { (response, error) in
             guard error.kind == .Success, let payeeFIOPublicKey = response?.publicAddress else {
                 onCompletion(nil, error)
                 return
