@@ -9,7 +9,7 @@
 import Foundation
 
 /**
- * This class helps on Smallest Units of FIO (SUF) internal calculation prior to FIO transactions. [visit API specs](https://stealth.atlassian.net/wiki/spaces/DEV/pages/90898460/FIO+Protocol#FIOProtocol-Supply)
+ * This class helps on Smallest Units of FIO (SUF) internal calculation prior to FIO transactions. [visit API specs](https://developers.fioprotocol.io)
  **/
 public class SUFUtils {
     

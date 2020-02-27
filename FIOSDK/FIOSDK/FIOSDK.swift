@@ -8,6 +8,9 @@
 
 import UIKit
 
+/**
+*  Main Singleton class for FIO SDK functionality. [visit API specs](https://developers.fioprotocol.io)
+**/
 public class FIOSDK: BaseFIOSDK {
     
     //MARK: Namespacing

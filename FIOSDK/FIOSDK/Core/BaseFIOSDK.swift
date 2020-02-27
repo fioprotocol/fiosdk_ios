@@ -8,6 +8,9 @@
 
 import Foundation
 
+/**
+*  BaseFIOSDK providing validation methods. [visit API specs](https://developers.fioprotocol.io)
+**/
 public class BaseFIOSDK: NSObject {
     
     internal var privateKey:String = ""
@@ -114,6 +117,9 @@ public class BaseFIOSDK: NSObject {
         return Utilities.sharedInstance().mockURL
     }
     
+    //MARK: Get Public Key
+    /** Returns the public key, as previously set at initialization of the FIOSDK singleton
+     **/
     public func getPublicKey() -> String {
         return self.publicKey.replacingOccurrences(of: "EOS", with: "FIO")
     }
@@ -146,7 +152,7 @@ public class BaseFIOSDK: NSObject {
         }
     }
     
-    /// Retrieves ABI. [visit API specs](https://stealth.atlassian.net/wiki/spaces/DEV/pages/53280776/API#API-/get_raw_abi-GetABIforspecificaccountname)
+    /// Retrieves ABI. [visit API specs](https://developers.fioprotocol.io)
     /// - Parameters:
     ///     - account name: this can be: "fio.system","fio.reqobt","fio.token"
     ///     - completion: A function that is called once request is over with an optional response that should contain abi results and error containing the status of the call.
