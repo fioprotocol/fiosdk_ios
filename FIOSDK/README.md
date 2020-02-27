@@ -82,6 +82,17 @@ The FIO SDK Coding Methodology and Conventions follow swift patterns and convent
 		print(“success”) 
 	 }
 
+##Validation
+	The FIO iOS SDK has validation methods for validating your data.  These are documented in the Validation section of the html documentation.
+
+##SUFs
+	There are 1,000,000,000 Smallest Units of FIO (SUFs) inside 1 FIO.
+
+###
+	SUF Utilities 
+####
+	The SDK provides the SUFUtils convenience class for converting between SUFs and FIO.
+
 # Workflow for using the SDK with TestNet
 Most Signed API calls charge fees and require a FIO address that is associated with the user making the call. 
 
@@ -118,9 +129,12 @@ Use the following steps to determine the fee and pass it to the signed call.
 	1. Call getFee to get the fee for the Signed API call
 	2. Call the API Signed call with the fee
 
-# Creating your own FIO Private/Public Keys?
-The SDK provides calls to generate FIO Private/Public Key pairs.  
+# Generating FIO Private/Public Keys?
+The SDK provides methods to generate FIO Private/Public Key pairs.  See the html documentation for specific details.
 
+## FIOSDK.privatePublicKeyPair
+
+# Generating FIO Private/Public Keys without using the SDK?
 The following information can be used to manually generate FIO keys:
 
 FIO Keys use SLIP-235 for BIP-0044.

@@ -19,6 +19,12 @@ public class BaseFIOSDK: NSObject {
     
     internal override init() {}
     
+    //MARK: Validation
+    
+    /** Returns Is the token code valid?
+     *
+     * - Parameter tokenCode: token code to evaluate
+     **/
     public func isTokenCodeValid(_ tokenCode:String) -> Bool {
         if (tokenCode.count > 0 && tokenCode.count < 11){
             if (tokenCode.range(of:"[a-zA-Z0-9]",options: .regularExpression) != nil) {
@@ -28,6 +34,10 @@ public class BaseFIOSDK: NSObject {
         return false
     }
     
+    /** Returns Is the chain code valid?
+     *
+     * - Parameter chainCode: chain code to evaluate
+     **/
     public func isChainCodeValid(_ chainCode:String) -> Bool {
         if (chainCode.count > 0 && chainCode.count < 11){
             if (chainCode.range(of:"[a-zA-Z0-9]",options: .regularExpression) != nil) {
@@ -37,6 +47,10 @@ public class BaseFIOSDK: NSObject {
         return false
     }
     
+    /** Returns Is the fio public key valid?
+     *
+     * - Parameter fioPublicKey: fio public key to evaluate
+     **/
     public func isFioPublicKeyValid(_ fioPublicKey: String) -> Bool {
         if (fioPublicKey.count < 4){
             return false
@@ -47,10 +61,18 @@ public class BaseFIOSDK: NSObject {
         return false
     }
     
+    /** Returns Is the public address valid?
+     *
+     * - Parameter publicAddress: public address to evaluate
+     **/
     public func isPublicAddressValid(_ publicAddress:String) -> Bool {
         return (publicAddress.count > 0 && publicAddress.count < 129)
     }
     
+    /** Returns Is the fio address valid?
+     *
+     * - Parameter address: fio address to evaluate
+     **/
     public func isFioAddressValid(_ address: String) -> Bool {
         let fullNameArr = address.components(separatedBy: "@")
         
@@ -65,6 +87,10 @@ public class BaseFIOSDK: NSObject {
         return false
     }
     
+    /** Returns Is the fio domain valid?
+     *
+     * - Parameter domain: fio domain to evaluate
+     **/
     public func isFioDomainValid(_ domain: String) -> Bool {
         if domain.isEmpty || domain.count > 62 || domain.count < 1 { return false }
         
