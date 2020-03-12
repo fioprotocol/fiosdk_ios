@@ -13,14 +13,14 @@ internal struct RegisterFIOAddressRequest: Codable {
     let fioAddress: String
     let fioPublicKey: String
     let maxFee: Int
-    let walletFioAddress:String
+    let technologyProviderId:String
     let actor: String
     
     enum CodingKeys: String, CodingKey {
         case fioAddress = "fio_address"
         case fioPublicKey = "owner_fio_public_key"
         case maxFee = "max_fee"
-        case walletFioAddress = "tpid"
+        case technologyProviderId = "tpid"
         case actor
     }
 }

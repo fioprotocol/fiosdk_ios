@@ -21,8 +21,14 @@ import Foundation
  *      - account: The account required for packing and signing a transaction, for more info look at TransactionUtil.packAndSignTransaction
  *      - onCompletion: A callback function that is called when request is finished with is Data value and either with success or failure, both values are optional. Check FIOError.kind to determine if is a success or a failure.
  */
-internal func signedPostRequestTo<T: Codable>(privateKey: String, route: ChainRoutes, forAction action: ChainActions, withBody body: T, code: String, account: String, onCompletion: @escaping (_ result: TxResult?, FIOError?) -> Void) {
-    
+internal func signedPostRequestTo<T: Codable>(privateKey: String, route: ChainRoutes, forAction action: ChainActions, withBody body: T, code: String, account: String, onCompletion: @escaping (_ result: FIOSDK.Responses.TxResult?, FIOError?) -> Void) {
+
+    signedPostRequestTo (privateKey: privateKey, route: route, forAction: action.rawValue, withBody: body, code: code, account: account, onCompletion: { (result, error) in
+        onCompletion (result, error)
+    })
+}
+
+internal func signedPostRequestTo <T: Codable>(privateKey: String, route: ChainRoutes, forAction action: String, withBody body: T, code: String, account: String, onCompletion: @escaping (_ result: FIOSDK.Responses.TxResult?, FIOError?) -> Void) {
     guard let privateKey = try! PrivateKey(keyString: privateKey) else {
         onCompletion(nil, FIOError(kind: .FailedToUsePrivKey, localizedDescription: "Failed to retrieve private key."))
         return
@@ -31,7 +37,7 @@ internal func signedPostRequestTo<T: Codable>(privateKey: String, route: ChainRo
     serializeJsonToData(body, forCode: code, forAction: action) { (result, error) in
         if let result = result {
             
-            PackedTransactionUtil.packAndSignTransaction(code: code, action: action.rawValue, data: result.json, account: account, privateKey: privateKey, completion: { (signedTx, error) in
+            PackedTransactionUtil.packAndSignTransaction(code: code, action: action, data: result.json, account: account, privateKey: privateKey, completion: { (signedTx, error) in
                 if let error = translateErrorToFIOError(error: error) {
                     onCompletion(nil, error)
                 }
@@ -53,6 +59,7 @@ internal func signedPostRequestTo<T: Codable>(privateKey: String, route: ChainRo
             onCompletion(nil, error)
         }
     }
+    
 }
 
 /**
@@ -61,14 +68,14 @@ internal func signedPostRequestTo<T: Codable>(privateKey: String, route: ChainRo
  *      - data: The Data object containing a json or nil.
  * - Return: A tuple containing the parsed response object or error.
  */
-internal func parseResponseDataToTransactionResult(data: Data?) -> (response: TxResult?, error: FIOError?) {
+internal func parseResponseDataToTransactionResult(data: Data?) -> (response: FIOSDK.Responses.TxResult?, error: FIOError?) {
     guard let data = data else {
         return (nil, FIOError(kind: .NoDataReturned, localizedDescription: "Server response was empty"))
     }
     let decoder = JSONDecoder()
-    var responseObject: TxResult? = nil
+    var responseObject: FIOSDK.Responses.TxResult? = nil
     do {
-        responseObject = try decoder.decode(TxResult.self, from: data)
+        responseObject = try decoder.decode(FIOSDK.Responses.TxResult.self, from: data)
     } catch let error {
         return (nil, FIOError(kind: .Failure, localizedDescription: error.localizedDescription))
     }
@@ -81,7 +88,7 @@ internal func parseResponseDataToTransactionResult(data: Data?) -> (response: Tx
  *      - txResult: The transaction result to parse response from.
  * - Return: A tuple containing the parsed response object and error. The error is either a FIOError.ErrorKind.Failure or a FIOError.ErrorKind.Success.
  */
-internal func parseResponseFromTransactionResult<T: Codable>(txResult: TxResult) -> (response: T?, error: FIOError) {
+internal func parseResponseFromTransactionResult<T: Codable>(txResult: FIOSDK.Responses.TxResult) -> (response: T?, error: FIOError) {
     guard let responseString = txResult.processed?.actionTraces.first?.receipt.response.value as? String, let responseData = responseString.data(using: .utf8), let response = try? JSONDecoder().decode(T.self, from: responseData) else {
         return (nil, FIOError.init(kind: .Failure, localizedDescription: "Error parsing the response"))
     }

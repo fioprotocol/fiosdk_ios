@@ -8,12 +8,12 @@
 
 import Foundation
 
-internal struct TxResultProcessed: Codable {
-    
-    var actionTraces: [TxResultActionTrace]
-    
-    enum CodingKeys: String, CodingKey {
-        case actionTraces = "action_traces"
+extension FIOSDK.Responses {
+    public struct TxResultProcessed: Codable {
+        var actionTraces: [TxResultActionTrace]
+        
+        enum CodingKeys: String, CodingKey {
+            case actionTraces = "action_traces"
+        }
     }
-    
 }

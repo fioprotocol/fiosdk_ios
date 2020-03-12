@@ -9,7 +9,7 @@
 import Foundation
 
 /**
- * This class is responsible for account name API parameter https://stealth.atlassian.net/wiki/spaces/DEV/pages/53280776/API#API-Generatingactor, which is a generated hash following this https://stealth.atlassian.net/wiki/spaces/DEV/pages/130482236/Hash+function+definition specs
+ * This class is responsible for account name API parameter https://developers.fioprotocol.io specs
  * Account name is also called actor or FIO public address
  */
 struct AccountNameGenerator {

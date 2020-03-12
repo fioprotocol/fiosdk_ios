@@ -8,17 +8,26 @@
 
 import Foundation
 
+/**
+*  BaseFIOSDK providing validation methods. [visit API specs](https://developers.fioprotocol.io)
+**/
 public class BaseFIOSDK: NSObject {
     
     internal var privateKey:String = ""
     internal var publicKey:String = ""
     internal static let keyManager = FIOKeyManager()
     internal let pubAddressTokenFilter: [String: UInt8] = ["fio": 1]
-    internal var _abis: [String: String] = ["fio.address":"", "fio.reqobt":"", "fio.token":""]
-    internal var walletFioAddress = ""
+    internal var _abis: [String: String] = ["fio.address":"", "fio.reqobt":"", "fio.token":"", "eosio":""]
+    internal var technologyProviderId = ""
     
     internal override init() {}
     
+    //MARK: Validation
+    
+    /** Returns Is the token code valid?
+     *
+     * - Parameter tokenCode: token code to evaluate
+     **/
     public func isTokenCodeValid(_ tokenCode:String) -> Bool {
         if (tokenCode.count > 0 && tokenCode.count < 11){
             if (tokenCode.range(of:"[a-zA-Z0-9]",options: .regularExpression) != nil) {
@@ -28,6 +37,10 @@ public class BaseFIOSDK: NSObject {
         return false
     }
     
+    /** Returns Is the chain code valid?
+     *
+     * - Parameter chainCode: chain code to evaluate
+     **/
     public func isChainCodeValid(_ chainCode:String) -> Bool {
         if (chainCode.count > 0 && chainCode.count < 11){
             if (chainCode.range(of:"[a-zA-Z0-9]",options: .regularExpression) != nil) {
@@ -37,6 +50,10 @@ public class BaseFIOSDK: NSObject {
         return false
     }
     
+    /** Returns Is the fio public key valid?
+     *
+     * - Parameter fioPublicKey: fio public key to evaluate
+     **/
     public func isFioPublicKeyValid(_ fioPublicKey: String) -> Bool {
         if (fioPublicKey.count < 4){
             return false
@@ -47,11 +64,19 @@ public class BaseFIOSDK: NSObject {
         return false
     }
     
+    /** Returns Is the public address valid?
+     *
+     * - Parameter publicAddress: public address to evaluate
+     **/
     public func isPublicAddressValid(_ publicAddress:String) -> Bool {
         return (publicAddress.count > 0 && publicAddress.count < 129)
     }
     
-    public func isFIOAddressValid(_ address: String) -> Bool {
+    /** Returns Is the fio address valid?
+     *
+     * - Parameter address: fio address to evaluate
+     **/
+    public func isFioAddressValid(_ address: String) -> Bool {
         let fullNameArr = address.components(separatedBy: "@")
         
         if (fullNameArr.count != 2) {
@@ -65,7 +90,11 @@ public class BaseFIOSDK: NSObject {
         return false
     }
     
-    public func isFIODomainValid(_ domain: String) -> Bool {
+    /** Returns Is the fio domain valid?
+     *
+     * - Parameter domain: fio domain to evaluate
+     **/
+    public func isFioDomainValid(_ domain: String) -> Bool {
         if domain.isEmpty || domain.count > 62 || domain.count < 1 { return false }
         
         if domain.range(of:"^(\\w)+(-\\w+)*$", options: .regularExpression) == nil {
@@ -88,12 +117,15 @@ public class BaseFIOSDK: NSObject {
         return Utilities.sharedInstance().mockURL
     }
     
+    //MARK: Get Public Key
+    /** Returns the public key, as previously set at initialization of the FIOSDK singleton
+     **/
     public func getPublicKey() -> String {
         return self.publicKey.replacingOccurrences(of: "EOS", with: "FIO")
     }
     
-    internal func getWalletFioAddress(_ walletFioAddress: String) -> String {
-        return (walletFioAddress.count > 2 ? walletFioAddress : self.walletFioAddress)
+    internal func getTechnologyProviderId(_ technologyProviderId: String) -> String {
+        return (technologyProviderId.count > 2 ? technologyProviderId : self.technologyProviderId)
     }
     
     //MARK: - Chain Info
@@ -120,7 +152,7 @@ public class BaseFIOSDK: NSObject {
         }
     }
     
-    /// Retrieves ABI. [visit API specs](https://stealth.atlassian.net/wiki/spaces/DEV/pages/53280776/API#API-/get_raw_abi-GetABIforspecificaccountname)
+    /// Retrieves ABI. [visit API specs](https://developers.fioprotocol.io)
     /// - Parameters:
     ///     - account name: this can be: "fio.system","fio.reqobt","fio.token"
     ///     - completion: A function that is called once request is over with an optional response that should contain abi results and error containing the status of the call.
