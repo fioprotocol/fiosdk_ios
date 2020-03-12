@@ -1,13 +1,6 @@
 {
   "warnings": [
     {
-      "file": "/Users/shawnarney/Dropbox/working/dapix/code/fiosdk_ios/FIOSDK/FIOSDK/Core/BaseFIOSDK.swift",
-      "line": 120,
-      "symbol": "BaseFIOSDK.getPublicKey()",
-      "symbol_kind": "source.lang.swift.decl.function.method.instance",
-      "warning": "undocumented"
-    },
-    {
       "file": "/Users/shawnarney/Dropbox/working/dapix/code/fiosdk_ios/FIOSDK/FIOSDK/FIOSDK.swift",
       "line": 19,
       "symbol": "FIOSDK.Responses",
