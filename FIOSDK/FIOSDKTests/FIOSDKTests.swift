@@ -15,7 +15,7 @@ private let useAlternateServer = false
 private let DEFAULT_SERVER = "https://testnet.fioprotocol.io/v1"
 private let MOCK_DEFAULT_SERVER = ""
 
-private let ALTERNATE_SERVER = "https://dev2.fio.dev/v1"
+private let ALTERNATE_SERVER = ""
 private let MOCK_ALTERNATE_SERVER = ""
 
 class FIOSDKTests: XCTestCase {
@@ -29,21 +29,21 @@ class FIOSDKTests: XCTestCase {
     private let expectedDefaultPublicKey = "FIO5kJKNHwctcfUM5XZyiWSqSTM5HTzznJP9F3ZdbhaQAHEVq575o"
     private let mockUrl = (useDefaultServer ? MOCK_DEFAULT_SERVER : MOCK_ALTERNATE_SERVER)
     
-    private let fioPrivateKey = "5Je5uqXQ86rymhCPhjwpAUTR2dngJnmwKQduAKrKqmRtBTYG4sE"
-    private let fioPublicKey = "FIO6J1uka8y14eoZZ9hWtDGVMRUjXQXqDpqbBMzs6yRMyazx9eAku"
-    private let fioPrivateKeyAlternative = "5Hpw3ccf8igGgtuWRoaEwGU7DhCbdzmvdEK83NrcCUCvjY4EhNz"
-    private let fioPublicKeyAlternative = "FIO8kYn3qRD8UBJLsBwT3XBqgTwk6sdg9DT6YSJ4iaQ5Eyy6rwaKH"
+    private let fioPrivateKey = ""
+    private let fioPublicKey = ""
+    private let fioPrivateKeyAlternative = ""
+    private let fioPublicKeyAlternative = ""
     
-    private let faucetPrivateKey = "5KF2B21xT5pE5G3LNA6LKJc6AP2pAd2EnfpAUrJH12SFV8NtvCD"
-    private let faucetPublicKey = "FIO6zwqqzHQcqCc2MB4jpp1F73MXpisEQe2SDghQFSGQKoAPjvQ3H"
-    private let faucetFioAddress = "fio@faucet"
+    private let faucetPrivateKey = ""
+    private let faucetPublicKey = ""
+    private let faucetFioAddress = ""
     
     private let TEST_DOMAIN = "fiotestnet"
     
     //MARK: test variables
-    private var requesteeFioName: String = "alicetest61@fiotestnet"
+    private var requesteeFioName: String = "shawnaliceios@fiotestnet"
     private let requesteeAddress: String = "0xc39b2845E3CFAdE5f5b2864fe73f5960B8dB483B"
-    private var requestorFioName: String = "bobtest61@fiotestnet"
+    private var requestorFioName: String = "shawnbobios@fiotestnet"
     private let requestorAddress: String = "0x3A2522321656285661Df2012a3A05bEF84C8B1ed"
     private var isFunded: Bool = true
     
