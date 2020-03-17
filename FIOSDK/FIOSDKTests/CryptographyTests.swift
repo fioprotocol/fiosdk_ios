@@ -387,11 +387,66 @@ class CryptographyTests: XCTestCase {
            
         let encrypted = "A754EB5349FB8DABC25DCE3E477FE244F319E0EAB8549CA9BF5B8F445B99FCBC068BBCD06CA9498A1E7DD9824E75ADB26A6C99DCB6F51B6BE1BA2CB1BD430DFB4D1CA2280C5F17485FC8F2F7C77E9E32"
 
-
         let decryptedContent = self.decrypt(privateKey: bobfioPrivateKeyAlternative, publicKey: alicefioPublicKey, contentType: FIOAbiContentType.newFundsContent, encrypted: encrypted)
                
         print ("--decrypted--")
         print (decryptedContent)
+
+    }
+    
+    /* results from typescrypt sdk encryption */
+    func testDecryptFixedValueFromTypeScriptSDK() {
+        let alicePrivateKey = "5J35xdLtcPvDASxpyWhNrR2MfjSZ1xjViH5cvv15VVjqyNhiPfa"
+        let alicePublicKey = "FIO6NxZ7FLjjJuHGByJtNJQ1uN1P5X9JJnUmFW3q6Q7LE7YJD4GZs"
+        let bobPrivateKey = "5J37cXw5xRJgE869B5LxC3FQ8ZJECiYnsjuontcHz5cJsz5jhb7"
+        let bobPublicKey = "FIO4zUFC29aq8uA4CnfNSyRZCnBPya2uQk42jwevc3UZ2jCRtepVZ"
+           
+        let encrypted = "UKPHFo0xs3GwGAXMc44QqkDtj7dcbGHjU3cJmN1qiYWADvzyd9pen2WwKn0VZtk0ZTGFXpap7Id8nZxlCMK7TjkabO85XNbhausE4ZZzx3hm25bqV2GDRHpRomsRDGAzLbFEumsm+4UNBtnOqUK3Kuo91vKjlLIV3NoF83qOSbhL8QDqV2N/yJxSu4PsiDeqhhSypZx8McaubVoUueioWA=="
+
+        let decryptedContent = self.decrypt(privateKey: alicePrivateKey, publicKey: bobPublicKey, contentType: FIOAbiContentType.newFundsContent, encrypted: encrypted)
+               
+        print ("--decrypted--")
+        print (decryptedContent)
+        
+        XCTAssert(decryptedContent.contains(bobPublicKey), "Was not decrypted")
+
+    }
+    
+    /* results from kotlin sdk encryption */
+    func testDecryptFixedValueFromKotlinSDK() {
+        let alicePrivateKey = "5J35xdLtcPvDASxpyWhNrR2MfjSZ1xjViH5cvv15VVjqyNhiPfa"
+        let alicePublicKey = "FIO6NxZ7FLjjJuHGByJtNJQ1uN1P5X9JJnUmFW3q6Q7LE7YJD4GZs"
+        let bobPrivateKey = "5J37cXw5xRJgE869B5LxC3FQ8ZJECiYnsjuontcHz5cJsz5jhb7"
+        let bobPublicKey = "FIO4zUFC29aq8uA4CnfNSyRZCnBPya2uQk42jwevc3UZ2jCRtepVZ"
+           
+        let encrypted = "j5+2Map9cfl7KUNjTwiWw191CzDIRJtGkQD3AJIvbvybRp1D7ewnBXs4yyho6opY2xVi7GkzzGGDXmk7d7Bkk50CYtSfQTsxc0ZqcJZ0Cse0OZSjWhmFwmR0U5VrwY3Q6ZcOiLGJIkpUxWD2c+LOCoGjSSjfxRYlFHM42H5UdS+XwjP4Lq4FvXz91kio/p9hLRY/JuzxHL/JNHdT8woq3w=="
+
+        let decryptedContent = self.decrypt(privateKey: bobPrivateKey, publicKey: alicePublicKey, contentType: FIOAbiContentType.newFundsContent, encrypted: encrypted)
+               
+        print ("--decrypted--")
+        print (decryptedContent)
+        
+        XCTAssert(decryptedContent.contains(bobPublicKey), "Was not decrypted")
+    }
+    
+    func testSharedSDKsNewFundsContentEncryption (){
+        let alicePrivateKey = "5J35xdLtcPvDASxpyWhNrR2MfjSZ1xjViH5cvv15VVjqyNhiPfa"
+        let alicePublicKey = "FIO6NxZ7FLjjJuHGByJtNJQ1uN1P5X9JJnUmFW3q6Q7LE7YJD4GZs"
+        let bobPrivateKey = "5J37cXw5xRJgE869B5LxC3FQ8ZJECiYnsjuontcHz5cJsz5jhb7"
+        let bobPublicKey = "FIO4zUFC29aq8uA4CnfNSyRZCnBPya2uQk42jwevc3UZ2jCRtepVZ"
+
+        let payeePublicAddress = bobPublicKey
+        let amount = 1.57
+        let tokenCode = "FIO"
+        let metadata = RequestFundsRequest.MetaData(memo: "testing this for fio", hash: "", offlineUrl: "")
+
+        let contentJson = RequestFundsContent(payeePublicAddress: payeePublicAddress, amount: String(amount), chainCode: tokenCode, tokenCode: tokenCode, memo:metadata.memo ?? "", hash: metadata.hash ?? "", offlineUrl: metadata.offlineUrl ?? "")
+
+        print (contentJson.toJSONString())
+        let encryptedContent = self.encrypt(privateKey: bobPrivateKey, publicKey: alicePublicKey, contentType: FIOAbiContentType.newFundsContent, contentJson: contentJson.toJSONString())
+
+        print ("--encrypted--")
+        print (encryptedContent)
 
     }
     
