@@ -1,33 +1,33 @@
 {
   "warnings": [
     {
-      "file": "/Users/shawnarney/Dropbox/working/dapix/code/fiosdk_ios/FIOSDK/FIOSDK/FIOSDK.swift",
+      "file": "/Users/shawnarney/Documents/fioprotocol/ios_sdk/ios_sdk/FIOSDK/FIOSDK/FIOSDK.swift",
       "line": 19,
       "symbol": "FIOSDK.Responses",
       "symbol_kind": "source.lang.swift.decl.enum",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/shawnarney/Dropbox/working/dapix/code/fiosdk_ios/FIOSDK/FIOSDK/FIOSDK.swift",
+      "file": "/Users/shawnarney/Documents/fioprotocol/ios_sdk/ios_sdk/FIOSDK/FIOSDK/FIOSDK.swift",
       "line": 21,
       "symbol": "FIOSDK.Params",
       "symbol_kind": "source.lang.swift.decl.enum",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/shawnarney/Dropbox/working/dapix/code/fiosdk_ios/FIOSDK/FIOSDK/FIOSDK.swift",
+      "file": "/Users/shawnarney/Documents/fioprotocol/ios_sdk/ios_sdk/FIOSDK/FIOSDK/FIOSDK.swift",
       "line": 25,
       "symbol": "FIOSDK.isInitialized()",
       "symbol_kind": "source.lang.swift.decl.function.method.static",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/shawnarney/Dropbox/working/dapix/code/fiosdk_ios/FIOSDK/FIOSDK/FIOSDK.swift",
+      "file": "/Users/shawnarney/Documents/fioprotocol/ios_sdk/ios_sdk/FIOSDK/FIOSDK/FIOSDK.swift",
       "line": 91,
       "symbol": "FIOSDK.isFioNameValid(fioName:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     }
   ],
-  "source_directory": "/Users/shawnarney/Dropbox/working/dapix/code/fiosdk_ios/FIOSDK"
+  "source_directory": "/Users/shawnarney/Documents/fioprotocol/ios_sdk/ios_sdk/FIOSDK"
 }
