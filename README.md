@@ -1,3 +1,6 @@
+> [!IMPORTANT]
+> This repo is no longer maintained, use [fiosdk_typescript](https://github.com/fioprotocol/fiosdk_typescript) or [fio.sdk-lite](https://github.com/fioprotocol/fio.sdk-lite)
+
 # FIO Swift iOS SDK
 The Foundation for Interwallet Operability (FIO) is a consortium of leading blockchain wallets, exchanges and payments providers that seeks to accelerate blockchain adoption by reducing the risk, complexity, and inconvenience of sending and receiving cryptoassets.
 
